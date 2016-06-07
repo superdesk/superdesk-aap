@@ -8,5 +8,13 @@
 # AUTHORS and LICENSE files distributed with this source code, or
 # at https://www.sourcefabric.org/superdesk/license
 
-import aap.io.feed_parsers.text_file  # NOQA
-import aap.io.feed_parsers.zczc  # NOQA
+from superdesk.errors import ParserError
+
+
+class AAPParserError(ParserError):
+
+    ParserError._codes.update({1100: 'ZCZC input could not be processed'})
+
+    @classmethod
+    def ZCZCParserError(cls, exception=None, provider=None):
+        return ParserError(1100, exception, provider)
