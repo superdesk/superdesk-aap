@@ -1,3 +1,3 @@
 {% for item in items %}
-<p>{{item.dateline_city}} {{item.source}} - {{item.abstract|striptags}} ({{item.slugline}}) {{item.anpa_take_key}} {{item.versioncreated | format_datetime('Australia/Sydney', '%H:%S')}}</p></br>
+<p>{{item.dateline_city}} - {{item.abstract|striptags}} ({{item.slugline}}) {{item.anpa_take_key}} {{item.versioncreated | format_datetime('Australia/Sydney', '%H:%S')}}</p></br>
 {% endfor %}
