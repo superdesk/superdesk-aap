@@ -89,8 +89,8 @@ class NewsBitesFeedParser(FileFeedParser):
 
             # fix the formatting
             item[self.ITEM_VERSION_CREATED] = self.datetime(item[self.ITEM_VERSION_CREATED])
-            item[self.ITEM_BODY_HTML] = '<p>' + html.escape(item[self.ITEM_BODY_HTML].strip()).replace('\n',
-                                                                                          '</p><p>') + '</p>'
+            item[self.ITEM_BODY_HTML] = '<p>' + html.escape(item[self.ITEM_BODY_HTML].strip()).replace('\n', '</p><p>')\
+                                        + '</p>'
             item.setdefault('word_count', get_word_count(item['body_html']))
 
             return item
