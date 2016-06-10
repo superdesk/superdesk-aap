@@ -38,26 +38,9 @@ class AAPBulletinBuilderFormatter(Formatter):
             article['slugline'] = self.append_legal(article=article, truncate=True)
             pub_seq_num = superdesk.get_resource_service('subscribers').generate_sequence_number(subscriber)
             body_html = self.append_body_footer(article).strip('\r\n')
-            soup = BeautifulSoup(body_html, 'html.parser')
+            article['body_text'] = self.get_text_content(body_html)
+            article['abstract'] = self.get_text_content(article.get('abstract', '')).strip()
 
-            if not len(soup.find_all('p')):
-                for br in soup.find_all('br'):
-                    # remove the <br> tag
-                    br.replace_with(' {}'.format(br.get_text()))
-
-            for p in soup.find_all('p'):
-                # replace <p> tag with two carriage return
-                for br in p.find_all('br'):
-                    # remove the <br> tag
-                    br.replace_with(' {}'.format(br.get_text()))
-
-                para_text = p.get_text().strip()
-                if para_text != '':
-                    p.replace_with('{}\r\n\r\n'.format(para_text))
-                else:
-                    p.replace_with('')
-
-            article['body_text'] = re.sub(' +', ' ', soup.get_text())
             # get the first category and derive the locator
             category = next((iter(article.get('anpa_category', []))), None)
             if category:
@@ -84,3 +67,25 @@ class AAPBulletinBuilderFormatter(Formatter):
 
     def can_format(self, format_type, article):
         return format_type == 'AAP BULLETIN BUILDER'
+
+    def get_text_content(self, content):
+        soup = BeautifulSoup(content, 'html.parser')
+
+        if not len(soup.find_all('p')):
+            for br in soup.find_all('br'):
+                # remove the <br> tag
+                br.replace_with(' {}'.format(br.get_text()))
+
+        for p in soup.find_all('p'):
+            # replace <p> tag with two carriage return
+            for br in p.find_all('br'):
+                # remove the <br> tag
+                br.replace_with(' {}'.format(br.get_text()))
+
+            para_text = p.get_text().strip()
+            if para_text != '':
+                p.replace_with('{}\r\n\r\n'.format(para_text))
+            else:
+                p.replace_with('')
+
+        return re.sub(' +', ' ', soup.get_text())
