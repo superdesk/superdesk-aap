@@ -10,3 +10,4 @@
 
 import aap.io.feed_parsers.text_file  # NOQA
 import aap.io.feed_parsers.zczc  # NOQA
+import aap.io.feed_parsers.news_bites  # NOQA
