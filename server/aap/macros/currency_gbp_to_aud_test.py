@@ -35,6 +35,12 @@ class CurrencyTestCase(unittest.TestCase):
                'This is a  STG53 note. ' \
                'This is a  STG(54,000) note. ' \
                'This is a  STG (55,233.00) note. ' \
+               'This is a  GBP 52-million note. ' \
+               'This is a  GBP 52 mln note. ' \
+               'This is a  GBP53 b note. ' \
+               'This is a  GBP(540,000) million note. ' \
+               'This is a  GBP (55,233.00) million note. ' \
+               'This is a  GBP (55,233.00 billion) note. ' \
 
         item = {'body_html': text}
         res, diff = gbp_to_aud(item, rate=Decimal(2))
@@ -42,9 +48,15 @@ class CurrencyTestCase(unittest.TestCase):
         self.assertEqual(diff['£41'], '£41 ($A82)')
         self.assertEqual(diff['£(42)'], '£(42) ($A84)')
         self.assertEqual(diff['£46,483'], '£46,483 ($A92,966)')
-        self.assertEqual(diff['£4,648,382'], '£4,648,382 ($A9,296,764)')
-        self.assertEqual(diff['£4,648,382.20'], '£4,648,382.20 ($A9,296,764.40)')
+        self.assertEqual(diff['£4,648,382'], '£4,648,382 ($A9.3 million)')
+        self.assertEqual(diff['£4,648,382.20'], '£4,648,382.20 ($A9.30 million)')
         self.assertEqual(diff['GBP(54,000)'], 'GBP(54,000) ($A108,000)')
         self.assertEqual(diff['STG 52'], 'STG 52 ($A104)')
         self.assertEqual(diff['STG53'], 'STG53 ($A106)')
         self.assertEqual(diff['STG (55,233.00)'], 'STG (55,233.00) ($A110,466.00)')
+        self.assertEqual(diff['GBP 52-million'], 'GBP 52-million ($A104 million)')
+        self.assertEqual(diff['GBP 52 mln'], 'GBP 52 mln ($A104 mln)')
+        self.assertEqual(diff['GBP53 b'], 'GBP53 b ($A106 b)')
+        self.assertEqual(diff['GBP(540,000) million'], 'GBP(540,000) million ($A1,080 billion)')
+        self.assertEqual(diff['GBP (55,233.00) million'], 'GBP (55,233.00) million ($A110.47 billion)')
+        self.assertEqual(diff['GBP (55,233.00 billion)'], 'GBP (55,233.00 billion) ($A110.47 trillion)')
