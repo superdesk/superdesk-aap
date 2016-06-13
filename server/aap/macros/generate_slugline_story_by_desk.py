@@ -46,12 +46,17 @@ class GenerateBodyHtml(metaclass=ABCMeta):
     def create_query(self):
         raise NotImplementedError()
 
+    @abstractmethod
+    def process(self):
+        raise NotImplementedError()
+
     def generate(self, template_name):
         query, repo = self.create_query()
         articles = self.get_articles(query, repo)
         if not articles:
             return ''
 
+        self.process(articles)
         return render_template(template_name, items=articles)
 
 
@@ -112,6 +117,14 @@ class GenerateBodyHtmlForPublishedArticlesByDesk(GenerateBodyHtml):
             desk_query.append({'terms': {ITEM_STATE: list(PUBLISH_STATES)}})
 
         return query, ['archive', 'published']
+
+    def process(self, articles):
+        for article in articles:
+            article['anpa_take_key'] = article.get('anpa_take_key') or ''
+            article['abstract'] = article.get('abstract') or ''
+            article['slugline'] = article.get('slugline') or ''
+            article['source'] = article.get('source') or ''
+            article['dateline_city'] = (article.get('dateline', {}).get('located', {}).get('city') or '').upper()
 
 
 def generate_published_slugline_story_by_desk(item, **kwargs):

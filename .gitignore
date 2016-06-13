@@ -31,3 +31,4 @@ include/
 /server/.settings/org.eclipse.core.resources.prefs
 /results/
 /superdesk-content-api/
+/node_modules/
