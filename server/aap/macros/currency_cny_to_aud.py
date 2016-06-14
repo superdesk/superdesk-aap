@@ -31,9 +31,10 @@ def yuan_to_aud(item, **kwargs):
         rate = CNY_TO_AUD
 
     regex = r'([¥]|(CNY)|(RMB)|(CN¥))\s*\-?\s*\(?(((\d{1,3}((\,\d{3})*|\d*))?' \
-            r'(\.\d{1,4})?)|((\d{1,3}((\,\d{3})*|\d*))(\.\d{0,4})?))\)?([mb])?'
+            r'(\.\d{1,4})?)|((\d{1,3}((\,\d{3})*|\d*))(\.\d{0,4})?))\)?' \
+            + currency_base.SUFFIX_REGEX
 
-    return currency_base.do_conversion(item, rate, '$A', regex, match_index=0, value_index=5)
+    return currency_base.do_conversion(item, rate, '$A', regex, match_index=0, value_index=5, suffix_index=18)
 
 
 name = 'yuan_to_aud'

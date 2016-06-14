@@ -36,6 +36,12 @@ class CurrencyTestCase(unittest.TestCase):
                'This is a  $US58m note. ' \
                'This is a  $US(54,000) note. ' \
                'This is a  $US (55,233.00) note. ' \
+               'This is a  $US 52-million note. ' \
+               'This is a  $US 52 mln note. ' \
+               'This is a  $US53 b note. ' \
+               'This is a  $US(540,000) million note. ' \
+               'This is a  $US (55,233.00) million note. ' \
+               'This is a  $US (55,233.00 billion) note. ' \
 
         item = {'body_html': text}
         res, diff = usd_to_aud(item, rate=Decimal(2))
@@ -43,8 +49,8 @@ class CurrencyTestCase(unittest.TestCase):
         self.assertEqual(diff['$41'], '$41 ($A82)')
         self.assertEqual(diff['$(42)'], '$(42) ($A84)')
         self.assertEqual(diff['$46,483'], '$46,483 ($A92,966)')
-        self.assertEqual(diff['$4,648,382'], '$4,648,382 ($A9,296,764)')
-        self.assertEqual(diff['$4,648,382.20'], '$4,648,382.20 ($A9,296,764.40)')
+        self.assertEqual(diff['$4,648,382'], '$4,648,382 ($A9.3 million)')
+        self.assertEqual(diff['$4,648,382.20'], '$4,648,382.20 ($A9.30 million)')
         self.assertEqual(diff['USD(54,000)'], 'USD(54,000) ($A108,000)')
         self.assertEqual(diff['USD 52'], 'USD 52 ($A104)')
         self.assertEqual(diff['USD53'], 'USD53 ($A106)')
@@ -52,5 +58,11 @@ class CurrencyTestCase(unittest.TestCase):
         self.assertEqual(diff['$US(54,000)'], '$US(54,000) ($A108,000)')
         self.assertEqual(diff['$US 52'], '$US 52 ($A104)')
         self.assertEqual(diff['$US53'], '$US53 ($A106)')
-        self.assertEqual(diff['$US58m'], '$US58m ($A116m)')
+        self.assertEqual(diff['$US58m'], '$US58m ($A116 m)')
         self.assertEqual(diff['$US (55,233.00)'], '$US (55,233.00) ($A110,466.00)')
+        self.assertEqual(diff['$US 52-million'], '$US 52-million ($A104 million)')
+        self.assertEqual(diff['$US 52 mln'], '$US 52 mln ($A104 mln)')
+        self.assertEqual(diff['$US53 b'], '$US53 b ($A106 b)')
+        self.assertEqual(diff['$US(540,000) million'], '$US(540,000) million ($A1,080 billion)')
+        self.assertEqual(diff['$US (55,233.00) million'], '$US (55,233.00) million ($A110.47 billion)')
+        self.assertEqual(diff['$US (55,233.00 billion)'], '$US (55,233.00 billion) ($A110.47 trillion)')

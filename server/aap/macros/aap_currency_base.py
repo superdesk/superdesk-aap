@@ -14,6 +14,7 @@ from . import macro_replacement_fields
 from decimal import Decimal
 
 RATE_SERVICE = 'http://download.finance.yahoo.com/d/quotes.csv?s={}=X&f=nl1d1'
+SUFFIX_REGEX = r'((\s*\-?\s*)((mln)|(bln)|([mM]illion)|([bB]illion)|[mb]))?\)?'
 
 
 def to_currency(value, places=2, curr='', sep=',', dp='.', pos='', neg='-', trailneg=''):
@@ -72,15 +73,58 @@ def get_rate(from_currency, to_currency):
     return Decimal(r.text.split(',')[1])
 
 
-def format_output(original, converted):
+def update_suffix(value, suffix, precision=0):
+    '''
+    Updates the
+    :param value:
+    :param suffix:
+    :param precision:
+    :return:
+    '''
+    thousand = Decimal(1000)
+    million = Decimal(1000000)
+    billion = Decimal(1000000000)
+    trillion = Decimal(1000000000000)
+    million_suffixes = ['m', 'mln', 'million']
+    billion_suffixes = ['b', 'bln', 'billion']
+
+    if not suffix:
+        if value >= trillion:
+            value = value / trillion
+            suffix = 'trillion'
+        if value >= billion:
+            value = value / billion
+            suffix = 'billion'
+        if value >= million:
+            value = value / million
+            suffix = 'million'
+
+    if (value >= thousand) and suffix in billion_suffixes:
+        value = value / thousand
+        suffix = 'trillion'
+
+    if (value >= thousand) and suffix in million_suffixes:
+        value = value / thousand
+        suffix = 'billion'
+
+    if precision == 0:
+        if value < Decimal(1):
+            precision = 2
+        elif value < Decimal(10):
+            precision = 1
+
+    return value, suffix, precision
+
+
+def format_output(original, converted, suffix):
     """ Returns the replacement string for the given original value """
-    if original[-1:].isalpha():
-        # If there's 'm' or 'b' at the end of the original carry that across
-        converted += original[-1:]
-    return '{} ({})'.format(original, converted)
+    if suffix:
+        return '{} ({} {})'.format(original, converted, suffix)
+    else:
+        return '{} ({})'.format(original, converted, suffix)
 
 
-def do_conversion(item, rate, currency, search_param, match_index, value_index):
+def do_conversion(item, rate, currency, search_param, match_index, value_index, suffix_index):
     """
     Performs the conversion
     :param item: story
@@ -90,6 +134,7 @@ def do_conversion(item, rate, currency, search_param, match_index, value_index):
     be a valid regular expression pattern, and not just an arbitrary string.
     :param match_index: int index of groups used in matching string
     :param value_index: int index of groups used in converting the value
+    :param suffix_index: int index of groups used for millions or billions
     :return: modified story
     """
     diff = {}
@@ -97,6 +142,7 @@ def do_conversion(item, rate, currency, search_param, match_index, value_index):
     def convert(match):
         match_item = match.group(match_index)
         value_item = match.group(value_index)
+        suffix_item = match.group(suffix_index)
         if match_item and value_item:
             if ')' in match_item and '(' not in match_item:
                 # clear any trailing parenthesis
@@ -105,8 +151,9 @@ def do_conversion(item, rate, currency, search_param, match_index, value_index):
             from_value = Decimal(re.sub(r'[^\d.]', '', value_item))
             precision = abs(from_value.as_tuple().exponent)
             to_value = rate * from_value
+            to_value, suffix_item, precision = update_suffix(to_value, suffix_item, precision)
             converted_value = to_currency(to_value, places=precision, curr=currency)
-            diff.setdefault(match_item, format_output(match_item, converted_value))
+            diff.setdefault(match_item, format_output(match_item, converted_value, suffix_item))
             return diff[match_item]
 
     for field in macro_replacement_fields:
