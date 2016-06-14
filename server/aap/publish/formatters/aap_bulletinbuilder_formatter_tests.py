@@ -48,6 +48,7 @@ class AapBulletinBuilderFormatterTest(SuperdeskTestCase):
             'unique_id': '1',
             'type': 'preformatted',
             'body_html': 'The story body',
+            'abstract': 'abstract',
             'word_count': '1',
             'priority': '1',
             'firstcreated': utcnow(),
@@ -74,6 +75,7 @@ class AapBulletinBuilderFormatterTest(SuperdeskTestCase):
             config.VERSION: 2,
             'source': 'AAP',
             'headline': 'This is a test headline',
+            'abstract': '<p>abstract</p>',
             'type': 'text',
             'body_html': ('<p>The story body line 1<br>Line 2</p>'
                           '<p>abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi'
@@ -92,6 +94,7 @@ class AapBulletinBuilderFormatterTest(SuperdeskTestCase):
         self.assertGreater(int(seq), 0)
         test_article = json.loads(item.get('data'))
         self.assertEqual(test_article['body_text'], body_text)
+        self.assertEqual(test_article['abstract'], 'abstract')
 
     def test_strip_html_case1(self):
         article = {
