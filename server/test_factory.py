@@ -12,7 +12,7 @@ from flask import json
 from superdesk.tests import TestCase, setup, setup_db_user, test_user, get_prefixed_url, add_to_context
 from app import get_app
 from unittest.mock import patch
-from settings import LDAP_SERVER
+from settings import LDAP_SERVER, CUSTOM_TEMPLATE_PATH
 from apps.ldap import ADAuth
 
 
@@ -73,7 +73,11 @@ def setup_ad_user(context, user):
 class SuperdeskTestCase(TestCase):
 
     def setUp(self):
-        setup(self, app_factory=get_app)
+        config = {
+            'ELASTICSEARCH_FORCE_REFRESH': True,
+            'CUSTOM_TEMPLATE_PATH': CUSTOM_TEMPLATE_PATH
+        }
+        setup(self, config=config, app_factory=get_app)
         self.ctx = self.app.app_context()
         self.ctx.push()
 
