@@ -8,14 +8,14 @@
 # AUTHORS and LICENSE files distributed with this source code, or
 # at https://www.sourcefabric.org/superdesk/license
 
-from superdesk.tests import TestCase
+from test_factory import SuperdeskTestCase
 from superdesk.utc import utc_to_local, utcnow
 from datetime import timedelta
 from .generate_slugline_story_by_desk import GenerateBodyHtmlForPublishedArticlesByDesk, \
     generate_published_slugline_story_by_desk
 
 
-class SluglineStoryByDesk(TestCase):
+class SluglineStoryByDesk(SuperdeskTestCase):
     articles = []
     published = []
     desks = []
@@ -36,7 +36,10 @@ class SluglineStoryByDesk(TestCase):
             {
                 '_id': '1', 'type': 'text', 'abstract': 'abstract item 1', 'slugline': 'slugline item 1',
                 'dateline': {
-                    'text': 'Sydney, 01 Jan AAP -'
+                    'text': 'Sydney, 01 Jan AAP -',
+                    'located': {
+                        'city': 'Sydney'
+                    }
                 },
                 'state': 'in_progress',
                 'versioncreated': local_time + timedelta(minutes=-1),
@@ -47,7 +50,10 @@ class SluglineStoryByDesk(TestCase):
             {
                 '_id': '2', 'type': 'text', 'abstract': 'abstract item 2', 'slugline': 'slugline item 2',
                 'dateline': {
-                    'text': 'Sydney, 01 Jan AAP -'
+                    'text': 'Sydney, 01 Jan AAP -',
+                    'located': {
+                        'city': 'Sydney'
+                    }
                 },
                 'state': 'submitted',
                 'versioncreated': local_time + timedelta(minutes=-2),
@@ -59,7 +65,10 @@ class SluglineStoryByDesk(TestCase):
             {
                 '_id': '2a', 'type': 'text', 'abstract': 'abstract item 2a', 'slugline': 'slugline item 2a',
                 'dateline': {
-                    'text': 'Sydney, 01 Jan AAP -'
+                    'text': 'Sydney, 01 Jan AAP -',
+                    'located': {
+                        'city': 'Sydney'
+                    }
                 },
                 'state': 'published',
                 'versioncreated': local_time + timedelta(minutes=-5),
@@ -71,7 +80,10 @@ class SluglineStoryByDesk(TestCase):
             {
                 '_id': '3', 'type': 'text', 'abstract': 'abstract item 3', 'slugline': 'slugline item 3',
                 'dateline': {
-                    'text': 'Sydney, 01 Jan AAP -'
+                    'text': 'Sydney, 01 Jan AAP -',
+                    'located': {
+                        'city': 'Sydney'
+                    }
                 },
                 'state': 'submitted',
                 'versioncreated': local_time + timedelta(days=-1),
@@ -83,7 +95,10 @@ class SluglineStoryByDesk(TestCase):
             {
                 '_id': '4', 'type': 'text', 'abstract': 'abstract item 4', 'slugline': 'slugline item 4',
                 'dateline': {
-                    'text': 'Sydney, 01 Jan AAP -'
+                    'text': 'Sydney, 01 Jan AAP -',
+                    'located': {
+                        'city': 'Sydney'
+                    }
                 },
                 'state': 'corrected',
                 'versioncreated': local_time + timedelta(minutes=-1),
@@ -94,7 +109,10 @@ class SluglineStoryByDesk(TestCase):
             {
                 '_id': '5', 'type': 'text', 'abstract': 'abstract item 5', 'slugline': 'slugline item 5',
                 'dateline': {
-                    'text': 'Sydney, 01 Jan AAP -'
+                    'text': 'Sydney, 01 Jan AAP -',
+                    'located': {
+                        'city': 'Sydney'
+                    }
                 },
                 'state': 'in_progress',
                 'versioncreated': local_time + timedelta(minutes=-1),
@@ -106,7 +124,10 @@ class SluglineStoryByDesk(TestCase):
             {
                 '_id': '6', 'type': 'text', 'abstract': 'abstract item 6', 'slugline': 'slugline item 6',
                 'dateline': {
-                    'text': 'Sydney, 01 Jan AAP -'
+                    'text': 'Sydney, 01 Jan AAP -',
+                    'located': {
+                        'city': 'Sydney'
+                    }
                 },
                 'state': 'published',
                 'versioncreated': local_time + timedelta(days=-1),
@@ -120,7 +141,10 @@ class SluglineStoryByDesk(TestCase):
             {
                 'item_id': '2a', 'type': 'text', 'abstract': 'abstract item 2a', 'slugline': 'slugline item 2a',
                 'dateline': {
-                    'text': 'Sydney, 01 Jan AAP -'
+                    'text': 'Sydney, 01 Jan AAP -',
+                    'located': {
+                        'city': 'Sydney'
+                    }
                 },
                 'state': 'published',
                 'versioncreated': local_time + timedelta(minutes=-5),
@@ -132,7 +156,10 @@ class SluglineStoryByDesk(TestCase):
             {
                 'item_id': '4', 'type': 'text', 'abstract': 'abstract item 4', 'slugline': 'slugline item 4',
                 'dateline': {
-                    'text': 'Sydney, 01 Jan AAP -'
+                    'text': 'Sydney, 01 Jan AAP -',
+                    'located': {
+                        'city': 'Sydney'
+                    }
                 },
                 'state': 'corrected',
                 'versioncreated': local_time + timedelta(minutes=-1),
@@ -143,7 +170,10 @@ class SluglineStoryByDesk(TestCase):
             {
                 'item_id': '4', 'type': 'text', 'abstract': 'abstract item 4', 'slugline': 'slugline item 4',
                 'dateline': {
-                    'text': 'Sydney, 01 Jan AAP -'
+                    'text': 'Sydney, 01 Jan AAP -',
+                    'located': {
+                        'city': 'Sydney'
+                    }
                 },
                 'state': 'published',
                 'versioncreated': local_time + timedelta(minutes=-5),
@@ -154,7 +184,10 @@ class SluglineStoryByDesk(TestCase):
             {
                 'item_id': '6', 'type': 'text', 'abstract': 'abstract item 6', 'slugline': 'slugline item 6',
                 'dateline': {
-                    'text': 'Sydney, 01 Jan AAP -'
+                    'text': 'Sydney, 01 Jan AAP -',
+                    'located': {
+                        'city': 'Sydney'
+                    }
                 },
                 'state': 'published',
                 'versioncreated': local_time + timedelta(days=-1),
@@ -191,5 +224,5 @@ class SluglineStoryByDesk(TestCase):
         }
 
         generate_published_slugline_story_by_desk(item)
-        self.assertTrue('Sydney, 01 Jan AAP - abstract item 2 (slugline item 2)' in item['body_html'])
-        self.assertTrue('Sydney, 01 Jan AAP - abstract item 2a (slugline item 2a)' in item['body_html'])
+        self.assertTrue('SYDNEY abstract item 2 (slugline item 2)' in item['body_html'])
+        self.assertTrue('SYDNEY abstract item 2a (slugline item 2a)' in item['body_html'])
