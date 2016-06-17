@@ -9,3 +9,5 @@
 # at https://www.sourcefabric.org/superdesk/license
 
 from .import_text_archive import AppImportTextArchiveCommand  # noqa
+from .socket_load_test import SocketLoadTestCommand  # noqa
+from .socket_listener import SocketListenerCommand  # noqa
