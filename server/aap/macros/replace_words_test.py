@@ -44,9 +44,9 @@ class ReplaceWordsTest(SuperdeskTestCase):
 
         result, diff = self.under_test_find_and_replace(item)
         self.assertEqual(result['slugline'], 'this is colour')
-        self.assertEqual(result['headline'], 'colour is bad.')
+        self.assertEqual(result['headline'], 'Colour is bad.')
         self.assertEqual(result['body_html'], 'this is colour. tyre is great.')
-        self.assertDictEqual(diff, {'color': 'colour', 'tire': 'tyre'})
+        self.assertDictEqual(diff, {'ColOr': 'Colour', 'color': 'colour', 'tire': 'tyre'})
 
     def test_find_replace_words_same_words(self):
         item = {
@@ -54,8 +54,8 @@ class ReplaceWordsTest(SuperdeskTestCase):
         }
 
         result, diff = self.under_test_find_and_replace(item)
-        self.assertEqual(result['body_html'], 'centre is great. centre is far')
-        self.assertDictEqual(diff, {'center': 'centre'})
+        self.assertEqual(result['body_html'], 'Centre is great. Centre is far')
+        self.assertDictEqual(diff, {'Center': 'Centre'})
 
     def test_find_replace_words(self):
         item = {
@@ -78,3 +78,13 @@ class ReplaceWordsTest(SuperdeskTestCase):
         self.assertEqual(result['body_html'], 'George W Bush centre opens at 5 am')
         self.assertEqual(result['slugline'], 'George W Bush')
         self.assertDictEqual(diff, {'a.m.': 'am', 'George W. Bush': 'George W Bush', 'center': 'centre'})
+
+    def test_repetition_of_words_with_different_case(self):
+        item = {'body_html': 'Color color COLOR cOlOr'}
+        result, diff = self.under_test_find_and_replace(item)
+        self.assertEqual(result['body_html'], 'Colour colour COLOUR cOlOur')
+
+    def test_partial_word(self):
+        item = {'body_html': 'Something coloring it red'}
+        result, diff = self.under_test_find_and_replace(item)
+        self.assertEqual(result['body_html'], 'Something colouring it red')
