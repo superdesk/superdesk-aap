@@ -56,7 +56,7 @@ def do_conversion(item, converter, formatter, search_param):
     match_index = 0  # Index of complete match i.e. 5' 10"
     value_index = 1  # Index of the value: contains feet if feet is in the match else inches if there's no feet
     feet_symbol_index = 7  # Index of feet symbol ', ft, feet, foot
-    inches_with_feet_value_index = 8  # When there is a feet and inch value matched together
+    inches_with_feet_value_index = 11  # When there is a feet and inch value matched together
     inches_symbol_index = 5  # Index of inches symbol ", in, inch(es)
 
     def convert(match):
@@ -95,7 +95,8 @@ def do_conversion(item, converter, formatter, search_param):
 def feet_inches_to_metric(item, **kwargs):
     """Converts distance values from feet and inches to metric"""
 
-    regex = r'(\d+-?,?\.?\d*)((\s*)|(-))(((\'|ft\.?|[fF]eet|[fF]oot)\s?(\d+)?\s?("|in)?)|(\"|[iI]nches|[iI]nch|in))'
+    regex = r'(\d+-?,?\.?\d*)((\s*)|(-))(((\'|ft\.?|[fF]eet|[fF]oot)' \
+        r'((-)|(\s*))(\d+)?\s?("|in)?)|(\"|[iI]nches|[iI]nch|in))'
     return do_conversion(item, convert, unit_base.format_output, regex)
 
 

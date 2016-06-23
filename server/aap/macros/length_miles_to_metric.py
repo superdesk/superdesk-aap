@@ -34,7 +34,7 @@ def miles_to_metric(item, **kwargs):
 
 
 name = 'miles_to_metric'
-label = 'Length miles to kilometers'
+label = 'Length miles to kilometres'
 callback = miles_to_metric
 access_type = 'frontend'
 action_type = 'interactive'

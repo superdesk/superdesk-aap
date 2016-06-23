@@ -16,23 +16,25 @@ class FeetInchesTestCase(unittest.TestCase):
 
     def test_feet_to_cm(self):
         text = '''His height is 5'10" today
-               His height is 5'10 today
-               His height is 5' 10 today
-               His height is 5 ft 10 today
-               His height is 5 ft. 10 today
-               His height is 5 ft 10 in today
-               His height is 5' 10" today
-               His height is 5' today
-               His height is 5 ft today
-               His height is 5 feet today
-               His height is 10.2-ft today
-               His height is 10.2-in today
-               His height is 1,020" today
-               His height is 1,020 in today
-               His height is 1 inch today
-               His height is 1,020 inches today
-               His height is 10-12 ft today
-               His height is 10-12 in today'''
+                His height is 5'10 today
+                His height is 5' 10 today
+                His height is 5 ft 10 today
+                His height is 5 ft. 10 today
+                His height is 5 ft 10 in today
+                His height is 5' 10" today
+                His height is 5' today
+                His height is 5 ft today
+                His height is 5 feet today
+                His height is 10.2-ft today
+                His height is 10.2-in today
+                His height is 1,020" today
+                His height is 1,020 in today
+                His height is 1 inch today
+                His height is 1,020 inches today
+                His height is 10-12 ft today
+                His height is 10-12 in today
+                His height is 5-foot-10 today
+                His height is 5-feet-10 today'''
 
         item = {'body_html': text}
         res, diff = feet_inches_to_metric(item)
@@ -54,3 +56,5 @@ class FeetInchesTestCase(unittest.TestCase):
         self.assertEqual(diff['1,020 inches'], '1,020 inches (25.91 m)')
         self.assertEqual(diff['10-12 ft'], '10-12 ft (3.05-3.66 m)')
         self.assertEqual(diff['10-12 in'], '10-12 in (25.40-30.48 cm)')
+        self.assertEqual(diff['5-foot-10'], '5-foot-10 (1.78 m)')
+        self.assertEqual(diff['5-feet-10'], '5-feet-10 (1.78 m)')

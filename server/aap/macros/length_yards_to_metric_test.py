@@ -25,10 +25,10 @@ class YardTestCase(unittest.TestCase):
 
         item = {'body_html': text}
         res, diff = yards_to_metric(item)
-        self.assertEqual(diff['125 yd'], '125 yd (114 meters)')
-        self.assertEqual(diff['125 yards'], '125 yards (114 meters)')
-        self.assertEqual(diff['125 Yards'], '125 Yards (114 meters)')
-        self.assertEqual(diff['125-Yards'], '125-Yards (114 meters)')
-        self.assertEqual(diff['12.5 yd'], '12.5 yd (11.4 meters)')
-        self.assertEqual(diff['12,500 yards'], '12,500 yards (11,430 meters)')
-        self.assertEqual(diff['100-12500 Yards'], '100-12500 Yards (91-11,430 meters)')
+        self.assertEqual(diff['125 yd'], '125 yd (114 metres)')
+        self.assertEqual(diff['125 yards'], '125 yards (114 metres)')
+        self.assertEqual(diff['125 Yards'], '125 Yards (114 metres)')
+        self.assertEqual(diff['125-Yards'], '125-Yards (114 metres)')
+        self.assertEqual(diff['12.5 yd'], '12.5 yd (11.4 metres)')
+        self.assertEqual(diff['12,500 yards'], '12,500 yards (11,430 metres)')
+        self.assertEqual(diff['100-12500 Yards'], '100-12500 Yards (91-11,430 metres)')

@@ -31,7 +31,7 @@ def convert(fahrenheit, precision=0):
 def fahrenheit_to_celsius(item, **kwargs):
     """Converts temperature values from fahrenheit to celsius"""
 
-    regex = r'(\d+-?\.?\d*)((\s*)|(-))((°?F)|((degrees)?\s*[fF]ahrenheit))\b'
+    regex = r'(\d+-?\.?\d*)((\s*)|(-))((°?F)|((degrees)?\s*[fF]ahrenheit)|(degrees))\b'
     return unit_base.do_conversion(item, convert, unit_base.format_output, regex, match_index=0, value_index=1)
 
 
