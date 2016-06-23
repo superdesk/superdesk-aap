@@ -169,7 +169,11 @@ ODBC_TEST_CONNECTION_STRING = env('ODBC_TEST_CONNECTION_STRING',
                                   'DRIVER=FreeTDS;DSN=NEWSDB;UID=???;PWD=???;DATABASE=News')
 
 DEFAULT_SOURCE_VALUE_FOR_MANUAL_ARTICLES = 'AAP'
-DEFAULT_URGENCY_VALUE_FOR_MANUAL_ARTICLES = 3
+# Defines default value for Priority to be set for manually created articles
+DEFAULT_PRIORITY_VALUE_FOR_MANUAL_ARTICLES = int(env('DEFAULT_PRIORITY_VALUE_FOR_MANUAL_ARTICLES', 6))
+
+# Defines default value for Urgency to be set for manually created articles
+DEFAULT_URGENCY_VALUE_FOR_MANUAL_ARTICLES = int(env('DEFAULT_URGENCY_VALUE_FOR_MANUAL_ARTICLES', 3))
 DEFAULT_GENRE_VALUE_FOR_MANUAL_ARTICLES = [{'qcode': 'Article', 'name': 'Article (news)'}]
 RESET_PRIORITY_VALUE_FOR_UPDATE_ARTICLES = json.loads(env('RESET_PRIORITY_VALUE_FOR_UPDATE_ARTICLES', 'True').lower())
 
