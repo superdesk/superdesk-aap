@@ -34,7 +34,7 @@ def nautical_miles_to_metric(item, **kwargs):
 
 
 name = 'nautical_miles_to_metric'
-label = 'Length nautical miles to kilometers'
+label = 'Length nautical miles to kilometres'
 callback = nautical_miles_to_metric
 access_type = 'frontend'
 action_type = 'interactive'

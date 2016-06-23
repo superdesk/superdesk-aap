@@ -11,20 +11,20 @@
 from . import unit_base
 from decimal import Decimal
 
-METERS_SYMBOL = 'meters'
+METERS_SYMBOL = 'metres'
 
 
 def convert(yards, precision=0):
     """
-    Converts from yards to meters
+    Converts from yards to metres
     :param yards: Yards value in string
     :param precision: number of decimal points (int)
     :return: Meters value in string
     """
     yard_to_meter_rate = Decimal(0.9144)
     yards_list = yards.split('-')
-    meters = [unit_base.format_converted((Decimal(y) * yard_to_meter_rate), precision) for y in yards_list]
-    return '-'.join(meters), METERS_SYMBOL
+    metres = [unit_base.format_converted((Decimal(y) * yard_to_meter_rate), precision) for y in yards_list]
+    return '-'.join(metres), METERS_SYMBOL
 
 
 def yards_to_metric(item, **kwargs):
@@ -35,7 +35,7 @@ def yards_to_metric(item, **kwargs):
 
 
 name = 'yards_to_metric'
-label = 'Length yards to meters'
+label = 'Length yards to metres'
 callback = yards_to_metric
 access_type = 'frontend'
 action_type = 'interactive'
