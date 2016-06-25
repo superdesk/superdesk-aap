@@ -143,6 +143,28 @@ class AapBulletinBuilderFormatterTest(SuperdeskTestCase):
         test_article = json.loads(item.get('data'))
         self.assertEqual(test_article['body_text'], body_text)
 
+    def test_strip_html_with_linebreak(self):
+        article = {
+            config.ID_FIELD: '123',
+            config.VERSION: 2,
+            'source': 'AAP',
+            'headline': 'This is a test headline',
+            'type': 'text',
+            'body_html': ('<p>This is \nthird<br> take.</p><br><p>Correction in the third take.</p><br>'
+                          '<p>This is test.</p><br><p><br></p>')
+        }
+
+        body_text = ('This is third take.\r\n\r\n'
+                     'Correction in the third take.\r\n\r\n'
+                     'This is test.\r\n\r\n')
+
+        subscriber = self.app.data.find('subscribers', None, None)[0]
+        seq, item = self._formatter.format(article, subscriber)[0]
+        item = json.loads(item)
+        self.assertGreater(int(seq), 0)
+        test_article = json.loads(item.get('data'))
+        self.assertEqual(test_article['body_text'], body_text)
+
     def test_locator(self):
         article = {
             'source': 'AAP',
