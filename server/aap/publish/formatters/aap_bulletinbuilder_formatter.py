@@ -74,15 +74,15 @@ class AAPBulletinBuilderFormatter(Formatter):
         if not len(soup.find_all('p')):
             for br in soup.find_all('br'):
                 # remove the <br> tag
-                br.replace_with(' {}'.format(br.get_text().replace('\n', '')))
+                br.replace_with(' {}'.format(br.get_text().replace('\n', ' ')))
 
         for p in soup.find_all('p'):
             # replace <p> tag with two carriage return
             for br in p.find_all('br'):
                 # remove the <br> tag
-                br.replace_with(' {}'.format(br.get_text().replace('\n', '')))
+                br.replace_with(' {}'.format(br.get_text().replace('\n', ' ')))
 
-            para_text = p.get_text().strip().replace('\n', '')
+            para_text = p.get_text().strip().replace('\n', ' ')
             if para_text != '':
                 p.replace_with('{}\r\n\r\n'.format(para_text))
             else:

@@ -150,7 +150,7 @@ class AapBulletinBuilderFormatterTest(SuperdeskTestCase):
             'source': 'AAP',
             'headline': 'This is a test headline',
             'type': 'text',
-            'body_html': ('<p>This is \nthird<br> take.</p><br><p>Correction in the third take.</p><br>'
+            'body_html': ('<p>This is \nthird<br> take.</p><br><p>Correction\nin the third take.</p><br>'
                           '<p>This is test.</p><br><p><br></p>')
         }
 
