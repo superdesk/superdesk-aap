@@ -2,4 +2,4 @@ gunicorn==19.6.0
 honcho==0.6.6
 pyodbc==3.0.10
 
-git+git://github.com/superdesk/superdesk-core.git@c5c6534ad#egg=Superdesk-Core
+git+git://github.com/superdesk/superdesk-core.git@f968022bf#egg=Superdesk-Core
