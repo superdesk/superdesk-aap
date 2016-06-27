@@ -13,10 +13,11 @@ from .aap_formatter_common import map_priority
 from apps.archive.common import get_utc_schedule
 import superdesk
 from superdesk.errors import FormatterError
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, NavigableString
 import datetime
 from superdesk.metadata.item import ITEM_TYPE, CONTENT_TYPE, BYLINE, EMBARGO, FORMAT, FORMATS
 from .field_mappers.locator_mapper import LocatorMapper
+from io import StringIO
 
 
 class AAPAnpaFormatter(Formatter):
@@ -93,20 +94,33 @@ class AAPAnpaFormatter(Formatter):
                 anpa.append((b'\x20' + take_key) if len(take_key) > 0 else b'')
                 anpa.append(b'\x0D\x0A')
 
+                if article.get(EMBARGO):
+                    embargo = '{}{}\r\n'.format('Embargo Content. Timestamp: ',
+                                                get_utc_schedule(article, EMBARGO).isoformat())
+                    anpa.append(embargo.encode('ascii', 'replace'))
+
+                if article.get('ednote', '') != '':
+                    ednote = '{}\r\n'.format(article.get('ednote'))
+                    anpa.append(ednote.encode('ascii', 'replace'))
+
                 if BYLINE in article:
                     anpa.append(article.get(BYLINE).encode('ascii', 'ignore'))
                     anpa.append(b'\x0D\x0A')
 
-                if article.get('dateline', {}).get('text'):
-                    anpa.append(article.get('dateline').get('text').encode('ascii', 'ignore'))
-
-                body = self.append_body_footer(article)
-                if article.get(EMBARGO):
-                    embargo = '{}{}'.format('Embargo Content. Timestamp: ',
-                                            get_utc_schedule(article, EMBARGO).isoformat())
-                    body = embargo + body
-
-                anpa.append(BeautifulSoup(body, "html.parser").text.encode('ascii', 'replace'))
+                if article.get(FORMAT) == FORMATS.PRESERVED:
+                    soup = BeautifulSoup(self.append_body_footer(article), "html.parser")
+                    anpa.append(soup.get_text().encode('ascii', 'replace'))
+                else:
+                    if article.get('dateline', {}).get('text'):
+                        soup = BeautifulSoup(article.get('body_html', ''), "html.parser")
+                        ptag = soup.find('p')
+                        if ptag is not None:
+                            ptag.insert(0, NavigableString(
+                                '{} '.format(article.get('dateline').get('text')).encode('ascii', 'ignore')))
+                            article['body_html'] = str(soup)
+                    anpa.append(self.to_ascii(article.get('body_html', '')))
+                    if article.get('body_footer'):
+                        anpa.append(self.to_ascii(article.get('body_footer', '')))
 
                 anpa.append(b'\x0D\x0A')
                 if article.get('more_coming', False):
@@ -130,6 +144,21 @@ class AAPAnpaFormatter(Formatter):
             return docs
         except Exception as ex:
             raise FormatterError.AnpaFormatterError(ex, subscriber)
+
+    def to_ascii(self, html):
+        """
+        Given a html string returns ascii bytes
+        :param html:
+        :return:
+        """
+        soup = BeautifulSoup(html, "html.parser")
+        text = StringIO()
+        for p in soup.findAll('p'):
+            text.write('\r\n   ')
+            ptext = p.get_text('\n')
+            for l in ptext.split('\n'):
+                text.write(l + '\r\n')
+        return text.getvalue().replace('\xA0', ' ').encode('ascii', 'replace')
 
     def _process_headline(self, anpa, article, category):
         # prepend the locator to the headline if required

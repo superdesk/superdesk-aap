@@ -36,12 +36,12 @@ class ANPAFormatterTest(SuperdeskTestCase):
         'anpa_take_key': 'take_key',
         'urgency': 5,
         'unique_id': '1',
-        'body_html': 'The story body',
+        'body_html': '<p>The story body</p>',
         'type': 'text',
         'word_count': '1',
         'priority': 1,
         'task': {'desk': 1},
-        'body_footer': 'call helpline 999 if you are planning to quit smoking'
+        'body_footer': '<p>call helpline 999 if you are planning<br>to quit smoking</p>'
     }
 
     desks = [{'_id': 1, 'name': 'National'},
@@ -79,9 +79,18 @@ class ANPAFormatterTest(SuperdeskTestCase):
         line = lines.readline()
         self.assertEqual(line.strip(), 'slugline take_key')
 
+        lines.readline()
         line = lines.readline()
-        self.assertEqual(line.strip(), 'The story bodycall helpline 999 if you are planning to quit smoking')
+        self.assertEqual(line.strip(), 'The story body')
 
+        lines.readline()
+        line = lines.readline()
+        self.assertEqual(line.strip(), 'call helpline 999 if you are planning')
+
+        line = lines.readline()
+        self.assertEqual(line.strip(), 'to quit smoking')
+
+        lines.readline()
         line = lines.readline()
         self.assertEqual(line.strip(), 'AAP')
 
@@ -108,9 +117,18 @@ class ANPAFormatterTest(SuperdeskTestCase):
         line = lines.readline()
         self.assertEqual(line.strip(), 'slugline take_key')
 
+        lines.readline()
         line = lines.readline()
-        self.assertEqual(line.strip(), 'The story bodycall helpline 999 if you are planning to quit smoking')
+        self.assertEqual(line.strip(), 'The story body')
 
+        lines.readline()
+        line = lines.readline()
+        self.assertEqual(line.strip(), 'call helpline 999 if you are planning')
+
+        line = lines.readline()
+        self.assertEqual(line.strip(), 'to quit smoking')
+
+        lines.readline()
         line = lines.readline()
         self.assertEqual(line.strip(), 'AAP')
 
@@ -142,9 +160,18 @@ class ANPAFormatterTest(SuperdeskTestCase):
         line = lines.readline()
         self.assertEqual(line.strip(), 'Joe Blogs')
 
+        lines.readline()
         line = lines.readline()
-        self.assertEqual(line.strip(), 'The story bodycall helpline 999 if you are planning to quit smoking')
+        self.assertEqual(line.strip(), 'The story body')
 
+        lines.readline()
+        line = lines.readline()
+        self.assertEqual(line.strip(), 'call helpline 999 if you are planning')
+
+        line = lines.readline()
+        self.assertEqual(line.strip(), 'to quit smoking')
+
+        lines.readline()
         line = lines.readline()
         self.assertEqual(line.strip(), 'AAP')
 
@@ -221,3 +248,21 @@ class ANPAFormatterTest(SuperdeskTestCase):
         item = self.article.copy()
         item.update({'dateline': {'text': None}})
         seq, out = f.format(item, subscriber)[0]
+
+    def test_dateline_injection(self):
+        f = AAPAnpaFormatter()
+        subscriber = self.app.data.find('subscribers', None, None)[0]
+        item = self.article.copy()
+        item.update({'dateline': {'text': 'SYDNEY, June 27 AAP -'}})
+        seq, out = f.format(item, subscriber)[0]
+        lines = io.StringIO(out.decode())
+        self.assertTrue(lines.getvalue().find('SYDNEY, June 27 AAP - The story body') > 0)
+
+    def test_ednote_injection(self):
+        f = AAPAnpaFormatter()
+        subscriber = self.app.data.find('subscribers', None, None)[0]
+        item = self.article.copy()
+        item.update({'ednote': 'Note this'})
+        seq, out = f.format(item, subscriber)[0]
+        lines = io.StringIO(out.decode())
+        self.assertTrue(lines.getvalue().find('Note this') > 0)
