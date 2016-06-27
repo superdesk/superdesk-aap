@@ -248,6 +248,35 @@
             embeds: false
         };
 
+        config.list = {
+            'priority': [
+                'priority',
+                'urgency'
+            ],
+            'firstLine': [
+                'wordcount',
+                'slugline',
+                'highlights',
+                'headline',
+                'versioncreated'
+            ],
+            'secondLine': [
+                'profile',
+                'state',
+                'embargo',
+                'takekey',
+                'takepackage',
+                'signal',
+                'broadcast',
+                'flags',
+                'updated',
+                'category',
+                'provider',
+                'expiry',
+                'desk'
+            ]
+        };
+
         var modules = [
             'superdesk',
             'superdesk.settings',
