@@ -25,7 +25,6 @@ class SelectorcodeMapperTest(SuperdeskTestCase):
     }
     article2 = {
         'subject': [{'qcode': '15011002'}, {'qcode': '10006000'}]
-
     }
     article3 = {
         'subject': [{'qcode': '15063000'}, {'qcode': '15067000'}]
@@ -38,6 +37,30 @@ class SelectorcodeMapperTest(SuperdeskTestCase):
     article5 = {
         'subject': [{'qcode': '15000000'}, {'qcode': '15063000'}]
 
+    }
+
+    article6 = {
+        'subject': [{'qcode': '15011002'}, {'qcode': '10006000'}],
+        'place': [{
+            'name': 'NSW',
+            'state': '',
+            'world_region': 'Oceania',
+            'group': 'Australia',
+            'qcode': 'NSW',
+            'country': 'Australia'
+        }]
+    }
+
+    article7 = {
+        'subject': [{'qcode': '15011002'}, {'qcode': '10006000'}],
+        'place': [{
+            'name': 'CHINA',
+            'state': '',
+            'world_region': 'China',
+            'group': 'Rest of the World',
+            'qcode': 'CHN',
+            'country': 'China'
+        }]
     }
     category1 = 'I'
     category2 = 'D'
@@ -58,8 +81,9 @@ class SelectorcodeMapperTest(SuperdeskTestCase):
         init_app(self.app)
 
     def test_locator_code_for_international_domestic_news(self):
-        self.assertEqual(self.locator_map.map(self.article1, self.category1), 'TRAVI')
-        self.assertEqual(self.locator_map.map(self.article2, self.category2), 'TRAVD')
+        self.assertEqual(self.locator_map.map(self.article2, 'C'), 'TRAVI')
+        self.assertEqual(self.locator_map.map(self.article6, 'C'), 'TRAVD')
+        self.assertEqual(self.locator_map.map(self.article7, 'C'), 'TRAVI')
 
     def test_locator_code_for_international_domestic_sport(self):
         self.assertEqual(self.locator_map.map(self.article3, 'S'), 'VOL')
