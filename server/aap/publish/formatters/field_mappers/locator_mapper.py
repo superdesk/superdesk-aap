@@ -124,12 +124,21 @@ class LocatorMapper(FieldMapper):
             if feature:
                 return feature
 
+        # for now restricting to features category.
+        if category != 'C':
+            return None
+
         for subject in subjects:
             qcode = subject.get('qcode', '')
             feature = locators.get(qcode)
             if feature:
                 if qcode == '10006000':
-                    return '{}{}'.format(feature, 'I' if category == 'I' else 'D')
+                    place = article.get('place')[0] if article.get('place', None) else None
+                    suffix = 'D'
+                    if not place or place.get('country') != 'Australia':
+                        suffix = 'I'
+                    return '{}{}'.format(feature, suffix)
                 else:
                     return feature
+
         return None
