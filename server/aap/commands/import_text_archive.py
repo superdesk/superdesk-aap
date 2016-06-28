@@ -222,6 +222,9 @@ class AppImportTextArchiveCommand(superdesk.Command):
                         item['word_count'] = get_text_word_count(item['body_html'])
                     except:
                         pass
+                else:
+                    # Items with no body are ignored
+                    continue
 
                 item['source'] = self._get_head_value(doc, 'Agency')
                 # if the source document contains no agency then by definition it is unknown
