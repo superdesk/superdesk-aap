@@ -18,6 +18,8 @@ import datetime
 from superdesk.metadata.item import ITEM_TYPE, CONTENT_TYPE, BYLINE, EMBARGO, FORMAT, FORMATS
 from .field_mappers.locator_mapper import LocatorMapper
 from io import StringIO
+from apps.packages import TakesPackageService
+from eve.utils import config
 
 
 class AAPAnpaFormatter(Formatter):
@@ -25,6 +27,9 @@ class AAPAnpaFormatter(Formatter):
         try:
             docs = []
             for category in article.get('anpa_category'):
+                article[config.ID_FIELD] = article.get('item_id', article.get(config.ID_FIELD))
+                is_last_take = TakesPackageService().is_last_takes_package_item(article)
+                is_first_part = article.get('sequence', 1) == 1
                 pub_seq_num = superdesk.get_resource_service('subscribers').generate_sequence_number(subscriber)
                 anpa = []
 
@@ -111,7 +116,7 @@ class AAPAnpaFormatter(Formatter):
                     soup = BeautifulSoup(self.append_body_footer(article), "html.parser")
                     anpa.append(soup.get_text().encode('ascii', 'replace'))
                 else:
-                    if article.get('dateline', {}).get('text'):
+                    if is_first_part and article.get('dateline', {}).get('text'):
                         soup = BeautifulSoup(article.get('body_html', ''), "html.parser")
                         ptag = soup.find('p')
                         if ptag is not None:
@@ -123,7 +128,7 @@ class AAPAnpaFormatter(Formatter):
                         anpa.append(self.to_ascii(article.get('body_footer', '')))
 
                 anpa.append(b'\x0D\x0A')
-                if article.get('more_coming', False):
+                if not is_last_take:
                     anpa.append('MORE'.encode('ascii'))
                 else:
                     anpa.append(article.get('source', '').encode('ascii'))

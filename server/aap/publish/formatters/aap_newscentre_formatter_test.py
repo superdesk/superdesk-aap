@@ -39,7 +39,7 @@ class AapNewscentreFormatterTest(SuperdeskTestCase):
         'unique_id': '1',
         'format': 'preserved',
         'type': 'text',
-        'body_html': 'The story body',
+        'body_html': '<p>The story body</p>',
         'word_count': '1',
         'priority': 1,
         'place': [{'qcode': 'VIC', 'name': 'VIC'}],
@@ -72,7 +72,7 @@ class AapNewscentreFormatterTest(SuperdeskTestCase):
         self.assertDictEqual(item,
                              {'category': 'A', 'fullStory': 1, 'ident': '0',
                               'headline': 'VIC:This is a test headline', 'originator': 'AAP',
-                              'take_key': 'take_key', 'article_text': 'The story body', 'usn': '1',
+                              'take_key': 'take_key', 'article_text': 'The story body\r\nAAP', 'usn': '1',
                               'subject_matter': 'international law', 'news_item_type': 'News',
                               'subject_reference': '02011001', 'subject': 'crime, law and justice',
                               'subject_detail': 'international court or tribunal',
@@ -103,7 +103,7 @@ class AapNewscentreFormatterTest(SuperdeskTestCase):
         item = json.loads(item)
 
         expected = '   \r\nThe story body line 1 \r\nLine 2 \r\n   \r\nabcdefghi abcdefghi abcdefghi abcdefghi ' \
-                   'abcdefghi abcdefghi abcdefghi abcdefghi more \r\n'
+                   'abcdefghi abcdefghi abcdefghi abcdefghi more \r\n\r\nAAP'
         self.assertEqual(item['article_text'], expected)
 
     def testMultipleCategories(self):
@@ -118,7 +118,7 @@ class AapNewscentreFormatterTest(SuperdeskTestCase):
             'anpa_take_key': 'take_key',
             'unique_id': '1',
             'type': 'text',
-            'body_html': 'body',
+            'body_html': '<p>body</p>',
             'word_count': '1',
             'priority': 1,
             'task': {'desk': 1},
@@ -155,7 +155,7 @@ class AapNewscentreFormatterTest(SuperdeskTestCase):
             'anpa_take_key': 'take_key',
             'unique_id': '1',
             'type': 'text',
-            'body_html': 'body',
+            'body_html': '<p>body</p>',
             'word_count': '1',
             'priority': 1,
             'task': {'desk': 1},
@@ -180,7 +180,7 @@ class AapNewscentreFormatterTest(SuperdeskTestCase):
             'anpa_take_key': 'take_key',
             'unique_id': '1',
             'type': 'text',
-            'body_html': 'body',
+            'body_html': '<p>body</p>',
             'word_count': '1',
             'priority': 1,
             'task': {'desk': 1},
@@ -210,7 +210,8 @@ class AapNewscentreFormatterTest(SuperdeskTestCase):
                              {'category': 'A', 'fullStory': 1, 'ident': '0',
                               'headline': 'VIC:This is a test headline', 'originator': 'AAP',
                               'take_key': 'take_key',
-                              'article_text': 'The story body\r\ncall helpline 999 if you are planning to quit smoking',
+                              'article_text': 'The story body\r\ncall helpline 999 if you are planning '
+                              'to quit smoking\r\nAAP',
                               'usn': '1',
                               'subject_matter': 'international law', 'news_item_type': 'News',
                               'subject_reference': '02011001', 'subject': 'crime, law and justice',
