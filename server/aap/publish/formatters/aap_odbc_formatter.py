@@ -14,6 +14,7 @@ from .aap_formatter_common import set_subject
 from apps.archive.common import get_utc_schedule
 from .field_mappers.locator_mapper import LocatorMapper
 from superdesk.metadata.item import EMBARGO
+from eve.utils import config
 import superdesk
 
 
@@ -62,8 +63,19 @@ class AAPODBCFormatter():
         :return:
         """
         if article.get(EMBARGO):
-            embargo = '{}{}'.format('Embargo Content. Timestamp: ', get_utc_schedule(article, EMBARGO).isoformat())
+            embargo = '{}{}\r\n'.format('Embargo Content. Timestamp: ', get_utc_schedule(article, EMBARGO).isoformat())
             odbc_item['article_text'] = embargo + odbc_item['article_text']
+
+    def add_ednote(self, odbc_item, article):
+        """
+        Add the editorial note if required
+        :param odbc_item:
+        :param article:
+        :return:
+        """
+        if article.get('ednote'):
+            ednote = 'EDS:{}\r\n'.format(article.get('ednote').replace('\'', '\'\''))
+            odbc_item['article_text'] = ednote + odbc_item['article_text']
 
     def expand_subject_codes(self, odbc_item):
         """
@@ -98,3 +110,10 @@ class AAPODBCFormatter():
             odbc_item['usn'] = pkg.get('unique_id', None)  # @usn
         else:
             odbc_item['usn'] = article.get('unique_id', None)  # @usn
+
+    def is_last_take(self, article):
+        article[config.ID_FIELD] = article.get('item_id', article.get(config.ID_FIELD))
+        return TakesPackageService().is_last_takes_package_item(article)
+
+    def is_first_part(self, article):
+        article.get('sequence', 1) == 1

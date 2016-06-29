@@ -28,8 +28,10 @@ class AAPNewscentreFormatter(Formatter, AAPODBCFormatter):
             docs = []
             for category in article.get('anpa_category'):
                 pub_seq_num, odbc_item = self.get_odbc_item(article, subscriber, category, codes)
+                is_last_take = self.is_last_take(article)
+                soup = BeautifulSoup(self.append_body_footer(article) if is_last_take else article.get('body_html', ''),
+                                     "html.parser")
 
-                soup = BeautifulSoup(self.append_body_footer(article), "html.parser")
                 if article.get(FORMAT) == FORMATS.PRESERVED:  # @article_text
                     odbc_item['article_text'] = soup.get_text().replace('\'', '\'\'')
                 else:
@@ -39,9 +41,24 @@ class AAPNewscentreFormatter(Formatter, AAPODBCFormatter):
                         ptext = p.get_text('\n')
                         for l in ptext.split('\n'):
                             text.write(l + ' \r\n')
-                    odbc_item['article_text'] = text.getvalue().replace('\'', '\'\'')
+                    body = text.getvalue().replace('\'', '\'\'')
+                    if self.is_first_part(article) and 'dateline' in article and 'text' in article.get('dateline', {}):
+                        if body.startswith('   \r\n'):
+                            body = '   \r\n{} {}'.format(article.get('dateline').get('text').replace('\'', '\'\''),
+                                                         body[5:])
+                    odbc_item['article_text'] = body
 
-                self.add_embargo(odbc_item, article)
+                if self.is_first_part(article):
+                    self.add_ednote(odbc_item, article)
+                    self.add_embargo(odbc_item, article)
+
+                if not is_last_take:
+                    odbc_item['article_text'] += '\r\nMORE'
+                else:
+                    odbc_item['article_text'] += '\r\n' + article.get('source', '')
+                sign_off = article.get('sign_off', '')
+                if len(sign_off) > 0:
+                    odbc_item['article_text'] += ' ' + sign_off
 
                 odbc_item['category'] = odbc_item.get('category', '').upper()
                 odbc_item['selector_codes'] = odbc_item.get('selector_codes', '').upper()

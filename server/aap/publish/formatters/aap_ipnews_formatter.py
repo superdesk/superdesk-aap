@@ -17,7 +17,6 @@ from .aap_formatter_common import map_priority
 from superdesk.publish.formatters import Formatter
 from superdesk.errors import FormatterError
 from superdesk.metadata.item import ITEM_TYPE, CONTENT_TYPE, FORMAT, FORMATS
-
 import json
 
 
@@ -32,8 +31,10 @@ class AAPIpNewsFormatter(Formatter, AAPODBCFormatter):
             docs = []
             for category in article.get('anpa_category'):
                 pub_seq_num, odbc_item = self.get_odbc_item(article, subscriber, category, codes)
-
-                soup = BeautifulSoup(self.append_body_footer(article), "html.parser")
+                # determine if this is the last take
+                is_last_take = self.is_last_take(article)
+                soup = BeautifulSoup(self.append_body_footer(article) if is_last_take else article.get('body_html', ''),
+                                     "html.parser")
                 if article.get(FORMAT) == FORMATS.PRESERVED:  # @article_text
                     odbc_item['article_text'] = soup.get_text().replace('\'', '\'\'')
                     odbc_item['texttab'] = 't'
@@ -47,10 +48,27 @@ class AAPIpNewsFormatter(Formatter, AAPODBCFormatter):
                                 text.write(textwrap.fill(l, 80).replace('\n', ' \r\n'))
                             else:
                                 text.write(l + ' \r\n')
-                    odbc_item['article_text'] = text.getvalue().replace('\'', '\'\'')
+                    body = text.getvalue().replace('\'', '\'\'')
+                    # if this is the first take and we have a dateline inject it
+                    if self.is_first_part(article) and 'dateline' in article and 'text' in article.get('dateline', {}):
+                        if body.startswith('\x19\r\n'):
+                            body = '\x19\r\n{} {}'.format(article.get('dateline').get('text').replace('\'', '\'\''),
+                                                          body[3:])
+
+                    odbc_item['article_text'] = body
                     odbc_item['texttab'] = 'x'
 
-                self.add_embargo(odbc_item, article)
+                if self.is_first_part(article):
+                    self.add_ednote(odbc_item, article)
+                    self.add_embargo(odbc_item, article)
+
+                if not is_last_take:
+                    odbc_item['article_text'] += '\r\nMORE'
+                else:
+                    odbc_item['article_text'] += '\r\n' + article.get('source', '')
+                sign_off = article.get('sign_off', '')
+                if len(sign_off) > 0:
+                    odbc_item['article_text'] += ' ' + sign_off
 
                 odbc_item['service_level'] = 'a'  # @service_level
                 odbc_item['wordcount'] = article.get('word_count', None)  # @wordcount

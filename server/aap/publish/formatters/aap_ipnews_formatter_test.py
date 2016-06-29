@@ -47,6 +47,11 @@ class AapIpNewsFormatterTest(SuperdeskTestCase):
         'genre': []
     }
 
+    pkg = [{'_id': 'package',
+            'type': 'composite',
+            'package_type': 'takes',
+            'last_take': '3'}]
+
     vocab = [{'_id': 'categories', 'items': [
         {'is_active': True, 'name': 'Overseas Sport', 'qcode': 'S', 'subject': '15000000'},
         {'is_active': True, 'name': 'Finance', 'qcode': 'F', 'subject': '04000000'}
@@ -58,6 +63,7 @@ class AapIpNewsFormatterTest(SuperdeskTestCase):
         self.app.data.insert('subscribers', self.subscribers)
         self.app.data.insert('vocabularies', self.vocab)
         self.app.data.insert('desks', self.desks)
+        self.app.data.insert('archive', self.pkg)
         init_app(self.app)
 
     def testIPNewsFormatterWithNoSelector(self):
@@ -73,7 +79,8 @@ class AapIpNewsFormatterTest(SuperdeskTestCase):
         self.assertDictEqual(item,
                              {'category': 'a', 'texttab': 't', 'fullStory': 1, 'ident': '0',
                               'headline': 'VIC:This is a test headline', 'service_level': 'a', 'originator': 'AAP',
-                              'take_key': 'take_key', 'article_text': 'The story body', 'priority': 'f', 'usn': '1',
+                              'take_key': 'take_key', 'article_text': 'The story body\r\nAAP', 'priority': 'f',
+                              'usn': '1',
                               'subject_matter': 'international law', 'news_item_type': 'News',
                               'subject_reference': '02011001', 'subject': 'crime, law and justice',
                               'wordcount': '1', 'subject_detail': 'international court or tribunal',
@@ -82,6 +89,7 @@ class AapIpNewsFormatterTest(SuperdeskTestCase):
 
     def testIPNewsHtmlToText(self):
         article = {
+            '_id': '1',
             'source': 'AAP',
             'anpa_category': [{'qcode': 'a'}],
             'headline': 'This is a test headline',
@@ -92,9 +100,15 @@ class AapIpNewsFormatterTest(SuperdeskTestCase):
             'unique_id': '1',
             'type': 'text',
             'body_html': '<p>The story body line 1<br>Line 2</p>\
-                         <p>abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi more</p>',
+                         <p>abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi</p>',
             'word_count': '1',
-            'priority': 1
+            'priority': 1,
+            "linked_in_packages": [
+                {
+                    "package": "package",
+                    "package_type": "takes"
+                }
+            ],
         }
 
         subscriber = self.app.data.find('subscribers', None, None)[0]
@@ -104,7 +118,41 @@ class AapIpNewsFormatterTest(SuperdeskTestCase):
         item = json.loads(item)
 
         expected = '\r\nThe story body line 1 \r\nLine 2 \r\n\r\nabcdefghi abcdefghi abcdefghi abcdefghi ' \
-                   'abcdefghi abcdefghi abcdefghi abcdefghi \r\nmore'
+                   'abcdefghi abcdefghi abcdefghi abcdefghi \r\n\r\nMORE'
+        self.assertEqual(item['article_text'], expected)
+
+    def testLastTake(self):
+        article = {
+            '_id': '3',
+            'source': 'AAP',
+            'anpa_category': [{'qcode': 'a'}],
+            'headline': 'This is a test headline',
+            'byline': 'joe',
+            'slugline': 'slugline',
+            'subject': [{'qcode': '02011001'}],
+            'anpa_take_key': 'take_key',
+            'unique_id': '1',
+            'type': 'text',
+            'body_html': '<p>The story body line 1<br>Line 2</p>\
+                         <p>abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi</p>',
+            'word_count': '1',
+            'priority': 1,
+            "linked_in_packages": [
+                {
+                    "package": "package",
+                    "package_type": "takes"
+                }
+            ],
+        }
+
+        subscriber = self.app.data.find('subscribers', None, None)[0]
+
+        f = AAPIpNewsFormatter()
+        seq, item = f.format(article, subscriber)[0]
+        item = json.loads(item)
+
+        expected = '\r\nThe story body line 1 \r\nLine 2 \r\n\r\nabcdefghi abcdefghi abcdefghi abcdefghi ' \
+                   'abcdefghi abcdefghi abcdefghi abcdefghi \r\n\r\nAAP'
         self.assertEqual(item['article_text'], expected)
 
     def testMultipleCategories(self):
@@ -240,7 +288,8 @@ class AapIpNewsFormatterTest(SuperdeskTestCase):
                              {'category': 'a', 'texttab': 't', 'fullStory': 1, 'ident': '0',
                               'headline': 'VIC:This is a test headline', 'service_level': 'a', 'originator': 'AAP',
                               'take_key': 'take_key',
-                              'article_text': 'The story body\r\ncall helpline 999 if you are planning to quit smoking',
+                              'article_text': 'The story body\r\ncall helpline 999 if you are planning to '
+                              'quit smoking\r\nAAP',
                               'priority': 'f', 'usn': '1',
                               'subject_matter': 'international law', 'news_item_type': 'News',
                               'subject_reference': '02011001', 'subject': 'crime, law and justice',
