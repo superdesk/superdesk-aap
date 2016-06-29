@@ -40,6 +40,7 @@ def usd_to_aud(item, **kwargs):
 
 name = 'usd_to_aud'
 label = 'Currency USD to AUD'
+order = 2
 callback = usd_to_aud
 access_type = 'frontend'
 action_type = 'interactive'

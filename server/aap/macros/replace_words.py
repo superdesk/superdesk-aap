@@ -90,6 +90,7 @@ def find_and_replace(item, **kwargs):
 
 name = 'Replace_Words'
 label = 'Replace American Words'
+order = 1
 shortcut = 'a'
 callback = find_and_replace
 access_type = 'frontend'
