@@ -41,19 +41,20 @@ class AAPIpNewsFormatter(Formatter, AAPODBCFormatter):
                 elif article.get(FORMAT, FORMATS.HTML) == FORMATS.HTML:
                     text = StringIO()
                     for p in soup.findAll('p'):
-                        text.write('\x19\r\n')
+                        text.write('   ')
                         ptext = p.get_text('\n')
                         for l in ptext.split('\n'):
                             if len(l) > 80:
                                 text.write(textwrap.fill(l, 80).replace('\n', ' \r\n'))
                             else:
                                 text.write(l + ' \r\n')
+                        text.write('\x19\r\n')
                     body = text.getvalue().replace('\'', '\'\'')
                     # if this is the first take and we have a dateline inject it
                     if self.is_first_part(article) and 'dateline' in article and 'text' in article.get('dateline', {}):
-                        if body.startswith('\x19\r\n'):
-                            body = '\x19\r\n{} {}'.format(article.get('dateline').get('text').replace('\'', '\'\''),
-                                                          body[3:])
+                        if body.startswith('   '):
+                            body = '   {} {}'.format(article.get('dateline').get('text').replace('\'', '\'\''),
+                                                     body[3:])
 
                     odbc_item['article_text'] = body
                     odbc_item['texttab'] = 'x'

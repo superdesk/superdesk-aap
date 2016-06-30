@@ -117,8 +117,8 @@ class AapIpNewsFormatterTest(SuperdeskTestCase):
         seq, item = f.format(article, subscriber)[0]
         item = json.loads(item)
 
-        expected = '\r\nThe story body line 1 \r\nLine 2 \r\n\r\nabcdefghi abcdefghi abcdefghi abcdefghi ' \
-                   'abcdefghi abcdefghi abcdefghi abcdefghi \r\n\r\nMORE'
+        expected = '   The story body line 1 \r\nLine 2 \r\n\r\n   abcdefghi abcdefghi abcdefghi abcdefghi ' \
+                   'abcdefghi abcdefghi abcdefghi abcdefghi \r\n\r\n\r\nMORE'
         self.assertEqual(item['article_text'], expected)
 
     def testLastTake(self):
@@ -150,9 +150,8 @@ class AapIpNewsFormatterTest(SuperdeskTestCase):
         f = AAPIpNewsFormatter()
         seq, item = f.format(article, subscriber)[0]
         item = json.loads(item)
-
-        expected = '\r\nThe story body line 1 \r\nLine 2 \r\n\r\nabcdefghi abcdefghi abcdefghi abcdefghi ' \
-                   'abcdefghi abcdefghi abcdefghi abcdefghi \r\n\r\nAAP'
+        expected = '   The story body line 1 \r\nLine 2 \r\n\r\n   abcdefghi abcdefghi abcdefghi abcdefghi ' \
+                   'abcdefghi abcdefghi abcdefghi abcdefghi \r\n\r\n\r\nAAP'
         self.assertEqual(item['article_text'], expected)
 
     def testMultipleCategories(self):
