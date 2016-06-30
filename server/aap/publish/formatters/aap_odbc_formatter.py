@@ -116,4 +116,4 @@ class AAPODBCFormatter():
         return TakesPackageService().is_last_takes_package_item(article)
 
     def is_first_part(self, article):
-        article.get('sequence', 1) == 1
+        return article.get('sequence', 1) == 1
