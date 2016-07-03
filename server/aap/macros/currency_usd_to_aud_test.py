@@ -17,6 +17,7 @@ class CurrencyTestCase(unittest.TestCase):
 
     def test_usd_to_aud(self):
         text = 'This is a $ 40 note. ' \
+               'This is a $ 1000 note. ' \
                'This is a $41 note. ' \
                'This is a $(42) note. ' \
                'This is a $46,483 note. ' \
@@ -46,6 +47,7 @@ class CurrencyTestCase(unittest.TestCase):
         item = {'body_html': text}
         res, diff = usd_to_aud(item, rate=Decimal(2))
         self.assertEqual(diff['$ 40'], '$ 40 ($A80)')
+        self.assertEqual(diff['$ 1000'], '$ 1000 ($A2,000)')
         self.assertEqual(diff['$41'], '$41 ($A82)')
         self.assertEqual(diff['$(42)'], '$(42) ($A84)')
         self.assertEqual(diff['$46,483'], '$46,483 ($A92,966)')
