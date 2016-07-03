@@ -31,7 +31,7 @@ def usd_to_aud(item, **kwargs):
     if os.environ.get('BEHAVE_TESTING'):
         rate = USD_TO_AUD
 
-    regex = r'((\$US)|(\$)|(USD)|(\$US))\s*\-?\s*\(?(((\d{1,3}((\,\d{3})*|\d*))?' \
+    regex = r'((\$US)|(\$)|(USD)|(\$US))\s*\-?\s*\(?(((\d{1,4}((\,\d{3})*|\d*))?' \
             r'(\.\d{1,4})?)|((\d{1,3}((\,\d{3})*|\d*))(\.\d{0,4})?))\)?' \
             + currency_base.SUFFIX_REGEX
 
