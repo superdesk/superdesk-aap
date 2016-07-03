@@ -79,11 +79,9 @@ class ANPAFormatterTest(SuperdeskTestCase):
         line = lines.readline()
         self.assertEqual(line.strip(), 'slugline take_key')
 
-        lines.readline()
         line = lines.readline()
         self.assertEqual(line.strip(), 'The story body')
 
-        lines.readline()
         line = lines.readline()
         self.assertEqual(line.strip(), 'call helpline 999 if you are planning')
 
@@ -117,11 +115,9 @@ class ANPAFormatterTest(SuperdeskTestCase):
         line = lines.readline()
         self.assertEqual(line.strip(), 'slugline take_key')
 
-        lines.readline()
         line = lines.readline()
         self.assertEqual(line.strip(), 'The story body')
 
-        lines.readline()
         line = lines.readline()
         self.assertEqual(line.strip(), 'call helpline 999 if you are planning')
 
@@ -160,11 +156,9 @@ class ANPAFormatterTest(SuperdeskTestCase):
         line = lines.readline()
         self.assertEqual(line.strip(), 'Joe Blogs')
 
-        lines.readline()
         line = lines.readline()
         self.assertEqual(line.strip(), 'The story body')
 
-        lines.readline()
         line = lines.readline()
         self.assertEqual(line.strip(), 'call helpline 999 if you are planning')
 

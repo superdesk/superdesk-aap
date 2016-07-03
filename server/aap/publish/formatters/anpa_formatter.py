@@ -116,14 +116,16 @@ class AAPAnpaFormatter(Formatter):
                     soup = BeautifulSoup(self.append_body_footer(article), "html.parser")
                     anpa.append(soup.get_text().encode('ascii', 'replace'))
                 else:
+                    body = article.get('body_html', '')
+                    # we need to inject the dateline
                     if is_first_part and article.get('dateline', {}).get('text'):
-                        soup = BeautifulSoup(article.get('body_html', ''), "html.parser")
+                        soup = BeautifulSoup(body, "html.parser")
                         ptag = soup.find('p')
                         if ptag is not None:
                             ptag.insert(0, NavigableString(
                                 '{} '.format(article.get('dateline').get('text')).encode('ascii', 'ignore')))
-                            article['body_html'] = str(soup)
-                    anpa.append(self.to_ascii(article.get('body_html', '')))
+                            body = str(soup)
+                    anpa.append(self.to_ascii(body))
                     if article.get('body_footer'):
                         anpa.append(self.to_ascii(article.get('body_footer', '')))
 
@@ -159,7 +161,7 @@ class AAPAnpaFormatter(Formatter):
         soup = BeautifulSoup(html, "html.parser")
         text = StringIO()
         for p in soup.findAll('p'):
-            text.write('\r\n   ')
+            text.write('   ')
             ptext = p.get_text('\n')
             for l in ptext.split('\n'):
                 text.write(l + '\r\n')
