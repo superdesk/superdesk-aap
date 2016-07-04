@@ -40,6 +40,8 @@ class AAPBulletinBuilderFormatter(Formatter):
             body_html = self.append_body_footer(article).strip('\r\n')
             article['body_text'] = self.get_text_content(body_html)
             article['abstract'] = self.get_text_content(article.get('abstract', '')).strip()
+            article['headline'] = self.get_text_content(article.get('headline', '')).strip()
+            article['slugline'] = self.get_text_content(article.get('slugline', '')).strip()
 
             # get the first category and derive the locator
             category = next((iter(article.get('anpa_category', []))), None)
@@ -72,7 +74,6 @@ class AAPBulletinBuilderFormatter(Formatter):
         soup = BeautifulSoup(content, 'html.parser')
 
         for top_level_tag in soup.find_all(recursive=False):
-            # self.remove_tags(top_level_tag, 'br')
             self.format_text_content(top_level_tag)
 
         return re.sub(' +', ' ', soup.get_text())
@@ -86,7 +87,7 @@ class AAPBulletinBuilderFormatter(Formatter):
         for child_tag in tag.find_all():
             child_tag.replace_with(' {}'.format(child_tag.get_text().replace('\n', ' ')))
 
-        para_text = tag.get_text().strip().replace('\n', ' ')
+        para_text = tag.get_text().strip().replace('\n', ' ').replace('\xa0', ' ')
         if para_text != '':
             tag.replace_with('{}\r\n\r\n'.format(para_text))
         else:

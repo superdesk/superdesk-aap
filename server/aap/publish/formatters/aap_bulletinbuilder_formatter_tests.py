@@ -74,10 +74,11 @@ class AapBulletinBuilderFormatterTest(SuperdeskTestCase):
             config.ID_FIELD: '123',
             config.VERSION: 2,
             'source': 'AAP',
-            'headline': 'This is a test headline',
+            'headline': 'This is a test headline&nbsp;<span></span>',
+            'slugline': 'This is a test slugline ',
             'abstract': '<p>abstract</p>',
             'type': 'text',
-            'body_html': ('<p>The story body line 1<br>Line 2</p>'
+            'body_html': ('<p>The story&nbsp;<span></span>body line 1<br>Line 2</p>'
                           '<p>abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi'
                           '<span> abcdefghi</span> abcdefghi abcdefghi more</p>'
                           '<table><tr><td>test</td></tr></table>')
@@ -95,6 +96,8 @@ class AapBulletinBuilderFormatterTest(SuperdeskTestCase):
         test_article = json.loads(item.get('data'))
         self.assertEqual(test_article['body_text'], body_text)
         self.assertEqual(test_article['abstract'], 'abstract')
+        self.assertEqual(test_article['headline'], 'This is a test headline')
+        self.assertEqual(test_article['slugline'], 'This is a test slugline')
 
     def test_strip_html_case1(self):
         article = {
@@ -231,8 +234,9 @@ class AapBulletinBuilderFormatterTest(SuperdeskTestCase):
                          'The story body\r\ncall helpline 999 if you are planning to quit smoking')
 
     def test_strip_html_mixed_tags(self):
-        html = '<div>This is mixed content <p>this is para</p></div>' \
-               '<p>This is mixed content<div>this is para</div></p>'
+        html = '<div>This is mixed&nbsp;<span style=\\\"background-color: transparent;\\\">content' \
+               ' <p>this is para</p></div>' \
+               '<p>This is&nbsp;&nbsp;&nbsp;mixed content<div>this is para</div></p>'
         formatted_content = self._formatter.get_text_content(html)
 
         body_text = ('This is mixed content this is para\r\n\r\n'
