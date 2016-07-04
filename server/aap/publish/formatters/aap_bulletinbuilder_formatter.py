@@ -40,6 +40,8 @@ class AAPBulletinBuilderFormatter(Formatter):
             body_html = self.append_body_footer(article).strip('\r\n')
             article['body_text'] = self.get_text_content(body_html)
             article['abstract'] = self.get_text_content(article.get('abstract', '')).strip()
+            article['headline'] = self.get_text_content(article.get('headline', '')).strip()
+            article['slugline'] = self.get_text_content(article.get('slugline', '')).strip()
 
             # get the first category and derive the locator
             category = next((iter(article.get('anpa_category', []))), None)
@@ -71,21 +73,22 @@ class AAPBulletinBuilderFormatter(Formatter):
     def get_text_content(self, content):
         soup = BeautifulSoup(content, 'html.parser')
 
-        if not len(soup.find_all('p')):
-            for br in soup.find_all('br'):
-                # remove the <br> tag
-                br.replace_with(' {}'.format(br.get_text().replace('\n', ' ')))
-
-        for p in soup.find_all('p'):
-            # replace <p> tag with two carriage return
-            for br in p.find_all('br'):
-                # remove the <br> tag
-                br.replace_with(' {}'.format(br.get_text().replace('\n', ' ')))
-
-            para_text = p.get_text().strip().replace('\n', ' ')
-            if para_text != '':
-                p.replace_with('{}\r\n\r\n'.format(para_text))
-            else:
-                p.replace_with('')
+        for top_level_tag in soup.find_all(recursive=False):
+            self.format_text_content(top_level_tag)
 
         return re.sub(' +', ' ', soup.get_text())
+
+    def remove_tags(self, tag, tag_name):
+        for replace_tag in tag.find_all(tag_name):
+            # remove the <br> tag
+            replace_tag.replace_with(' {}'.format(replace_tag.get_text().replace('\n', ' ')))
+
+    def format_text_content(self, tag):
+        for child_tag in tag.find_all():
+            child_tag.replace_with(' {}'.format(child_tag.get_text().replace('\n', ' ')))
+
+        para_text = tag.get_text().strip().replace('\n', ' ').replace('\xa0', ' ')
+        if para_text != '':
+            tag.replace_with('{}\r\n\r\n'.format(para_text))
+        else:
+            tag.replace_with('')
