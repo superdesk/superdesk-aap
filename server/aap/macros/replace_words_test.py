@@ -30,7 +30,8 @@ class ReplaceWordsTest(SuperdeskTestCase):
                     {"is_active": True, "existing": "center", "replacement": "centre"},
                     {"is_active": True, "existing": "color", "replacement": "colour"},
                     {"is_active": True, "existing": "tire", "replacement": "tyre"},
-                    {"is_active": True, "existing": "George W. Bush", "replacement": "George W Bush"}
+                    {"is_active": True, "existing": "George W. Bush", "replacement": "George W Bush"},
+                    {"is_active": True, "existing": "ax", "replacement": "axe"}
                 ]}
 
             self.app.data.insert('vocabularies', [vocab])
@@ -39,14 +40,15 @@ class ReplaceWordsTest(SuperdeskTestCase):
         item = {
             'slugline': 'this is color',
             'headline': 'ColOr is bad.',
-            'body_html': 'this is color. tire is great.'
+            'body_html': 'this is color. tire is great. maximum'
         }
 
         result, diff = self.under_test_find_and_replace(item)
         self.assertEqual(result['slugline'], 'this is colour')
         self.assertEqual(result['headline'], 'Colour is bad.')
-        self.assertEqual(result['body_html'], 'this is colour. tyre is great.')
-        self.assertDictEqual(diff, {'ColOr': 'Colour', 'color': 'colour', 'tire': 'tyre'})
+        self.assertEqual(result['body_html'], 'this is colour. tyre is great. maxeimum')
+        self.assertDictEqual(diff, {'ColOr': 'Colour', 'color': 'colour',
+                                    'tire': 'tyre', 'ax': 'axe'})
 
     def test_find_replace_words_same_words(self):
         item = {

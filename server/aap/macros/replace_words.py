@@ -9,6 +9,7 @@
 # at https://www.sourcefabric.org/superdesk/license
 
 import re
+
 from . import macro_replacement_fields
 from superdesk import get_resource_service
 
@@ -57,6 +58,7 @@ def find_and_replace(item, **kwargs):
                 return result
 
     def do_find_replace(input_string, words_list):
+        found_list = {}
         for word in words_list:
             pattern = r'{}'.format(re.escape(word.get('existing', '')))
 
@@ -64,9 +66,10 @@ def find_and_replace(item, **kwargs):
                 # get the original string from the input
                 original = re.search(pattern, input_string, flags=re.IGNORECASE).group(0)
                 replacement = repl(word.get('replacement', ''), original)
-                if original == replacement:
+                if found_list.get(original):
                     break
                 diff[original] = replacement
+                found_list[original] = replacement
                 input_string = input_string.replace(original, replacement)
 
         return input_string
