@@ -172,9 +172,9 @@ class AAPAnpaFormatter(Formatter):
         # prepend the locator to the headline if required
         headline_prefix = LocatorMapper().map(article, category.upper())
         if headline_prefix:
-            headline = '{}:{}'.format(headline_prefix, article['headline'])
+            headline = '{}:{}'.format(headline_prefix, article['headline'].replace('\xA0', ' '))
         else:
-            headline = article.get('headline', '')
+            headline = article.get('headline', '').replace('\xA0', ' ')
 
         # Set the maximum size to 64 including the sequence number if any
         if len(headline) > 64:
