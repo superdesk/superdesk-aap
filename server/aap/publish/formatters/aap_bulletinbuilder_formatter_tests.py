@@ -86,7 +86,7 @@ class AapBulletinBuilderFormatterTest(SuperdeskTestCase):
         body_text = ('The story body line 1 Line 2\r\n\r\n'
                      'abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi'
                      ' abcdefghi abcdefghi abcdefghi more\r\n\r\n'
-                     'test')
+                     'test\r\n\r\n')
 
         subscriber = self.app.data.find('subscribers', None, None)[0]
         seq, item = self._formatter.format(article, subscriber)[0]
@@ -112,7 +112,7 @@ class AapBulletinBuilderFormatterTest(SuperdeskTestCase):
         body_text = ('The story body line 1 Line 2\r\n\r\n'
                      'abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi'
                      ' abcdefghi abcdefghi abcdefghi more\r\n\r\n'
-                     'test')
+                     'test\r\n\r\n')
 
         subscriber = self.app.data.find('subscribers', None, None)[0]
         seq, item = self._formatter.format(article, subscriber)[0]
@@ -128,8 +128,8 @@ class AapBulletinBuilderFormatterTest(SuperdeskTestCase):
             'source': 'AAP',
             'headline': 'This is a test headline',
             'type': 'text',
-            'body_html': ('<p>This is third<br> take.</p><br><p>Correction in the third take.</p><br>'
-                          '<p>This is test.</p><br><p><br></p>')
+            'body_html': ('<p>This is third<br/> take.</p><br/><p>Correction in the third take.</p><br/>'
+                          '<p>This is test.</p><br/><p><br/></p>')
         }
 
         body_text = ('This is third take.\r\n\r\n'
@@ -150,8 +150,8 @@ class AapBulletinBuilderFormatterTest(SuperdeskTestCase):
             'source': 'AAP',
             'headline': 'This is a test headline',
             'type': 'text',
-            'body_html': ('<p>This is \nthird<br> take.</p><br><p>Correction\nin the third take.</p><br>'
-                          '<p>This is test.</p><br><p><br></p>')
+            'body_html': ('<p>This is \nthird<br> take.</p><br/><p>Correction\nin the third take.</p><br/>'
+                          '<p>This is test.</p><br/><p><br/></p>')
         }
 
         body_text = ('This is third take.\r\n\r\n'
@@ -229,3 +229,13 @@ class AapBulletinBuilderFormatterTest(SuperdeskTestCase):
         formatted_article = json.loads(item.get('data'))
         self.assertEqual(formatted_article['body_text'],
                          'The story body\r\ncall helpline 999 if you are planning to quit smoking')
+
+    def test_strip_html_mixed_tags(self):
+        html = '<div>This is mixed content <p>this is para</p></div>' \
+               '<p>This is mixed content<div>this is para</div></p>'
+        formatted_content = self._formatter.get_text_content(html)
+
+        body_text = ('This is mixed content this is para\r\n\r\n'
+                     'This is mixed content this is para\r\n\r\n')
+
+        self.assertEqual(formatted_content, body_text)
