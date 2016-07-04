@@ -245,7 +245,11 @@
 
         config.editor = {
             toolbar: false,
-            embeds: false
+            embeds: false,
+            paste: {
+                forcePlainText: true,
+                cleanPastedHTML: true
+            }
         };
 
         config.view = {
