@@ -10,7 +10,7 @@
 
 
 from superdesk.publish.formatters import Formatter
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, NavigableString
 from superdesk.errors import FormatterError
 from superdesk.metadata.item import ITEM_TYPE, CONTENT_TYPE, FORMAT, FORMATS
 from .aap_odbc_formatter import AAPODBCFormatter
@@ -36,11 +36,12 @@ class AAPNewscentreFormatter(Formatter, AAPODBCFormatter):
                     odbc_item['article_text'] = soup.get_text().replace('\'', '\'\'')
                 else:
                     text = StringIO()
-                    for p in soup.findAll('p'):
-                        text.write('   \r\n')
-                        ptext = p.get_text('\n')
-                        for l in ptext.split('\n'):
-                            text.write(l + ' \r\n')
+                    for p in soup.findAll():
+                        if p.name == 'p':
+                            text.write('   \r\n')
+                        if len(p.contents) > 0:
+                            if isinstance(p.contents[0], NavigableString) and p.contents[0].string is not None:
+                                text.write(p.contents[0] + ' \r\n')
                     body = text.getvalue().replace('\'', '\'\'')
                     if self.is_first_part(article) and 'dateline' in article and 'text' in article.get('dateline', {}):
                         if body.startswith('   \r\n'):

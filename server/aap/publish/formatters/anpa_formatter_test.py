@@ -260,3 +260,22 @@ class ANPAFormatterTest(SuperdeskTestCase):
         seq, out = f.format(item, subscriber)[0]
         lines = io.StringIO(out.decode())
         self.assertTrue(lines.getvalue().find('Note this') > 0)
+
+    def test_div_body(self):
+        f = AAPAnpaFormatter()
+        subscriber = self.app.data.find('subscribers', None, None)[0]
+        item = self.article.copy()
+        item.update({
+            'body_html': '<div>Kathmandu Holdings has lodged a claim in the New Zealand High'
+                         'Court for the recovery of costs associated with last year\'s takeover bid from Briscoe'
+                         'Group.</div><div>Kathmandu Holdings has lodged a claim in the New Zealand High Court for '
+                         'the recovery of costs associated with last year\'s takeover bid from Briscoe Group.'
+                         '</div><div><br></div><div>Kathmandu incurred costs in relation to the takeover bid. '
+                         'After an initial request for payment on November 20, 2015 and subsequent correspondence, '
+                         'Briscoe made a payment of $637,711.65 on May 25, 2016 without prejudice to its position on '
+                         'what sum Kathmandu is entitled to recover.</div><div><br></div><div>Kathmandu considers the '
+                         'full amount claimed is recoverable and has issued legal proceedings for the balance of monies'
+                         ' owed.</div>'})
+        seq, out = f.format(item, subscriber)[0]
+        lines = io.StringIO(out.decode())
+        self.assertTrue(lines.getvalue().split('\n')[6].find('Kathmandu incurred costs in relation') == 0)
