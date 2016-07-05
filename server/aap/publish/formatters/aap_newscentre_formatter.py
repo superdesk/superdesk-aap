@@ -14,7 +14,7 @@ from bs4 import BeautifulSoup
 from superdesk.errors import FormatterError
 from superdesk.metadata.item import ITEM_TYPE, CONTENT_TYPE, FORMAT, FORMATS
 from .aap_odbc_formatter import AAPODBCFormatter
-from io import StringIO
+import re
 import json
 
 
@@ -29,24 +29,19 @@ class AAPNewscentreFormatter(Formatter, AAPODBCFormatter):
             for category in article.get('anpa_category'):
                 pub_seq_num, odbc_item = self.get_odbc_item(article, subscriber, category, codes)
                 is_last_take = self.is_last_take(article)
-                soup = BeautifulSoup(self.append_body_footer(article) if is_last_take else article.get('body_html', ''),
-                                     "html.parser")
-
                 if article.get(FORMAT) == FORMATS.PRESERVED:  # @article_text
+                    soup = BeautifulSoup(self.append_body_footer(article) if is_last_take else
+                                         article.get('body_html', ''), "html.parser")
                     odbc_item['article_text'] = soup.get_text().replace('\'', '\'\'')
                 else:
-                    text = StringIO()
-                    for p in soup.findAll('p'):
-                        text.write('   \r\n')
-                        ptext = p.get_text('\n')
-                        for l in ptext.split('\n'):
-                            text.write(l + ' \r\n')
-                    body = text.getvalue().replace('\'', '\'\'')
+                    body = self.get_text_content(
+                        self.append_body_footer(article) if is_last_take else
+                        article.get('body_html', ''))
+
                     if self.is_first_part(article) and 'dateline' in article and 'text' in article.get('dateline', {}):
-                        if body.startswith('   \r\n'):
-                            body = '   \r\n{} {}'.format(article.get('dateline').get('text').replace('\'', '\'\''),
-                                                         body[5:])
-                    odbc_item['article_text'] = body
+                        if body.startswith('   '):
+                            body = '   {} {}'.format(article.get('dateline').get('text'), body[3:])
+                    odbc_item['article_text'] = body.replace('\'', '\'\'')
 
                 if self.is_first_part(article):
                     self.add_ednote(odbc_item, article)
@@ -68,6 +63,27 @@ class AAPNewscentreFormatter(Formatter, AAPODBCFormatter):
             return docs
         except Exception as ex:
             raise FormatterError.AAPNewscentreFormatterError(ex, subscriber)
+
+    def get_text_content(self, content):
+        soup = BeautifulSoup(content, 'html.parser')
+
+        for top_level_tag in soup.find_all(recursive=False):
+            self.format_text_content(top_level_tag)
+
+        return soup.get_text()
+
+    def format_text_content(self, tag):
+        for child_tag in tag.find_all():
+            if child_tag.name == 'br':
+                child_tag.replace_with('\r\n{}'.format(child_tag.get_text()))
+            else:
+                child_tag.replace_with(' {}'.format(child_tag.get_text()))
+
+        para_text = re.sub(' +', ' ', tag.get_text().strip().replace('\xA0', ' '))
+        if para_text != '':
+            tag.replace_with('   {}\r\n\r\n'.format(para_text))
+        else:
+            tag.replace_with('')
 
     def can_format(self, format_type, article):
         return format_type == 'AAP NEWSCENTRE' and article[ITEM_TYPE] in [CONTENT_TYPE.TEXT, CONTENT_TYPE.PREFORMATTED]

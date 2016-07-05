@@ -99,8 +99,8 @@ class AapIpNewsFormatterTest(SuperdeskTestCase):
             'anpa_take_key': 'take_key',
             'unique_id': '1',
             'type': 'text',
-            'body_html': '<p>The story body line 1<br>Line 2</p>\
-                         <p>abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi</p>',
+            'body_html': '<p>The story body line 1<br>Line 2</p>'
+                         '<p>abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi</p>',
             'word_count': '1',
             'priority': 1,
             "linked_in_packages": [
@@ -117,8 +117,8 @@ class AapIpNewsFormatterTest(SuperdeskTestCase):
         seq, item = f.format(article, subscriber)[0]
         item = json.loads(item)
 
-        expected = '   The story body line 1 \r\nLine 2 \r\n\r\n   abcdefghi abcdefghi abcdefghi abcdefghi ' \
-                   'abcdefghi abcdefghi abcdefghi abcdefghi \r\n\r\n\r\nMORE'
+        expected = '   The story body line 1\r\nLine 2\r\n   abcdefghi abcdefghi abcdefghi abcdefghi ' \
+                   'abcdefghi abcdefghi abcdefghi abcdefghi\r\n\r\nMORE'
         self.assertEqual(item['article_text'], expected)
 
     def testLastTake(self):
@@ -133,8 +133,8 @@ class AapIpNewsFormatterTest(SuperdeskTestCase):
             'anpa_take_key': 'take_key',
             'unique_id': '1',
             'type': 'text',
-            'body_html': '<p>The story body line 1<br>Line 2</p>\
-                         <p>abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi</p>',
+            'body_html': '<p>The story body line 1<br>Line 2</p>'
+                         '<p>abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi</p>',
             'word_count': '1',
             'priority': 1,
             "linked_in_packages": [
@@ -150,8 +150,58 @@ class AapIpNewsFormatterTest(SuperdeskTestCase):
         f = AAPIpNewsFormatter()
         seq, item = f.format(article, subscriber)[0]
         item = json.loads(item)
-        expected = '   The story body line 1 \r\nLine 2 \r\n\r\n   abcdefghi abcdefghi abcdefghi abcdefghi ' \
-                   'abcdefghi abcdefghi abcdefghi abcdefghi \r\n\r\n\r\nAAP'
+        expected = '   The story body line 1\r\nLine 2\r\n   abcdefghi abcdefghi abcdefghi abcdefghi ' \
+                   'abcdefghi abcdefghi abcdefghi abcdefghi\r\n\r\nAAP'
+        self.assertEqual(item['article_text'], expected)
+
+    def testDivContent(self):
+        article = {
+            '_id': '3',
+            'source': 'AAP',
+            'anpa_category': [{'qcode': 'a'}],
+            'headline': 'This is a test headline',
+            'byline': 'joe',
+            'slugline': 'slugline',
+            'subject': [{'qcode': '02011001'}],
+            'anpa_take_key': 'take_key',
+            'unique_id': '1',
+            'type': 'text',
+            'body_html': '<div>Kathmandu Holdings has lodged a claim in the New Zealand High'
+                         'Court for the recovery of costs associated with last years takeover bid from Briscoe'
+                         'Group.</div><div>Kathmandu Holdings has lodged a claim in the New Zealand High Court for '
+                         'the recovery of costs associated with last years takeover bid from Briscoe Group.'
+                         '</div><div><br></div><div>Kathmandu incurred costs in relation to the takeover bid. '
+                         'After an initial request for payment on November 20, 2015 and subsequent correspondence, '
+                         'Briscoe made a payment of $637,711.65 on May 25, 2016 without prejudice to its position on '
+                         'what sum Kathmandu is entitled to recover.</div><div><br></div><div>Kathmandu considers the '
+                         'full amount claimed is recoverable and has issued legal proceedings for the balance of monies'
+                         ' owed.</div>',
+            'word_count': '1',
+            'priority': 1,
+            "linked_in_packages": [
+                {
+                    "package": "package",
+                    "package_type": "takes"
+                }
+            ],
+        }
+        subscriber = self.app.data.find('subscribers', None, None)[0]
+
+        f = AAPIpNewsFormatter()
+        seq, item = f.format(article, subscriber)[0]
+        item = json.loads(item)
+
+        expected = '   Kathmandu Holdings has lodged a claim in the New Zealand HighCourt for the \r\n' + \
+            'recovery of costs associated with last years takeover bid from BriscoeGroup.\r\n' + \
+            '   Kathmandu Holdings has lodged a claim in the New Zealand High Court for the \r\nrecovery of ' + \
+            'costs associated with last years takeover bid from Briscoe Group.\r\n   Kathmandu ' + \
+            'incurred costs in relation to the takeover bid. After an initial \r\nrequest for payment on ' + \
+            'November 20, 2015 and subsequent correspondence, Briscoe \r\nmade a payment of $637,711.65 on May ' + \
+            '25, 2016 without prejudice to its position \r\non what sum Kathmandu is entitled to ' + \
+            'recover.\r\n   Kathmandu considers the full amount claimed is recoverable and has ' + \
+            'issued legal \r\nproceedings for the balance of monies owed.\r\n\r\nAAP'
+
+        self.maxDiff = None
         self.assertEqual(item['article_text'], expected)
 
     def testMultipleCategories(self):

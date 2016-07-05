@@ -90,8 +90,8 @@ class AapNewscentreFormatterTest(SuperdeskTestCase):
             'anpa_take_key': 'take_key',
             'unique_id': '1',
             'type': 'text',
-            'body_html': '<p>The story body line 1<br>Line 2</p>\
-                         <p>abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi more</p>',
+            'body_html': '<p>The story body line 1<br>Line 2</p>'
+                         '<p>abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi more</p>',
             'word_count': '1',
             'priority': 1
         }
@@ -102,8 +102,8 @@ class AapNewscentreFormatterTest(SuperdeskTestCase):
         seq, item = f.format(article, subscriber)[0]
         item = json.loads(item)
 
-        expected = '   \r\nThe story body line 1 \r\nLine 2 \r\n   \r\nabcdefghi abcdefghi abcdefghi abcdefghi ' \
-                   'abcdefghi abcdefghi abcdefghi abcdefghi more \r\n\r\nAAP'
+        expected = '   The story body line 1\r\nLine 2\r\n\r\n   abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi ' + \
+            'abcdefghi abcdefghi abcdefghi more\r\n\r\n\r\nAAP'
         self.assertEqual(item['article_text'], expected)
 
     def testMultipleCategories(self):

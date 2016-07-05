@@ -10,18 +10,17 @@
 
 
 import textwrap
-from io import StringIO
 from bs4 import BeautifulSoup
 from .aap_odbc_formatter import AAPODBCFormatter
 from .aap_formatter_common import map_priority
 from superdesk.publish.formatters import Formatter
 from superdesk.errors import FormatterError
 from superdesk.metadata.item import ITEM_TYPE, CONTENT_TYPE, FORMAT, FORMATS
+import re
 import json
 
 
 class AAPIpNewsFormatter(Formatter, AAPODBCFormatter):
-
     def format(self, article, subscriber, codes=None):
         """
         Constructs a dictionary that represents the parameters passed to the IPNews InsertNews stored procedure
@@ -36,20 +35,14 @@ class AAPIpNewsFormatter(Formatter, AAPODBCFormatter):
                 soup = BeautifulSoup(self.append_body_footer(article) if is_last_take else article.get('body_html', ''),
                                      "html.parser")
                 if article.get(FORMAT) == FORMATS.PRESERVED:  # @article_text
+                    soup = BeautifulSoup(
+                        self.append_body_footer(article) if is_last_take else article.get('body_html', ''),
+                        "html.parser")
                     odbc_item['article_text'] = soup.get_text().replace('\'', '\'\'')
                     odbc_item['texttab'] = 't'
                 elif article.get(FORMAT, FORMATS.HTML) == FORMATS.HTML:
-                    text = StringIO()
-                    for p in soup.findAll('p'):
-                        text.write('   ')
-                        ptext = p.get_text('\n')
-                        for l in ptext.split('\n'):
-                            if len(l) > 80:
-                                text.write(textwrap.fill(l, 80).replace('\n', ' \r\n'))
-                            else:
-                                text.write(l + ' \r\n')
-                        text.write('\x19\r\n')
-                    body = text.getvalue().replace('\'', '\'\'')
+                    body = self.get_text_content(self.append_body_footer(article) if is_last_take
+                                                 else article.get('body_html', '')).replace('\'', '\'\'')
                     # if this is the first take and we have a dateline inject it
                     if self.is_first_part(article) and 'dateline' in article and 'text' in article.get('dateline', {}):
                         if body.startswith('   '):
@@ -85,6 +78,29 @@ class AAPIpNewsFormatter(Formatter, AAPODBCFormatter):
             return docs
         except Exception as ex:
             raise FormatterError.AAPIpNewsFormatterError(ex, subscriber)
+
+    def get_text_content(self, content):
+        soup = BeautifulSoup(content, 'html.parser')
+
+        for top_level_tag in soup.find_all(recursive=False):
+            self.format_text_content(top_level_tag)
+
+        return soup.get_text()
+
+    def format_text_content(self, tag):
+        for child_tag in tag.find_all():
+            if child_tag.name == 'br':
+                child_tag.replace_with('\r\n{}'.format(child_tag.get_text()))
+            else:
+                child_tag.replace_with(' {}'.format(child_tag.get_text()))
+
+        para_text = re.sub(' +', ' ', tag.get_text().strip().replace('\xA0', ' '))
+        if len(para_text) > 80:
+            para_text = textwrap.fill(para_text, 80).replace('\n', ' \r\n')
+        if para_text != '':
+            tag.replace_with('   {}\x19\r\n'.format(para_text))
+        else:
+            tag.replace_with('')
 
     def can_format(self, format_type, article):
         return format_type == 'AAP IPNEWS' and article[ITEM_TYPE] in [CONTENT_TYPE.TEXT, CONTENT_TYPE.PREFORMATTED]
