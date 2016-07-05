@@ -11,7 +11,7 @@
 
 import textwrap
 from io import StringIO
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, NavigableString
 from .aap_odbc_formatter import AAPODBCFormatter
 from .aap_formatter_common import map_priority
 from superdesk.publish.formatters import Formatter
@@ -40,14 +40,20 @@ class AAPIpNewsFormatter(Formatter, AAPODBCFormatter):
                     odbc_item['texttab'] = 't'
                 elif article.get(FORMAT, FORMATS.HTML) == FORMATS.HTML:
                     text = StringIO()
-                    for p in soup.findAll('p'):
-                        text.write('   ')
-                        ptext = p.get_text('\n')
-                        for l in ptext.split('\n'):
-                            if len(l) > 80:
-                                text.write(textwrap.fill(l, 80).replace('\n', ' \r\n'))
-                            else:
-                                text.write(l + ' \r\n')
+                    inPar = False
+                    for p in soup.findAll():
+                        if p.name == 'p':
+                            if inPar:
+                                text.write('\x19\r\n')
+                            text.write('   ')
+                            inPar = True
+                        if len(p.contents) > 0:
+                            if isinstance(p.contents[0], NavigableString) and p.contents[0].string is not None:
+                                if len(p.contents[0]) > 80:
+                                    text.write(textwrap.fill(p.contents[0], 80).replace('\n', ' \r\n') + ' \r\n')
+                                else:
+                                    text.write(p.contents[0] + ' \r\n')
+                    if inPar:
                         text.write('\x19\r\n')
                     body = text.getvalue().replace('\'', '\'\'')
                     # if this is the first take and we have a dateline inject it

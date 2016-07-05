@@ -160,20 +160,21 @@ class AAPAnpaFormatter(Formatter):
         """
         soup = BeautifulSoup(html, "html.parser")
         text = StringIO()
-        for p in soup.findAll('p'):
-            text.write('   ')
-            ptext = p.get_text('\n')
-            for l in ptext.split('\n'):
-                text.write(l + '\r\n')
+        for p in soup.findAll():
+            if p.name == 'p':
+                text.write('   ')
+            if len(p.contents) > 0:
+                if isinstance(p.contents[0], NavigableString) and p.contents[0].string is not None:
+                    text.write(p.contents[0] + '\r\n')
         return text.getvalue().replace('\xA0', ' ').encode('ascii', 'replace')
 
     def _process_headline(self, anpa, article, category):
         # prepend the locator to the headline if required
         headline_prefix = LocatorMapper().map(article, category.upper())
         if headline_prefix:
-            headline = '{}:{}'.format(headline_prefix, article['headline'])
+            headline = '{}:{}'.format(headline_prefix, article['headline'].replace('\xA0', ' '))
         else:
-            headline = article.get('headline', '')
+            headline = article.get('headline', '').replace('\xA0', ' ')
 
         # Set the maximum size to 64 including the sequence number if any
         if len(headline) > 64:
