@@ -260,3 +260,56 @@ class ANPAFormatterTest(SuperdeskTestCase):
         seq, out = f.format(item, subscriber)[0]
         lines = io.StringIO(out.decode())
         self.assertTrue(lines.getvalue().find('Note this') > 0)
+
+    def test_div_body(self):
+        f = AAPAnpaFormatter()
+        subscriber = self.app.data.find('subscribers', None, None)[0]
+        item = self.article.copy()
+        item.update({
+            'body_html': '<div>Kathmandu Holdings has lodged a claim in the New Zealand High'
+                         ' Court for the recovery of costs associated with last year\'s takeover bid from Briscoe'
+                         ' Group.</div><div>Kathmandu Holdings has lodged a claim in the New Zealand High Court for '
+                         'the recovery of costs associated with last year\'s takeover bid from Briscoe Group.'
+                         '</div><div><br></div><div>Kathmandu incurred costs in relation to the takeover bid. '
+                         'After an initial request for payment on November 20, 2015 and subsequent correspondence, '
+                         'Briscoe made a payment of $637,711.65 on May 25, 2016 without prejudice to its position on '
+                         'what sum Kathmandu is entitled to recover.</div><div><br></div><div>Kathmandu considers the '
+                         'full amount claimed is recoverable and has issued legal proceedings for the balance of monies'
+                         ' owed.</div>'})
+        seq, out = f.format(item, subscriber)[0]
+        lines = io.StringIO(out.decode())
+        self.assertTrue(lines.getvalue().split('\n')[6].find('   Kathmandu incurred costs in relation') == 0)
+
+    def test_span_body(self):
+        f = AAPAnpaFormatter()
+        subscriber = self.app.data.find('subscribers', None, None)[0]
+        item = self.article.copy()
+        item.update({
+            'body_html': '<p>Dental materials maker and marketer SDI has boosted its shares after reporting a lift in'
+            ' sales, with improvements across Europe, Brazil and North America.</p>'
+            '<p>SDI&nbsp;<span style=\"background-color: transparent;\">reported a 7.8 per cent lift in unaudited'
+            ' sales to $74 million for the year to June 30, 2016 on Monday, up from $68.7 million a year '
+            'earlier.</span></p><p>The company said it expected to report a post-tax profit of between $7.2 million '
+            'and $7.8 million when it releases its full-year results on August 29.</p><p>Shares in SDI gained '
+            '6.5 cents - a 12.2 per cent increase - to close at 59.5 cents on Monday.</p>'})
+        seq, out = f.format(item, subscriber)[0]
+        lines = io.StringIO(out.decode())
+        self.assertTrue(lines.getvalue().split('\n')[5].find('   SDI reported a 7.8 per cent lift in unaudited') == 0)
+
+    def test_br_body(self):
+        f = AAPAnpaFormatter()
+        subscriber = self.app.data.find('subscribers', None, None)[0]
+        item = self.article.copy()
+        item.update({
+            'body_html': '<p>Dental materials maker and marketer SDI<br> has boosted its shares after '
+            'reporting a lift in'
+            ' sales, with improvements across Europe, Brazil and North America.</p>'
+            '<p>SDI&nbsp;<span style=\"background-color: transparent;\">reported a 7.8 per cent lift in unaudited'
+            ' sales to $74 million for the year to June 30, 2016 on Monday, up from $68.7 million a year '
+            'earlier.</span></p><p>The company said it expected to report a post-tax profit of between $7.2 million '
+            'and $7.8 million when it releases its full-year results on August 29.</p><p>Shares in SDI gained '
+            '6.5 cents - a 12.2 per cent increase - to close at 59.5 cents on Monday.</p>'})
+        seq, out = f.format(item, subscriber)[0]
+        lines = io.StringIO(out.decode())
+        self.assertTrue(lines.getvalue().split('\n')[4].find('   Dental materials maker and marketer SDI') == 0)
+        self.assertTrue(lines.getvalue().split('\n')[5].find(' has boosted its shares after reporting') == 0)

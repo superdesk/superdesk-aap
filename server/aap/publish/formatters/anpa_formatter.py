@@ -17,9 +17,9 @@ from bs4 import BeautifulSoup, NavigableString
 import datetime
 from superdesk.metadata.item import ITEM_TYPE, CONTENT_TYPE, BYLINE, EMBARGO, FORMAT, FORMATS
 from .field_mappers.locator_mapper import LocatorMapper
-from io import StringIO
 from apps.packages import TakesPackageService
 from eve.utils import config
+import re
 
 
 class AAPAnpaFormatter(Formatter):
@@ -125,9 +125,9 @@ class AAPAnpaFormatter(Formatter):
                             ptag.insert(0, NavigableString(
                                 '{} '.format(article.get('dateline').get('text')).encode('ascii', 'ignore')))
                             body = str(soup)
-                    anpa.append(self.to_ascii(body))
+                    anpa.append(self.get_text_content(body))
                     if article.get('body_footer'):
-                        anpa.append(self.to_ascii(article.get('body_footer', '')))
+                        anpa.append(self.get_text_content(article.get('body_footer', '')))
 
                 anpa.append(b'\x0D\x0A')
                 if not is_last_take:
@@ -152,20 +152,26 @@ class AAPAnpaFormatter(Formatter):
         except Exception as ex:
             raise FormatterError.AnpaFormatterError(ex, subscriber)
 
-    def to_ascii(self, html):
-        """
-        Given a html string returns ascii bytes
-        :param html:
-        :return:
-        """
-        soup = BeautifulSoup(html, "html.parser")
-        text = StringIO()
-        for p in soup.findAll('p'):
-            text.write('   ')
-            ptext = p.get_text('\n')
-            for l in ptext.split('\n'):
-                text.write(l + '\r\n')
-        return text.getvalue().replace('\xA0', ' ').encode('ascii', 'replace')
+    def get_text_content(self, content):
+        soup = BeautifulSoup(content, 'html.parser')
+
+        for top_level_tag in soup.find_all(recursive=False):
+            self.format_text_content(top_level_tag)
+
+        return soup.get_text().encode('ascii', 'replace')
+
+    def format_text_content(self, tag):
+        for child_tag in tag.find_all():
+            if child_tag.name == 'br':
+                child_tag.replace_with('\r\n{}'.format(child_tag.get_text()))
+            else:
+                child_tag.replace_with(' {}'.format(child_tag.get_text()))
+
+        para_text = re.sub(' +', ' ', tag.get_text().strip().replace('\xA0', ' '))
+        if para_text != '':
+            tag.replace_with('   {}\r\n'.format(para_text))
+        else:
+            tag.replace_with('')
 
     def _process_headline(self, anpa, article, category):
         # prepend the locator to the headline if required
