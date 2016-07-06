@@ -18,6 +18,7 @@ from superdesk.metadata.item import ITEM_TYPE, PACKAGE_TYPE
 from bs4 import BeautifulSoup
 from .field_mappers.locator_mapper import LocatorMapper
 from .aap_formatter_common import set_subject
+from .unicodetoascii import to_ascii
 import json
 
 
@@ -35,13 +36,13 @@ class AAPBulletinBuilderFormatter(Formatter):
         """
         try:
 
-            article['slugline'] = self.append_legal(article=article, truncate=True)
+            article['slugline'] = self.get_text_content(to_ascii(self.append_legal(article=article,
+                                                                                   truncate=True))).strip()
             pub_seq_num = superdesk.get_resource_service('subscribers').generate_sequence_number(subscriber)
-            body_html = self.append_body_footer(article).strip('\r\n')
+            body_html = to_ascii(self.append_body_footer(article)).strip('\r\n')
             article['body_text'] = self.get_text_content(body_html)
-            article['abstract'] = self.get_text_content(article.get('abstract', '')).strip()
-            article['headline'] = self.get_text_content(article.get('headline', '')).strip()
-            article['slugline'] = self.get_text_content(article.get('slugline', '')).strip()
+            article['abstract'] = self.get_text_content(to_ascii(article.get('abstract', ''))).strip()
+            article['headline'] = self.get_text_content(to_ascii(article.get('headline', ''))).strip()
 
             # get the first category and derive the locator
             category = next((iter(article.get('anpa_category', []))), None)
@@ -71,6 +72,7 @@ class AAPBulletinBuilderFormatter(Formatter):
         return format_type == 'AAP BULLETIN BUILDER'
 
     def get_text_content(self, content):
+        content.replace('<br>', '<br/>').replace('</br>', '')
         soup = BeautifulSoup(content, 'html.parser')
 
         for top_level_tag in soup.find_all(recursive=False):

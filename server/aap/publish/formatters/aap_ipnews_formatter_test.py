@@ -15,6 +15,7 @@ from apps.publish import init_app
 from .aap_ipnews_formatter import AAPIpNewsFormatter
 from .aap_formatter_common import set_subject
 import json
+from copy import deepcopy
 
 
 class AapIpNewsFormatterTest(SuperdeskTestCase):
@@ -99,8 +100,8 @@ class AapIpNewsFormatterTest(SuperdeskTestCase):
             'anpa_take_key': 'take_key',
             'unique_id': '1',
             'type': 'text',
-            'body_html': '<p>The story body line 1<br>Line 2</p>\
-                         <p>abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi</p>',
+            'body_html': '<p>The story body line 1<br>Line 2</p>'
+                         '<p>abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi</p>',
             'word_count': '1',
             'priority': 1,
             "linked_in_packages": [
@@ -117,8 +118,8 @@ class AapIpNewsFormatterTest(SuperdeskTestCase):
         seq, item = f.format(article, subscriber)[0]
         item = json.loads(item)
 
-        expected = '   The story body line 1 \r\nLine 2 \r\n\r\n   abcdefghi abcdefghi abcdefghi abcdefghi ' \
-                   'abcdefghi abcdefghi abcdefghi abcdefghi \r\n\r\n\r\nMORE'
+        expected = '   The story body line 1\r\nLine 2\r\n   abcdefghi abcdefghi abcdefghi abcdefghi ' \
+                   'abcdefghi abcdefghi abcdefghi abcdefghi\r\n\r\nMORE'
         self.assertEqual(item['article_text'], expected)
 
     def testLastTake(self):
@@ -133,8 +134,8 @@ class AapIpNewsFormatterTest(SuperdeskTestCase):
             'anpa_take_key': 'take_key',
             'unique_id': '1',
             'type': 'text',
-            'body_html': '<p>The story body line 1<br>Line 2</p>\
-                         <p>abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi</p>',
+            'body_html': '<p>The story body line 1<br>Line 2</p>'
+                         '<p>abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi</p>',
             'word_count': '1',
             'priority': 1,
             "linked_in_packages": [
@@ -150,8 +151,58 @@ class AapIpNewsFormatterTest(SuperdeskTestCase):
         f = AAPIpNewsFormatter()
         seq, item = f.format(article, subscriber)[0]
         item = json.loads(item)
-        expected = '   The story body line 1 \r\nLine 2 \r\n\r\n   abcdefghi abcdefghi abcdefghi abcdefghi ' \
-                   'abcdefghi abcdefghi abcdefghi abcdefghi \r\n\r\n\r\nAAP'
+        expected = '   The story body line 1\r\nLine 2\r\n   abcdefghi abcdefghi abcdefghi abcdefghi ' \
+                   'abcdefghi abcdefghi abcdefghi abcdefghi\r\n\r\nAAP'
+        self.assertEqual(item['article_text'], expected)
+
+    def testDivContent(self):
+        article = {
+            '_id': '3',
+            'source': 'AAP',
+            'anpa_category': [{'qcode': 'a'}],
+            'headline': 'This is a test headline',
+            'byline': 'joe',
+            'slugline': 'slugline',
+            'subject': [{'qcode': '02011001'}],
+            'anpa_take_key': 'take_key',
+            'unique_id': '1',
+            'type': 'text',
+            'body_html': '<div>Kathmandu Holdings has lodged a claim in the New Zealand High'
+                         'Court for the recovery of costs associated with last years takeover bid from Briscoe'
+                         'Group.</div><div>Kathmandu Holdings has lodged a claim in the New Zealand High Court for '
+                         'the recovery of costs associated with last years takeover bid from Briscoe Group.'
+                         '</div><div><br></div><div>Kathmandu incurred costs in relation to the takeover bid. '
+                         'After an initial request for payment on November 20, 2015 and subsequent correspondence, '
+                         'Briscoe made a payment of $637,711.65 on May 25, 2016 without prejudice to its position on '
+                         'what sum Kathmandu is entitled to recover.</div><div><br></div><div>Kathmandu considers the '
+                         'full amount claimed is recoverable and has issued legal proceedings for the balance of monies'
+                         ' owed.</div>',
+            'word_count': '1',
+            'priority': 1,
+            "linked_in_packages": [
+                {
+                    "package": "package",
+                    "package_type": "takes"
+                }
+            ],
+        }
+        subscriber = self.app.data.find('subscribers', None, None)[0]
+
+        f = AAPIpNewsFormatter()
+        seq, item = f.format(article, subscriber)[0]
+        item = json.loads(item)
+
+        expected = '   Kathmandu Holdings has lodged a claim in the New Zealand HighCourt for the \r\n' + \
+            'recovery of costs associated with last years takeover bid from BriscoeGroup.\r\n' + \
+            '   Kathmandu Holdings has lodged a claim in the New Zealand High Court for the \r\nrecovery of ' + \
+            'costs associated with last years takeover bid from Briscoe Group.\r\n   Kathmandu ' + \
+            'incurred costs in relation to the takeover bid. After an initial \r\nrequest for payment on ' + \
+            'November 20, 2015 and subsequent correspondence, Briscoe \r\nmade a payment of $637,711.65 on May ' + \
+            '25, 2016 without prejudice to its position \r\non what sum Kathmandu is entitled to ' + \
+            'recover.\r\n   Kathmandu considers the full amount claimed is recoverable and has ' + \
+            'issued legal \r\nproceedings for the balance of monies owed.\r\n\r\nAAP'
+
+        self.maxDiff = None
         self.assertEqual(item['article_text'], expected)
 
     def testMultipleCategories(self):
@@ -289,6 +340,34 @@ class AapIpNewsFormatterTest(SuperdeskTestCase):
                               'take_key': 'take_key',
                               'article_text': 'The story body\r\ncall helpline 999 if you are planning to '
                               'quit smoking\r\nAAP',
+                              'priority': 'f', 'usn': '1',
+                              'subject_matter': 'international law', 'news_item_type': 'News',
+                              'subject_reference': '02011001', 'subject': 'crime, law and justice',
+                              'wordcount': '1', 'subject_detail': 'international court or tribunal',
+                              'selector_codes': 'Axx',
+                              'genre': 'Current', 'keyword': 'slugline', 'author': 'joe'})
+
+    def test_aap_ipnews_formatter_with_body_formatted(self):
+        subscriber = self.app.data.find('subscribers', None, None)[0]
+        doc = deepcopy(self.article)
+        doc['body_footer'] = '<p>call helpline 999 if you are planning to quit smoking</p>'
+        doc['body_html'] = ('<pre>  The story\n body\r\n</pre>'
+                            '<pre>  second line<br></pre><br>')
+        doc['format'] = 'preserved'
+
+        f = AAPIpNewsFormatter()
+        seq, item = f.format(doc, subscriber, ['Axx'])[0]
+        item = json.loads(item)
+
+        self.assertGreater(int(seq), 0)
+        self.assertEqual(seq, item['sequence'])
+        item.pop('sequence')
+        self.assertDictEqual(item,
+                             {'category': 'a', 'texttab': 't', 'fullStory': 1, 'ident': '0',
+                              'headline': 'VIC:This is a test headline', 'service_level': 'a', 'originator': 'AAP',
+                              'take_key': 'take_key',
+                              'article_text': '  The story\r\n body\r\n  second line\r\n\r\n\r\ncall helpline '
+                                              '999 if you are planning to quit smoking\r\nAAP',
                               'priority': 'f', 'usn': '1',
                               'subject_matter': 'international law', 'news_item_type': 'News',
                               'subject_reference': '02011001', 'subject': 'crime, law and justice',

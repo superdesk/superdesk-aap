@@ -7,7 +7,7 @@
 # For the full copyright and license information, please see the
 # AUTHORS and LICENSE files distributed with this source code, or
 # at https://www.sourcefabric.org/superdesk/license
-
+from copy import deepcopy
 from superdesk.publish.formatters import Formatter
 from .aap_formatter_common import map_priority
 from apps.archive.common import get_utc_schedule
@@ -17,9 +17,10 @@ from bs4 import BeautifulSoup, NavigableString
 import datetime
 from superdesk.metadata.item import ITEM_TYPE, CONTENT_TYPE, BYLINE, EMBARGO, FORMAT, FORMATS
 from .field_mappers.locator_mapper import LocatorMapper
-from io import StringIO
 from apps.packages import TakesPackageService
 from eve.utils import config
+from .unicodetoascii import to_ascii
+import re
 
 
 class AAPAnpaFormatter(Formatter):
@@ -27,19 +28,13 @@ class AAPAnpaFormatter(Formatter):
         try:
             docs = []
             for category in article.get('anpa_category'):
-                article[config.ID_FIELD] = article.get('item_id', article.get(config.ID_FIELD))
-                is_last_take = TakesPackageService().is_last_takes_package_item(article)
-                is_first_part = article.get('sequence', 1) == 1
+                formatted_article = deepcopy(article)
+                formatted_article[config.ID_FIELD] = formatted_article.get('item_id',
+                                                                           formatted_article.get(config.ID_FIELD))
+                is_last_take = TakesPackageService().is_last_takes_package_item(formatted_article)
+                is_first_part = formatted_article.get('sequence', 1) == 1
                 pub_seq_num = superdesk.get_resource_service('subscribers').generate_sequence_number(subscriber)
                 anpa = []
-
-                # selector codes are only injected for those subscribers that are defined
-                # in the mapper
-                # Ta 20/04/16: Keeping selector code mapper section here for the time being
-                # selectors = dict()
-                # SelectorcodeMapper().map(article, category.get('qcode').upper(),
-                #                          subscriber=subscriber,
-                #                          formatted_item=selectors)
 
                 if codes:
                     anpa.append(b'\x05')
@@ -48,28 +43,28 @@ class AAPAnpaFormatter(Formatter):
 
                 # start of message header (syn syn soh)
                 anpa.append(b'\x16\x16\x01')
-                anpa.append(article.get('service_level', 'a').lower().encode('ascii'))
+                anpa.append(formatted_article.get('service_level', 'a').lower().encode('ascii'))
 
                 # story number
                 anpa.append(str(pub_seq_num).zfill(4).encode('ascii'))
 
                 # field seperator
                 anpa.append(b'\x0A')  # -LF
-                anpa.append(map_priority(article.get('priority')).encode('ascii'))
+                anpa.append(map_priority(formatted_article.get('priority')).encode('ascii'))
                 anpa.append(b'\x20')
 
                 anpa.append(category['qcode'].encode('ascii'))
 
                 anpa.append(b'\x13')
                 # format identifier
-                if article.get(FORMAT, FORMATS.HTML) == FORMATS.PRESERVED:
+                if formatted_article.get(FORMAT, FORMATS.HTML) == FORMATS.PRESERVED:
                     anpa.append(b'\x12')
                 else:
                     anpa.append(b'\x11')
                 anpa.append(b'\x20')
 
                 # keyword
-                keyword = 'bc-{}'.format(self.append_legal(article=article, truncate=True)).replace(' ', '-')
+                keyword = 'bc-{}'.format(self.append_legal(article=formatted_article, truncate=True)).replace(' ', '-')
                 keyword = keyword[:24] if len(keyword) > 24 else keyword
                 anpa.append(keyword.encode('ascii'))
                 anpa.append(b'\x20')
@@ -81,60 +76,60 @@ class AAPAnpaFormatter(Formatter):
                 anpa.append(b'\x20')
 
                 # filing date
-                anpa.append('{}-{}'.format(article['_updated'].strftime('%m'),
-                                           article['_updated'].strftime('%d')).encode('ascii'))
+                anpa.append('{}-{}'.format(formatted_article['_updated'].strftime('%m'),
+                                           formatted_article['_updated'].strftime('%d')).encode('ascii'))
                 anpa.append(b'\x20')
 
                 # add the word count
-                anpa.append(str(article.get('word_count', '0000')).zfill(4).encode('ascii'))
+                anpa.append(str(formatted_article.get('word_count', '0000')).zfill(4).encode('ascii'))
                 anpa.append(b'\x0D\x0A')
 
                 anpa.append(b'\x02')  # STX
 
-                self._process_headline(anpa, article, category['qcode'].encode('ascii'))
+                self._process_headline(anpa, formatted_article, category['qcode'].encode('ascii'))
 
-                keyword = self.append_legal(article=article, truncate=True).encode('ascii', 'ignore')
+                keyword = self.append_legal(article=formatted_article, truncate=True).encode('ascii', 'ignore')
                 anpa.append(keyword)
-                take_key = article.get('anpa_take_key', '').encode('ascii', 'ignore')
+                take_key = formatted_article.get('anpa_take_key', '').encode('ascii', 'ignore')
                 anpa.append((b'\x20' + take_key) if len(take_key) > 0 else b'')
                 anpa.append(b'\x0D\x0A')
 
-                if article.get(EMBARGO):
+                if formatted_article.get(EMBARGO):
                     embargo = '{}{}\r\n'.format('Embargo Content. Timestamp: ',
-                                                get_utc_schedule(article, EMBARGO).isoformat())
+                                                get_utc_schedule(formatted_article, EMBARGO).isoformat())
                     anpa.append(embargo.encode('ascii', 'replace'))
 
-                if article.get('ednote', '') != '':
-                    ednote = '{}\r\n'.format(article.get('ednote'))
+                if formatted_article.get('ednote', '') != '':
+                    ednote = '{}\r\n'.format(to_ascii(formatted_article.get('ednote')))
                     anpa.append(ednote.encode('ascii', 'replace'))
 
-                if BYLINE in article:
-                    anpa.append(article.get(BYLINE).encode('ascii', 'ignore'))
+                if BYLINE in formatted_article:
+                    anpa.append(formatted_article.get(BYLINE).encode('ascii', 'ignore'))
                     anpa.append(b'\x0D\x0A')
 
-                if article.get(FORMAT) == FORMATS.PRESERVED:
-                    soup = BeautifulSoup(self.append_body_footer(article), "html.parser")
+                if formatted_article.get(FORMAT) == FORMATS.PRESERVED:
+                    soup = BeautifulSoup(self.append_body_footer(formatted_article), "html.parser")
                     anpa.append(soup.get_text().encode('ascii', 'replace'))
                 else:
-                    body = article.get('body_html', '')
+                    body = to_ascii(formatted_article.get('body_html', ''))
                     # we need to inject the dateline
-                    if is_first_part and article.get('dateline', {}).get('text'):
+                    if is_first_part and formatted_article.get('dateline', {}).get('text'):
                         soup = BeautifulSoup(body, "html.parser")
                         ptag = soup.find('p')
                         if ptag is not None:
                             ptag.insert(0, NavigableString(
-                                '{} '.format(article.get('dateline').get('text')).encode('ascii', 'ignore')))
+                                '{} '.format(formatted_article.get('dateline').get('text')).encode('ascii', 'ignore')))
                             body = str(soup)
-                    anpa.append(self.to_ascii(body))
-                    if article.get('body_footer'):
-                        anpa.append(self.to_ascii(article.get('body_footer', '')))
+                    anpa.append(self.get_text_content(body))
+                    if formatted_article.get('body_footer'):
+                        anpa.append(self.get_text_content(to_ascii(formatted_article.get('body_footer', ''))))
 
                 anpa.append(b'\x0D\x0A')
                 if not is_last_take:
                     anpa.append('MORE'.encode('ascii'))
                 else:
-                    anpa.append(article.get('source', '').encode('ascii'))
-                sign_off = article.get('sign_off', '').encode('ascii')
+                    anpa.append(formatted_article.get('source', '').encode('ascii'))
+                sign_off = formatted_article.get('sign_off', '').encode('ascii')
                 anpa.append((b'\x20' + sign_off) if len(sign_off) > 0 else b'')
                 anpa.append(b'\x0D\x0A')
 
@@ -152,28 +147,33 @@ class AAPAnpaFormatter(Formatter):
         except Exception as ex:
             raise FormatterError.AnpaFormatterError(ex, subscriber)
 
-    def to_ascii(self, html):
-        """
-        Given a html string returns ascii bytes
-        :param html:
-        :return:
-        """
-        soup = BeautifulSoup(html, "html.parser")
-        text = StringIO()
-        for p in soup.findAll('p'):
-            text.write('   ')
-            ptext = p.get_text('\n')
-            for l in ptext.split('\n'):
-                text.write(l + '\r\n')
-        return text.getvalue().replace('\xA0', ' ').encode('ascii', 'replace')
+    def get_text_content(self, content):
+        soup = BeautifulSoup(content, 'html.parser')
+
+        for top_level_tag in soup.find_all(recursive=False):
+            self.format_text_content(top_level_tag)
+
+        return soup.get_text().encode('ascii', 'replace')
+
+    def format_text_content(self, tag):
+        for child_tag in tag.find_all():
+            if child_tag.name == 'br':
+                child_tag.replace_with('\r\n{}'.format(child_tag.get_text()))
+            else:
+                child_tag.replace_with(' {}'.format(child_tag.get_text()))
+
+        para_text = re.sub(' +', ' ', tag.get_text().strip().replace('\xA0', ' '))
+        if para_text != '':
+            tag.replace_with('   {}\r\n'.format(para_text))
+        else:
+            tag.replace_with('')
 
     def _process_headline(self, anpa, article, category):
         # prepend the locator to the headline if required
         headline_prefix = LocatorMapper().map(article, category.upper())
+        headline = to_ascii(article.get('headline', ''))
         if headline_prefix:
-            headline = '{}:{}'.format(headline_prefix, article['headline'])
-        else:
-            headline = article.get('headline', '')
+            headline = '{}:{}'.format(headline_prefix, headline)
 
         # Set the maximum size to 64 including the sequence number if any
         if len(headline) > 64:

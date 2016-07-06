@@ -243,3 +243,19 @@ class AapBulletinBuilderFormatterTest(SuperdeskTestCase):
                      'This is mixed content this is para\r\n\r\n')
 
         self.assertEqual(formatted_content, body_text)
+
+    def test_takes_package(self):
+        html = ('<p>Para1: A tropical cyclone is a rapidly rotating storm system</p>'
+                '<p>Para2: Tropical refers to the geographical origin of these systems</p>'
+                '<br />'
+                '<p>Para3:Tropical refers to the geographical origin of these systems</p>'
+                '<br />'
+                '<p>Para4:Tropical refers to the geographical origin of these systems</p>')
+        formatted_content = self._formatter.get_text_content(html)
+
+        body_text = ('Para1: A tropical cyclone is a rapidly rotating storm system\r\n\r\n'
+                     'Para2: Tropical refers to the geographical origin of these systems\r\n\r\n'
+                     'Para3:Tropical refers to the geographical origin of these systems\r\n\r\n'
+                     'Para4:Tropical refers to the geographical origin of these systems\r\n\r\n')
+
+        self.assertEqual(formatted_content, body_text)
