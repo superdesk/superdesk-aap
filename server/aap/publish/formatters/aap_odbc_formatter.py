@@ -16,6 +16,7 @@ from .field_mappers.locator_mapper import LocatorMapper
 from superdesk.metadata.item import EMBARGO
 from eve.utils import config
 import superdesk
+from .unicodetoascii import to_ascii
 
 
 class AAPODBCFormatter():
@@ -32,7 +33,7 @@ class AAPODBCFormatter():
         pub_seq_num = superdesk.get_resource_service('subscribers').generate_sequence_number(subscriber)
         odbc_item = dict(originator=article.get('source', None), sequence=pub_seq_num,
                          category=category.get('qcode'),
-                         headline=article.get('headline', '').replace('\'', '\'\'').replace('\xA0', ' '),
+                         headline=to_ascii(article.get('headline', '')).replace('\'', '\'\'').replace('\xA0', ' '),
                          author=article.get('byline', '').replace('\'', '\'\''),
                          keyword=self.append_legal(article=article, truncate=True).replace('\'', '\'\''),
                          subject_reference=set_subject(category, article),

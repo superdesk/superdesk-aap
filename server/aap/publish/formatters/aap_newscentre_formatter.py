@@ -7,8 +7,6 @@
 # For the full copyright and license information, please see the
 # AUTHORS and LICENSE files distributed with this source code, or
 # at https://www.sourcefabric.org/superdesk/license
-
-
 from superdesk.publish.formatters import Formatter
 from bs4 import BeautifulSoup
 from superdesk.errors import FormatterError
@@ -16,6 +14,8 @@ from superdesk.metadata.item import ITEM_TYPE, CONTENT_TYPE, FORMAT, FORMATS
 from .aap_odbc_formatter import AAPODBCFormatter
 import re
 import json
+from .unicodetoascii import to_ascii
+from copy import deepcopy
 
 
 class AAPNewscentreFormatter(Formatter, AAPODBCFormatter):
@@ -27,31 +27,33 @@ class AAPNewscentreFormatter(Formatter, AAPODBCFormatter):
         try:
             docs = []
             for category in article.get('anpa_category'):
-                pub_seq_num, odbc_item = self.get_odbc_item(article, subscriber, category, codes)
-                is_last_take = self.is_last_take(article)
-                if article.get(FORMAT) == FORMATS.PRESERVED:  # @article_text
-                    soup = BeautifulSoup(self.append_body_footer(article) if is_last_take else
-                                         article.get('body_html', ''), "html.parser")
+                formatted_article = deepcopy(article)
+                pub_seq_num, odbc_item = self.get_odbc_item(formatted_article, subscriber, category, codes)
+                is_last_take = self.is_last_take(formatted_article)
+                if formatted_article.get(FORMAT) == FORMATS.PRESERVED:  # @article_text
+                    soup = BeautifulSoup(self.append_body_footer(formatted_article) if is_last_take else
+                                         formatted_article.get('body_html', ''), "html.parser")
                     odbc_item['article_text'] = soup.get_text().replace('\'', '\'\'')
                 else:
                     body = self.get_text_content(
-                        self.append_body_footer(article) if is_last_take else
-                        article.get('body_html', ''))
+                        to_ascii(self.append_body_footer(formatted_article) if is_last_take else
+                                 formatted_article.get('body_html', '')))
 
-                    if self.is_first_part(article) and 'dateline' in article and 'text' in article.get('dateline', {}):
+                    if self.is_first_part(formatted_article) and 'dateline' in formatted_article \
+                            and 'text' in formatted_article.get('dateline', {}):
                         if body.startswith('   '):
-                            body = '   {} {}'.format(article.get('dateline').get('text'), body[3:])
+                            body = '   {} {}'.format(formatted_article.get('dateline').get('text'), body[3:])
                     odbc_item['article_text'] = body.replace('\'', '\'\'')
 
-                if self.is_first_part(article):
-                    self.add_ednote(odbc_item, article)
-                    self.add_embargo(odbc_item, article)
+                if self.is_first_part(formatted_article):
+                    self.add_ednote(odbc_item, formatted_article)
+                    self.add_embargo(odbc_item, formatted_article)
 
                 if not is_last_take:
                     odbc_item['article_text'] += '\r\nMORE'
                 else:
-                    odbc_item['article_text'] += '\r\n' + article.get('source', '')
-                sign_off = article.get('sign_off', '')
+                    odbc_item['article_text'] += '\r\n' + formatted_article.get('source', '')
+                sign_off = formatted_article.get('sign_off', '')
                 if len(sign_off) > 0:
                     odbc_item['article_text'] += ' ' + sign_off
 

@@ -18,6 +18,8 @@ from superdesk.errors import FormatterError
 from superdesk.metadata.item import ITEM_TYPE, CONTENT_TYPE, FORMAT, FORMATS
 import re
 import json
+from .unicodetoascii import to_ascii
+from copy import deepcopy
 
 
 class AAPIpNewsFormatter(Formatter, AAPODBCFormatter):
@@ -29,47 +31,50 @@ class AAPIpNewsFormatter(Formatter, AAPODBCFormatter):
         try:
             docs = []
             for category in article.get('anpa_category'):
-                pub_seq_num, odbc_item = self.get_odbc_item(article, subscriber, category, codes)
+                formatted_article = deepcopy(article)
+                pub_seq_num, odbc_item = self.get_odbc_item(formatted_article, subscriber, category, codes)
                 # determine if this is the last take
-                is_last_take = self.is_last_take(article)
-                soup = BeautifulSoup(self.append_body_footer(article) if is_last_take else article.get('body_html', ''),
-                                     "html.parser")
-                if article.get(FORMAT) == FORMATS.PRESERVED:  # @article_text
+                is_last_take = self.is_last_take(formatted_article)
+
+                if formatted_article.get(FORMAT) == FORMATS.PRESERVED:  # @article_text
                     soup = BeautifulSoup(
-                        self.append_body_footer(article) if is_last_take else article.get('body_html', ''),
+                        self.append_body_footer(formatted_article) if is_last_take else
+                        formatted_article.get('body_html', ''),
                         "html.parser")
                     odbc_item['article_text'] = soup.get_text().replace('\'', '\'\'')
                     odbc_item['texttab'] = 't'
-                elif article.get(FORMAT, FORMATS.HTML) == FORMATS.HTML:
-                    body = self.get_text_content(self.append_body_footer(article) if is_last_take
-                                                 else article.get('body_html', '')).replace('\'', '\'\'')
+                elif formatted_article.get(FORMAT, FORMATS.HTML) == FORMATS.HTML:
+                    body = self.get_text_content(to_ascii(self.append_body_footer(formatted_article) if is_last_take
+                                                 else formatted_article.get('body_html', ''))).replace('\'', '\'\'')
                     # if this is the first take and we have a dateline inject it
-                    if self.is_first_part(article) and 'dateline' in article and 'text' in article.get('dateline', {}):
+                    if self.is_first_part(formatted_article) and 'dateline' in formatted_article and \
+                       'text' in formatted_article.get('dateline', {}):
                         if body.startswith('   '):
-                            body = '   {} {}'.format(article.get('dateline').get('text').replace('\'', '\'\''),
+                            body = '   {} {}'.format(formatted_article.get('dateline')
+                                                     .get('text').replace('\'', '\'\''),
                                                      body[3:])
 
                     odbc_item['article_text'] = body
                     odbc_item['texttab'] = 'x'
 
-                if self.is_first_part(article):
-                    self.add_ednote(odbc_item, article)
-                    self.add_embargo(odbc_item, article)
+                if self.is_first_part(formatted_article):
+                    self.add_ednote(odbc_item, formatted_article)
+                    self.add_embargo(odbc_item, formatted_article)
 
                 if not is_last_take:
                     odbc_item['article_text'] += '\r\nMORE'
                 else:
-                    odbc_item['article_text'] += '\r\n' + article.get('source', '')
-                sign_off = article.get('sign_off', '')
+                    odbc_item['article_text'] += '\r\n' + formatted_article.get('source', '')
+                sign_off = formatted_article.get('sign_off', '')
                 if len(sign_off) > 0:
                     odbc_item['article_text'] += ' ' + sign_off
 
                 odbc_item['service_level'] = 'a'  # @service_level
-                odbc_item['wordcount'] = article.get('word_count', None)  # @wordcount
-                odbc_item['priority'] = map_priority(article.get('priority'))  # @priority
+                odbc_item['wordcount'] = formatted_article.get('word_count', None)  # @wordcount
+                odbc_item['priority'] = map_priority(formatted_article.get('priority'))  # @priority
 
                 # Ta 20/04/16: Keeping selector code mapper section here for the time being
-                # SelectorcodeMapper().map(article, category.get('qcode').upper(),
+                # SelectorcodeMapper().map(formatted_article, category.get('qcode').upper(),
                 #                          subscriber=subscriber,
                 #                          formatted_item=odbc_item)
 

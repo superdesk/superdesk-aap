@@ -15,6 +15,7 @@ from apps.publish import init_app
 from .aap_ipnews_formatter import AAPIpNewsFormatter
 from .aap_formatter_common import set_subject
 import json
+from copy import deepcopy
 
 
 class AapIpNewsFormatterTest(SuperdeskTestCase):
@@ -339,6 +340,34 @@ class AapIpNewsFormatterTest(SuperdeskTestCase):
                               'take_key': 'take_key',
                               'article_text': 'The story body\r\ncall helpline 999 if you are planning to '
                               'quit smoking\r\nAAP',
+                              'priority': 'f', 'usn': '1',
+                              'subject_matter': 'international law', 'news_item_type': 'News',
+                              'subject_reference': '02011001', 'subject': 'crime, law and justice',
+                              'wordcount': '1', 'subject_detail': 'international court or tribunal',
+                              'selector_codes': 'Axx',
+                              'genre': 'Current', 'keyword': 'slugline', 'author': 'joe'})
+
+    def test_aap_ipnews_formatter_with_body_formatted(self):
+        subscriber = self.app.data.find('subscribers', None, None)[0]
+        doc = deepcopy(self.article)
+        doc['body_footer'] = '<p>call helpline 999 if you are planning to quit smoking</p>'
+        doc['body_html'] = ('<pre>  The story\n body\r\n</pre>'
+                            '<pre>  second line<br></pre><br>')
+        doc['format'] = 'preserved'
+
+        f = AAPIpNewsFormatter()
+        seq, item = f.format(doc, subscriber, ['Axx'])[0]
+        item = json.loads(item)
+
+        self.assertGreater(int(seq), 0)
+        self.assertEqual(seq, item['sequence'])
+        item.pop('sequence')
+        self.assertDictEqual(item,
+                             {'category': 'a', 'texttab': 't', 'fullStory': 1, 'ident': '0',
+                              'headline': 'VIC:This is a test headline', 'service_level': 'a', 'originator': 'AAP',
+                              'take_key': 'take_key',
+                              'article_text': '  The story\r\n body\r\n  second line\r\n\r\n\r\ncall helpline '
+                                              '999 if you are planning to quit smoking\r\nAAP',
                               'priority': 'f', 'usn': '1',
                               'subject_matter': 'international law', 'news_item_type': 'News',
                               'subject_reference': '02011001', 'subject': 'crime, law and justice',
