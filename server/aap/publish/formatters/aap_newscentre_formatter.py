@@ -81,7 +81,7 @@ class AAPNewscentreFormatter(Formatter, AAPODBCFormatter):
             else:
                 child_tag.replace_with(' {}'.format(child_tag.get_text()))
 
-        para_text = re.sub(' +', ' ', tag.get_text().strip().replace('\xA0', ' '))
+        para_text = re.sub(' +', ' ', tag.get_text().strip().replace('\n\n', ' ').replace('\xA0', ' '))
         if para_text != '':
             tag.replace_with('   {}\r\n\r\n'.format(para_text))
         else:
