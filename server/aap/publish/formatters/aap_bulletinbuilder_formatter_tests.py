@@ -247,9 +247,9 @@ class AapBulletinBuilderFormatterTest(SuperdeskTestCase):
     def test_takes_package(self):
         html = ('<p>Para1: A tropical cyclone is a rapidly rotating storm system</p>'
                 '<p>Para2: Tropical refers to the geographical origin of these systems</p>'
-                '<br />'
+                '<br>'
                 '<p>Para3:Tropical refers to the geographical origin of these systems</p>'
-                '<br />'
+                '<br>'
                 '<p>Para4:Tropical refers to the geographical origin of these systems</p>')
         formatted_content = self._formatter.get_text_content(html)
 
