@@ -205,6 +205,67 @@ class AapIpNewsFormatterTest(SuperdeskTestCase):
         self.maxDiff = None
         self.assertEqual(item['article_text'], expected)
 
+    def testLFContent(self):
+        article = {
+            '_id': '3',
+            'source': 'AAP',
+            'anpa_category': [{'qcode': 'a'}],
+            'headline': 'This is a test headline',
+            'byline': 'joe',
+            'slugline': 'slugline',
+            'subject': [{'qcode': '02011001'}],
+            'anpa_take_key': 'take_key',
+            'unique_id': '1',
+            'type': 'text',
+            'body_html': '<p><span style=\"background-color: transparent;\">The Australian dollar has tumbled'
+                         ' after&nbsp;</span>Standard &amp; Poor\'s warned the country\'s triple-A credit rating '
+                         'is at risk.<br></p><p>   At 1200 AEST on Thursday, the currency was trading at 74.98 US '
+                         'cents, up from\n\n 74.41\n\n cents on Wednesday, but down from a high of 75.38 on Thursday '
+                         'morning.</p><p>S&amp;P downgraded its outlook on Australia\'s credit rating from stable '
+                         'to negative, due to the prospect of ongoing budget deficits without substantial reforms '
+                         'being passed by parliament.</p><p>Westpac chief currency strategist&nbsp;Robert Rennie '
+                         'said the uncertain election outcome is likely to result in a longer run of budget'
+                         'deficits.</p><p>\"It was clearly a risk and the market has been living in its shadow since'
+                         'Monday morning,\" he said.</p><p>\"Gridlock or the inability to improve the fiscal situation '
+                         'over the forecast period is something I think a ratings agency ought to take into '
+                         'account.\"</p><p><span style=\"background-color: transparent;\">The currency had a sudden '
+                         'plunge to 74.67 US cents on the announcement from S&amp;P, before recovering some of that '
+                         'ground.</span></p><p><span style=\"background-color: transparent;\">Mr Rennie tipped the '
+                         'Australian dollar will slip further on Thursday.</span></p><p><span style=\"background-color:'
+                         'transparent;\">\"We should make fresh lows, we should be pushing down though 74 US cents '
+                         'and possibly lower,\" he said.</span></p><p><span style=\"background-color: '
+                         'transparent;\">KEY MOVEMENTS:</span></p><p><span style=\"background-color: transparent;\">One'
+                         'Australian dollar buys:</span><br></p><p>   * 74.98 US cents, from\n\n 74.41\n\ncents on '
+                         'Wednesday</p><p>   * 75.63 Japanese yen, from \n\n75.15\n\n yen</p><p>   * 67.64 euro cents, '
+                         'from \n\n67.24\n\n euro cents</p><p>   * 105.01 New Zealand cents, from \n\n104.85\n\n NZ '
+                         'cents</p><p>   * 57.96 British pence, from \n\n57.53\n\n pence</p><p>   Government bond '
+                         'yields:</p><p>   * CGS 5.25pct March 2019, 1.510pct, from \n\n1.513pct</p><p>   * CGS 4.25pct'
+                         'April 2026, 1.868pct, from \n\n1.862pct</p><p>   Sydney Futures Exchange prices:</p><p>   *'
+                         'September 2016 10-year bond futures contract, was at 98.125\n\n (1.875\n\n per cent), '
+                         'unchanged from Wednesday</p><p>   * September 2016 3-year bond futures contract, at 98.570 '
+                         '(1.430 per cent), up from \n\n98.550\n\n (1.450\n\n per cent)</p><p>   (*Currency closes '
+                         'taken at 1700 AEST previous local session, bond market closes taken at 1630 AEST previous '
+                         'local session)</p><p>   Source: IRESS</p>',
+            'word_count': '1',
+            'priority': 1,
+            "linked_in_packages": [
+                {
+                    "package": "package",
+                    "package_type": "takes"
+                }
+            ],
+        }
+        subscriber = self.app.data.find('subscribers', None, None)[0]
+
+        f = AAPIpNewsFormatter()
+        seq, item = f.format(article, subscriber)[0]
+        item = json.loads(item)
+
+        expected = '   * 74.98 US cents, from 74.41 cents on Wednesday'
+
+        self.maxDiff = None
+        self.assertEqual(item['article_text'].split('\x19\r\n')[11], expected)
+
     def testMultipleCategories(self):
         article = {
             'source': 'AAP',

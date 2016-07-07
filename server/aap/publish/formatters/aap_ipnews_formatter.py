@@ -73,11 +73,6 @@ class AAPIpNewsFormatter(Formatter, AAPODBCFormatter):
                 odbc_item['wordcount'] = formatted_article.get('word_count', None)  # @wordcount
                 odbc_item['priority'] = map_priority(formatted_article.get('priority'))  # @priority
 
-                # Ta 20/04/16: Keeping selector code mapper section here for the time being
-                # SelectorcodeMapper().map(formatted_article, category.get('qcode').upper(),
-                #                          subscriber=subscriber,
-                #                          formatted_item=odbc_item)
-
                 docs.append((pub_seq_num, json.dumps(odbc_item)))
 
             return docs
@@ -99,7 +94,7 @@ class AAPIpNewsFormatter(Formatter, AAPODBCFormatter):
             else:
                 child_tag.replace_with(' {}'.format(child_tag.get_text()))
 
-        para_text = re.sub(' +', ' ', tag.get_text().strip().replace('\xA0', ' '))
+        para_text = re.sub(' +', ' ', tag.get_text().strip().replace('\n\n', ' ').replace('\xA0', ' '))
         if len(para_text) > 80:
             para_text = textwrap.fill(para_text, 80).replace('\n', ' \r\n')
         if para_text != '':
