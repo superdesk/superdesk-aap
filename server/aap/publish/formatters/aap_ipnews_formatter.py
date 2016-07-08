@@ -91,10 +91,11 @@ class AAPIpNewsFormatter(Formatter, AAPODBCFormatter):
         for child_tag in tag.find_all():
             if child_tag.name == 'br':
                 child_tag.replace_with('\r\n{}'.format(child_tag.get_text()))
-            else:
-                child_tag.replace_with(' {}'.format(child_tag.get_text()))
 
-        para_text = re.sub(' +', ' ', tag.get_text().strip().replace('\n\n', ' ').replace('\xA0', ' '))
+        # remove runs os spaces and stray line feeds
+        para_text = re.sub(r' +', ' ', re.sub(r'(?<!\r)\n+', ' ', tag.get_text()).strip().replace('\xA0', ' '))
+        # remove control chars except \r and \n
+        para_text = re.sub('[\x00-\x09\x0b\x0c\x0e-\x1f]', '', para_text)
         if len(para_text) > 80:
             para_text = textwrap.fill(para_text, 80).replace('\n', ' \r\n')
         if para_text != '':

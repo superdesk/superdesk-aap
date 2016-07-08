@@ -235,12 +235,12 @@ class AapBulletinBuilderFormatterTest(SuperdeskTestCase):
 
     def test_strip_html_mixed_tags(self):
         html = '<div>This is mixed&nbsp;<span style=\\\"background-color: transparent;\\\">content' \
-               ' <p>this is para</p></div>' \
-               '<p>This is&nbsp;&nbsp;&nbsp;mixed content<div>this is para</div></p>'
+               ' <p>this is para1</p></div>' \
+               '<p>This is&nbsp;&nbsp;&nbsp;mixed content<div> this is para2</div></p>'
         formatted_content = self._formatter.get_text_content(html)
 
-        body_text = ('This is mixed content this is para\r\n\r\n'
-                     'This is mixed content this is para\r\n\r\n')
+        body_text = ('This is mixed content this is para1\r\n\r\n'
+                     'This is mixed content this is para2\r\n\r\n')
 
         self.assertEqual(formatted_content, body_text)
 
