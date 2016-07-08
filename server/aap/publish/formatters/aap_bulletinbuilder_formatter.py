@@ -87,9 +87,13 @@ class AAPBulletinBuilderFormatter(Formatter):
 
     def format_text_content(self, tag):
         for child_tag in tag.find_all():
-            child_tag.replace_with(' {}'.format(child_tag.get_text().replace('\n', ' ')))
+            if child_tag.name == 'br':
+                child_tag.replace_with(' {}'.format(child_tag.get_text()))
+            else:
+                child_tag.replace_with('{}'.format(child_tag.get_text().replace('\n', ' ')))
 
         para_text = tag.get_text().strip().replace('\n', ' ').replace('\xa0', ' ')
+        para_text = re.sub('[\x00-\x1f]', '', para_text)
         if para_text != '':
             tag.replace_with('{}\r\n\r\n'.format(para_text))
         else:
