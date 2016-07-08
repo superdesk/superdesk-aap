@@ -266,6 +266,132 @@ class AapIpNewsFormatterTest(SuperdeskTestCase):
         self.maxDiff = None
         self.assertEqual(item['article_text'].split('\x19\r\n')[11], expected)
 
+    def testStraySpaceContent(self):
+        article = {
+            '_id': '3',
+            'source': 'AAP',
+            'anpa_category': [{'qcode': 'a'}],
+            'headline': 'This is a test headline',
+            'byline': 'joe',
+            'slugline': 'slugline',
+            'subject': [{'qcode': '02011001'}],
+            'anpa_take_key': 'take_key',
+            'unique_id': '1',
+            'type': 'text',
+            'body_html': '<p><span style=\"background-color: transparent;\">\"</span>'
+                         '<span style=\"background-color: transparent;\">However</span></p>'
+                         '<p>\"<span style=\"background-color: transparent;\">The proposed</p>',
+            'word_count': '1',
+            'priority': 1,
+            "linked_in_packages": [
+                {
+                    "package": "package",
+                    "package_type": "takes"
+                }
+            ],
+        }
+        subscriber = self.app.data.find('subscribers', None, None)[0]
+
+        f = AAPIpNewsFormatter()
+        seq, item = f.format(article, subscriber)[0]
+        item = json.loads(item)
+        expected = '   "However\r\n   "The proposed\r\n\r\nAAP'
+        self.maxDiff = None
+        self.assertEqual(item['article_text'], expected)
+
+    def testNoneAsciNamesContent(self):
+        article = {
+            '_id': '3',
+            'source': 'AAP',
+            'anpa_category': [{'qcode': 'a'}],
+            'headline': 'This is a test headline',
+            'byline': 'joe',
+            'slugline': 'slugline',
+            'subject': [{'qcode': '02011001'}],
+            'anpa_take_key': 'take_key',
+            'unique_id': '1',
+            'type': 'text',
+            'body_html': '<p>Tommi Mäkinen crashes a Škoda in Äppelbo</p>',
+            'word_count': '1',
+            'priority': 1,
+            "linked_in_packages": [
+                {
+                    "package": "package",
+                    "package_type": "takes"
+                }
+            ],
+        }
+        subscriber = self.app.data.find('subscribers', None, None)[0]
+
+        f = AAPIpNewsFormatter()
+        seq, item = f.format(article, subscriber)[0]
+        item = json.loads(item)
+        expected = '   Tommi Makinen crashes a Skoda in Appelbo\r\n\r\nAAP'
+        self.maxDiff = None
+        self.assertEqual(item['article_text'], expected)
+
+    def testSpacesContent(self):
+        article = {
+            '_id': '3',
+            'source': 'AAP',
+            'anpa_category': [{'qcode': 'a'}],
+            'headline': 'This is a test headline',
+            'byline': 'joe',
+            'slugline': 'slugline',
+            'subject': [{'qcode': '02011001'}],
+            'anpa_take_key': 'take_key',
+            'unique_id': '1',
+            'type': 'text',
+            'body_html': '<p>a b  c   d&nbsp;e&nbsp;&nbsp;f\xA0g</p>',
+            'word_count': '1',
+            'priority': 1,
+            "linked_in_packages": [
+                {
+                    "package": "package",
+                    "package_type": "takes"
+                }
+            ],
+        }
+        subscriber = self.app.data.find('subscribers', None, None)[0]
+
+        f = AAPIpNewsFormatter()
+        seq, item = f.format(article, subscriber)[0]
+        item = json.loads(item)
+        expected = '   a b c d e f g\r\n\r\nAAP'
+        self.assertEqual(item['article_text'], expected)
+
+    def testControlCharsContent(self):
+        article = {
+            '_id': '3',
+            'source': 'AAP',
+            'anpa_category': [{'qcode': 'a'}],
+            'headline': 'This is a test headline',
+            'byline': 'joe',
+            'slugline': 'slugline',
+            'subject': [{'qcode': '02011001'}],
+            'anpa_take_key': 'take_key',
+            'unique_id': '1',
+            'type': 'text',
+            'body_html': '<p><span style=\"background-color: transparent;\">\u0018\u0012\f \u000b\u0012\b</span>'
+                         '<span style=\"background-color: transparent;\">\u0005\f\u0006\b \u0006\f\u0019&nbsp;</span>'
+                         '</p>',
+            'word_count': '1',
+            'priority': 1,
+            "linked_in_packages": [
+                {
+                    "package": "package",
+                    "package_type": "takes"
+                }
+            ],
+        }
+        subscriber = self.app.data.find('subscribers', None, None)[0]
+
+        f = AAPIpNewsFormatter()
+        seq, item = f.format(article, subscriber)[0]
+        item = json.loads(item)
+        expected = '     \r\n\r\nAAP'
+        self.assertEqual(item['article_text'], expected)
+
     def testMultipleCategories(self):
         article = {
             'source': 'AAP',

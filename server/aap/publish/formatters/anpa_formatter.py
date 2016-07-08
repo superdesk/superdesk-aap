@@ -159,10 +159,9 @@ class AAPAnpaFormatter(Formatter):
         for child_tag in tag.find_all():
             if child_tag.name == 'br':
                 child_tag.replace_with('\r\n{}'.format(child_tag.get_text()))
-            else:
-                child_tag.replace_with(' {}'.format(child_tag.get_text()))
 
-        para_text = re.sub(' +', ' ', tag.get_text().strip().replace('\n\n', ' ').replace('\xA0', ' '))
+        para_text = re.sub(' +', ' ', re.sub('(?<!\r)\n+', ' ', tag.get_text()).strip().replace('\xA0', ' '))
+        para_text = re.sub('[\x00-\x09\x0b\x0c\x0e-\x1f]', '', para_text)
         if para_text != '':
             tag.replace_with('   {}\r\n'.format(para_text))
         else:
