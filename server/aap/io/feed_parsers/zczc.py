@@ -21,6 +21,7 @@ import superdesk
 from apps.publish.content.common import ITEM_PUBLISH
 import uuid
 import html
+import re
 
 
 class ZCZCFeedParser(FileFeedParser):
@@ -47,6 +48,7 @@ class ZCZCFeedParser(FileFeedParser):
     FORMAT = '*'  # *format "X" text "T" tabular
     SERVICELEVEL = '&'  # &service level - Default A but for results should match category
     IPTC = '+'  # +IPTC Subject Reference Number as defined in the SubjectReference.ini file
+    PLACE = '@'
 
     # Possible values for format
     TEXT = 'X'
@@ -57,6 +59,7 @@ class ZCZCFeedParser(FileFeedParser):
     ITEM_ANPA_CATEGORY = 'anpa_category'
     ITEM_SUBJECT = 'subject'
     ITEM_TAKE_KEY = 'anpa_take_key'
+    ITEM_PLACE = 'place'
 
     header_map = {KEYWORD: ITEM_SLUGLINE, TAKEKEY: ITEM_TAKE_KEY,
                   HEADLINE: ITEM_HEADLINE, SERVICELEVEL: None}
@@ -88,6 +91,8 @@ class ZCZCFeedParser(FileFeedParser):
                         header = True
                         continue
                     if header:
+                        if line == '\n':
+                            continue
                         if line[0] in self.header_map:
                             if self.header_map[line[0]]:
                                 item[self.header_map[line[0]]] = line[1:-1]
@@ -105,7 +110,8 @@ class ZCZCFeedParser(FileFeedParser):
                             continue
                         if line[0] == self.IPTC:
                             iptc_code = line[1:-1]
-                            item[self.ITEM_SUBJECT] = [{'qcode': iptc_code, 'name': subject_codes[iptc_code]}]
+                            if iptc_code.isdigit():
+                                item[self.ITEM_SUBJECT] = [{'qcode': iptc_code, 'name': subject_codes[iptc_code]}]
                             continue
                         header = False
                         body = True
@@ -147,6 +153,18 @@ class ZCZCFeedParser(FileFeedParser):
         elif provider.get('source') == 'BRA':
             # Racing system
             item[FORMAT] = FORMATS.PRESERVED
+        elif provider.get('source') == 'BOB':
+            item[FORMAT] = FORMATS.HTML
+            item['original_source'] = 'BOB'
+            self.CATEGORY = '%'
+            self.KEYWORD = '#'
+            self.HEADLINE = '$'
+            self.TAKEKEY = ':'
+            self.IPTC = '*'
+            self.FORMAT = None
+            self.header_map = {self.KEYWORD: self.ITEM_SLUGLINE, self.TAKEKEY: self.ITEM_TAKE_KEY,
+                               self.HEADLINE: self.ITEM_HEADLINE, self.SERVICELEVEL: None,
+                               self.PLACE: self.ITEM_PLACE}
         else:
             item[FORMAT] = FORMATS.HTML
 
@@ -231,10 +249,25 @@ class ZCZCFeedParser(FileFeedParser):
                     if self.ITEM_HEADLINE in item:
                         item[self.ITEM_HEADLINE] = item[self.ITEM_HEADLINE][:max_headline_len] \
                             if len(item[self.ITEM_HEADLINE]) > max_headline_len else item[self.ITEM_HEADLINE]
+            elif provider.get('source') == 'BOB':
+                item['body_html'] = '<p>{}</p>'.format(
+                    re.sub('<p>   ', '<p>', item.get('body_html', '').replace('\n\n', '\n').replace('\n', '</p><p>')))
+                if self.ITEM_PLACE in item:
+                    locator_map = superdesk.get_resource_service('vocabularies').find_one(req=None, _id='locators')
+                    place = [x for x in locator_map.get('items', []) if
+                             x['qcode'] == item.get(self.ITEM_PLACE, '').upper()]
+                    if place is not None:
+                        item[self.ITEM_PLACE] = place
+                    else:
+                        item.pop(self.ITEM_PLACE)
+                genre_map = superdesk.get_resource_service('vocabularies').find_one(req=None, _id='genre')
+                item['genre'] = [x for x in genre_map.get('items', []) if
+                                 x['qcode'] == 'Broadcast Script' and x['is_active']]
         except Exception as ex:
             logger.exception(ex)
 
         return item
+
 
 try:
     register_feed_parser(ZCZCFeedParser.NAME, ZCZCFeedParser())
