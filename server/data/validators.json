@@ -54,6 +54,11 @@
                 "required": true,
                 "minlength": 1
             },
+            "genre": {
+                "type": "list",
+                "required": true,
+                "minlength": 1
+            },
             "urgency": {
                 "type": "integer",
                 "required": true,
@@ -125,6 +130,11 @@
                 "empty": false
             },
             "subject": {
+                "type": "list",
+                "required": true,
+                "minlength": 1
+            },
+            "genre": {
                 "type": "list",
                 "required": true,
                 "minlength": 1
@@ -269,6 +279,11 @@
                 "required": true,
                 "minlength": 1
             },
+            "genre": {
+                "type": "list",
+                "required": true,
+                "minlength": 1
+            },
             "urgency": {
                 "type": "integer",
                 "required": true,
@@ -335,6 +350,11 @@
                 "empty": false
             },
             "subject": {
+                "type": "list",
+                "required": true,
+                "minlength": 1
+            },
+            "genre": {
                 "type": "list",
                 "required": true,
                 "minlength": 1
