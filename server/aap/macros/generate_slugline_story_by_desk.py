@@ -93,7 +93,7 @@ class GenerateBodyHtmlForPublishedArticlesByDesk(GenerateBodyHtml):
                                 {
                                     'range': {
                                         'versioncreated': {
-                                            "lte": current_local_time.strftime('%Y-%m-%dT00:00:00%z'),
+                                            "lte": current_local_time.strftime('%Y-%m-%dT00:00:00%z')
                                         }
                                     }
                                 }
@@ -103,14 +103,27 @@ class GenerateBodyHtmlForPublishedArticlesByDesk(GenerateBodyHtml):
                 }
             },
             'sort': [
-                {'versioncreated': 'desc'},
+                {'versioncreated': 'desc'}
             ]
         }
 
         desk_query = query['query']['filtered']['filter']['bool']['must']
         if desk.get('desk_type') == DeskTypes.authoring.value:
-            desk_query.append({'term': {'task.last_authoring_desk': str(self.desk_id)}})
-            desk_query.append({'terms': {ITEM_STATE: states}})
+            desk_filter = {'or': []}
+
+            # if published from authoring desk
+            desk_filter['or'].append({'and': [
+                {'term': {'task.desk': str(self.desk_id)}},
+                {'terms': {ITEM_STATE: list(PUBLISH_STATES)}}
+            ]})
+
+            # if published send from authoring desk
+            desk_filter['or'].append({'and': [
+                {'term': {'task.last_authoring_desk': str(self.desk_id)}},
+                {'terms': {ITEM_STATE: states}}
+            ]})
+
+            desk_query.append(desk_filter)
         else:
             # filtering only published states for production for now.
             desk_query.append({'term': {'task.desk': str(self.desk_id)}})

@@ -134,6 +134,20 @@ class SluglineStoryByDesk(SuperdeskTestCase):
                 'task': {
                     'desk': self.desks[2].get('_id')
                 }
+            },
+            {
+                '_id': '7', 'type': 'text', 'abstract': 'abstract item 7', 'slugline': 'slugline item 7',
+                'dateline': {
+                    'text': 'Sydney, 01 Jan AAP -',
+                    'located': {
+                        'city': 'Sydney'
+                    }
+                },
+                'state': 'published',
+                'versioncreated': local_time + timedelta(minutes=-7),
+                'task': {
+                    'desk': self.desks[0].get('_id')
+                }
             }
         ]
 
@@ -194,6 +208,20 @@ class SluglineStoryByDesk(SuperdeskTestCase):
                 'task': {
                     'desk': self.desks[2].get('_id')
                 }
+            },
+            {
+                'item_id': '7', 'type': 'text', 'abstract': 'abstract item 7', 'slugline': 'slugline item 7',
+                'dateline': {
+                    'text': 'Sydney, 01 Jan AAP -',
+                    'located': {
+                        'city': 'Sydney'
+                    }
+                },
+                'state': 'published',
+                'versioncreated': local_time + timedelta(minutes=-7),
+                'task': {
+                    'desk': self.desks[0].get('_id')
+                }
             }
         ]
 
@@ -204,9 +232,10 @@ class SluglineStoryByDesk(SuperdeskTestCase):
         cls = GenerateBodyHtmlForPublishedArticlesByDesk(self.desks[0].get('_id'))
         query, repo = cls.create_query()
         articles = cls.get_articles(query, repo)
-        self.assertEqual(len(articles), 2)
+        self.assertEqual(len(articles), 3)
         self.assertEqual(articles[0]['_id'], '2')
         self.assertEqual(articles[1]['_id'], '2a')
+        self.assertEqual(articles[2]['_id'], '7')
 
     def test_slugline_by_desk_for_production(self):
         cls = GenerateBodyHtmlForPublishedArticlesByDesk(self.desks[1].get('_id'))
@@ -226,3 +255,4 @@ class SluglineStoryByDesk(SuperdeskTestCase):
         generate_published_slugline_story_by_desk(item)
         self.assertTrue('SYDNEY abstract item 2 (slugline item 2)' in item['body_html'])
         self.assertTrue('SYDNEY abstract item 2a (slugline item 2a)' in item['body_html'])
+        self.assertTrue('SYDNEY abstract item 7 (slugline item 7)' in item['body_html'])
