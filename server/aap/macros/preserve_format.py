@@ -14,6 +14,38 @@ import logging
 logger = logging.getLogger(__name__)
 
 
+def sanitize_pre_tags(item):
+    soup = BeautifulSoup(item.get('body_html', ''), 'html.parser')
+    sanitized_text = ''
+    for p in soup.findAll(['pre', 'p', 'div']):
+        if len(list(p.children)) > 0:
+            sanitized_children = ''
+            for c in p.children:
+                if c.name in ['div', 'p']:
+                    rowc = c.get_text()
+                    sanitized_children = '{}{}{}'.format(sanitized_children, rowc, '\n')
+
+            if not sanitized_children:
+                row = p.get_text()
+                sanitized_children = '{}{}'.format(row, '\n')
+
+            sanitized_text = '{}{}'.format(sanitized_text, sanitized_children)
+    item['body_html'] = '<pre>{}</pre>'.format(sanitized_text)
+    return item
+
+
+def sanitize_tags(item):
+    item['body_html'] = item.get('body_html', '').replace('&nbsp;', ' ')
+    soup = BeautifulSoup(item.get('body_html', ''), 'html.parser')
+    sanitized_text = ''
+    for p in soup.findAll(['p', 'div']):
+        row = p.get_text()
+        sanitized_text = '{}{}{}'.format(sanitized_text, row, '\n')
+    item['body_html'] = '<pre>{}</pre>'.format(sanitized_text)
+    item[FORMAT] = FORMATS.PRESERVED
+    return item
+
+
 def preserve(item, **kwargs):
     """
     This macro removes any markup from body_html and wraps it with <pre> tag
@@ -25,17 +57,10 @@ def preserve(item, **kwargs):
     try:
         if item.get(FORMAT) == FORMATS.PRESERVED:
             # this item has been processed before
-            return item
-
-        item['body_html'] = item.get('body_html', '').replace('&nbsp;', ' ')
-        soup = BeautifulSoup(item.get('body_html', ''), 'html.parser')
-        sanitized_text = ''
-        for p in soup.findAll('p'):
-            row = p.get_text()
-            sanitized_text = '{}{}{}'.format(sanitized_text, row, '\n')
-        item['body_html'] = '<pre>{}</pre>'.format(sanitized_text)
-        item[FORMAT] = FORMATS.PRESERVED
-        return item
+            # to make sure process again
+            return sanitize_pre_tags(item)
+        else:
+            return sanitize_tags(item)
     except Exception as ex:
         logging.exception('Exception in preserve format macro: ', ex)
         raise ex
