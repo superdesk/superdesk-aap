@@ -172,14 +172,4 @@ Feature: Content Auto Publishing
       When run import legal publish queue
       When we enqueue published
       And we get "/legal_publish_queue"
-      Then we get list with 2 items
-      """
-      {
-        "_items": [
-          {"state": "pending", "content_type": "composite",
-          "subscriber_id": "Channel 1", "item_id": "#archive.123.take_package#", "item_version": 2},
-          {"state": "pending", "content_type": "text",
-          "subscriber_id": "Channel 2", "item_id": "123", "item_version": 2}
-        ]
-      }
-      """
+      Then we get list with 0 items
