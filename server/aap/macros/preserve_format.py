@@ -14,34 +14,27 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def sanitize_pre_tags(item):
-    soup = BeautifulSoup(item.get('body_html', ''), 'html.parser')
-    sanitized_text = ''
-    for p in soup.findAll(['pre', 'p', 'div']):
-        if len(list(p.children)) > 0:
-            sanitized_children = ''
-            for c in p.children:
-                if c.name in ['div', 'p']:
-                    rowc = c.get_text()
-                    sanitized_children = '{}{}{}'.format(sanitized_children, rowc, '\n')
+def format_text_content(tag):
+    for child_tag in tag.find_all():
+        if child_tag.name == 'br':
+            child_tag.replace_with('{}'.format(child_tag.get_text()))
+        else:
+            if child_tag.get_text() != '\n':
+                child_tag.replace_with('{}\n'.format(child_tag.get_text()))
 
-            if not sanitized_children:
-                row = p.get_text()
-                sanitized_children = '{}{}'.format(row, '\n')
-
-            sanitized_text = '{}{}'.format(sanitized_text, sanitized_children)
-    item['body_html'] = '<pre>{}</pre>'.format(sanitized_text)
-    return item
+    para_text = tag.get_text().strip()
+    if para_text != '\n':
+        tag.replace_with('{}\n'.format(para_text))
 
 
 def sanitize_tags(item):
-    item['body_html'] = item.get('body_html', '').replace('&nbsp;', ' ')
-    soup = BeautifulSoup(item.get('body_html', ''), 'html.parser')
-    sanitized_text = ''
-    for p in soup.findAll(['p', 'div']):
-        row = p.get_text()
-        sanitized_text = '{}{}{}'.format(sanitized_text, row, '\n')
-    item['body_html'] = '<pre>{}</pre>'.format(sanitized_text)
+    content = item.get('body_html', '')
+    content = content.replace('<br>', '\n')
+    content = content.replace('&nbsp;', ' ')
+    soup = BeautifulSoup(content, 'html.parser')
+    for top_level_tag in soup.find_all(recursive=False):
+        format_text_content(top_level_tag)
+    item['body_html'] = '<pre>{}</pre>'.format(soup.get_text())
     item[FORMAT] = FORMATS.PRESERVED
     return item
 
@@ -55,12 +48,7 @@ def preserve(item, **kwargs):
     :return:
     """
     try:
-        if item.get(FORMAT) == FORMATS.PRESERVED:
-            # this item has been processed before
-            # to make sure process again
-            return sanitize_pre_tags(item)
-        else:
-            return sanitize_tags(item)
+        return sanitize_tags(item)
     except Exception as ex:
         logging.exception('Exception in preserve format macro: ', ex)
         raise ex
