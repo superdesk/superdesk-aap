@@ -14,6 +14,31 @@ import logging
 logger = logging.getLogger(__name__)
 
 
+def format_text_content(tag):
+    for child_tag in tag.find_all():
+        if child_tag.name == 'br':
+            child_tag.replace_with('{}'.format(child_tag.get_text()))
+        else:
+            if child_tag.get_text() != '\n':
+                child_tag.replace_with('{}\n'.format(child_tag.get_text()))
+
+    para_text = tag.get_text().strip()
+    if para_text != '\n':
+        tag.replace_with('{}\n'.format(para_text))
+
+
+def sanitize_tags(item):
+    content = item.get('body_html', '')
+    content = content.replace('<br>', '\n')
+    content = content.replace('&nbsp;', ' ')
+    soup = BeautifulSoup(content, 'html.parser')
+    for top_level_tag in soup.find_all(recursive=False):
+        format_text_content(top_level_tag)
+    item['body_html'] = '<pre>{}</pre>'.format(soup.get_text())
+    item[FORMAT] = FORMATS.PRESERVED
+    return item
+
+
 def preserve(item, **kwargs):
     """
     This macro removes any markup from body_html and wraps it with <pre> tag
@@ -23,19 +48,7 @@ def preserve(item, **kwargs):
     :return:
     """
     try:
-        if item.get(FORMAT) == FORMATS.PRESERVED:
-            # this item has been processed before
-            return item
-
-        item['body_html'] = item.get('body_html', '').replace('&nbsp;', ' ')
-        soup = BeautifulSoup(item.get('body_html', ''), 'html.parser')
-        sanitized_text = ''
-        for p in soup.findAll('p'):
-            row = p.get_text()
-            sanitized_text = '{}{}{}'.format(sanitized_text, row, '\n')
-        item['body_html'] = '<pre>{}</pre>'.format(sanitized_text)
-        item[FORMAT] = FORMATS.PRESERVED
-        return item
+        return sanitize_tags(item)
     except Exception as ex:
         logging.exception('Exception in preserve format macro: ', ex)
         raise ex
