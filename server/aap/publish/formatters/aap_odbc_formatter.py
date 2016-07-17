@@ -34,10 +34,10 @@ class AAPODBCFormatter():
         odbc_item = dict(originator=article.get('source', None), sequence=pub_seq_num,
                          category=category.get('qcode'),
                          headline=to_ascii(article.get('headline', '')).replace('\'', '\'\'').replace('\xA0', ' '),
-                         author=article.get('byline', '').replace('\'', '\'\''),
+                         author=(article.get('byline', '') or '').replace('\'', '\'\''),
                          keyword=self.append_legal(article=article, truncate=True).replace('\'', '\'\''),
                          subject_reference=set_subject(category, article),
-                         take_key=article.get('anpa_take_key', '').replace('\'', '\'\''))
+                         take_key=(article.get('anpa_take_key', '') or '').replace('\'', '\'\''))
         if 'genre' in article and len(article['genre']) >= 1:
             odbc_item['genre'] = article['genre'][0].get('name', None)
         else:

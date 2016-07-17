@@ -90,7 +90,7 @@ class AAPAnpaFormatter(Formatter):
 
                 keyword = self.append_legal(article=formatted_article, truncate=True).encode('ascii', 'ignore')
                 anpa.append(keyword)
-                take_key = formatted_article.get('anpa_take_key', '').encode('ascii', 'ignore')
+                take_key = (formatted_article.get('anpa_take_key', '') or '').encode('ascii', 'ignore')
                 anpa.append((b'\x20' + take_key) if len(take_key) > 0 else b'')
                 anpa.append(b'\x0D\x0A')
 
