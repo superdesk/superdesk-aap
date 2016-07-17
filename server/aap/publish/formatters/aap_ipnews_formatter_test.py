@@ -509,6 +509,97 @@ class AapIpNewsFormatterTest(SuperdeskTestCase):
         self.assertEqual(doc['subject_reference'], '00000000')
         self.assertEqual(doc['headline'], 'This is a test headline')
 
+    def testIpNewsFormatterNoByline(self):
+        article = {
+            "_id": "urn:newsml:localhost:2016-07-15T12:48:23.630571:fcdf4e61-541c-4cc7-86c7-8e15314b5e71",
+            "headline": "Finance Highlights",
+            "source": "AAP",
+            "unique_id": 1,
+            "type": "text",
+            "slugline": "Highlights Finance",
+            "place": [
+                {
+                    "qcode": "FED",
+                    "country": "Australia",
+                    "world_region": "Oceania",
+                    "group": "Australia",
+                    "state": "",
+                    "name": "FED"
+                }
+            ],
+            "format": "HTML",
+            "priority": 6,
+            "sign_off": "SC/TDW/DC/SC",
+            "pubstatus": "usable",
+            "byline": None,
+            "more_coming": False,
+            "body_html": "<h2>One Ruralco export licence lost to BJD</h2>",
+            "original_creator": "576b60baa5398f65d12ad0c8",
+            "urgency": 3,
+            "schedule_settings": {
+                "utc_embargo": None,
+                "time_zone": None,
+                "utc_publish_schedule": None
+            },
+            "genre": [
+                {
+                    "qcode": "Article",
+                    "name": "Article (news)"
+                }
+            ],
+            "dateline": {
+                "date": "2016-07-15T02:48:23.000+0000",
+                "source": "AAP",
+                "located": {
+                    "state_code": "NSW",
+                    "country_code": "AU",
+                    "city": "Sydney",
+                    "alt_name": "",
+                    "country": "Australia",
+                    "tz": "Australia/Sydney",
+                    "city_code": "Sydney",
+                    "dateline": "city",
+                    "state": "New South Wales"
+                },
+                "text": "SYDNEY, July 15 AAP -"
+            },
+            "unique_name": "#9555064",
+            "version": 2,
+            "anpa_category": [
+                {
+                    "qcode": "f",
+                    "subject": "04000000",
+                    "name": "Finance",
+                    "scheme": None
+                }
+            ],
+            "linked_in_packages": [
+                {
+                    "package": "urn:newsml:localhost:2016-07-15T13:04:34.991699:fd7aad03-87a8-4cd5-9fdb-2624f3e02666"
+                },
+                {
+                    "package_type": "takes",
+                    "package": "urn:newsml:localhost:2016-07-15T13:59:19.157701:7c7bd386-25ea-42d7-9543-4eff5bceef40"
+                }
+            ],
+            "publish_schedule": None,
+            "subject": [
+                {
+                    "qcode": "04000000",
+                    "scheme": None,
+                    "name": "economy, business and finance",
+                    "parent": None
+                }
+            ],
+            "rewritten_by": None
+        }
+        subscriber = self.app.data.find('subscribers', None, None)[0]
+
+        f = AAPIpNewsFormatter()
+        seq, doc = f.format(article, subscriber)[0]
+        doc = json.loads(doc)
+        self.assertEqual(doc['headline'], 'FED:Finance Highlights')
+
     def test_aap_ipnews_formatter_with_body_footer(self):
         subscriber = self.app.data.find('subscribers', None, None)[0]
         doc = self.article.copy()
