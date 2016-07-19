@@ -13,6 +13,7 @@ from apps.packages import TakesPackageService
 from .aap_formatter_common import set_subject
 from apps.archive.common import get_utc_schedule
 from .field_mappers.locator_mapper import LocatorMapper
+from .field_mappers.slugline_mapper import SluglineMapper
 from superdesk.metadata.item import EMBARGO
 from eve.utils import config
 import superdesk
@@ -20,7 +21,6 @@ from .unicodetoascii import to_ascii
 
 
 class AAPODBCFormatter():
-
     def get_odbc_item(self, article, subscriber, category, codes):
         """
         Construct an odbc_item with the common key value pairs populated
@@ -35,7 +35,9 @@ class AAPODBCFormatter():
                          category=category.get('qcode'),
                          headline=to_ascii(article.get('headline', '')).replace('\'', '\'\'').replace('\xA0', ' '),
                          author=(article.get('byline', '') or '').replace('\'', '\'\''),
-                         keyword=self.append_legal(article=article, truncate=True).replace('\'', '\'\''),
+                         keyword=SluglineMapper().map(article=article,
+                                                      category=category.get('qcode').upper(),
+                                                      truncate=True).replace('\'', '\'\''),
                          subject_reference=set_subject(category, article),
                          take_key=(article.get('anpa_take_key', '') or '').replace('\'', '\'\''))
         if 'genre' in article and len(article['genre']) >= 1:
