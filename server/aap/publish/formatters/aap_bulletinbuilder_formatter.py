@@ -17,8 +17,10 @@ from superdesk.errors import FormatterError
 from superdesk.metadata.item import ITEM_TYPE, PACKAGE_TYPE
 from bs4 import BeautifulSoup
 from .field_mappers.locator_mapper import LocatorMapper
+from .field_mappers.slugline_mapper import SluglineMapper
 from .aap_formatter_common import set_subject
 from .unicodetoascii import to_ascii
+from copy import deepcopy
 import json
 
 
@@ -26,6 +28,7 @@ class AAPBulletinBuilderFormatter(Formatter):
     """
     Bulletin Builder Formatter
     """
+
     def format(self, article, subscriber, codes=None):
         """
         Formats the article as require by the subscriber
@@ -35,33 +38,39 @@ class AAPBulletinBuilderFormatter(Formatter):
         :return: tuple (int, str) of publish sequence of the subscriber, formatted article as string
         """
         try:
-
-            article['slugline'] = self.get_text_content(to_ascii(self.append_legal(article=article,
-                                                                                   truncate=True))).strip()
+            formatted_article = deepcopy(article)
+            formatted_article['slugline'] = self.get_text_content(to_ascii(self.append_legal(article=formatted_article,
+                                                                                             truncate=True))).strip()
             pub_seq_num = superdesk.get_resource_service('subscribers').generate_sequence_number(subscriber)
-            body_html = to_ascii(self.append_body_footer(article)).strip('\r\n')
-            article['body_text'] = self.get_text_content(body_html)
-            article['abstract'] = self.get_text_content(to_ascii(article.get('abstract', ''))).strip()
-            article['headline'] = self.get_text_content(to_ascii(article.get('headline', ''))).strip()
+            body_html = to_ascii(self.append_body_footer(formatted_article)).strip('\r\n')
+            formatted_article['body_text'] = self.get_text_content(body_html)
+            formatted_article['abstract'] = self.get_text_content(
+                to_ascii(formatted_article.get('abstract', ''))).strip()
+            formatted_article['headline'] = self.get_text_content(
+                to_ascii(formatted_article.get('headline', ''))).strip()
 
             # get the first category and derive the locator
-            category = next((iter(article.get('anpa_category', []))), None)
+            category = next((iter(formatted_article.get('anpa_category', []))), None)
             if category:
-                locator = LocatorMapper().map(article, category.get('qcode').upper())
+                locator = LocatorMapper().map(formatted_article, category.get('qcode').upper())
                 if locator:
-                    article['place'] = [{'qcode': locator, 'name': locator}]
+                    formatted_article['place'] = [{'qcode': locator, 'name': locator}]
 
-                article['first_category'] = category
-                article['first_subject'] = set_subject(category, article)
+                formatted_article['first_category'] = category
+                formatted_article['first_subject'] = set_subject(category, formatted_article)
+                formatted_article['slugline'] = self.get_text_content(
+                    to_ascii(SluglineMapper().map(article=formatted_article,
+                                                  category=category.get('qcode').upper(), truncate=True))).strip()
 
             odbc_item = {
-                'id': article.get(config.ID_FIELD),
-                'version': article.get(config.VERSION),
-                ITEM_TYPE: article.get(ITEM_TYPE),
-                PACKAGE_TYPE: article.get(PACKAGE_TYPE, ''),
-                'headline': article.get('headline', '').replace('\'', '\'\''),
-                'slugline': article.get('slugline', '').replace('\'', '\'\''),
-                'data': superdesk.json.dumps(article, default=json_serialize_datetime_objectId).replace('\'', '\'\'')
+                'id': formatted_article.get(config.ID_FIELD),
+                'version': formatted_article.get(config.VERSION),
+                ITEM_TYPE: formatted_article.get(ITEM_TYPE),
+                PACKAGE_TYPE: formatted_article.get(PACKAGE_TYPE, ''),
+                'headline': formatted_article.get('headline', '').replace('\'', '\'\''),
+                'slugline': formatted_article.get('slugline', '').replace('\'', '\'\''),
+                'data': superdesk.json.dumps(formatted_article,
+                                             default=json_serialize_datetime_objectId).replace('\'', '\'\'')
             }
 
             return [(pub_seq_num, json.dumps(odbc_item, default=json_serialize_datetime_objectId))]

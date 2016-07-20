@@ -13,7 +13,6 @@ from eve.utils import config
 from test_factory import SuperdeskTestCase
 from apps.publish import init_app
 from .aap_bulletinbuilder_formatter import AAPBulletinBuilderFormatter
-from superdesk.utils import json_serialize_datetime_objectId
 from superdesk import json
 from superdesk.metadata.item import ITEM_TYPE, PACKAGE_TYPE
 from superdesk.utc import utcnow
@@ -66,8 +65,8 @@ class AapBulletinBuilderFormatterTest(SuperdeskTestCase):
         self.assertEqual(article.get(PACKAGE_TYPE, ''), item.get(PACKAGE_TYPE))
         self.assertEqual(article['headline'], item.get('headline'))
         self.assertEqual(article['slugline'], item.get('slugline'))
-        self.assertEqual(json.dumps(article, default=json_serialize_datetime_objectId),
-                         item.get('data'))
+        formatted_item = json.loads(item.get('data'))
+        self.assertEqual(article['headline'], formatted_item['headline'])
 
     def test_strip_html(self):
         article = {

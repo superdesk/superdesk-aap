@@ -17,6 +17,7 @@ from bs4 import BeautifulSoup, NavigableString
 import datetime
 from superdesk.metadata.item import ITEM_TYPE, CONTENT_TYPE, BYLINE, EMBARGO, FORMAT, FORMATS
 from .field_mappers.locator_mapper import LocatorMapper
+from .field_mappers.slugline_mapper import SluglineMapper
 from apps.packages import TakesPackageService
 from eve.utils import config
 from .unicodetoascii import to_ascii
@@ -88,7 +89,8 @@ class AAPAnpaFormatter(Formatter):
 
                 self._process_headline(anpa, formatted_article, category['qcode'].encode('ascii'))
 
-                keyword = self.append_legal(article=formatted_article, truncate=True).encode('ascii', 'ignore')
+                keyword = SluglineMapper().map(article=formatted_article, category=category['qcode'].upper(),
+                                               truncate=True).encode('ascii', 'ignore')
                 anpa.append(keyword)
                 take_key = (formatted_article.get('anpa_take_key', '') or '').encode('ascii', 'ignore')
                 anpa.append((b'\x20' + take_key) if len(take_key) > 0 else b'')
@@ -169,7 +171,7 @@ class AAPAnpaFormatter(Formatter):
 
     def _process_headline(self, anpa, article, category):
         # prepend the locator to the headline if required
-        headline_prefix = LocatorMapper().map(article, category.upper())
+        headline_prefix = LocatorMapper().map(article, category.decode('UTF-8').upper())
         headline = to_ascii(article.get('headline', ''))
         if headline_prefix:
             headline = '{}:{}'.format(headline_prefix, headline)
