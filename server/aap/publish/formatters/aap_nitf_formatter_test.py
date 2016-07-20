@@ -199,7 +199,7 @@ class AAPNitfFormatterTest(SuperdeskTestCase):
         }
         seq, doc = self.formatter.format(article, {'name': 'Test Subscriber'})[0]
         nitf_xml = etree.fromstring(doc)
-        self.assertTrue('from   74.41' in nitf_xml.findall('body/body.content/p')[1].text)
+        self.assertTrue('from 74.41' in nitf_xml.findall('body/body.content/p')[1].text)
 
     def testStraySpaceContent(self):
         article = {
@@ -280,7 +280,7 @@ class AAPNitfFormatterTest(SuperdeskTestCase):
         }
         seq, doc = self.formatter.format(article, {'name': 'Test Subscriber'})[0]
         nitf_xml = etree.fromstring(doc)
-        self.assertEqual(nitf_xml.find('body/body.content/p').text, 'a b  c   d e  f g')
+        self.assertEqual(nitf_xml.find('body/body.content/p').text, 'a b c d e  f g')
 
     def testControlCharsContent(self):
         article = {
@@ -308,4 +308,4 @@ class AAPNitfFormatterTest(SuperdeskTestCase):
         }
         seq, doc = self.formatter.format(article, {'name': 'Test Subscriber'})[0]
         nitf_xml = etree.fromstring(doc)
-        self.assertEqual(nitf_xml.find('body/body.content/p').text, '  ')
+        self.assertEqual(nitf_xml.find('body/body.content/p').text, ' ')

@@ -85,5 +85,5 @@ class AAPNITFFormatter(NITFFormatter):
         for top_level_tag in soup.find_all(recursive=False):
             para_text = top_level_tag.get_text().strip().replace('\n', ' ')
             para_text = re.sub('[\x00-\x09\x0b\x0c\x0e-\x1f]', '', para_text)
-            para_text.sub(' +', ' ', para_text)
+            para_text = re.sub(' +', ' ', para_text)
             SubElement(element, 'p').text = to_ascii(para_text)
