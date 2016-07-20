@@ -10,6 +10,9 @@
 
 import logging
 from .legal_archive_consistency import LegalArchiveConsistencyResource
+from aap.data_consistency.consistency_record import ConsistencyRecordResource, \
+    ConsistencyRecordService
+from aap.data_consistency.compare_repositories import CompareRepositories  # noqa
 from superdesk import get_backend
 from superdesk.services import BaseService
 
@@ -20,3 +23,12 @@ def init_app(app):
     endpoint_name = 'legal_archive_consistency'
     service = BaseService(endpoint_name, backend=get_backend())
     LegalArchiveConsistencyResource(endpoint_name, app=app, service=service)
+
+    endpoint_name = 'consistency'
+    service = ConsistencyRecordService(endpoint_name, backend=get_backend())
+    ConsistencyRecordResource(endpoint_name, app=app, service=service)
+
+
+# must be imported for registration
+import aap.data_consistency.compare_repositories  # NOQA
+import aap.data_consistency.consistency_record  # NOQA

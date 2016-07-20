@@ -131,6 +131,7 @@ INSTALLED_APPS.extend([
     'apps.workqueue',
 
     'aap.commands',
+    'aap.data_consistency',
     'aap.macros',
     'aap.publish.formatters',
     'aap_mm',
