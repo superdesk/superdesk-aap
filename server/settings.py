@@ -78,6 +78,7 @@ INSTALLED_APPS.extend([
     'superdesk.upload',
     'superdesk.sequences',
     'superdesk.notification',
+    'superdesk.data_updates',
     'superdesk.activity',
     'superdesk.vocabularies',
     'apps.comments',
