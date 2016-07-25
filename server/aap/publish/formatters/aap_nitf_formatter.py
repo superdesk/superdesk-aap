@@ -37,16 +37,12 @@ class AAPNITFFormatter(NITFFormatter):
         """
         Appends <meta> elements to <head>
         """
+        super()._append_meta(article, head, destination, pub_seq_num)
 
         SubElement(head, 'meta', {'name': 'anpa-sequence', 'content': str(pub_seq_num)})
         SubElement(head, 'meta', {'name': 'anpa-keyword', 'content': self.append_legal(article)})
         SubElement(head, 'meta', {'name': 'anpa-takekey', 'content': article.get('anpa_take_key', '')})
-        if 'anpa_category' in article and article['anpa_category'] is not None and len(
-                article.get('anpa_category')) > 0:
-            SubElement(head, 'meta',
-                       {'name': 'anpa-category', 'content': article.get('anpa_category')[0].get('qcode', '')})
 
-        self._append_meta_priority(article, head)
         original_creator = superdesk.get_resource_service('users').find_one(req=None,
                                                                             _id=article.get('original_creator', ''))
         if original_creator:
