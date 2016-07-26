@@ -13,3 +13,4 @@ import aap.publish.formatters.anpa_formatter  # NOQA
 import aap.publish.formatters.aap_bulletinbuilder_formatter  # NOQA
 import aap.publish.formatters.aap_sms_formatter  # NOQA
 import aap.publish.formatters.aap_newscentre_formatter  # NOQA
+import aap.publish.formatters.aap_nitf_formatter  # NOQA
