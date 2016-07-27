@@ -90,6 +90,12 @@
             dateformat: 'DD/MM/YYYY'
         };
 
+        config.previewFormats = [{
+            name: 'AAPIpNewsFormatter',
+            outputType: 'json',
+            outputField: 'article_text'
+        }]
+
         config.defaultTimezone = 'Australia/Sydney';
 
         config.list = {
