@@ -137,7 +137,8 @@ INSTALLED_APPS.extend([
     'aap.publish.formatters',
     'aap_mm',
     'aap.io.feed_parsers',
-    'aap.data_consistency'
+    'aap.data_consistency',
+    'aap.io.iptc_extension'
 ])
 
 RENDITIONS = {
