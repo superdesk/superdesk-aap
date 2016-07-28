@@ -47,13 +47,13 @@ class SendEmailTestCase(SuperdeskTestCase):
                         'text': 'Test, Test, July 9 AAP -'
                     },
                     'body_html': 'body',
-                    'desk_name': 'New Zealand'
+                    'desk_name': 'New Zealand',
+                    'city': 'Test, Test'
                 }
                 send_article_killed_email(article, ['test@sd.io'], utcnow())
                 self.assertEqual(len(outbox), 1)
                 self.assertEqual(outbox[0].subject, 'Transmission from circuit: E_KILL_')
-                self.assertIn('New Zealand Newswire', outbox[0].body)
-                self.assertIn('NZN', outbox[0].body)
+                self.assertIn('body', outbox[0].body)
 
     def test_send_email_kill_for_AAP(self):
         with self.app.app_context():
@@ -70,10 +70,10 @@ class SendEmailTestCase(SuperdeskTestCase):
                         'text': 'Test, Test, July 9 AAP -'
                     },
                     'body_html': 'body',
-                    'desk_name': 'Sports'
+                    'desk_name': 'Sports',
+                    'city': 'Test, Test'
                 }
                 send_article_killed_email(article, ['test@sd.io'], utcnow())
                 self.assertEqual(len(outbox), 1)
                 self.assertEqual(outbox[0].subject, 'Transmission from circuit: E_KILL_')
-                self.assertIn('Australian Associated Press', outbox[0].body)
-                self.assertIn('AAP', outbox[0].body)
+                self.assertIn('body', outbox[0].body)

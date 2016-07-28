@@ -1,3 +1,3 @@
 {
-    "body_html": "<p>Please kill story slugged {{ item.slugline }} headlined {{item.headline}} ex{{ item.dateline['text'][:item.dateline['text'].rfind(',')] }} transmitted at {%if desk_name.strip().lower() == 'new zealand'%}{{item.versioncreated | format_datetime('Pacific/Auckland', '%d %b %Y %H:%S %Z')}}{% else %}{{item.versioncreated | format_datetime('Australia/Sydney', '%d %b %Y %H:%S %Z')}}{% endif %}.</p>{{item.body_html | escape}}"
+    "body_html": "<p>Please kill story slugged {{ slugline }} headlined {{headline}} ex {{ city }} at {%if desk_name.strip().lower() == 'new zealand'%}{{versioncreated | format_datetime('Pacific/Auckland', '%d %b %Y %H:%S %Z')}}{% else %}{{versioncreated | format_datetime('Australia/Sydney', '%d %b %Y %H:%S %Z')}}{% endif %}.</p>{{body_html | escape}}"
 }
