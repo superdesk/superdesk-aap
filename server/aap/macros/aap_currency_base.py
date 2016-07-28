@@ -116,15 +116,17 @@ def update_suffix(value, suffix, precision=0):
     return value, suffix, precision
 
 
-def format_output(original, converted, suffix):
+def format_output(original, converted, suffix, src_currency):
     """ Returns the replacement string for the given original value """
+    original = original if src_currency is None or src_currency in original \
+        else original.replace('$', src_currency)
     if suffix:
         return '{} ({} {})'.format(original, converted, suffix)
     else:
         return '{} ({})'.format(original, converted, suffix)
 
 
-def do_conversion(item, rate, currency, search_param, match_index, value_index, suffix_index):
+def do_conversion(item, rate, currency, search_param, match_index, value_index, suffix_index, src_currency=None):
     """
     Performs the conversion
     :param item: story
@@ -153,7 +155,7 @@ def do_conversion(item, rate, currency, search_param, match_index, value_index, 
             to_value = rate * from_value
             to_value, suffix_item, precision = update_suffix(to_value, suffix_item, precision)
             converted_value = to_currency(to_value, places=precision, curr=currency)
-            diff.setdefault(match_item, format_output(match_item, converted_value, suffix_item))
+            diff.setdefault(match_item, format_output(match_item, converted_value, suffix_item, src_currency))
             return diff[match_item]
 
     for field in macro_replacement_fields:
