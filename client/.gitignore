@@ -28,3 +28,4 @@ nbproject/
 coveralls.json
 lcov.info
 index.html
+templates-cache.js
