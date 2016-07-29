@@ -32,3 +32,5 @@ include/
 /results/
 /superdesk-content-api/
 /node_modules/
+client/index.html
+client/templates-cache.js
