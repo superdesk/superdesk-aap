@@ -30,4 +30,4 @@ class NznIpNewsFormatter(AAPIpNewsFormatter):
         return get_nzn_category_list(category_list)
 
     def can_format(self, format_type, article):
-        return format_type == 'NZN IPNEWS' and article[ITEM_TYPE] in [CONTENT_TYPE.TEXT, CONTENT_TYPE.PREFORMATTED]
+        return format_type == 'NZN IPNEWS' and article[ITEM_TYPE] in [CONTENT_TYPE.TEXT]

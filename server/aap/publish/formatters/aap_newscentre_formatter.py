@@ -97,4 +97,4 @@ class AAPNewscentreFormatter(Formatter, AAPODBCFormatter):
             tag.replace_with('')
 
     def can_format(self, format_type, article):
-        return format_type == 'AAP NEWSCENTRE' and article[ITEM_TYPE] in [CONTENT_TYPE.TEXT, CONTENT_TYPE.PREFORMATTED]
+        return format_type == 'AAP NEWSCENTRE' and article[ITEM_TYPE] in [CONTENT_TYPE.TEXT]
