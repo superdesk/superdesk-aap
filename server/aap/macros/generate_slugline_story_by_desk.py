@@ -104,7 +104,8 @@ class GenerateBodyHtmlForPublishedArticlesByDesk(GenerateBodyHtml):
             },
             'sort': [
                 {'versioncreated': 'desc'}
-            ]
+            ],
+            'size': 200
         }
 
         desk_query = query['query']['filtered']['filter']['bool']['must']
