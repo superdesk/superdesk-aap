@@ -16,6 +16,7 @@ import re
 import json
 from .unicodetoascii import to_ascii
 from copy import deepcopy
+from .category_list_map import get_aap_category_list
 
 
 class AAPNewscentreFormatter(Formatter, AAPODBCFormatter):
@@ -24,36 +25,42 @@ class AAPNewscentreFormatter(Formatter, AAPODBCFormatter):
         Constructs a dictionary that represents the parameters passed to the IPNews InsertNews stored procedure
         :return: returns the sequence number of the subscriber and the constructed parameter dictionary
         """
+        formatted_article = deepcopy(article)
+        mapped_source = formatted_article.get('source', '') if formatted_article.get('source', '') != 'NZN' else 'AAP'
+
+        return self.format_for_source(formatted_article, subscriber, mapped_source, codes)
+
+    def format_for_source(self, article, subscriber, source, codes=None):
         try:
             docs = []
-            for category in article.get('anpa_category'):
-                formatted_article = deepcopy(article)
-                pub_seq_num, odbc_item = self.get_odbc_item(formatted_article, subscriber, category, codes)
-                is_last_take = self.is_last_take(formatted_article)
-                if formatted_article.get(FORMAT) == FORMATS.PRESERVED:  # @article_text
-                    soup = BeautifulSoup(self.append_body_footer(formatted_article) if is_last_take else
-                                         formatted_article.get('body_html', ''), "html.parser")
+            for category in self._get_category_list(article.get('anpa_category')):
+                article['source'] = source
+                pub_seq_num, odbc_item = self.get_odbc_item(article, subscriber, category, codes)
+                is_last_take = self.is_last_take(article)
+                if article.get(FORMAT) == FORMATS.PRESERVED:  # @article_text
+                    soup = BeautifulSoup(self.append_body_footer(article) if is_last_take else
+                                         article.get('body_html', ''), "html.parser")
                     odbc_item['article_text'] = soup.get_text().replace('\'', '\'\'')
                 else:
                     body = self.get_text_content(
-                        to_ascii(self.append_body_footer(formatted_article) if is_last_take else
-                                 formatted_article.get('body_html', '')))
+                        to_ascii(self.append_body_footer(article) if is_last_take else
+                                 article.get('body_html', '')))
 
-                    if self.is_first_part(formatted_article) and 'dateline' in formatted_article \
-                            and 'text' in formatted_article.get('dateline', {}):
+                    if self.is_first_part(article) and 'dateline' in article \
+                            and 'text' in article.get('dateline', {}):
                         if body.startswith('   '):
-                            body = '   {} {}'.format(formatted_article.get('dateline').get('text'), body[3:])
+                            body = '   {} {}'.format(article.get('dateline').get('text'), body[3:])
                     odbc_item['article_text'] = body.replace('\'', '\'\'')
 
-                if self.is_first_part(formatted_article):
-                    self.add_ednote(odbc_item, formatted_article)
-                    self.add_embargo(odbc_item, formatted_article)
+                if self.is_first_part(article):
+                    self.add_ednote(odbc_item, article)
+                    self.add_embargo(odbc_item, article)
 
                 if not is_last_take:
                     odbc_item['article_text'] += '\r\nMORE'
                 else:
-                    odbc_item['article_text'] += '\r\n' + formatted_article.get('source', '')
-                sign_off = formatted_article.get('sign_off', '')
+                    odbc_item['article_text'] += '\r\n' + source
+                sign_off = article.get('sign_off', '')
                 if len(sign_off) > 0:
                     odbc_item['article_text'] += ' ' + sign_off
 
@@ -65,6 +72,9 @@ class AAPNewscentreFormatter(Formatter, AAPODBCFormatter):
             return docs
         except Exception as ex:
             raise FormatterError.AAPNewscentreFormatterError(ex, subscriber)
+
+    def _get_category_list(self, category_list):
+        return get_aap_category_list(category_list)
 
     def get_text_content(self, content):
         soup = BeautifulSoup(content, 'html.parser')
