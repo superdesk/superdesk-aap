@@ -50,14 +50,15 @@ class GenerateBodyHtml(metaclass=ABCMeta):
     def process(self):
         raise NotImplementedError()
 
-    def generate(self, template_name):
+    def generate(self, template_name, **kwargs):
         query, repo = self.create_query()
         articles = self.get_articles(query, repo)
         if not articles:
-            return ''
+            return {}
 
         self.process(articles)
-        return render_template(template_name, items=articles)
+        kwargs['items'] = articles
+        return render_template(template_name, **kwargs)
 
 
 class GenerateBodyHtmlForPublishedArticlesByDesk(GenerateBodyHtml):
@@ -156,7 +157,13 @@ def generate_published_slugline_story_by_desk(item, **kwargs):
     if not desk_id:
         raise SuperdeskApiError.badRequestError("Article should be on a desk to run the macro.")
 
-    item['body_html'] = GenerateBodyHtmlForPublishedArticlesByDesk(desk_id).generate('skeds_body_html.html')
+    desk_name = get_resource_service('desks').get_desk_name(desk_id)
+    now = utcnow()
+    fields = json.loads(GenerateBodyHtmlForPublishedArticlesByDesk(desk_id).generate('skeds_body_html.json',
+                                                                                     desk_name=desk_name,
+                                                                                     now=now))
+    for key, value in fields.items():
+        item[key] = value
 
     return item
 
