@@ -1,0 +1,9 @@
+{{place}}:Kill/Takedown Notice Kill/Takedown Notice
+**KILL/TAKEDOWN NOTICE**  **KILL/TAKEDOWN NOTICE**
+
+    {{body | striptags}}
+
+Regards,
+Mike Osborne Editor AAP
+
+
