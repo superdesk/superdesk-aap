@@ -48,10 +48,17 @@ class ANPAFormatterTest(SuperdeskTestCase):
              {'_id': 2, 'name': 'Sports'},
              {'_id': 3, 'name': 'Finance'}]
 
+    vocab = [{'_id': 'categories', 'items': [
+        {'is_active': True, 'name': 'Overseas Sport', 'qcode': 'S', 'subject': '15000000'},
+        {'is_active': True, 'name': 'Finance', 'qcode': 'F', 'subject': '04000000'},
+        {'is_active': True, 'name': 'General News', 'qcode': 'A'},
+        {'is_active': True, 'name': 'bogus', 'qcode': 'b'}]}]
+
     def setUp(self):
         super().setUp()
         self.app.data.insert('subscribers', self.subscribers)
         self.app.data.insert('desks', self.desks)
+        self.app.data.insert('vocabularies', self.vocab)
         init_app(self.app)
 
     def testANPAFormatter(self):

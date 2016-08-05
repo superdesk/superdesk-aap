@@ -16,3 +16,4 @@ import aap.publish.formatters.aap_newscentre_formatter  # NOQA
 import aap.publish.formatters.aap_nitf_formatter  # NOQA
 import aap.publish.formatters.nzn_newscentre_formatter  # NOQA
 import aap.publish.formatters.nzn_ipnews_formatter  # NOQA
+import aap.publish.formatters.nzn_anpa_formatter  # NOQA

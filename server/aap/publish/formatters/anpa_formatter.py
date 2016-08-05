@@ -21,6 +21,7 @@ from .field_mappers.slugline_mapper import SluglineMapper
 from apps.packages import TakesPackageService
 from eve.utils import config
 from .unicodetoascii import to_ascii
+from .category_list_map import get_aap_category_list
 import re
 
 
@@ -28,8 +29,9 @@ class AAPAnpaFormatter(Formatter):
     def format(self, article, subscriber, codes=None):
         try:
             docs = []
-            for category in article.get('anpa_category'):
-                formatted_article = deepcopy(article)
+            formatted_article = deepcopy(article)
+            for category in self._get_category_list(formatted_article.get('anpa_category')):
+                mapped_source = self._get_mapped_source(formatted_article)
                 formatted_article[config.ID_FIELD] = formatted_article.get('item_id',
                                                                            formatted_article.get(config.ID_FIELD))
                 is_last_take = TakesPackageService().is_last_takes_package_item(formatted_article)
@@ -54,7 +56,7 @@ class AAPAnpaFormatter(Formatter):
                 anpa.append(map_priority(formatted_article.get('priority')).encode('ascii'))
                 anpa.append(b'\x20')
 
-                anpa.append(category['qcode'].encode('ascii'))
+                anpa.append(category['qcode'].lower().encode('ascii'))
 
                 anpa.append(b'\x13')
                 # format identifier
@@ -130,7 +132,7 @@ class AAPAnpaFormatter(Formatter):
                 if not is_last_take:
                     anpa.append('MORE'.encode('ascii'))
                 else:
-                    anpa.append(formatted_article.get('source', '').encode('ascii'))
+                    anpa.append(mapped_source.encode('ascii'))
                 sign_off = formatted_article.get('sign_off', '').encode('ascii')
                 anpa.append((b'\x20' + sign_off) if len(sign_off) > 0 else b'')
                 anpa.append(b'\x0D\x0A')
@@ -187,6 +189,12 @@ class AAPAnpaFormatter(Formatter):
         else:
             anpa.append(headline.encode('ascii', 'replace'))
         anpa.append(b'\x0D\x0A')
+
+    def _get_category_list(self, category_list):
+        return get_aap_category_list(category_list)
+
+    def _get_mapped_source(self, article):
+        return article.get('source', '') if article.get('source', '') != 'NZN' else 'AAP'
 
     def can_format(self, format_type, article):
         return format_type == 'AAP ANPA' and article[ITEM_TYPE] in [CONTENT_TYPE.TEXT, CONTENT_TYPE.PREFORMATTED]
