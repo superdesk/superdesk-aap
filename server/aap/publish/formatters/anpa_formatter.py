@@ -106,7 +106,8 @@ class AAPAnpaFormatter(Formatter):
                     anpa.append(ednote.encode('ascii', 'replace'))
 
                 if BYLINE in formatted_article:
-                    anpa.append(formatted_article.get(BYLINE).encode('ascii', 'ignore'))
+                    anpa.append(BeautifulSoup(formatted_article.get(BYLINE), 'html.parser').text.encode
+                                ('ascii', 'ignore'))
                     anpa.append(b'\x0D\x0A')
 
                 if formatted_article.get(FORMAT) == FORMATS.PRESERVED:
@@ -172,7 +173,7 @@ class AAPAnpaFormatter(Formatter):
     def _process_headline(self, anpa, article, category):
         # prepend the locator to the headline if required
         headline_prefix = LocatorMapper().map(article, category.decode('UTF-8').upper())
-        headline = to_ascii(article.get('headline', ''))
+        headline = to_ascii(BeautifulSoup(article.get('headline', ''), 'html.parser').text)
         if headline_prefix:
             headline = '{}:{}'.format(headline_prefix, headline)
 
