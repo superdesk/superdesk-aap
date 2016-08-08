@@ -51,6 +51,16 @@ class AapSMSFormatterTest(SuperdeskTestCase):
         'body_footer': 'call helpline 999 if you are planning to quit smoking'
     }
 
+    article4 = {
+        'priority': 1,
+        'anpa_category': [{'qcode': 'a'}],
+        'headline': 'This is a test headline',
+        'sms_message': '<p>not marked up string</p>',
+        'type': 'text',
+        'body_html': 'The story body',
+        'body_footer': 'call helpline 999 if you are planning to quit smoking'
+    }
+
     published = [{"_id": 1, "state": "published", "sms_message": "dont send again", "flags": {"marked_for_sms": True},
                   "queue_state": "queued"}]
 
@@ -111,3 +121,11 @@ class AapSMSFormatterTest(SuperdeskTestCase):
                                     'Headline': 'This is the sms message',
                                     'StoryText':
                                         'The story bodycall helpline 999 if you are planning to quit smoking'})
+
+    def test_html_message(self):
+        subscriber = self.app.data.find('subscribers', None, None)[0]
+
+        f = AAPSMSFormatter()
+        seq, item = f.format(self.article4, subscriber)[0]
+        item = json.loads(item)
+        self.assertEqual(item['Headline'], 'not marked up string')

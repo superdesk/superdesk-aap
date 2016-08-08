@@ -33,7 +33,7 @@ class AAPSMSFormatter(Formatter):
                 else article.get('anpa_category', [{}])[0].get('qcode').upper()
 
             odbc_item = {'Sequence': pub_seq_num, 'Category': category,
-                         'Headline': sms_message,
+                         'Headline': BeautifulSoup(sms_message, 'html.parser').text,
                          'Priority': map_priority(article.get('priority'))}
 
             body = self.append_body_footer(article)
