@@ -139,7 +139,7 @@ class ANPAFormatterTest(SuperdeskTestCase):
         subscriber = self.app.data.find('subscribers', None, None)[0]
         subscriber['name'] = 'not notes'
         byline_article = dict(self.article.copy())
-        byline_article['byline'] = 'Joe Blogs'
+        byline_article['byline'] = '<p>Joe Blogs</p>'
 
         f = AAPAnpaFormatter()
         seq, item = f.format(byline_article, subscriber)[0]
@@ -199,6 +199,13 @@ class ANPAFormatterTest(SuperdeskTestCase):
         anpa = []
         f._process_headline(anpa, article, b'a')
         self.assertEqual(anpa[0], b'12345678901234567890123456789012345678901234567890')
+
+    def test_headline_with_markup(self):
+        f = AAPAnpaFormatter()
+        article = {'headline': '<p>headline</p>'}
+        anpa = []
+        f._process_headline(anpa, article, b'a')
+        self.assertEqual(anpa[0], b'headline')
 
     def test_process_headline_empty_sequence_long_headline(self):
         f = AAPAnpaFormatter()

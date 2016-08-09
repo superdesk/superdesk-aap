@@ -17,6 +17,7 @@ from superdesk.metadata.item import EMBARGO
 from eve.utils import config
 import superdesk
 from .unicodetoascii import to_ascii
+from bs4 import BeautifulSoup
 
 
 class AAPODBCFormatter():
@@ -32,8 +33,10 @@ class AAPODBCFormatter():
         pub_seq_num = superdesk.get_resource_service('subscribers').generate_sequence_number(subscriber)
         odbc_item = dict(originator=article.get('source', None), sequence=pub_seq_num,
                          category=category.get('qcode').lower(),
-                         headline=to_ascii(article.get('headline', '')).replace('\'', '\'\'').replace('\xA0', ' '),
-                         author=(article.get('byline', '') or '').replace('\'', '\'\''),
+                         headline=to_ascii(BeautifulSoup(article.get('headline', ''), 'html.parser').text).replace
+                         ('\'', '\'\'').replace('\xA0', ' '),
+                         author=BeautifulSoup(article.get('byline', '') or '', 'html.parser').text.replace
+                         ('\'', '\'\''),
                          keyword=SluglineMapper().map(article=article,
                                                       category=category.get('qcode').upper(),
                                                       truncate=True).replace('\'', '\'\''),

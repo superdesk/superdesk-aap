@@ -94,8 +94,8 @@ class AapIpNewsFormatterTest(SuperdeskTestCase):
             '_id': '1',
             'source': 'AAP',
             'anpa_category': [{'qcode': 'a'}],
-            'headline': 'This is a test headline',
-            'byline': 'joe',
+            'headline': '<p>This is a test headline</p>',
+            'byline': '<div>joe</div>',
             'slugline': 'slugline',
             'subject': [{'qcode': '02011001'}],
             'anpa_take_key': 'take_key',
@@ -122,6 +122,8 @@ class AapIpNewsFormatterTest(SuperdeskTestCase):
         expected = '   The story body line 1\r\nLine 2\r\n   abcdefghi abcdefghi abcdefghi abcdefghi ' \
                    'abcdefghi abcdefghi abcdefghi abcdefghi\r\n\r\nMORE'
         self.assertEqual(item['article_text'], expected)
+        self.assertEqual(item['headline'], 'This is a test headline')
+        self.assertEqual(item['author'], 'joe')
 
     def testLastTake(self):
         article = {
