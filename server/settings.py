@@ -187,6 +187,8 @@ NEWSML_PROVIDER_ID = 'aap.com.au'
 ORGANIZATION_NAME = 'Australian Associated Press'
 ORGANIZATION_NAME_ABBREVIATION = 'AAP'
 NITF_INCLUDE_SCHEMA = False
+# Set to False for production, True will inject the test value for category into the output
+TEST_SMS_OUTPUT = env('TEST_SMS_OUTPUT', True)
 
 AMAZON_CONTAINER_NAME = env('AMAZON_CONTAINER_NAME', '')
 AMAZON_ACCESS_KEY_ID = env('AMAZON_ACCESS_KEY_ID', '')

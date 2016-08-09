@@ -41,10 +41,35 @@ class AapSMSFormatterTest(SuperdeskTestCase):
         'body_footer': 'call helpline 999 if you are planning to quit smoking'
     }
 
+    article3 = {
+        'priority': 1,
+        'anpa_category': [{'qcode': 'a'}],
+        'headline': 'This is a test headline',
+        'sms_message': 'dont send again',
+        'type': 'text',
+        'body_html': 'The story body',
+        'body_footer': 'call helpline 999 if you are planning to quit smoking'
+    }
+
+    article4 = {
+        'priority': 1,
+        'anpa_category': [{'qcode': 'a'}],
+        'headline': 'This is a test headline',
+        'sms_message': '<p>not marked up string</p>',
+        'type': 'text',
+        'body_html': 'The story body',
+        'body_footer': 'call helpline 999 if you are planning to quit smoking'
+    }
+
+    published = [{"_id": 1, "state": "published", "sms_message": "dont send again", "flags": {"marked_for_sms": True},
+                  "queue_state": "queued"}]
+
     def setUp(self):
         super().setUp()
         self.app.data.insert('subscribers', self.subscribers)
+        self.app.data.insert('published', self.published)
         init_app(self.app)
+        self.app.config['TEST_SMS_OUTPUT'] = False
 
     def test_sms_can_format(self):
         f = AAPSMSFormatter()
@@ -52,6 +77,10 @@ class AapSMSFormatterTest(SuperdeskTestCase):
         self.assertFalse(f.can_format("AAP SMS", self.article2))
         self.article2['flags'] = {'marked_for_sms': True}
         self.assertTrue(f.can_format("AAP SMS", self.article2))
+
+    def test_cant_send_again(self):
+        f = AAPSMSFormatter()
+        self.assertFalse(f.can_format("AAP SMS", self.article3))
 
     def test_sms_formatter(self):
         subscriber = self.app.data.find('subscribers', None, None)[0]
@@ -61,7 +90,21 @@ class AapSMSFormatterTest(SuperdeskTestCase):
         item = json.loads(item)
 
         self.assertGreater(int(seq), 0)
-        self.assertDictEqual(item, {'Category': 'a', 'Priority': 'f', 'Sequence': item['Sequence'], 'ident': '0',
+        self.assertDictEqual(item, {'Category': 'A', 'Priority': 'f', 'Sequence': item['Sequence'], 'ident': '0',
+                                    'Headline': 'This is a test headline',
+                                    'StoryText':
+                                        'The story bodycall helpline 999 if you are planning to quit smoking'})
+
+    def test_test_sms_formatter(self):
+        subscriber = self.app.data.find('subscribers', None, None)[0]
+        self.app.config['TEST_SMS_OUTPUT'] = True
+
+        f = AAPSMSFormatter()
+        seq, item = f.format(self.article1, subscriber)[0]
+        item = json.loads(item)
+
+        self.assertGreater(int(seq), 0)
+        self.assertDictEqual(item, {'Category': '1', 'Priority': 'f', 'Sequence': item['Sequence'], 'ident': '0',
                                     'Headline': 'This is a test headline',
                                     'StoryText':
                                         'The story bodycall helpline 999 if you are planning to quit smoking'})
@@ -74,7 +117,15 @@ class AapSMSFormatterTest(SuperdeskTestCase):
         item = json.loads(item)
 
         self.assertGreater(int(seq), 0)
-        self.assertDictEqual(item, {'Category': 'a', 'Priority': 'f', 'Sequence': item['Sequence'], 'ident': '0',
+        self.assertDictEqual(item, {'Category': 'A', 'Priority': 'f', 'Sequence': item['Sequence'], 'ident': '0',
                                     'Headline': 'This is the sms message',
                                     'StoryText':
                                         'The story bodycall helpline 999 if you are planning to quit smoking'})
+
+    def test_html_message(self):
+        subscriber = self.app.data.find('subscribers', None, None)[0]
+
+        f = AAPSMSFormatter()
+        seq, item = f.format(self.article4, subscriber)[0]
+        item = json.loads(item)
+        self.assertEqual(item['Headline'], 'not marked up string')
