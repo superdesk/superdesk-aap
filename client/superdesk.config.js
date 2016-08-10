@@ -29,6 +29,8 @@ module.exports = function() {
         }],
 
         defaultTimezone: 'Australia/Sydney',
+        shortDateFormat: 'DD/MM',
+        ArchivedDateFormat: 'D/MM/YYYY',
 
         list: {
             'priority': [
