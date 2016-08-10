@@ -65,7 +65,9 @@ class ANPAFormatterTest(SuperdeskTestCase):
         subscriber = self.app.data.find('subscribers', None, None)[0]
 
         f = AAPAnpaFormatter()
-        seq, item = f.format(self.article.copy(), subscriber, ['axx'])[0]
+        resp = f.format(self.article.copy(), subscriber, ['axx'])[0]
+        seq = resp['published_seq_num']
+        item = resp['encoded_item']
 
         self.assertGreater(int(seq), 0)
 
@@ -104,7 +106,9 @@ class ANPAFormatterTest(SuperdeskTestCase):
         subscriber['name'] = 'not notes'
 
         f = AAPAnpaFormatter()
-        seq, item = f.format(self.article.copy(), subscriber)[0]
+        resp = f.format(self.article.copy(), subscriber)[0]
+        seq = resp['published_seq_num']
+        item = resp['encoded_item']
 
         self.assertGreater(int(seq), 0)
 
@@ -142,7 +146,9 @@ class ANPAFormatterTest(SuperdeskTestCase):
         byline_article['byline'] = '<p>Joe Blogs</p>'
 
         f = AAPAnpaFormatter()
-        seq, item = f.format(byline_article, subscriber)[0]
+        resp = f.format(byline_article, subscriber)[0]
+        seq = resp['published_seq_num']
+        item = resp['encoded_item']
 
         self.assertGreater(int(seq), 0)
 
@@ -183,10 +189,13 @@ class ANPAFormatterTest(SuperdeskTestCase):
         multi_article['anpa_category'] = [{'qcode': 'a'}, {'qcode': 'b'}]
         f = AAPAnpaFormatter()
         docs = f.format(multi_article, subscriber, ['Axy', 'Bkl'])
+        docs = f.format(multi_article, subscriber, ['Axy', 'Bkl'])
+
         self.assertEqual(len(docs), 2)
         cat = 'a'
-        for seq, doc in docs:
-            lines = io.StringIO(doc.decode())
+        for doc in docs:
+            item = doc['encoded_item']
+            lines = io.StringIO(item.decode())
             line = lines.readline()
             line = lines.readline()
             line = lines.readline()
@@ -255,14 +264,16 @@ class ANPAFormatterTest(SuperdeskTestCase):
         subscriber = self.app.data.find('subscribers', None, None)[0]
         item = self.article.copy()
         item.update({'dateline': {'text': None}})
-        seq, out = f.format(item, subscriber)[0]
+        resp = f.format(item, subscriber)[0]
+        self.assertTrue('The story body' in resp['encoded_item'].decode('ascii'))
 
     def test_dateline_injection(self):
         f = AAPAnpaFormatter()
         subscriber = self.app.data.find('subscribers', None, None)[0]
         item = self.article.copy()
         item.update({'dateline': {'text': 'SYDNEY, June 27 AAP -'}})
-        seq, out = f.format(item, subscriber)[0]
+        resp = f.format(item, subscriber)[0]
+        out = resp['encoded_item']
         lines = io.StringIO(out.decode())
         self.assertTrue(lines.getvalue().find('SYDNEY, June 27 AAP - The story body') > 0)
 
@@ -271,7 +282,8 @@ class ANPAFormatterTest(SuperdeskTestCase):
         subscriber = self.app.data.find('subscribers', None, None)[0]
         item = self.article.copy()
         item.update({'ednote': 'Note this'})
-        seq, out = f.format(item, subscriber)[0]
+        resp = f.format(item, subscriber)[0]
+        out = resp['encoded_item']
         lines = io.StringIO(out.decode())
         self.assertTrue(lines.getvalue().find('Note this') > 0)
 
@@ -290,7 +302,8 @@ class ANPAFormatterTest(SuperdeskTestCase):
                          'what sum Kathmandu is entitled to recover.</div><div><br></div><div>Kathmandu considers the '
                          'full amount claimed is recoverable and has issued legal proceedings for the balance of monies'
                          ' owed.</div>'})
-        seq, out = f.format(item, subscriber)[0]
+        resp = f.format(item, subscriber)[0]
+        out = resp['encoded_item']
         lines = io.StringIO(out.decode())
         self.assertTrue(lines.getvalue().split('\n')[6].find('   Kathmandu incurred costs in relation') == 0)
 
@@ -306,7 +319,8 @@ class ANPAFormatterTest(SuperdeskTestCase):
             'earlier.</span></p><p>The company said it expected to report a post-tax profit of between $7.2 million '
             'and $7.8 million when it releases its full-year results on August 29.</p><p>Shares in SDI gained '
             '6.5 cents - a 12.2 per cent increase - to close at 59.5 cents on Monday.</p>'})
-        seq, out = f.format(item, subscriber)[0]
+        resp = f.format(item, subscriber)[0]
+        out = resp['encoded_item']
         lines = io.StringIO(out.decode())
         self.assertTrue(lines.getvalue().split('\n')[5].find('   SDI reported a 7.8 per cent lift in unaudited') == 0)
 
@@ -323,7 +337,9 @@ class ANPAFormatterTest(SuperdeskTestCase):
             'earlier.</span></p><p>The company said it expected to report a post-tax profit of between $7.2 million '
             'and $7.8 million when it releases its full-year results on August 29.</p><p>Shares in SDI gained '
             '6.5 cents - a 12.2 per cent increase - to close at 59.5 cents on Monday.</p>'})
-        seq, out = f.format(item, subscriber)[0]
+        resp = f.format(item, subscriber)[0]
+        out = resp['encoded_item']
+
         lines = io.StringIO(out.decode())
         self.assertTrue(lines.getvalue().split('\n')[4].find('   Dental materials maker and marketer SDI') == 0)
         self.assertTrue(lines.getvalue().split('\n')[5].find(' has boosted its shares after reporting') == 0)

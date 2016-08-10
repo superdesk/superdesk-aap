@@ -64,7 +64,9 @@ class NZNANPAFormatterTest(SuperdeskTestCase):
         subscriber = self.app.data.find('subscribers', None, None)[0]
 
         f = NZNAnpaFormatter()
-        seq, item = f.format(self.article.copy(), subscriber, ['axx'])[0]
+        resp = f.format(self.article.copy(), subscriber, ['axx'])[0]
+        seq = resp['published_seq_num']
+        item = resp['encoded_item']
 
         self.assertGreater(int(seq), 0)
 

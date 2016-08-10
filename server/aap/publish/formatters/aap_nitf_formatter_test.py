@@ -60,8 +60,8 @@ class AAPNitfFormatterTest(SuperdeskTestCase):
             'sign_off': 'me'
         }
 
-        seq, doc = self.formatter.format(article, {'name': 'Test Subscriber'})[0]
-        nitf_xml = etree.fromstring(doc)
+        doc = self.formatter.format(article, {'name': 'Test Subscriber'})[0]
+        nitf_xml = etree.fromstring(doc['formatted_item'])
         self.assertEqual(nitf_xml.find('head/title').text, article['headline'])
         self.assertEqual(nitf_xml.find('body/body.content/p').text, 'test body')
         self.assertEqual(nitf_xml.find('head/docdata/urgency').get('ed-urg'), '2')
@@ -119,8 +119,8 @@ class AAPNitfFormatterTest(SuperdeskTestCase):
             'company_codes': [{'name': 'YANCOAL AUSTRALIA LIMITED', 'qcode': 'YAL', 'security_exchange': 'ASX'}]
         }
 
-        seq, doc = self.formatter.format(article, {'name': 'Test Subscriber'})[0]
-        nitf_xml = etree.fromstring(doc)
+        doc = self.formatter.format(article, {'name': 'Test Subscriber'})[0]
+        nitf_xml = etree.fromstring(doc['formatted_item'])
         company = nitf_xml.find('body/body.head/org')
         self.assertEqual(company.text, 'YANCOAL AUSTRALIA LIMITED')
         self.assertEqual(company.attrib.get('idsrc', ''), 'ASX')
@@ -157,8 +157,8 @@ class AAPNitfFormatterTest(SuperdeskTestCase):
                 }
             ],
         }
-        seq, doc = self.formatter.format(article, {'name': 'Test Subscriber'})[0]
-        nitf_xml = etree.fromstring(doc)
+        doc = self.formatter.format(article, {'name': 'Test Subscriber'})[0]
+        nitf_xml = etree.fromstring(doc['formatted_item'])
         self.assertTrue(nitf_xml.findall('body/body.content/p')[5].text.startswith('Kathmandu considers'))
 
     def testLFContent(self):
@@ -211,8 +211,8 @@ class AAPNitfFormatterTest(SuperdeskTestCase):
                 }
             ],
         }
-        seq, doc = self.formatter.format(article, {'name': 'Test Subscriber'})[0]
-        nitf_xml = etree.fromstring(doc)
+        doc = self.formatter.format(article, {'name': 'Test Subscriber'})[0]
+        nitf_xml = etree.fromstring(doc['formatted_item'])
         self.assertTrue('from 74.41' in nitf_xml.findall('body/body.content/p')[1].text)
 
     def testStraySpaceContent(self):
@@ -239,10 +239,9 @@ class AAPNitfFormatterTest(SuperdeskTestCase):
                 }
             ],
         }
-        seq, doc = self.formatter.format(article, {'name': 'Test Subscriber'})[0]
-        nitf_xml = etree.fromstring(doc)
+        doc = self.formatter.format(article, {'name': 'Test Subscriber'})[0]
+        nitf_xml = etree.fromstring(doc['formatted_item'])
         self.assertEqual(nitf_xml.find('body/body.content/p').text, '"However')
-        print(etree.tostring(nitf_xml, 'utf-8'))
 
     def testNoneAsciNamesContent(self):
         article = {
@@ -266,8 +265,8 @@ class AAPNitfFormatterTest(SuperdeskTestCase):
                 }
             ],
         }
-        seq, doc = self.formatter.format(article, {'name': 'Test Subscriber'})[0]
-        nitf_xml = etree.fromstring(doc)
+        doc = self.formatter.format(article, {'name': 'Test Subscriber'})[0]
+        nitf_xml = etree.fromstring(doc['formatted_item'])
         self.assertEqual(nitf_xml.find('body/body.content/p').text, 'Tommi Makinen crashes a Skoda in Appelbo')
 
     def testSpacesContent(self):
@@ -292,8 +291,8 @@ class AAPNitfFormatterTest(SuperdeskTestCase):
                 }
             ],
         }
-        seq, doc = self.formatter.format(article, {'name': 'Test Subscriber'})[0]
-        nitf_xml = etree.fromstring(doc)
+        doc = self.formatter.format(article, {'name': 'Test Subscriber'})[0]
+        nitf_xml = etree.fromstring(doc['formatted_item'])
         self.assertEqual(nitf_xml.find('body/body.content/p').text, 'a b c d e  f g')
 
     def testControlCharsContent(self):
@@ -320,8 +319,8 @@ class AAPNitfFormatterTest(SuperdeskTestCase):
                 }
             ],
         }
-        seq, doc = self.formatter.format(article, {'name': 'Test Subscriber'})[0]
-        nitf_xml = etree.fromstring(doc)
+        doc = self.formatter.format(article, {'name': 'Test Subscriber'})[0]
+        nitf_xml = etree.fromstring(doc['formatted_item'])
         self.assertEqual(nitf_xml.find('body/body.content/p').text, ' ')
 
     def testNullTakeKeyContent(self):

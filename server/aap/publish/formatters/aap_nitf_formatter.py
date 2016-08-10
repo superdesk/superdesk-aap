@@ -25,7 +25,9 @@ class AAPNITFFormatter(NITFFormatter):
             pub_seq_num = superdesk.get_resource_service('subscribers').generate_sequence_number(subscriber)
 
             nitf = self.get_nitf(article, subscriber, pub_seq_num)
-            return [(pub_seq_num, etree.tostring(nitf, encoding='ascii').decode('ASCII'))]
+            return [{'published_seq_num': pub_seq_num,
+                     'formatted_item': etree.tostring(nitf, encoding='ascii').decode('ascii'),
+                    'item_encoding': 'ascii'}]
         except Exception as ex:
             raise FormatterError.nitfFormatterError(ex, subscriber)
 
