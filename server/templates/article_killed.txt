@@ -4,6 +4,6 @@
     {{body | striptags}}
 
 Regards,
-Mike Osborne Editor AAP
+Mike Osborne Editor
 
 
