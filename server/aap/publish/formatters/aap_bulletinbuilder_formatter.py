@@ -48,6 +48,8 @@ class AAPBulletinBuilderFormatter(Formatter):
                 to_ascii(formatted_article.get('abstract', ''))).strip()
             formatted_article['headline'] = self.get_text_content(
                 to_ascii(formatted_article.get('headline', ''))).strip()
+            formatted_article['byline'] = self.get_text_content(
+                to_ascii(formatted_article.get('byline', ''))).strip()
 
             # get the first category and derive the locator
             category = next((iter(formatted_article.get('anpa_category', []))), None)
