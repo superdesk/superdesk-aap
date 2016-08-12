@@ -69,6 +69,10 @@ class AAPNITFFormatter(NITFFormatter):
         if SIGN_OFF in article:
             SubElement(head, 'meta', {'name': 'aap-signoff', 'content': article.get(SIGN_OFF, '')})
 
+    def _append_meta_priority(self, article, head):
+        if 'priority' in article:
+            SubElement(head, 'meta', {'name': 'aap-priority', 'content': str(article['priority'])})
+
     def map_html_to_xml(self, element, html):
         """
         Map the html text tags to xml
