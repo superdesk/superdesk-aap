@@ -48,10 +48,16 @@ class AAPNitfFormatterTest(SuperdeskTestCase):
         article = {
             'headline': 'test headline',
             'body_html': '<p>test body</p>',
+            'slugline': 'keyword',
+            'anpa_take_key': 'take-key',
+            'original_source': 'EMAIL',
             'type': 'text',
-            'priority': '1',
+            'priority': '9',
+            'source': 'SUP',
             '_id': 'urn:localhost.abc',
-            'urgency': 2
+            'urgency': 2,
+            'place': [{'qcode': 'FED'}],
+            'sign_off': 'me'
         }
 
         seq, doc = self.formatter.format(article, {'name': 'Test Subscriber'})[0]
@@ -59,6 +65,14 @@ class AAPNitfFormatterTest(SuperdeskTestCase):
         self.assertEqual(nitf_xml.find('head/title').text, article['headline'])
         self.assertEqual(nitf_xml.find('body/body.content/p').text, 'test body')
         self.assertEqual(nitf_xml.find('head/docdata/urgency').get('ed-urg'), '2')
+        self.assertEqual(nitf_xml.find('head/meta[@name="aap-priority"]').get('content'), '9')
+        self.assertEqual(nitf_xml.find('head/meta[@name="anpa-sequence"]').get('content'), str(seq))
+        self.assertEqual(nitf_xml.find('head/meta[@name="anpa-keyword"]').get('content'), 'keyword')
+        self.assertEqual(nitf_xml.find('head/meta[@name="anpa-takekey"]').get('content'), 'take-key')
+        self.assertEqual(nitf_xml.find('head/meta[@name="aap-source"]').get('content'), 'SUP')
+        self.assertEqual(nitf_xml.find('head/meta[@name="aap-original-source"]').get('content'), 'EMAIL')
+        self.assertEqual(nitf_xml.find('head/meta[@name="aap-place"]').get('content'), 'FED')
+        self.assertEqual(nitf_xml.find('head/meta[@name="aap-signoff"]').get('content'), 'me')
 
     def test_company_codes(self):
         article = {
