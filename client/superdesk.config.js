@@ -17,6 +17,10 @@ module.exports = function() {
             }
         },
 
+        feature: {
+            elasticHighlight: true
+        },
+
         view: {
             timeformat: 'HH:mm',
             dateformat: 'DD/MM/YYYY'
