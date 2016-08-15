@@ -5,3 +5,4 @@ unidecode==0.04.19
 
 git+git://github.com/superdesk/superdesk-core.git@a0b8cbe02191b2ee80284d1564f2403683980fe0#egg=Superdesk-Core
 
+
