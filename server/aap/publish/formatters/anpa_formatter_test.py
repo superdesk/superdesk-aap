@@ -327,3 +327,11 @@ class ANPAFormatterTest(SuperdeskTestCase):
         lines = io.StringIO(out.decode())
         self.assertTrue(lines.getvalue().split('\n')[4].find('   Dental materials maker and marketer SDI') == 0)
         self.assertTrue(lines.getvalue().split('\n')[5].find(' has boosted its shares after reporting') == 0)
+
+    def test_none_body(self):
+        f = AAPAnpaFormatter()
+        subscriber = self.app.data.find('subscribers', None, None)[0]
+        item = self.article.copy()
+        item.update({
+            'anpa_take_key': None, 'byline': None, 'abstract': None})
+        seq, out = f.format(item, subscriber)[0]
