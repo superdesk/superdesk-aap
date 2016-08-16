@@ -258,3 +258,23 @@ class AapBulletinBuilderFormatterTest(SuperdeskTestCase):
                      'Para4:Tropical refers to the geographical origin of these systems\r\n\r\n')
 
         self.assertEqual(formatted_content, body_text)
+
+    def test_null_abstract_byline_key(self):
+        article = {
+            config.ID_FIELD: '123',
+            config.VERSION: 2,
+            'source': 'AAP',
+            'headline': 'This is a test headline',
+            'type': 'text',
+            'anpa_take_key': None,
+            'byline': None,
+            'abstract': None,
+            'body_html': ('<p>Hi</p>')
+        }
+        subscriber = self.app.data.find('subscribers', None, None)[0]
+        seq, item = self._formatter.format(article, subscriber)[0]
+        item = json.loads(item)
+        self.assertGreater(int(seq), 0)
+        test_article = json.loads(item.get('data'))
+        self.assertEqual(test_article['byline'], '')
+        self.assertEqual(test_article['abstract'], '')

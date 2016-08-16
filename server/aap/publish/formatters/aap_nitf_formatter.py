@@ -41,7 +41,8 @@ class AAPNITFFormatter(NITFFormatter):
 
         SubElement(head, 'meta', {'name': 'anpa-sequence', 'content': str(pub_seq_num)})
         SubElement(head, 'meta', {'name': 'anpa-keyword', 'content': self.append_legal(article)})
-        SubElement(head, 'meta', {'name': 'anpa-takekey', 'content': article.get('anpa_take_key', '')})
+        if article.get('anpa_take_key'):
+            SubElement(head, 'meta', {'name': 'anpa-takekey', 'content': article.get('anpa_take_key', '')})
 
         original_creator = superdesk.get_resource_service('users').find_one(req=None,
                                                                             _id=article.get('original_creator', ''))

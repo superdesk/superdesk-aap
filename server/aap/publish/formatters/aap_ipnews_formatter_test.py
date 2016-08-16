@@ -363,6 +363,35 @@ class AapIpNewsFormatterTest(SuperdeskTestCase):
         expected = '   a b c d e f g\r\n\r\nAAP'
         self.assertEqual(item['article_text'], expected)
 
+    def testNullTakeKeyContent(self):
+        article = {
+            '_id': '3',
+            'source': 'AAP',
+            'anpa_category': [{'qcode': 'a'}],
+            'headline': 'This is a test headline',
+            'byline': None,
+            'slugline': 'slugline',
+            'subject': [{'qcode': '02011001'}],
+            'anpa_take_key': None,
+            'unique_id': '1',
+            'type': 'text',
+            'body_html': '<p>Nothing</p>',
+            'word_count': '1',
+            'priority': 1,
+            "linked_in_packages": [
+                {
+                    "package": "package",
+                    "package_type": "takes"
+                }
+            ],
+        }
+        subscriber = self.app.data.find('subscribers', None, None)[0]
+
+        f = AAPIpNewsFormatter()
+        seq, item = f.format(article, subscriber)[0]
+        item = json.loads(item)
+        self.assertEqual(item['take_key'], '')
+
     def testControlCharsContent(self):
         article = {
             '_id': '3',
