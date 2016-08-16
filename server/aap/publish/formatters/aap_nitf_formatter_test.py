@@ -323,3 +323,30 @@ class AAPNitfFormatterTest(SuperdeskTestCase):
         seq, doc = self.formatter.format(article, {'name': 'Test Subscriber'})[0]
         nitf_xml = etree.fromstring(doc)
         self.assertEqual(nitf_xml.find('body/body.content/p').text, ' ')
+
+    def testNullTakeKeyContent(self):
+        article = {
+            '_id': '3',
+            'source': 'AAP',
+            'anpa_category': [{'qcode': 'a'}],
+            'headline': 'This is a test headline',
+            'byline': None,
+            'slugline': 'slugline',
+            'subject': [{'qcode': '02011001'}],
+            'anpa_take_key': None,
+            'unique_id': '1',
+            'type': 'text',
+            'body_html': '<p>no body</p>',
+            'word_count': '1',
+            'priority': 1,
+            'abstract': None,
+            "linked_in_packages": [
+                {
+                    "package": "package",
+                    "package_type": "takes"
+                }
+            ],
+        }
+        seq, doc = self.formatter.format(article, {'name': 'Test Subscriber'})[0]
+        nitf_xml = etree.fromstring(doc)
+        self.assertIsNone(nitf_xml.find('head/meta[@name="anpa-takekey"]'))

@@ -107,7 +107,7 @@ class AAPAnpaFormatter(Formatter):
                     ednote = '{}\r\n'.format(to_ascii(formatted_article.get('ednote')))
                     anpa.append(ednote.encode('ascii', 'replace'))
 
-                if BYLINE in formatted_article:
+                if formatted_article.get(BYLINE):
                     anpa.append(BeautifulSoup(formatted_article.get(BYLINE), 'html.parser').text.encode
                                 ('ascii', 'ignore'))
                     anpa.append(b'\x0D\x0A')
