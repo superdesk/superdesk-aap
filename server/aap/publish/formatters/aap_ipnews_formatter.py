@@ -74,7 +74,7 @@ class AAPIpNewsFormatter(Formatter, AAPODBCFormatter):
                     odbc_item['article_text'] += '\r\nMORE'
                 else:
                     odbc_item['article_text'] += '\r\n' + article.get('source', '')
-                sign_off = article.get('sign_off', '')
+                sign_off = article.get('sign_off', '') or ''
                 if len(sign_off) > 0:
                     odbc_item['article_text'] += ' ' + sign_off
 

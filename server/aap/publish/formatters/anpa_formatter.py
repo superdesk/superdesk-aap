@@ -134,7 +134,7 @@ class AAPAnpaFormatter(Formatter):
                     anpa.append('MORE'.encode('ascii'))
                 else:
                     anpa.append(mapped_source.encode('ascii'))
-                sign_off = formatted_article.get('sign_off', '').encode('ascii')
+                sign_off = (formatted_article.get('sign_off', '') or '').encode('ascii')
                 anpa.append((b'\x20' + sign_off) if len(sign_off) > 0 else b'')
                 anpa.append(b'\x0D\x0A')
 

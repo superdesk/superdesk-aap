@@ -67,7 +67,7 @@ class AAPNITFFormatter(NITFFormatter):
         if 'place' in article and article['place'] is not None and len(article.get('place', [])) > 0:
             SubElement(head, 'meta', {'name': 'aap-place', 'content': article.get('place')[0]['qcode']})
         if SIGN_OFF in article:
-            SubElement(head, 'meta', {'name': 'aap-signoff', 'content': article.get(SIGN_OFF, '')})
+            SubElement(head, 'meta', {'name': 'aap-signoff', 'content': article.get(SIGN_OFF, '') or ''})
 
     def _append_meta_priority(self, article, head):
         if 'priority' in article:
