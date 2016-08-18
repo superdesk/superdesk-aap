@@ -13,7 +13,8 @@ module.exports = function() {
             embeds: false,
             paste: {
                 forcePlainText: true,
-                cleanPastedHTML: false
+                cleanPastedHTML: true,
+                cleanTags: ['meta', 'i', 'u', 'h1', 'h2', 'b']
             }
         },
 
