@@ -39,8 +39,6 @@ class AAPBulletinBuilderFormatter(Formatter):
         """
         try:
             formatted_article = deepcopy(article)
-            formatted_article['slugline'] = self.get_text_content(to_ascii(self.append_legal(article=formatted_article,
-                                                                                             truncate=True))).strip()
             pub_seq_num = superdesk.get_resource_service('subscribers').generate_sequence_number(subscriber)
             body_html = to_ascii(self.append_body_footer(formatted_article)).strip('\r\n')
 
@@ -71,7 +69,7 @@ class AAPBulletinBuilderFormatter(Formatter):
                 formatted_article['first_subject'] = set_subject(category, formatted_article)
                 formatted_article['slugline'] = self.get_text_content(
                     to_ascii(SluglineMapper().map(article=formatted_article,
-                                                  category=category.get('qcode').upper(), truncate=True))).strip()
+                                                  category=category.get('qcode').upper(), truncate=True)).strip())
 
             odbc_item = {
                 'id': formatted_article.get(config.ID_FIELD),

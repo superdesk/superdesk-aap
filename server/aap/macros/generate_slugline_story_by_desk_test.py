@@ -48,7 +48,7 @@ class SluglineStoryByDesk(SuperdeskTestCase):
                 }
             },
             {
-                '_id': '2', 'type': 'text', 'abstract': 'abstract item 2', 'slugline': 'slugline item 2',
+                '_id': '2', 'type': 'text', 'abstract': 'abstract "item 2"', 'slugline': 'slugline item 2',
                 'dateline': {
                     'text': 'Sydney, 01 Jan AAP -',
                     'located': {
@@ -253,6 +253,6 @@ class SluglineStoryByDesk(SuperdeskTestCase):
         }
 
         generate_published_slugline_story_by_desk(item)
-        self.assertTrue('SYDNEY abstract item 2 (slugline item 2)' in item['body_html'])
+        self.assertTrue('SYDNEY abstract "item 2" (slugline item 2)' in item['body_html'])
         self.assertTrue('SYDNEY abstract item 2a (slugline item 2a)' in item['body_html'])
         self.assertTrue('SYDNEY abstract item 7 (slugline item 7)' in item['body_html'])

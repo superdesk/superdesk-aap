@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 
 def to_ascii(input_str):
     try:
-        return unidecode.unidecode(input_str)
+        return unidecode.unidecode(input_str) if input_str else ''
     except:
         logger.exception('Cannot convert input {} to ascii'.format(input_str))
         return input_str

@@ -139,7 +139,8 @@ class GenerateBodyHtmlForPublishedArticlesByDesk(GenerateBodyHtml):
             article['abstract'] = article.get('abstract') or ''
             article['slugline'] = article.get('slugline') or ''
             article['source'] = article.get('source') or ''
-            article['dateline_city'] = (article.get('dateline', {}).get('located', {}).get('city') or '').upper()
+            article['dateline_city'] = \
+                (((article.get('dateline') or {}).get('located') or {}).get('city') or '').upper()
 
 
 def generate_published_slugline_story_by_desk(item, **kwargs):
