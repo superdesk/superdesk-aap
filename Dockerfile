@@ -44,10 +44,6 @@ ENV PYTHONUNBUFFERED 1
 ENV C_FORCE_ROOT "False"
 ENV CELERYBEAT_SCHEDULE_FILENAME /tmp/celerybeatschedule.db
 
-RUN apt-get update && \
-DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-unixodbc-dev
-
 # install server dependencies
 COPY ./server/requirements.txt /tmp/requirements.txt
 RUN cd /tmp && pip3 install -U -r /tmp/requirements.txt
