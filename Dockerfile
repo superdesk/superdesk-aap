@@ -10,7 +10,9 @@ build-essential libffi-dev git \
 libtiff5-dev libjpeg8-dev zlib1g-dev \
 libfreetype6-dev liblcms2-dev libwebp-dev \
 curl libfontconfig nodejs npm nginx \
-&& echo "\ndaemon off;" >> /etc/nginx/nginx.conf \
+unixodbc-dev
+
+RUN echo "\ndaemon off;" >> /etc/nginx/nginx.conf \
 && rm /etc/nginx/sites-enabled/default \
 && ln --symbolic /usr/bin/nodejs /usr/bin/node
 
@@ -41,6 +43,10 @@ EXPOSE 5100
 ENV PYTHONUNBUFFERED 1
 ENV C_FORCE_ROOT "False"
 ENV CELERYBEAT_SCHEDULE_FILENAME /tmp/celerybeatschedule.db
+
+RUN apt-get update && \
+DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+unixodbc-dev
 
 # install server dependencies
 COPY ./server/requirements.txt /tmp/requirements.txt
