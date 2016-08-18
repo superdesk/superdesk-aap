@@ -2,7 +2,7 @@
     "slugline": "{{desk_name}} skeds {{now | format_datetime('Australia/Sydney', '%b %-d')}}",
     "abstract": "{{desk_name}} skedlines, {{now | format_datetime('Australia/Sydney', '%B %-d')}}",
     "headline": "{{desk_name}} skedlines, {{now | format_datetime('Australia/Sydney', '%B %-d')}}",
-    "body_html": "<p>{{desk_name}} skeds for {{now | format_datetime('Australia/Sydney', '%A, %B %-d')}}:</p></br>{% for item in items %}<p>{{item.dateline_city}} {{item.abstract|striptags}} ({{item.slugline}}) {{item.anpa_take_key}} {{item.versioncreated | format_datetime('Australia/Sydney', '%H:%S')}}</p></br>{% endfor %}",
+    "body_html": "<p>{{desk_name}} skeds for {{now | format_datetime('Australia/Sydney', '%A, %B %-d')}}:</p></br>{% for item in items %}<p>{{item.dateline_city}} {{item.abstract.replace('\"', '\\\"') | striptags}} ({{item.slugline.replace('\"', '\\\"')}}) {{item.anpa_take_key.replace('\"', '\\\"')}} {{item.versioncreated | format_datetime('Australia/Sydney', '%H:%S')}}</p></br>{% endfor %}",
     "anpa_category": [{"qcode" : "v", "name" : "Advisories", "is_active" : true}],
     "subject": [{"qcode" : "99001000", "scheme" : null, "name" : "advisory", "parent" : "99000000"}]
 }
