@@ -43,6 +43,15 @@ class AAPBulletinBuilderFormatter(Formatter):
                                                                                              truncate=True))).strip()
             pub_seq_num = superdesk.get_resource_service('subscribers').generate_sequence_number(subscriber)
             body_html = to_ascii(self.append_body_footer(formatted_article)).strip('\r\n')
+
+            # get the desk name
+            desk_name = superdesk.get_resource_service('desks').\
+                get_desk_name(formatted_article.get('task', {}).get('desk'))
+
+            # force the content to source 'NZN' if desk is 'NZN'
+            if 'new zealand' in desk_name.lower().strip():
+                formatted_article['source'] = 'NZN'
+
             formatted_article['body_text'] = self.get_text_content(body_html)
             formatted_article['abstract'] = self.get_text_content(
                 to_ascii(formatted_article.get('abstract', '') or '')).strip()
