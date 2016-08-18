@@ -27,9 +27,14 @@ class AapBulletinBuilderFormatterTest(SuperdeskTestCase):
                                       }]
                     }]
 
+    desks = [
+        {"name": "Sports"}, {"name": "New Zealand"}
+    ]
+
     def setUp(self):
         super().setUp()
         self.app.data.insert('subscribers', self.subscribers)
+        self.app.data.insert('desks', self.desks)
         init_app(self.app)
         self._formatter = AAPBulletinBuilderFormatter()
 
@@ -278,3 +283,123 @@ class AapBulletinBuilderFormatterTest(SuperdeskTestCase):
         test_article = json.loads(item.get('data'))
         self.assertEqual(test_article['byline'], '')
         self.assertEqual(test_article['abstract'], '')
+
+    def test_new_zealand_content_with_source_not_NZN(self):
+        article = {
+            'source': 'AAP',
+            'anpa_category': [{'qcode': 's'}],
+            'headline': 'This is a test headline',
+            'byline': 'joe',
+            'slugline': 'slugline',
+            'subject': [{'qcode': '15017000'}],
+            'anpa_take_key': 'take_key',
+            'unique_id': '1',
+            'type': 'text',
+            'format': 'preserved',
+            'body_html': 'The story body',
+            'word_count': '1',
+            'priority': '1',
+            'firstcreated': utcnow(),
+            'versioncreated': utcnow(),
+            'lock_user': ObjectId(),
+            'task': {
+                'desk': self.desks[1][config.ID_FIELD]
+            }
+        }
+
+        subscriber = self.app.data.find('subscribers', None, None)[0]
+        seq, item = self._formatter.format(article, subscriber)[0]
+        item = json.loads(item)
+        self.assertGreater(int(seq), 0)
+        test_article = json.loads(item.get('data'))
+        self.assertEqual(test_article['source'], 'NZN')
+
+    def test_new_zealand_content_with_source_NZN(self):
+        article = {
+            'source': 'NZN',
+            'anpa_category': [{'qcode': 's'}],
+            'headline': 'This is a test headline',
+            'byline': 'joe',
+            'slugline': 'slugline',
+            'subject': [{'qcode': '15017000'}],
+            'anpa_take_key': 'take_key',
+            'unique_id': '1',
+            'type': 'text',
+            'format': 'preserved',
+            'body_html': 'The story body',
+            'word_count': '1',
+            'priority': '1',
+            'firstcreated': utcnow(),
+            'versioncreated': utcnow(),
+            'lock_user': ObjectId(),
+            'task': {
+                'desk': self.desks[1][config.ID_FIELD]
+            }
+        }
+
+        subscriber = self.app.data.find('subscribers', None, None)[0]
+        seq, item = self._formatter.format(article, subscriber)[0]
+        item = json.loads(item)
+        self.assertGreater(int(seq), 0)
+        test_article = json.loads(item.get('data'))
+        self.assertEqual(test_article['source'], 'NZN')
+
+    def test_AAP_content_from_Sports_Desk(self):
+        article = {
+            'source': 'AAP',
+            'anpa_category': [{'qcode': 's'}],
+            'headline': 'This is a test headline',
+            'byline': 'joe',
+            'slugline': 'slugline',
+            'subject': [{'qcode': '15017000'}],
+            'anpa_take_key': 'take_key',
+            'unique_id': '1',
+            'type': 'text',
+            'format': 'preserved',
+            'body_html': 'The story body',
+            'word_count': '1',
+            'priority': '1',
+            'firstcreated': utcnow(),
+            'versioncreated': utcnow(),
+            'lock_user': ObjectId(),
+            'task': {
+                'desk': self.desks[0][config.ID_FIELD]
+            }
+        }
+
+        subscriber = self.app.data.find('subscribers', None, None)[0]
+        seq, item = self._formatter.format(article, subscriber)[0]
+        item = json.loads(item)
+        self.assertGreater(int(seq), 0)
+        test_article = json.loads(item.get('data'))
+        self.assertEqual(test_article['source'], 'AAP')
+
+    def test_NZN_content_from_Sports_Desk(self):
+        article = {
+            'source': 'NZN',
+            'anpa_category': [{'qcode': 's'}],
+            'headline': 'This is a test headline',
+            'byline': 'joe',
+            'slugline': 'slugline',
+            'subject': [{'qcode': '15017000'}],
+            'anpa_take_key': 'take_key',
+            'unique_id': '1',
+            'type': 'text',
+            'format': 'preserved',
+            'body_html': 'The story body',
+            'word_count': '1',
+            'priority': '1',
+            'firstcreated': utcnow(),
+            'versioncreated': utcnow(),
+            'lock_user': ObjectId(),
+            'task': {
+                'desk': self.desks[0][config.ID_FIELD]
+            }
+        }
+
+        subscriber = self.app.data.find('subscribers', None, None)[0]
+        seq, item = self._formatter.format(article, subscriber)[0]
+        item = json.loads(item)
+        self.assertGreater(int(seq), 0)
+        test_article = json.loads(item.get('data'))
+        self.assertEqual(test_article['source'], 'NZN')
