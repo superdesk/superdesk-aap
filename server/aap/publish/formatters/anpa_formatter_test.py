@@ -350,4 +350,5 @@ class ANPAFormatterTest(SuperdeskTestCase):
         item = self.article.copy()
         item.update({
             'anpa_take_key': None, 'byline': None, 'abstract': None})
-        seq, out = f.format(item, subscriber)[0]
+        resp = f.format(item, subscriber)[0]
+        self.assertTrue('encoded_item' in resp)

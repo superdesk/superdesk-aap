@@ -66,7 +66,8 @@ class AAPNitfFormatterTest(SuperdeskTestCase):
         self.assertEqual(nitf_xml.find('body/body.content/p').text, 'test body')
         self.assertEqual(nitf_xml.find('head/docdata/urgency').get('ed-urg'), '2')
         self.assertEqual(nitf_xml.find('head/meta[@name="aap-priority"]').get('content'), '9')
-        self.assertEqual(nitf_xml.find('head/meta[@name="anpa-sequence"]').get('content'), str(seq))
+        self.assertEqual(nitf_xml.find('head/meta[@name="anpa-sequence"]').get('content'),
+                         str(doc['published_seq_num']))
         self.assertEqual(nitf_xml.find('head/meta[@name="anpa-keyword"]').get('content'), 'keyword')
         self.assertEqual(nitf_xml.find('head/meta[@name="anpa-takekey"]').get('content'), 'take-key')
         self.assertEqual(nitf_xml.find('head/meta[@name="aap-source"]').get('content'), 'SUP')
@@ -346,6 +347,6 @@ class AAPNitfFormatterTest(SuperdeskTestCase):
                 }
             ],
         }
-        seq, doc = self.formatter.format(article, {'name': 'Test Subscriber'})[0]
-        nitf_xml = etree.fromstring(doc)
+        resp = self.formatter.format(article, {'name': 'Test Subscriber'})[0]
+        nitf_xml = etree.fromstring(resp['formatted_item'])
         self.assertIsNone(nitf_xml.find('head/meta[@name="anpa-takekey"]'))
