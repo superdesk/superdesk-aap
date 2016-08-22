@@ -17,8 +17,8 @@ module.exports = function() {
             }
         },
 
-        feature: {
-            elasticHighlight: true
+        features: {
+            elasticHighlight: 1
         },
 
         view: {
