@@ -33,3 +33,5 @@ class ToAsciiConverterTest(SuperdeskTestCase):
         self.assertEqual(to_ascii('ʺ'), '"')
         self.assertEqual(to_ascii('̀'), '')
         self.assertEqual(to_ascii('ˮ'), '"')
+        self.assertEqual(to_ascii(None), '')
+        self.assertEqual(to_ascii(''), '')

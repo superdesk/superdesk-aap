@@ -79,9 +79,13 @@ class AapBulletinBuilderFormatterTest(SuperdeskTestCase):
             config.VERSION: 2,
             'source': 'AAP',
             'headline': 'This is a test headline&nbsp;<span></span>',
-            'slugline': 'This is a test slugline ',
+            'slugline': 'slugline',
             'abstract': '<p>abstract</p>',
             'type': 'text',
+            'anpa_category': [{'qcode': 'a', 'name': 'Australian General News'}],
+            'flags': {
+                'marked_for_legal': True
+            },
             'body_html': ('<p>The story&nbsp;<span></span>body line 1<br>Line 2</p>'
                           '<p>abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi'
                           '<span> abcdefghi</span> abcdefghi abcdefghi more</p>'
@@ -101,7 +105,7 @@ class AapBulletinBuilderFormatterTest(SuperdeskTestCase):
         self.assertEqual(test_article['body_text'], body_text)
         self.assertEqual(test_article['abstract'], 'abstract')
         self.assertEqual(test_article['headline'], 'This is a test headline')
-        self.assertEqual(test_article['slugline'], 'This is a test slugline')
+        self.assertEqual(test_article['slugline'], 'Legal: slugline')
 
     def test_strip_html_case1(self):
         article = {
