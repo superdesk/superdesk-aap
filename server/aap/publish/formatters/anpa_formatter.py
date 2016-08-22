@@ -146,7 +146,8 @@ class AAPAnpaFormatter(Formatter):
                 anpa.append(b'\x04')  # EOT
                 anpa.append(b'\x0D\x0A\x0D\x0A\x0D\x0A\x0D\x0A\x0D\x0A\x0D\x0A\x0D\x0A\x0D\x0A')
 
-                docs.append((pub_seq_num, b''.join(anpa)))
+                docs.append({'published_seq_num': pub_seq_num, 'encoded_item': b''.join(anpa),
+                             'formatted_item': b''.join(anpa).decode('ascii')})
 
             return docs
         except Exception as ex:
