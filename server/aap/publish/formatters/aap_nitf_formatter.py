@@ -41,6 +41,10 @@ class AAPNITFFormatter(NITFFormatter):
         """
         super()._append_meta(article, head, destination, pub_seq_num)
 
+        if 'anpa_category' in article and article['anpa_category'] is not None and len(
+                article.get('anpa_category')) > 0:
+            SubElement(head, 'meta',
+                       {'name': 'anpa-category', 'content': article.get('anpa_category')[0].get('qcode', '')})
         SubElement(head, 'meta', {'name': 'anpa-sequence', 'content': str(pub_seq_num)})
         SubElement(head, 'meta', {'name': 'anpa-keyword', 'content': self.append_legal(article)})
         if article.get('anpa_take_key'):
