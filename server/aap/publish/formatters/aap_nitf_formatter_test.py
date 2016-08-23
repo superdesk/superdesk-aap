@@ -50,6 +50,7 @@ class AAPNitfFormatterTest(SuperdeskTestCase):
             'body_html': '<p>test body</p>',
             'slugline': 'keyword',
             'anpa_take_key': 'take-key',
+            'anpa_category': [{'qcode': 'f', 'name': 'Finance'}],
             'original_source': 'EMAIL',
             'type': 'text',
             'priority': '9',
@@ -74,6 +75,7 @@ class AAPNitfFormatterTest(SuperdeskTestCase):
         self.assertEqual(nitf_xml.find('head/meta[@name="aap-original-source"]').get('content'), 'EMAIL')
         self.assertEqual(nitf_xml.find('head/meta[@name="aap-place"]').get('content'), 'FED')
         self.assertEqual(nitf_xml.find('head/meta[@name="aap-signoff"]').get('content'), 'me')
+        self.assertEqual(nitf_xml.find('head/meta[@name="anpa-category"]').get('content'), 'f')
 
     def test_company_codes(self):
         article = {
