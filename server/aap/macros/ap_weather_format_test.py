@@ -19,7 +19,7 @@ class APWeatherTestCase(SuperdeskTestCase):
         super().setUp()
         self.app.data.insert('vocabularies', self.vocab)
 
-    def test_story_with_p_tags(self):
+    def test_weather_story(self):
         text = '<pre>BC-WEA--Global Weather-Celsius,<\r\n' \
                '\t   NEW YORK (AP) _ Minimum and maximum temperatures in Celsius, precipitation in' \
                ' centimeters and weather conditions as recorded for the previous day and forecast for the' \
