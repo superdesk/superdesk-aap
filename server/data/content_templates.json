@@ -10,7 +10,6 @@
             "headline": "Kill\/Takedown notice ~~~ Kill\/Takedown notice",
             "anpa_take_key": "KILL\/TAKEDOWN",
             "ednote": "",
-            "more_coming" : false,
             "format" : "HTML",
             "flags" : {
                 "marked_archived_only" : false,
