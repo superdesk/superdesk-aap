@@ -13,8 +13,9 @@ import superdesk
 import re
 from eve.utils import config
 from superdesk.utils import json_serialize_datetime_objectId
+from superdesk.utc import utcnow
 from superdesk.errors import FormatterError
-from superdesk.metadata.item import ITEM_TYPE, PACKAGE_TYPE
+from superdesk.metadata.item import ITEM_TYPE, PACKAGE_TYPE, ITEM_STATE, CONTENT_STATE
 from bs4 import BeautifulSoup
 from .field_mappers.locator_mapper import LocatorMapper
 from .field_mappers.slugline_mapper import SluglineMapper
@@ -49,6 +50,10 @@ class AAPBulletinBuilderFormatter(Formatter):
             # force the content to source 'NZN' if desk is 'NZN'
             if 'new zealand' in desk_name.lower().strip():
                 formatted_article['source'] = 'NZN'
+
+            # this is temporary fix for bulletin builder formatter
+            if formatted_article.get(ITEM_STATE, '') == CONTENT_STATE.SCHEDULED:
+                formatted_article['versioncreated'] = utcnow()
 
             formatted_article['body_text'] = self.get_text_content(body_html)
             formatted_article['abstract'] = self.get_text_content(
