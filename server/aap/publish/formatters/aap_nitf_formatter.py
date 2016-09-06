@@ -35,11 +35,11 @@ class AAPNITFFormatter(NITFFormatter):
         return format_type == 'aap_nitf' and \
             article[ITEM_TYPE] in (CONTENT_TYPE.TEXT, CONTENT_TYPE.PREFORMATTED)
 
-    def _append_meta(self, article, head, destination, pub_seq_num):
+    def _format_meta(self, article, head, destination, pub_seq_num):
         """
         Appends <meta> elements to <head>
         """
-        super()._append_meta(article, head, destination, pub_seq_num)
+        super()._format_meta(article, head, destination, pub_seq_num)
 
         if 'anpa_category' in article and article['anpa_category'] is not None and len(
                 article.get('anpa_category')) > 0:
@@ -76,7 +76,7 @@ class AAPNITFFormatter(NITFFormatter):
         if SIGN_OFF in article:
             SubElement(head, 'meta', {'name': 'aap-signoff', 'content': article.get(SIGN_OFF, '') or ''})
 
-    def _append_meta_priority(self, article, head):
+    def _format_meta_priority(self, article, head):
         if 'priority' in article:
             SubElement(head, 'meta', {'name': 'aap-priority', 'content': str(article['priority'])})
 
