@@ -63,8 +63,13 @@ class AAPBulletinBuilderFormatter(Formatter):
             formatted_article['byline'] = self.get_text_content(
                 to_ascii(formatted_article.get('byline', '') or '')).strip()
 
+            # remove category c from the list
+            formatted_article['anpa_category'] = [cat for cat in (formatted_article.get('anpa_category') or [])
+                                                  if cat.get('qcode') != 'c']
+
             # get the first category and derive the locator
-            category = next((iter(formatted_article.get('anpa_category', []))), None)
+            category = next((iter((formatted_article.get('anpa_category') or []))), None)
+
             if category:
                 locator = LocatorMapper().map(formatted_article, category.get('qcode').upper())
                 if locator:
