@@ -27,7 +27,9 @@ class LocatorMapper(FieldMapper):
         '13000000': 'SCI',
         '13010000': 'TECH',
         '10006000': 'TRAV',
-        '01016000': 'TV'
+        '01016000': 'TV',
+        '01028000': 'HIST',
+        '13003002': 'HIST'
     }
 
     iptc_sports_locators = {

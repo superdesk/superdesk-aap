@@ -407,3 +407,37 @@ class AapBulletinBuilderFormatterTest(SuperdeskTestCase):
         self.assertGreater(int(seq), 0)
         test_article = json.loads(item.get('data'))
         self.assertEqual(test_article['source'], 'NZN')
+
+    def test_multiple_categories(self):
+        article = {
+            'source': 'AAP',
+            'anpa_category': [{'qcode': 'c'}, {'qcode': 's'}, {'qcode': 'a'}],
+            'headline': 'This is a test headline',
+            'byline': 'joe',
+            'slugline': 'slugline',
+            'subject': [{'qcode': '15017000'}],
+            'anpa_take_key': 'take_key',
+            'unique_id': '1',
+            'type': 'text',
+            'format': 'HTML',
+            'body_html': 'The story body',
+            'word_count': '1',
+            'priority': '1',
+            'firstcreated': utcnow(),
+            'versioncreated': utcnow(),
+            'lock_user': ObjectId(),
+            'task': {
+                'desk': self.desks[0][config.ID_FIELD]
+            }
+        }
+
+        subscriber = self.app.data.find('subscribers', None, None)[0]
+        seq, item = self._formatter.format(article, subscriber)[0]
+        item = json.loads(item)
+        self.assertGreater(int(seq), 0)
+        test_article = json.loads(item.get('data'))
+        self.assertEqual(test_article['source'], 'AAP')
+        self.assertEqual(test_article['first_category']['qcode'], 's')
+        self.assertEqual(len(test_article['anpa_category']), 2)
+        self.assertEqual(test_article['anpa_category'][0]['qcode'], 's')
+        self.assertEqual(test_article['anpa_category'][1]['qcode'], 'a')
