@@ -26,6 +26,13 @@ module.exports = function() {
             dateformat: 'DD/MM/YYYY'
         },
 
+        search: {
+            slugline: 1, headline: 1, unique_name: 1, story_text: 1,
+            byline: 1, keywords: 1, creator: 1, from_desk: 1,
+            to_desk: 1, spike: 1, scheduled: 1, company_codes: 1,
+            useDefaultTimezone: 1
+        },
+        
         previewFormats: [{
             name: 'AAPIpNewsFormatter',
             outputType: 'json',
