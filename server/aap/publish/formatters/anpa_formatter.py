@@ -154,6 +154,7 @@ class AAPAnpaFormatter(Formatter):
             raise FormatterError.AnpaFormatterError(ex, subscriber)
 
     def get_text_content(self, content):
+        content = content.replace('<br>', '<br/>').replace('</br>', '')
         soup = BeautifulSoup(content, 'html.parser')
 
         for top_level_tag in soup.find_all(recursive=False):

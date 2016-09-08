@@ -685,6 +685,67 @@ class AapIpNewsFormatterTest(SuperdeskTestCase):
                               'selector_codes': 'Axx',
                               'genre': 'Current', 'keyword': 'slugline', 'author': 'joe'})
 
+    def testAdvisoryWithBreaksContent(self):
+        article = {
+            '_id': '3',
+            'source': 'AAP',
+            'anpa_category': [{'qcode': 'a'}],
+            'headline': 'This is a test headline',
+            'byline': 'joe',
+            'slugline': 'slugline',
+            'subject': [{'qcode': '02011001'}],
+            'anpa_take_key': 'take_key',
+            'unique_id': '1',
+            'type': 'text',
+            'body_html': '<p>Economy</p><p>The latest national accounts.<br></p><p>Farm<br></p><p>If you ask Treasurer'
+                         '</p><br><p>Turnbull Howard<br></p><p>Former prime minister John Howard believes </p>',
+            'word_count': '1',
+            'priority': 1,
+            "linked_in_packages": [
+                {
+                    "package": "package",
+                    "package_type": "takes"
+                }
+            ],
+        }
+        subscriber = self.app.data.find('subscribers', None, None)[0]
+
+        f = AAPIpNewsFormatter()
+        seq, item = f.format(article, subscriber)[0]
+        item = json.loads(item)
+        expected = '   Economy\r\n   The latest national accounts.\r\n   Farm\r\n   If you ask Treasurer\r\n   ' \
+            'Turnbull Howard\r\n   Former prime minister John Howard believes\r\n\r\nAAP'
+        self.assertEqual(item['article_text'], expected)
+
+    def testNullWordCount(self):
+        article = {
+            '_id': '3',
+            'source': 'AAP',
+            'anpa_category': [{'qcode': 'a'}],
+            'headline': 'This is a test headline',
+            'byline': 'joe',
+            'slugline': 'slugline',
+            'subject': [{'qcode': '02011001'}],
+            'anpa_take_key': 'take_key',
+            'unique_id': '1',
+            'type': 'text',
+            'body_html': '<p>Test</p>',
+            'word_count': None,
+            'priority': 1,
+            "linked_in_packages": [
+                {
+                    "package": "package",
+                    "package_type": "takes"
+                }
+            ],
+        }
+        subscriber = self.app.data.find('subscribers', None, None)[0]
+
+        f = AAPIpNewsFormatter()
+        seq, item = f.format(article, subscriber)[0]
+        item = json.loads(item)
+        self.assertEqual(item['wordcount'], 0)
+
 
 class DefaultSubjectTest(SuperdeskTestCase):
 
