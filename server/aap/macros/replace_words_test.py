@@ -8,13 +8,12 @@
 # AUTHORS and LICENSE files distributed with this source code, or
 # at https://www.sourcefabric.org/superdesk/license
 
-from test_factory import SuperdeskTestCase
+from superdesk.tests import TestCase
 
 
-class ReplaceWordsTest(SuperdeskTestCase):
+class ReplaceWordsTest(TestCase):
 
     def setUp(self):
-        super().setUp()
         try:
             from .replace_words import find_and_replace
         except:

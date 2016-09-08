@@ -7,18 +7,18 @@
 # For the full copyright and license information, please see the
 # AUTHORS and LICENSE files distributed with this source code, or
 # at https://www.sourcefabric.org/superdesk/license
+from superdesk.tests import TestCase
+
 from .rename_genre_value import rename_genre_value
-from test_factory import SuperdeskTestCase
 
 
-class RenameGenreTestCase(SuperdeskTestCase):
+class RenameGenreTestCase(TestCase):
     articles = [{'guid': '1', '_id': '1', 'type': 'text',
                  'genre': [{'value': 'a', 'name': 'a'}]},
                 {'guid': '2', '_id': '2', 'type': 'text',
                  'genre': [{'value': 'b', 'name': 'b'}, {'value': 'c', 'name': 'c'}]}]
 
     def setUp(self):
-        super().setUp()
         self.app.data.insert('archive', self.articles)
 
     def test_rename_genre(self):

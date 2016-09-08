@@ -8,16 +8,17 @@
 # AUTHORS and LICENSE files distributed with this source code, or
 # at https://www.sourcefabric.org/superdesk/license
 
-from superdesk.publish.subscribers import SUBSCRIBER_TYPES
-
-from test_factory import SuperdeskTestCase
-from apps.publish import init_app
-from .nzn_anpa_formatter import NZNAnpaFormatter
 from datetime import datetime
+
 import io
+from apps.publish import init_app
+from superdesk.publish.subscribers import SUBSCRIBER_TYPES
+from superdesk.tests import TestCase
+
+from .nzn_anpa_formatter import NZNAnpaFormatter
 
 
-class NZNANPAFormatterTest(SuperdeskTestCase):
+class NZNANPAFormatterTest(TestCase):
     subscribers = [{"_id": "1", "name": "notes", "subscriber_type": SUBSCRIBER_TYPES.WIRE, "media_type": "media",
                     "is_active": True, "sequence_num_settings": {"max": 10, "min": 1},
                     "destinations": [{"name": "ANPA", "delivery_type": "email", "format": "ANPA",
@@ -54,7 +55,6 @@ class NZNANPAFormatterTest(SuperdeskTestCase):
         {'is_active': True, 'name': 'New Zealand News', 'qcode': 'N'}]}]
 
     def setUp(self):
-        super().setUp()
         self.app.data.insert('subscribers', self.subscribers)
         self.app.data.insert('desks', self.desks)
         self.app.data.insert('vocabularies', self.vocab)

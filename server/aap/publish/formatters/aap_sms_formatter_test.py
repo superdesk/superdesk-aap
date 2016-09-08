@@ -8,13 +8,15 @@
 # AUTHORS and LICENSE files distributed with this source code, or
 # at https://www.sourcefabric.org/superdesk/license
 
-from test_factory import SuperdeskTestCase
-from apps.publish import init_app
-from .aap_sms_formatter import AAPSMSFormatter
 import json
 
+from apps.publish import init_app
+from superdesk.tests import TestCase
 
-class AapSMSFormatterTest(SuperdeskTestCase):
+from .aap_sms_formatter import AAPSMSFormatter
+
+
+class AapSMSFormatterTest(TestCase):
     subscribers = [{"_id": "1", "name": "Test", "can_send_takes_packages": False, "media_type": "media",
                     "is_active": True, "sequence_num_settings": {"max": 10, "min": 1},
                     "destinations": [{"name": "AAP SMS", "delivery_type": "ODBC", "format": "AAP SMS",
@@ -65,7 +67,6 @@ class AapSMSFormatterTest(SuperdeskTestCase):
                   "queue_state": "queued"}]
 
     def setUp(self):
-        super().setUp()
         self.app.data.insert('subscribers', self.subscribers)
         self.app.data.insert('published', self.published)
         init_app(self.app)

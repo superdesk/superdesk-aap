@@ -8,13 +8,14 @@
 # AUTHORS and LICENSE files distributed with this source code, or
 # at https://www.sourcefabric.org/superdesk/license
 
-
 import os
-from test_factory import SuperdeskTestCase
+
+from superdesk.tests import TestCase
+
 from aap.io.feed_parsers.zczc import ZCZCFeedParser
 
 
-class ZCZCTestCase(SuperdeskTestCase):
+class ZCZCTestCase(TestCase):
     provider = {'name': 'test provder', 'provider': {}}
 
     validators = [
@@ -57,7 +58,6 @@ class ZCZCTestCase(SuperdeskTestCase):
     }]}]
 
     def setUp(self):
-        super().setUp()
         self.app.data.insert('validators', self.validators)
         self.app.data.insert('vocabularies', self.vocab)
 

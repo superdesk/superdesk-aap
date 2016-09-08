@@ -7,11 +7,12 @@
 # For the full copyright and license information, please see the
 # AUTHORS and LICENSE files distributed with this source code, or
 # at https://www.sourcefabric.org/superdesk/license
+from superdesk.tests import TestCase
+
 from .clean_keywords import clean_keywords
-from test_factory import SuperdeskTestCase
 
 
-class CleanKeywordsTestCase(SuperdeskTestCase):
+class CleanKeywordsTestCase(TestCase):
 
     articles = [{'guid': 'aapimage-1', '_id': '1', 'type': 'text',
                  'keywords': ['Student', 'Crime', 'Police', 'Missing']},
@@ -28,7 +29,6 @@ class CleanKeywordsTestCase(SuperdeskTestCase):
                 {'guid': '8', '_id': '8', 'type': 'text', 'keywords': ['Student', 'Crime', 'Police', 'Missing']}]
 
     def setUp(self):
-        super().setUp()
         self.app.data.insert('archive', self.articles)
 
     def test_clear_keywords(self):

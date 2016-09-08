@@ -7,19 +7,20 @@
 # For the full copyright and license information, please see the
 # AUTHORS and LICENSE files distributed with this source code, or
 # at https://www.sourcefabric.org/superdesk/license
+import json
 
-from superdesk.publish.subscribers import SUBSCRIBER_TYPES
-from eve.utils import config
-from test_factory import SuperdeskTestCase
 from apps.publish import init_app
-from .aap_bulletinbuilder_formatter import AAPBulletinBuilderFormatter
-from superdesk import json
-from superdesk.metadata.item import ITEM_TYPE, PACKAGE_TYPE
-from superdesk.utc import utcnow
 from bson import ObjectId
+from eve.utils import config
+from superdesk.metadata.item import ITEM_TYPE, PACKAGE_TYPE
+from superdesk.publish.subscribers import SUBSCRIBER_TYPES
+from superdesk.tests import TestCase
+from superdesk.utc import utcnow
+
+from .aap_bulletinbuilder_formatter import AAPBulletinBuilderFormatter
 
 
-class AapBulletinBuilderFormatterTest(SuperdeskTestCase):
+class AapBulletinBuilderFormatterTest(TestCase):
     subscribers = [{"_id": "1", "name": "Test", "subscriber_type": SUBSCRIBER_TYPES.WIRE, "media_type": "media",
                     "is_active": True, "sequence_num_settings": {"max": 10, "min": 1},
                     "destinations": [{"name": "AAP Bulletin Builder", "delivery_type": "pull",
@@ -32,7 +33,6 @@ class AapBulletinBuilderFormatterTest(SuperdeskTestCase):
     ]
 
     def setUp(self):
-        super().setUp()
         self.app.data.insert('subscribers', self.subscribers)
         self.app.data.insert('desks', self.desks)
         init_app(self.app)

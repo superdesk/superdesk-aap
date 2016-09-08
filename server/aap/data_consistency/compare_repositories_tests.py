@@ -19,9 +19,6 @@ from eve.methods.common import resolve_document_etag
 
 class CompareRepositoriesTestCase(TestCase):
 
-    def setUp(self):
-        super().setUp()
-
     def test_compare_repos(self):
         with self.app.app_context():
             req = ParsedRequest()
