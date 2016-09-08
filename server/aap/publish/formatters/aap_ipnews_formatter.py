@@ -79,7 +79,7 @@ class AAPIpNewsFormatter(Formatter, AAPODBCFormatter):
                     odbc_item['article_text'] += ' ' + sign_off
 
                 odbc_item['service_level'] = 'a'  # @service_level
-                odbc_item['wordcount'] = article.get('word_count', None)  # @wordcount
+                odbc_item['wordcount'] = article.get('word_count') or 0   # @wordcount
                 odbc_item['priority'] = map_priority(article.get('priority'))  # @priority
 
                 docs.append((pub_seq_num, json.dumps(odbc_item)))
@@ -93,6 +93,7 @@ class AAPIpNewsFormatter(Formatter, AAPODBCFormatter):
         :param content:
         :return:
         """
+        content = content.replace('<br>', '<br/>').replace('</br>', '')
         soup = BeautifulSoup(content, 'html.parser')
 
         for top_level_tag in soup.find_all(recursive=False):
