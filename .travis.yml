@@ -22,8 +22,8 @@ addons:
     - tdsodbc
 
 cache:
-  - pip
   directories:
+    - $HOME/.cache/pip
     - $HOME/.npm
 
 before_install:
