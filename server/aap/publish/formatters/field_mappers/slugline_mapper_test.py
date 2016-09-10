@@ -8,12 +8,13 @@
 # AUTHORS and LICENSE files distributed with this source code, or
 # at https://www.sourcefabric.org/superdesk/license
 
-from test_factory import SuperdeskTestCase
 from apps.publish import init_app
+from superdesk.tests import TestCase
+
 from .slugline_mapper import SluglineMapper
 
 
-class SelectorcodeMapperTest(SuperdeskTestCase):
+class SelectorcodeMapperTest(TestCase):
 
     article1 = {
         'slugline': 'SLUG1',
@@ -59,7 +60,6 @@ class SelectorcodeMapperTest(SuperdeskTestCase):
     slugline_map = SluglineMapper()
 
     def setUp(self):
-        super().setUp()
         init_app(self.app)
 
     def test_finex_explainer_locator(self):

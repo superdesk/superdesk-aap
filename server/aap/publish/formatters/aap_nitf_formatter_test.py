@@ -8,18 +8,19 @@
 # AUTHORS and LICENSE files distributed with this source code, or
 # at https://www.sourcefabric.org/superdesk/license
 
-from test_factory import SuperdeskTestCase
 from unittest import mock
-from superdesk.publish.formatters import Formatter
-from superdesk.publish import init_app
+
 import xml.etree.ElementTree as etree
+from superdesk.publish import init_app
+from superdesk.publish.formatters import Formatter
+from superdesk.tests import TestCase
+
 from .aap_nitf_formatter import AAPNITFFormatter
 
 
 @mock.patch('superdesk.publish.subscribers.SubscribersService.generate_sequence_number', lambda self, subscriber: 1)
-class AAPNitfFormatterTest(SuperdeskTestCase):
+class AAPNitfFormatterTest(TestCase):
     def setUp(self):
-        super().setUp()
         self.formatter = AAPNITFFormatter()
         self.base_formatter = Formatter()
         init_app(self.app)

@@ -7,16 +7,16 @@
 # For the full copyright and license information, please see the
 # AUTHORS and LICENSE files distributed with this source code, or
 # at https://www.sourcefabric.org/superdesk/license
-
-from superdesk.publish.subscribers import SUBSCRIBER_TYPES
-
-from test_factory import SuperdeskTestCase
-from apps.publish import init_app
-from .aap_newscentre_formatter import AAPNewscentreFormatter
 import json
 
+from apps.publish import init_app
+from superdesk.publish.subscribers import SUBSCRIBER_TYPES
+from superdesk.tests import TestCase
 
-class AapNewscentreFormatterTest(SuperdeskTestCase):
+from .aap_newscentre_formatter import AAPNewscentreFormatter
+
+
+class AapNewscentreFormatterTest(TestCase):
     subscribers = [{"_id": "1", "name": "newscentre", "subscriber_type": SUBSCRIBER_TYPES.WIRE, "media_type": "media",
                     "is_active": True, "sequence_num_settings": {"max": 10, "min": 1},
                     "destinations": [{"name": "AAP NEWSCENTRE", "delivery_type": "email", "format": "AAP NEWSCENTRE",
@@ -54,7 +54,6 @@ class AapNewscentreFormatterTest(SuperdeskTestCase):
                                                        {'name': 'Victoria', 'qcode': 'VIC', 'is_active': True}]}]
 
     def setUp(self):
-        super().setUp()
         self.app.data.insert('subscribers', self.subscribers)
         self.app.data.insert('vocabularies', self.vocab)
         self.app.data.insert('desks', self.desks)

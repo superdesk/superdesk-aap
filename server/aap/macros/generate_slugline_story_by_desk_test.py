@@ -8,20 +8,23 @@
 # AUTHORS and LICENSE files distributed with this source code, or
 # at https://www.sourcefabric.org/superdesk/license
 
-from test_factory import SuperdeskTestCase
-from superdesk.utc import utc_to_local, utcnow
 from datetime import timedelta
-from .generate_slugline_story_by_desk import GenerateBodyHtmlForPublishedArticlesByDesk, \
+
+from superdesk.tests import TestCase
+from superdesk.utc import utc_to_local, utcnow
+
+from .generate_slugline_story_by_desk import (
+    GenerateBodyHtmlForPublishedArticlesByDesk,
     generate_published_slugline_story_by_desk
+)
 
 
-class SluglineStoryByDesk(SuperdeskTestCase):
+class SluglineStoryByDesk(TestCase):
     articles = []
     published = []
     desks = []
 
     def setUp(self):
-        super().setUp()
         local_time = utc_to_local(self.app.config['DEFAULT_TIMEZONE'], utcnow())
 
         self.desks = [

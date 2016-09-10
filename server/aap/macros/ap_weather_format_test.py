@@ -8,15 +8,15 @@
 # AUTHORS and LICENSE files distributed with this source code, or
 # at https://www.sourcefabric.org/superdesk/license
 
-from test_factory import SuperdeskTestCase
+from superdesk.tests import TestCase
+
 from .ap_weather_format import ap_weather_format
 
 
-class APWeatherTestCase(SuperdeskTestCase):
+class APWeatherTestCase(TestCase):
     vocab = [{'_id': 'locators', 'items': [{'qcode': 'US'}]}]
 
     def setUp(self):
-        super().setUp()
         self.app.data.insert('vocabularies', self.vocab)
 
     def test_weather_story(self):

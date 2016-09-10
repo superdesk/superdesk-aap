@@ -8,12 +8,13 @@
 # AUTHORS and LICENSE files distributed with this source code, or
 # at https://www.sourcefabric.org/superdesk/license
 
-from test_factory import SuperdeskTestCase
 from apps.publish import init_app
+from superdesk.tests import TestCase
+
 from .locator_mapper import LocatorMapper
 
 
-class SelectorcodeMapperTest(SuperdeskTestCase):
+class SelectorcodeMapperTest(TestCase):
 
     desks = [{'_id': 1, 'name': 'National'},
              {'_id': 2, 'name': 'Sports'},
@@ -75,7 +76,6 @@ class SelectorcodeMapperTest(SuperdeskTestCase):
     ]}]
 
     def setUp(self):
-        super().setUp()
         self.app.data.insert('desks', self.desks)
         self.app.data.insert('vocabularies', self.vocab)
         init_app(self.app)

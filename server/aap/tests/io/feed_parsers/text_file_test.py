@@ -8,18 +8,18 @@
 # AUTHORS and LICENSE files distributed with this source code, or
 # at https://www.sourcefabric.org/superdesk/license
 
-
 import os
-from test_factory import SuperdeskTestCase
+
+from superdesk.tests import TestCase
+
 from aap.io.feed_parsers.text_file import TextFileParser
 
 
-class TextFileTestCase(SuperdeskTestCase):
+class TextFileTestCase(TestCase):
 
     filename = 'CRN2016427R1.tst'
 
     def setUp(self):
-        super().setUp()
         dirname = os.path.dirname(os.path.realpath(__file__))
         self.fixture = os.path.normpath(os.path.join(dirname, '../fixtures', self.filename))
         self.provider = {'name': 'Test'}

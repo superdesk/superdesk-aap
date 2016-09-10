@@ -8,11 +8,12 @@
 # AUTHORS and LICENSE files distributed with this source code, or
 # at https://www.sourcefabric.org/superdesk/license
 
+from unittest import TestCase
+
 from .unicodetoascii import to_ascii
-from test_factory import SuperdeskTestCase
 
 
-class ToAsciiConverterTest(SuperdeskTestCase):
+class ToAsciiConverterTest(TestCase):
     def TestCase(self):
         self.assertEqual(to_ascii('a'), 'a')
         self.assertEqual(to_ascii('aÀ'), 'aA')

@@ -7,18 +7,18 @@
 # For the full copyright and license information, please see the
 # AUTHORS and LICENSE files distributed with this source code, or
 # at https://www.sourcefabric.org/superdesk/license
+import copy
+import json
 
 from superdesk.publish.subscribers import SUBSCRIBER_TYPES
-
-from test_factory import SuperdeskTestCase
+from superdesk.tests import TestCase
 from apps.publish import init_app
+
 from .aap_ipnews_formatter import AAPIpNewsFormatter
 from .aap_formatter_common import set_subject
-import json
-from copy import deepcopy
 
 
-class AapIpNewsFormatterTest(SuperdeskTestCase):
+class AapIpNewsFormatterTest(TestCase):
     subscribers = [{"_id": "1", "name": "ipnews", "subscriber_type": SUBSCRIBER_TYPES.WIRE, "media_type": "media",
                     "is_active": True, "sequence_num_settings": {"max": 10, "min": 1},
                     "destinations": [{"name": "AAP IPNEWS", "delivery_type": "email", "format": "AAP IPNEWS",
@@ -61,7 +61,6 @@ class AapIpNewsFormatterTest(SuperdeskTestCase):
                                                        {'name': 'Victoria', 'qcode': 'VIC', 'is_active': True}]}]
 
     def setUp(self):
-        super().setUp()
         self.app.data.insert('subscribers', self.subscribers)
         self.app.data.insert('vocabularies', self.vocab)
         self.app.data.insert('desks', self.desks)
@@ -659,7 +658,7 @@ class AapIpNewsFormatterTest(SuperdeskTestCase):
 
     def test_aap_ipnews_formatter_with_body_formatted(self):
         subscriber = self.app.data.find('subscribers', None, None)[0]
-        doc = deepcopy(self.article)
+        doc = copy.deepcopy(self.article)
         doc['body_footer'] = '<p>call helpline 999 if you are planning to quit smoking</p>'
         doc['body_html'] = ('<pre>  The story\n body\r\n</pre>'
                             '<pre>  second line<br></pre><br>')
@@ -747,10 +746,9 @@ class AapIpNewsFormatterTest(SuperdeskTestCase):
         self.assertEqual(item['wordcount'], 0)
 
 
-class DefaultSubjectTest(SuperdeskTestCase):
+class DefaultSubjectTest(TestCase):
 
     def setUp(self):
-        super().setUp()
         vocabularies = [{
             '_id': 'categories',
             'display_name': 'Categories',

@@ -1,11 +1,14 @@
-from superdesk.emails import send_user_status_changed_email, send_activity_emails, send_email, \
-    send_article_killed_email
-from test_factory import SuperdeskTestCase
 from unittest.mock import patch
+
+from superdesk.emails import (
+    send_user_status_changed_email, send_activity_emails, send_email,
+    send_article_killed_email
+)
+from superdesk.tests import TestCase
 from superdesk.utc import utcnow
 
 
-class SendEmailTestCase(SuperdeskTestCase):
+class SendEmailTestCase(TestCase):
 
     def test_send_email(self):
         with self.app.app_context():
