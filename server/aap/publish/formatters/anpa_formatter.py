@@ -176,10 +176,8 @@ class AAPAnpaFormatter(Formatter):
 
     def _process_headline(self, anpa, article, category):
         # prepend the locator to the headline if required
-        headline_prefix = LocatorMapper().map(article, category.decode('UTF-8').upper())
-        headline = to_ascii(BeautifulSoup(article.get('headline', ''), 'html.parser').text)
-        if headline_prefix:
-            headline = '{}:{}'.format(headline_prefix, headline)
+        article['headline'] = BeautifulSoup(article.get('headline', ''), 'html.parser').text
+        headline = to_ascii(LocatorMapper().get_formatted_headline(article, category.decode('UTF-8').upper()))
 
         # Set the maximum size to 64 including the sequence number if any
         if len(headline) > 64:

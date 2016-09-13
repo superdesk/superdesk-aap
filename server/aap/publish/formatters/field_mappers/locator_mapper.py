@@ -91,12 +91,11 @@ class LocatorMapper(FieldMapper):
 
     sport_categories = {'S', 'T', 'R'}
 
-    def map(self, article, category, **kwargs):
+    def map(self, article, category):
         """
         Based on the category and subject code it returns the locator
         :param dict article: original article
         :param str category: category of the article
-        :param dict kwargs: keyword args
         :return: if found then the locator as string else None
         """
         if category in self.sport_categories:
@@ -146,3 +145,24 @@ class LocatorMapper(FieldMapper):
                     return feature
 
         return None
+
+    def get_formatted_headline(self, article, category):
+        """
+        Based on the category and subject code it prefix the headline with locator.
+        If headline contains ':' in first six characters (legacy auto publish)
+        then no need for locator mapping.
+        :param dict article: original article
+        :param str category: category of the article
+        :return: Headline with locator prefix
+        """
+        headline = article.get('headline') or ''
+        if headline and ':' in (headline[:6]):
+            # If headline contains ':' in first six characters (legacy auto publish)
+            # could be done better with list of all locators.
+            return headline
+
+        headline_prefix = LocatorMapper().map(article, category)
+        if headline_prefix:
+            headline = '{}:{}'.format(headline_prefix, headline)
+
+        return headline

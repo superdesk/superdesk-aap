@@ -92,3 +92,63 @@ class SelectorcodeMapperTest(TestCase):
 
     def test_locator_code_is_none(self):
         self.assertIsNone(self.locator_map.map(self.article4, self.category2))
+
+    def test_headline_prefix(self):
+        article = {
+            'headline': 'This is test headline',
+            'subject': [{'qcode': '15063000'}],
+            'place': [{
+                'name': 'NSW',
+                'state': '',
+                'world_region': 'Oceania',
+                'group': 'Australia',
+                'qcode': 'NSW',
+                'country': 'Australia'
+            }]
+        }
+
+        self.assertEqual(self.locator_map.get_formatted_headline(article, 'S'),
+                         'TTEN:This is test headline')
+
+    def test_headline_prefix_legacy(self):
+        article = {
+            'headline': 'VOL:This is test headline',
+            'subject': [{'qcode': '15063000'}],
+            'place': [{
+                'name': 'NSW',
+                'state': '',
+                'world_region': 'Oceania',
+                'group': 'Australia',
+                'qcode': 'NSW',
+                'country': 'Australia'
+            }]
+        }
+
+        self.assertEqual(self.locator_map.get_formatted_headline(article, 'S'),
+                         'VOL:This is test headline')
+
+    def test_headline_prefix_not_sports(self):
+        article = {
+            'headline': 'This is test headline',
+            'subject': [{'qcode': '04001000'}],
+            'place': [{
+                'name': 'NSW',
+                'state': '',
+                'world_region': 'Oceania',
+                'group': 'Australia',
+                'qcode': 'NSW',
+                'country': 'Australia'
+            }]
+        }
+
+        self.assertEqual(self.locator_map.get_formatted_headline(article, 'A'),
+                         'NSW:This is test headline')
+
+    def test_headline_prefix_no_place(self):
+        article = {
+            'headline': 'This is test headline',
+            'subject': [{'qcode': '04001000'}]
+        }
+
+        self.assertEqual(self.locator_map.get_formatted_headline(article, 'A'),
+                         'This is test headline')
