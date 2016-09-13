@@ -89,6 +89,8 @@ class LocatorMapper(FieldMapper):
         '15072000': 'WRES'
     }
 
+    sport_categories = {'S', 'T', 'R'}
+
     def map(self, article, category, **kwargs):
         """
         Based on the category and subject code it returns the locator
@@ -97,7 +99,7 @@ class LocatorMapper(FieldMapper):
         :param dict kwargs: keyword args
         :return: if found then the locator as string else None
         """
-        if category == 'S' or category == 'T' or category == 'R':
+        if category in self.sport_categories:
             mapped_value = self._map_locator_code(article, category, self.iptc_sports_locators)
         else:
             mapped_value = self._map_locator_code(article, category, self.iptc_locators)
@@ -120,7 +122,7 @@ class LocatorMapper(FieldMapper):
         subjects = article.get('subject') or []
 
         # for sports category
-        if category == 'S' or category == 'T':
+        if category in self.sport_categories:
             subject = set_subject({'qcode': category}, article) or ''
             feature = locators.get('{}000'.format(subject[:5])) or locators.get(subject)
             if feature:
