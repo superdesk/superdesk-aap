@@ -89,15 +89,16 @@ class LocatorMapper(FieldMapper):
         '15072000': 'WRES'
     }
 
-    def map(self, article, category, **kwargs):
+    sport_categories = {'S', 'T', 'R'}
+
+    def map(self, article, category):
         """
         Based on the category and subject code it returns the locator
         :param dict article: original article
         :param str category: category of the article
-        :param dict kwargs: keyword args
         :return: if found then the locator as string else None
         """
-        if category == 'S' or category == 'T' or category == 'R':
+        if category in self.sport_categories:
             mapped_value = self._map_locator_code(article, category, self.iptc_sports_locators)
         else:
             mapped_value = self._map_locator_code(article, category, self.iptc_locators)
@@ -120,7 +121,7 @@ class LocatorMapper(FieldMapper):
         subjects = article.get('subject') or []
 
         # for sports category
-        if category == 'S' or category == 'T':
+        if category in self.sport_categories:
             subject = set_subject({'qcode': category}, article) or ''
             feature = locators.get('{}000'.format(subject[:5])) or locators.get(subject)
             if feature:
@@ -144,3 +145,24 @@ class LocatorMapper(FieldMapper):
                     return feature
 
         return None
+
+    def get_formatted_headline(self, article, category):
+        """
+        Based on the category and subject code it prefix the headline with locator.
+        If headline contains ':' in first six characters (legacy auto publish)
+        then no need for locator mapping.
+        :param dict article: original article
+        :param str category: category of the article
+        :return: Headline with locator prefix
+        """
+        headline = article.get('headline') or ''
+        if headline and ':' in (headline[:6]):
+            # If headline contains ':' in first six characters (legacy auto publish)
+            # could be done better with list of all locators.
+            return headline
+
+        headline_prefix = LocatorMapper().map(article, category)
+        if headline_prefix:
+            headline = '{}:{}'.format(headline_prefix, headline)
+
+        return headline

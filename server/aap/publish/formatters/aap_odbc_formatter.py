@@ -30,11 +30,10 @@ class AAPODBCFormatter():
         :param codes:
         :return:
         """
+        article['headline'] = BeautifulSoup(article.get('headline', ''), 'html.parser').text
         pub_seq_num = superdesk.get_resource_service('subscribers').generate_sequence_number(subscriber)
         odbc_item = dict(originator=article.get('source', None), sequence=pub_seq_num,
                          category=category.get('qcode').lower(),
-                         headline=to_ascii(BeautifulSoup(article.get('headline', ''), 'html.parser').text).replace
-                         ('\'', '\'\'').replace('\xA0', ' '),
                          author=BeautifulSoup(article.get('byline', '') or '', 'html.parser').text.replace
                          ('\'', '\'\''),
                          keyword=SluglineMapper().map(article=article,
@@ -51,9 +50,8 @@ class AAPODBCFormatter():
         odbc_item['ident'] = '0'  # @ident
         odbc_item['selector_codes'] = ' '.join(codes) if codes else ' '
 
-        headline_prefix = LocatorMapper().map(article, category.get('qcode').upper())
-        if headline_prefix:
-            odbc_item['headline'] = '{}:{}'.format(headline_prefix, odbc_item['headline'])
+        headline = LocatorMapper().get_formatted_headline(article, category.get('qcode').upper())
+        odbc_item['headline'] = to_ascii(headline.replace('\'', '\'\'').replace('\xA0', ' '))
 
         self.expand_subject_codes(odbc_item)
         self.set_usn(odbc_item, article)
