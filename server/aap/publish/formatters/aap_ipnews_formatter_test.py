@@ -745,6 +745,52 @@ class AapIpNewsFormatterTest(TestCase):
         item = json.loads(item)
         self.assertEqual(item['wordcount'], 0)
 
+    def testHeadlinePrefix(self):
+        article = {
+            '_id': '3',
+            'source': 'AAP',
+            'anpa_category': [{'qcode': 's'}],
+            'headline': 'This is a test headline',
+            'byline': 'joe',
+            'slugline': 'slugline',
+            'subject': [{'qcode': '15063000'}],
+            'anpa_take_key': 'take_key',
+            'unique_id': '1',
+            'type': 'text',
+            'body_html': '<p>Test</p>',
+            'word_count': 150,
+            'priority': 1,
+        }
+        subscriber = self.app.data.find('subscribers', None, None)[0]
+
+        f = AAPIpNewsFormatter()
+        seq, item = f.format(article, subscriber)[0]
+        item = json.loads(item)
+        self.assertEqual(item['headline'], 'TTEN:This is a test headline')
+
+    def testHeadlinePrefixLegacy(self):
+        article = {
+            '_id': '3',
+            'source': 'AAP',
+            'anpa_category': [{'qcode': 's'}],
+            'headline': 'ABCDEF:This is a test headline',
+            'byline': 'joe',
+            'slugline': 'slugline',
+            'subject': [{'qcode': '15063000'}],
+            'anpa_take_key': 'take_key',
+            'unique_id': '1',
+            'type': 'text',
+            'body_html': '<p>Test</p>',
+            'word_count': 150,
+            'priority': 1,
+        }
+        subscriber = self.app.data.find('subscribers', None, None)[0]
+
+        f = AAPIpNewsFormatter()
+        seq, item = f.format(article, subscriber)[0]
+        item = json.loads(item)
+        self.assertEqual(item['headline'], 'TTEN:ABCDEF:This is a test headline')
+
 
 class DefaultSubjectTest(TestCase):
 
