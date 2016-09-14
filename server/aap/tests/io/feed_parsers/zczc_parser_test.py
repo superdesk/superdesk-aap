@@ -13,6 +13,10 @@ import os
 from superdesk.tests import TestCase
 
 from aap.io.feed_parsers.zczc import ZCZCFeedParser
+from aap.io.feed_parsers.zczc_bob import ZCZCBOBParser
+from aap.io.feed_parsers.zczc_pmf import ZCZCPMFParser
+from aap.io.feed_parsers.zczc_medianet import ZCZCMedianetParser
+from aap.io.feed_parsers.zczc_racing import ZCZCRacingParser
 
 
 class ZCZCTestCase(TestCase):
@@ -77,7 +81,7 @@ class ZCZCTestCase(TestCase):
         dirname = os.path.dirname(os.path.realpath(__file__))
         fixture = os.path.normpath(os.path.join(dirname, '../fixtures', filename))
         self.provider['source'] = 'MNET'
-        self.items = ZCZCFeedParser().parse(fixture, self.provider)
+        self.items = ZCZCMedianetParser().parse(fixture, self.provider)
         self.assertEqual(self.items.get('headline'), 'Australian Financial Security Authority')
 
     def test_pagemasters_format(self):
@@ -85,7 +89,7 @@ class ZCZCTestCase(TestCase):
         dirname = os.path.dirname(os.path.realpath(__file__))
         fixture = os.path.normpath(os.path.join(dirname, '../fixtures', filename))
         self.provider['source'] = 'PMF'
-        self.items = ZCZCFeedParser().parse(fixture, self.provider)
+        self.items = ZCZCPMFParser().parse(fixture, self.provider)
         self.assertEqual(self.items.get('headline'), 'Darwin Greyhound Fields Sunday')
         self.assertEqual(self.items.get('slugline'), 'Darwin Grey')
         self.assertEqual(self.items.get('anpa_category')[0]['qcode'], 'r')
@@ -96,7 +100,7 @@ class ZCZCTestCase(TestCase):
         dirname = os.path.dirname(os.path.realpath(__file__))
         fixture = os.path.normpath(os.path.join(dirname, '../fixtures', filename))
         self.provider['source'] = 'BRA'
-        self.items = ZCZCFeedParser().parse(fixture, self.provider)
+        self.items = ZCZCRacingParser().parse(fixture, self.provider)
         self.assertEqual(self.items.get('headline'), ' Racing.Com Park FIELDS Thursday')
         self.assertEqual(self.items.get('slugline'), ' Racing.Com Park FIELDS ')
         self.assertEqual(self.items.get('anpa_category')[0]['qcode'], 'r')
@@ -107,7 +111,7 @@ class ZCZCTestCase(TestCase):
         dirname = os.path.dirname(os.path.realpath(__file__))
         fixture = os.path.normpath(os.path.join(dirname, '../fixtures', filename))
         self.provider['source'] = 'PMF'
-        self.items = ZCZCFeedParser().parse(fixture, self.provider)
+        self.items = ZCZCPMFParser().parse(fixture, self.provider)
         self.assertEqual(self.items.get('headline'), 'VIC TAB DIVS 1-4 Friday')
         self.assertEqual(self.items.get('slugline'), 'Wagga Trot')
         self.assertEqual(self.items.get('anpa_category')[0]['qcode'], 'r')
@@ -118,7 +122,7 @@ class ZCZCTestCase(TestCase):
         dirname = os.path.dirname(os.path.realpath(__file__))
         fixture = os.path.normpath(os.path.join(dirname, '../fixtures', filename))
         self.provider['source'] = 'BRA'
-        self.items = ZCZCFeedParser().parse(fixture, self.provider)
+        self.items = ZCZCRacingParser().parse(fixture, self.provider)
         self.assertEqual(self.items.get('headline'), 'Leading jockeys (Sydney)')
         self.assertEqual(self.items.get('slugline'), 'Leading jockeys (Sydney)')
         self.assertEqual(self.items.get('anpa_category')[0]['qcode'], 'r')
@@ -129,7 +133,7 @@ class ZCZCTestCase(TestCase):
         dirname = os.path.dirname(os.path.realpath(__file__))
         fixture = os.path.normpath(os.path.join(dirname, '../fixtures', filename))
         self.provider['source'] = 'BRA'
-        self.items = ZCZCFeedParser().parse(fixture, self.provider)
+        self.items = ZCZCRacingParser().parse(fixture, self.provider)
         self.assertEqual(self.items.get('headline'), 'STRADBROKE HANDICAP 1400M .=!')
         self.assertEqual(self.items.get('slugline'), 'STRADBROKE HANDICAP 1400')
         self.assertEqual(self.items.get('anpa_category')[0]['qcode'], 'r')
@@ -140,7 +144,7 @@ class ZCZCTestCase(TestCase):
         dirname = os.path.dirname(os.path.realpath(__file__))
         fixture = os.path.normpath(os.path.join(dirname, '../fixtures', filename))
         self.provider['source'] = 'BOB'
-        self.items = ZCZCFeedParser().parse(fixture, self.provider)
+        self.items = ZCZCBOBParser().parse(fixture, self.provider)
         self.assertEqual(self.items.get('slugline'), 'Legionella_BC1')
         self.assertEqual(self.items.get('anpa_category')[0]['qcode'], 'A')
         self.assertEqual(self.items.get('headline'), 'Legionella found in Qld hospital')
@@ -153,7 +157,7 @@ class ZCZCTestCase(TestCase):
         dirname = os.path.dirname(os.path.realpath(__file__))
         fixture = os.path.normpath(os.path.join(dirname, '../fixtures', filename))
         self.provider['source'] = 'BOB'
-        self.items = ZCZCFeedParser().parse(fixture, self.provider)
+        self.items = ZCZCBOBParser().parse(fixture, self.provider)
         self.assertEqual(self.items.get('slugline'), 'Legal: Causevic_BC6')
         self.assertEqual(self.items.get('anpa_category')[0]['qcode'], 'A')
         self.assertEqual(self.items.get('headline'), 'GPS device to come off Vic teen ')
