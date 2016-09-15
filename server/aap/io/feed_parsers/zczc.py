@@ -15,13 +15,9 @@ from aap.errors import AAPParserError
 from superdesk.io.iptc import subject_codes
 from superdesk.metadata.item import ITEM_TYPE, CONTENT_TYPE, FORMAT, FORMATS
 from superdesk.utc import utcnow
-from datetime import datetime
 from superdesk.logging import logger
-import superdesk
-from apps.publish.content.common import ITEM_PUBLISH
 import uuid
 import html
-import re
 
 
 class ZCZCFeedParser(FileFeedParser):
@@ -134,39 +130,7 @@ class ZCZCFeedParser(FileFeedParser):
         item['pubstatus'] = 'usable'
         item['versioncreated'] = utcnow()
         item[ITEM_TYPE] = CONTENT_TYPE.TEXT
-        # Pagemasters
-        if provider.get('source') == 'PMF':
-            item[FORMAT] = FORMATS.PRESERVED
-            item['original_source'] = 'Pagemasters'
-            self.KEYWORD = '#'
-            self.TAKEKEY = '@'
-            self.HEADLINE = ':'
-            self.header_map = {self.KEYWORD: self.ITEM_SLUGLINE, self.TAKEKEY: self.ITEM_TAKE_KEY,
-                               self.HEADLINE: self.ITEM_HEADLINE}
-        elif provider.get('source') == 'MNET':
-            # Medianet
-            item[FORMAT] = FORMATS.PRESERVED
-            item['original_source'] = 'Medianet'
-            item['urgency'] = 8
-            self.HEADLINE = ':'
-            self.header_map = {'%': None, self.HEADLINE: self.ITEM_HEADLINE}
-        elif provider.get('source') == 'BRA':
-            # Racing system
-            item[FORMAT] = FORMATS.PRESERVED
-        elif provider.get('source') == 'BOB':
-            item[FORMAT] = FORMATS.HTML
-            item['original_source'] = 'BOB'
-            self.CATEGORY = '%'
-            self.KEYWORD = '#'
-            self.HEADLINE = '$'
-            self.TAKEKEY = ':'
-            self.IPTC = '*'
-            self.FORMAT = None
-            self.header_map = {self.KEYWORD: self.ITEM_SLUGLINE, self.TAKEKEY: self.ITEM_TAKE_KEY,
-                               self.HEADLINE: self.ITEM_HEADLINE, self.SERVICELEVEL: None,
-                               self.PLACE: self.ITEM_PLACE}
-        else:
-            item[FORMAT] = FORMATS.HTML
+        item[FORMAT] = FORMATS.HTML
 
     def post_process_item(self, item, provider):
         """
@@ -175,97 +139,6 @@ class ZCZCFeedParser(FileFeedParser):
         :param provider:
         :return: item
         """
-        try:
-            # Pagemasters sourced content is Greyhound or Trot related, maybe AFL otherwise financial
-            if provider.get('source') == 'PMF':
-                # is it a horse or dog racing item
-                if item.get(self.ITEM_SLUGLINE, '').find('Grey') != -1 or item.get(self.ITEM_SLUGLINE, '').find(
-                        'Trot') != -1 or item.get(self.ITEM_SLUGLINE, '').find('Gallop') != -1:
-                    # Don't look for the date in the TAB Dividends
-                    if item.get(self.ITEM_HEADLINE, '').find('TAB DIVS') == -1:
-                        try:
-                            raceday = datetime.strptime(item.get(self.ITEM_HEADLINE, ''), '%d/%m/%Y')
-                            item[self.ITEM_TAKE_KEY] = 'Fields ' + raceday.strftime('%A')
-                        except:
-                            item[self.ITEM_TAKE_KEY] = 'Fields'
-                        # it's the dogs
-                        if item.get(self.ITEM_SLUGLINE, '').find('Grey') != -1:
-                            item[self.ITEM_HEADLINE] = item.get(self.ITEM_SLUGLINE) + 'hound ' + item.get(
-                                self.ITEM_TAKE_KEY,
-                                '')
-                            item[self.ITEM_SUBJECT] = [{'qcode': '15082000', 'name': subject_codes['15082000']}]
-                        if item.get(self.ITEM_SLUGLINE, '').find('Trot') != -1:
-                            item[self.ITEM_HEADLINE] = item.get(self.ITEM_SLUGLINE) + ' ' + item.get(self.ITEM_TAKE_KEY,
-                                                                                                     '')
-                            item[self.ITEM_SUBJECT] = [{'qcode': '15030003', 'name': subject_codes['15030003']}]
-                    else:
-                        if item.get(self.ITEM_SLUGLINE, '').find('Greyhound') != -1:
-                            item[self.ITEM_SUBJECT] = [{'qcode': '15082000', 'name': subject_codes['15082000']}]
-                        if item.get(self.ITEM_SLUGLINE, '').find('Trot') != -1:
-                            item[self.ITEM_SUBJECT] = [{'qcode': '15030003', 'name': subject_codes['15030003']}]
-                        if item.get(self.ITEM_SLUGLINE, '').find('Gallop') != -1:
-                            item[self.ITEM_SUBJECT] = [{'qcode': '15030001', 'name': subject_codes['15030001']}]
-                    item[self.ITEM_ANPA_CATEGORY] = [{'qcode': 'r'}]
-                elif item.get(self.ITEM_SLUGLINE, '').find('AFL') != -1:
-                    item[self.ITEM_ANPA_CATEGORY] = [{'qcode': 't'}]
-                    item[self.ITEM_SUBJECT] = [{'qcode': '15084000', 'name': subject_codes['15084000']}]
-                else:
-                    item[self.ITEM_ANPA_CATEGORY] = [{'qcode': 'f'}]
-                    item[self.ITEM_SUBJECT] = [{'qcode': '04000000', 'name': subject_codes['04000000']}]
-            elif provider.get('source') == 'BRA':
-                # It is from the Racing system
-                item[self.ITEM_ANPA_CATEGORY] = [{'qcode': 'r'}]
-                item[self.ITEM_SUBJECT] = [{'qcode': '15030001', 'name': subject_codes['15030001']}]
-                lines = item['body_html'].split('\n')
-                if lines[2] and lines[2].find(':SPORT -') != -1:
-                    item[self.ITEM_HEADLINE] = lines[2][9:]
-                    if lines[1] and lines[1].find(':POTTED :') != -1:
-                        item[self.ITEM_SLUGLINE] = lines[1][9:]
-                elif lines[1] and lines[1].find('RACING : ') != -1:
-                    item[self.ITEM_HEADLINE] = lines[1][8:]
-                    item[self.ITEM_SLUGLINE] = lines[1][8:]
-                elif lines[0] and lines[0].find('YY FORM') != -1:
-                    item[self.ITEM_HEADLINE] = lines[1]
-                    item[self.ITEM_SLUGLINE] = lines[1]
-                elif lines[1] and lines[1].find(':POTTED :') != -1:
-                    item[self.ITEM_HEADLINE] = lines[1][9:]
-                    item[self.ITEM_SLUGLINE] = lines[1][9:]
-                else:
-                    for line_num in range(3, min(len(lines), 6)):
-                        if lines[line_num] != '':
-                            item[self.ITEM_HEADLINE] = lines[line_num].strip()
-                            item[self.ITEM_SLUGLINE] = lines[line_num].strip()
-                            break
-                # Truncate the slugline and headline to the lengths defined on the validators if required if required
-                lookup = {'act': ITEM_PUBLISH, 'type': CONTENT_TYPE.TEXT}
-                validators = superdesk.get_resource_service('validators').get(req=None, lookup=lookup)
-                if validators.count():
-                    max_slugline_len = validators[0]['schema']['slugline']['maxlength']
-                    max_headline_len = validators[0]['schema']['headline']['maxlength']
-                    if self.ITEM_SLUGLINE in item and len(item[self.ITEM_SLUGLINE]) > max_slugline_len:
-                        # the overflow of the slugline is dumped in the take key
-                        item[self.ITEM_TAKE_KEY] = item.get(self.ITEM_SLUGLINE)[max_slugline_len:]
-                        item[self.ITEM_SLUGLINE] = item[self.ITEM_SLUGLINE][:max_slugline_len]
-                    if self.ITEM_HEADLINE in item:
-                        item[self.ITEM_HEADLINE] = item[self.ITEM_HEADLINE][:max_headline_len] \
-                            if len(item[self.ITEM_HEADLINE]) > max_headline_len else item[self.ITEM_HEADLINE]
-            elif provider.get('source') == 'BOB':
-                item['body_html'] = '<p>{}</p>'.format(
-                    re.sub('<p>   ', '<p>', item.get('body_html', '').replace('\n\n', '\n').replace('\n', '</p><p>')))
-                if self.ITEM_PLACE in item:
-                    locator_map = superdesk.get_resource_service('vocabularies').find_one(req=None, _id='locators')
-                    place = [x for x in locator_map.get('items', []) if
-                             x['qcode'] == item.get(self.ITEM_PLACE, '').upper()]
-                    if place is not None:
-                        item[self.ITEM_PLACE] = place
-                    else:
-                        item.pop(self.ITEM_PLACE)
-                genre_map = superdesk.get_resource_service('vocabularies').find_one(req=None, _id='genre')
-                item['genre'] = [x for x in genre_map.get('items', []) if
-                                 x['qcode'] == 'Broadcast Script' and x['is_active']]
-        except Exception as ex:
-            logger.exception(ex)
-
         return item
 
 
