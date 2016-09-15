@@ -15,3 +15,4 @@ import aap.io.feed_parsers.zczc_bob  # NOQA
 import aap.io.feed_parsers.zczc_pmf  # NOQA
 import aap.io.feed_parsers.zczc_medianet  # NOQA
 import aap.io.feed_parsers.zczc_racing  # NOQA
+import aap.io.feed_parsers.zczc_sportsresults  # NOQA

@@ -11,12 +11,12 @@
 import os
 
 from superdesk.tests import TestCase
-
 from aap.io.feed_parsers.zczc import ZCZCFeedParser
 from aap.io.feed_parsers.zczc_bob import ZCZCBOBParser
 from aap.io.feed_parsers.zczc_pmf import ZCZCPMFParser
 from aap.io.feed_parsers.zczc_medianet import ZCZCMedianetParser
 from aap.io.feed_parsers.zczc_racing import ZCZCRacingParser
+from aap.io.feed_parsers.zczc_sportsresults import ZCZCSportsResultsParser
 
 
 class ZCZCTestCase(TestCase):
@@ -58,8 +58,12 @@ class ZCZCTestCase(TestCase):
     }]}, {'_id': 'genre', 'items': [{
         "name": "Broadcast Script",
         "is_active": True,
-        "qcode": "Broadcast Script"
-    }]}]
+        "qcode": "Broadcast Script"},
+        {
+            "name": "Results (sport)",
+            "is_active": True,
+            "qcode": "Results (sport)"}
+    ]}]
 
     def setUp(self):
         self.app.data.insert('validators', self.validators)
@@ -74,6 +78,18 @@ class ZCZCTestCase(TestCase):
         self.assertEqual(self.items.get('headline'), 'MOTOR:  Collated results/standings after Sydney NRMA 500')
         self.assertEqual(self.items.get('anpa_category')[0]['qcode'], 'T')
         self.assertEqual(self.items.get('subject')[0]['qcode'], '15039001')
+        self.assertIn('versioncreated', self.items)
+
+    def test_sports_results_format(self):
+        filename = 'Standings__2014_14_635535729050675896.tst'
+        dirname = os.path.dirname(os.path.realpath(__file__))
+        fixture = os.path.normpath(os.path.join(dirname, '../fixtures', filename))
+        self.provider['source'] = 'SOMETHING'
+        self.items = ZCZCSportsResultsParser().parse(fixture, self.provider)
+        self.assertEqual(self.items.get('headline'), 'MOTOR:  Collated results/standings after Sydney NRMA 500')
+        self.assertEqual(self.items.get('anpa_category')[0]['qcode'], 'T')
+        self.assertEqual(self.items.get('subject')[0]['qcode'], '15039001')
+        self.assertEqual(self.items.get('genre')[0]['qcode'], 'Results (sport)')
         self.assertIn('versioncreated', self.items)
 
     def test_medianet_format(self):
@@ -94,6 +110,7 @@ class ZCZCTestCase(TestCase):
         self.assertEqual(self.items.get('slugline'), 'Darwin Grey')
         self.assertEqual(self.items.get('anpa_category')[0]['qcode'], 'r')
         self.assertEqual(self.items.get('subject')[0]['qcode'], '15082000')
+        self.assertEqual(self.items.get('genre')[0]['qcode'], 'Results (sport)')
 
     def test_racing_format(self):
         filename = 'viflda004_7257.tst'

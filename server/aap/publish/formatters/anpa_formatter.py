@@ -9,7 +9,7 @@
 # at https://www.sourcefabric.org/superdesk/license
 from copy import deepcopy
 from superdesk.publish.formatters import Formatter
-from .aap_formatter_common import map_priority
+from .aap_formatter_common import map_priority, get_service_level
 from apps.archive.common import get_utc_schedule
 import superdesk
 from superdesk.errors import FormatterError
@@ -46,7 +46,7 @@ class AAPAnpaFormatter(Formatter):
 
                 # start of message header (syn syn soh)
                 anpa.append(b'\x16\x16\x01')
-                anpa.append(formatted_article.get('service_level', 'a').lower().encode('ascii'))
+                anpa.append(get_service_level(category, formatted_article).encode('ascii'))
 
                 # story number
                 anpa.append(str(pub_seq_num).zfill(4).encode('ascii'))
