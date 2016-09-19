@@ -4,4 +4,4 @@ pyodbc==3.0.10
 unidecode==0.04.19
 
 
-git+git://github.com/superdesk/superdesk-core.git@288ba23#egg=Superdesk-Core
+git+git://github.com/superdesk/superdesk-core.git@64123a99#egg=Superdesk-Core
