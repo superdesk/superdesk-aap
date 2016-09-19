@@ -182,6 +182,27 @@ class ANPAFormatterTest(TestCase):
         line = lines.readline()
         self.assertEqual(line.strip(), 'AAP')
 
+    def testServiceLevelFormatter(self):
+        subscriber = self.app.data.find('subscribers', None, None)[0]
+        subscriber['name'] = 'not notes'
+        service_level_article = dict(self.article.copy())
+        service_level_article['genre'] = [{'qcode': 'Results (sport)'}]
+        service_level_article['anpa_category'] = [{'qcode': 'S'}]
+        f = AAPAnpaFormatter()
+        resp = f.format(service_level_article, subscriber)[0]
+        seq = resp['published_seq_num']
+        item = resp['encoded_item']
+
+        self.assertGreater(int(seq), 0)
+
+        lines = io.StringIO(item.decode())
+
+        line = lines.readline()
+        self.assertEqual(line[:3], '')  # Skip the sequence
+
+        line = lines.readline()
+        self.assertEqual(line[0:20], 'f s bc-slugline   ')  # skip the date
+
     def testMultipleCategoryFormatter(self):
         subscriber = self.app.data.find('subscribers', None, None)[0]
         multi_article = dict(self.article.copy())

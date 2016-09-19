@@ -19,6 +19,7 @@ import json
 from .unicodetoascii import to_ascii
 from copy import deepcopy
 from .category_list_map import get_aap_category_list
+from .aap_formatter_common import get_service_level
 import re
 import textwrap
 
@@ -78,7 +79,7 @@ class AAPIpNewsFormatter(Formatter, AAPODBCFormatter):
                 if len(sign_off) > 0:
                     odbc_item['article_text'] += ' ' + sign_off
 
-                odbc_item['service_level'] = 'a'  # @service_level
+                odbc_item['service_level'] = get_service_level(category, article)  # @service_level
                 odbc_item['wordcount'] = article.get('word_count') or 0   # @wordcount
                 odbc_item['priority'] = map_priority(article.get('priority'))  # @priority
 

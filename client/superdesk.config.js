@@ -44,7 +44,8 @@ module.exports = function() {
             {value: 'BOB_zczc', name: 'AAP ZCZC (BOB) Parser'},
             {value: 'PMF_zczc', name: 'AAP ZCZC (PMF) Parser'},
             {value: 'Meadinet_zczc', name: 'AAP ZCZC (Medianet) Parser'},
-            {value: 'Racing_zczc', name: 'AAP ZCZC (RBA) Parser'},            
+            {value: 'Racing_zczc', name: 'AAP ZCZC (BRA) Parser'},
+            {value: 'Sportsresults_zczc', name: 'AAP ZCZC (Sports Results) Parser'},
             {value: 'text_file', name: 'AAP Text File'},
             {value: 'News Bites', name: 'AAP News Bites'}
         ],

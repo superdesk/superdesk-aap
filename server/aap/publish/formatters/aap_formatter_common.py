@@ -56,3 +56,16 @@ def set_subject(category, article):
                 if ref > 0:
                     subject_reference = '{0:0>8}'.format(ref)
     return subject_reference
+
+
+def get_service_level(category, article):
+    """
+    If the Genre of the article is sport result then the service level returned will be the same as the category qcode
+    :param category:
+    :param article:
+    :return:
+    """
+    if [x for x in article.get('genre', []) if x['qcode'] == 'Results (sport)']:
+        return category.get('qcode', 'a').lower()
+
+    return 'a'

@@ -14,6 +14,7 @@ from aap.errors import AAPParserError
 from datetime import datetime
 from superdesk.io.iptc import subject_codes
 from superdesk.logging import logger
+import superdesk
 
 
 class ZCZCPMFParser(ZCZCFeedParser):
@@ -59,6 +60,10 @@ class ZCZCPMFParser(ZCZCFeedParser):
                         item[self.ITEM_SUBJECT] = [{'qcode': '15030003', 'name': subject_codes['15030003']}]
                     if item.get(self.ITEM_SLUGLINE, '').find('Gallop') != -1:
                         item[self.ITEM_SUBJECT] = [{'qcode': '15030001', 'name': subject_codes['15030001']}]
+
+                genre_map = superdesk.get_resource_service('vocabularies').find_one(req=None, _id='genre')
+                item['genre'] = [x for x in genre_map.get('items', []) if
+                                 x['qcode'] == 'Results (sport)' and x['is_active']]
                 item[self.ITEM_ANPA_CATEGORY] = [{'qcode': 'r'}]
             elif item.get(self.ITEM_SLUGLINE, '').find('AFL') != -1:
                 item[self.ITEM_ANPA_CATEGORY] = [{'qcode': 't'}]
