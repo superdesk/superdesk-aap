@@ -32,10 +32,11 @@ class AAPNewscentreFormatter(Formatter, AAPODBCFormatter):
 
     def format_for_source(self, article, subscriber, source, codes=None):
         try:
+            pass_through = self.pass_through(article)
             docs = []
             for category in self._get_category_list(article.get('anpa_category')):
                 article['source'] = source
-                pub_seq_num, odbc_item = self.get_odbc_item(article, subscriber, category, codes)
+                pub_seq_num, odbc_item = self.get_odbc_item(article, subscriber, category, codes, pass_through)
                 is_last_take = self.is_last_take(article)
                 if article.get(FORMAT) == FORMATS.PRESERVED:  # @article_text
                     soup = BeautifulSoup(self.append_body_footer(article) if is_last_take else
@@ -47,7 +48,7 @@ class AAPNewscentreFormatter(Formatter, AAPODBCFormatter):
                                  article.get('body_html', '')))
 
                     if self.is_first_part(article) and 'dateline' in article \
-                            and 'text' in article.get('dateline', {}):
+                            and 'text' in article.get('dateline', {}) and not pass_through:
                         if body.startswith('   '):
                             body = '   {} {}'.format(article.get('dateline').get('text'), body[3:])
                     odbc_item['article_text'] = body.replace('\'', '\'\'')

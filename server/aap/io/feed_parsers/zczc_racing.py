@@ -28,7 +28,7 @@ class ZCZCRacingParser(ZCZCFeedParser):
         try:
             # Pagemasters sourced content is Greyhound or Trot related, maybe AFL otherwise financial
             # It is from the Racing system
-            item[self.ITEM_ANPA_CATEGORY] = [{'qcode': 'r'}]
+            item[self.ITEM_ANPA_CATEGORY] = [{'qcode': 'h'}]
             item[self.ITEM_SUBJECT] = [{'qcode': '15030001', 'name': subject_codes['15030001']}]
             lines = item['body_html'].split('\n')
             if lines[2] and lines[2].find(':SPORT -') != -1:

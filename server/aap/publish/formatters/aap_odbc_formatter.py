@@ -21,13 +21,15 @@ from bs4 import BeautifulSoup
 
 
 class AAPODBCFormatter():
-    def get_odbc_item(self, article, subscriber, category, codes):
+    def get_odbc_item(self, article, subscriber, category, codes, pass_through=False):
         """
-        Construct an odbc_item with the common key value pairs populated
+        Construct an odbc_item with the common key value pairs populated, if pass_through is true then the headline
+        original headline is maintained.
         :param article:
         :param subscriber:
         :param category:
         :param codes:
+        :param pass_through:
         :return:
         """
         article['headline'] = BeautifulSoup(article.get('headline', ''), 'html.parser').text
@@ -38,7 +40,8 @@ class AAPODBCFormatter():
                          ('\'', '\'\''),
                          keyword=SluglineMapper().map(article=article,
                                                       category=category.get('qcode').upper(),
-                                                      truncate=True).replace('\'', '\'\''),
+                                                      truncate=True).replace('\'', '\'\'') if not pass_through else
+                         (article.get('slugline','') or '').replace('\'', '\'\''),
                          subject_reference=set_subject(category, article),
                          take_key=(article.get('anpa_take_key', '') or '').replace('\'', '\'\''))
         if 'genre' in article and len(article['genre']) >= 1:
@@ -50,7 +53,8 @@ class AAPODBCFormatter():
         odbc_item['ident'] = '0'  # @ident
         odbc_item['selector_codes'] = ' '.join(codes) if codes else ' '
 
-        headline = LocatorMapper().get_formatted_headline(article, category.get('qcode').upper())
+        headline = article.get('headline') if pass_through else \
+            LocatorMapper().get_formatted_headline(article, category.get('qcode').upper())
         odbc_item['headline'] = to_ascii(headline.replace('\'', '\'\'').replace('\xA0', ' '))
 
         self.expand_subject_codes(odbc_item)

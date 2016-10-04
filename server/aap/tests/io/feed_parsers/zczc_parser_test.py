@@ -98,7 +98,7 @@ class ZCZCTestCase(TestCase):
         fixture = os.path.normpath(os.path.join(dirname, '../fixtures', filename))
         self.provider['source'] = 'MNET'
         self.items = ZCZCMedianetParser().parse(fixture, self.provider)
-        self.assertEqual(self.items.get('headline'), 'Australian Financial Security Authority')
+        self.assertEqual(self.items.get('headline'), 'Media Release: Australian Financial Security Authority')
 
     def test_pagemasters_format(self):
         filename = 'Darwin GR - Greys - Sun 11 Oct, 2015.tst'
