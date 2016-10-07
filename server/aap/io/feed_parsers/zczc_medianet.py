@@ -14,6 +14,7 @@ from aap.errors import AAPParserError
 import superdesk
 from bs4 import BeautifulSoup, NavigableString
 
+
 class ZCZCMedianetParser(ZCZCFeedParser):
 
     NAME = 'Meadinet_zczc'

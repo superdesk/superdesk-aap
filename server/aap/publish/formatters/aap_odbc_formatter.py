@@ -41,7 +41,7 @@ class AAPODBCFormatter():
                          keyword=SluglineMapper().map(article=article,
                                                       category=category.get('qcode').upper(),
                                                       truncate=True).replace('\'', '\'\'') if not pass_through else
-                         (article.get('slugline','') or '').replace('\'', '\'\''),
+                         (article.get('slugline', '') or '').replace('\'', '\'\''),
                          subject_reference=set_subject(category, article),
                          take_key=(article.get('anpa_take_key', '') or '').replace('\'', '\'\''))
         if 'genre' in article and len(article['genre']) >= 1:
