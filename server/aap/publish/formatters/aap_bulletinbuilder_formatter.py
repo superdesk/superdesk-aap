@@ -40,6 +40,7 @@ class AAPBulletinBuilderFormatter(Formatter):
         """
         try:
             formatted_article = deepcopy(article)
+
             pub_seq_num = superdesk.get_resource_service('subscribers').generate_sequence_number(subscriber)
             body_html = to_ascii(self.append_body_footer(formatted_article)).strip('\r\n')
 
@@ -67,6 +68,8 @@ class AAPBulletinBuilderFormatter(Formatter):
                 formatted_article['anpa_category'] = [cat for cat in (formatted_article.get('anpa_category') or [])
                                                       if cat.get('qcode') != 'c']
 
+            self.set_abstract_for_auto_publish(formatted_article)
+
             # get the first category and derive the locator
             category = next((iter((formatted_article.get('anpa_category') or []))), None)
 
@@ -79,7 +82,8 @@ class AAPBulletinBuilderFormatter(Formatter):
                 formatted_article['first_subject'] = set_subject(category, formatted_article)
                 formatted_article['slugline'] = self.get_text_content(
                     to_ascii(SluglineMapper().map(article=formatted_article,
-                                                  category=category.get('qcode').upper(), truncate=True)).strip())
+                                                  category=category.get('qcode').upper(),
+                                                  truncate=(not formatted_article.get('auto_publish')))).strip())
 
             odbc_item = {
                 'id': formatted_article.get(config.ID_FIELD),
@@ -126,3 +130,37 @@ class AAPBulletinBuilderFormatter(Formatter):
             tag.replace_with('{}\r\n\r\n'.format(para_text))
         else:
             tag.replace_with('')
+
+    def set_abstract_for_auto_publish(self, article):
+        """ Set the abstract from body_text if not specified in the article.
+
+        :param dict article:
+        """
+        source_dateline = {
+            'REUTERS': ' (Reuters) - ',
+            'AP': ' (AP) _ '
+        }
+
+        if not article.get('auto_publish'):
+            return
+
+        # abstract is already set
+        if article.get('abstract'):
+            return
+
+        # empty body text
+        if not article.get('body_text'):
+            return
+
+        source = (article.get('source') or '').upper()
+
+        if source in source_dateline:
+            first, source, last = article.get('body_text').partition(source_dateline.get(source))
+            if last:
+                lines = last.splitlines()
+                if lines[0].strip():
+                    article['abstract'] = lines[0].strip()
+                    return
+
+        # if not matching dateline patterns get the headline.
+        article['abstract'] = article.get('headline', '')
