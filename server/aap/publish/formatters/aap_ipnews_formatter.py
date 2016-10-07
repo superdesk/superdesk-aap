@@ -38,7 +38,7 @@ class AAPIpNewsFormatter(Formatter, AAPODBCFormatter):
         :type article: object
         :return: returns the sequence number of the subscriber and the constructed parameter dictionary
         """
-        pass_through = self.pass_through(article)
+        pass_through = article.get('auto_publish', False)
         try:
             docs = []
             for category in self._get_category_list(article.get('anpa_category')):

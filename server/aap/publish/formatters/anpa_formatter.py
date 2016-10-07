@@ -28,7 +28,7 @@ import re
 class AAPAnpaFormatter(Formatter):
     def format(self, article, subscriber, codes=None):
         try:
-            pass_through = self.pass_through(article)
+            pass_through = article.get('auto_publish', False)
             docs = []
             formatted_article = deepcopy(article)
             for category in self._get_category_list(formatted_article.get('anpa_category')):

@@ -32,7 +32,7 @@ class AAPNewscentreFormatter(Formatter, AAPODBCFormatter):
 
     def format_for_source(self, article, subscriber, source, codes=None):
         try:
-            pass_through = self.pass_through(article)
+            pass_through = article.get('auto_publish', False)
             docs = []
             for category in self._get_category_list(article.get('anpa_category')):
                 article['source'] = source
