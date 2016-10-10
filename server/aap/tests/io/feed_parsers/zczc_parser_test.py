@@ -120,7 +120,7 @@ class ZCZCTestCase(TestCase):
         self.items = ZCZCRacingParser().parse(fixture, self.provider)
         self.assertEqual(self.items.get('headline'), ' Racing.Com Park FIELDS Thursday')
         self.assertEqual(self.items.get('slugline'), ' Racing.Com Park FIELDS ')
-        self.assertEqual(self.items.get('anpa_category')[0]['qcode'], 'r')
+        self.assertEqual(self.items.get('anpa_category')[0]['qcode'], 'h')
         self.assertEqual(self.items.get('subject')[0]['qcode'], '15030001')
 
     def test_trot_tab_divs(self):
@@ -142,7 +142,7 @@ class ZCZCTestCase(TestCase):
         self.items = ZCZCRacingParser().parse(fixture, self.provider)
         self.assertEqual(self.items.get('headline'), 'Leading jockeys (Sydney)')
         self.assertEqual(self.items.get('slugline'), 'Leading jockeys (Sydney)')
-        self.assertEqual(self.items.get('anpa_category')[0]['qcode'], 'r')
+        self.assertEqual(self.items.get('anpa_category')[0]['qcode'], 'h')
         self.assertEqual(self.items.get('subject')[0]['qcode'], '15030001')
 
     def test_weights(self):
@@ -153,7 +153,7 @@ class ZCZCTestCase(TestCase):
         self.items = ZCZCRacingParser().parse(fixture, self.provider)
         self.assertEqual(self.items.get('headline'), 'STRADBROKE HANDICAP 1400M .=!')
         self.assertEqual(self.items.get('slugline'), 'STRADBROKE HANDICAP 1400')
-        self.assertEqual(self.items.get('anpa_category')[0]['qcode'], 'r')
+        self.assertEqual(self.items.get('anpa_category')[0]['qcode'], 'h')
         self.assertEqual(self.items.get('subject')[0]['qcode'], '15030001')
 
     def test_bob(self):

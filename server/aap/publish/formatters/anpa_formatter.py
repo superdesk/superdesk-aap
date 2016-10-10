@@ -28,7 +28,6 @@ import re
 class AAPAnpaFormatter(Formatter):
     def format(self, article, subscriber, codes=None):
         try:
-            pass_through = article.get('auto_publish', False)
             docs = []
             formatted_article = deepcopy(article)
             for category in self._get_category_list(formatted_article.get('anpa_category')):
@@ -90,7 +89,7 @@ class AAPAnpaFormatter(Formatter):
 
                 anpa.append(b'\x02')  # STX
 
-                self._process_headline(anpa, formatted_article, category['qcode'].encode('ascii'), pass_through)
+                self._process_headline(anpa, formatted_article, category['qcode'].encode('ascii'))
 
                 keyword = SluglineMapper().map(article=formatted_article, category=category['qcode'].upper(),
                                                truncate=True).encode('ascii', 'ignore')
@@ -119,7 +118,8 @@ class AAPAnpaFormatter(Formatter):
                 else:
                     body = to_ascii(formatted_article.get('body_html', ''))
                     # we need to inject the dateline
-                    if is_first_part and formatted_article.get('dateline', {}).get('text') and not pass_through:
+                    if is_first_part and formatted_article.get('dateline', {}).get('text') \
+                            and not article.get('auto_publish', False):
                         soup = BeautifulSoup(body, "html.parser")
                         ptag = soup.find('p')
                         if ptag is not None:
@@ -175,11 +175,10 @@ class AAPAnpaFormatter(Formatter):
         else:
             tag.replace_with('')
 
-    def _process_headline(self, anpa, article, category, pass_through):
+    def _process_headline(self, anpa, article, category):
         # prepend the locator to the headline if required
         article['headline'] = BeautifulSoup(article.get('headline', ''), 'html.parser').text
-        headline = to_ascii(LocatorMapper().get_formatted_headline(article, category.decode('UTF-8').upper())) if not \
-            pass_through else to_ascii(article.get('headline', ''))
+        headline = to_ascii(LocatorMapper().get_formatted_headline(article, category.decode('UTF-8').upper()))
 
         # Set the maximum size to 64 including the sequence number if any
         if len(headline) > 64:

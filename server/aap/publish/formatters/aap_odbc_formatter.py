@@ -53,8 +53,7 @@ class AAPODBCFormatter():
         odbc_item['ident'] = '0'  # @ident
         odbc_item['selector_codes'] = ' '.join(codes) if codes else ' '
 
-        headline = article.get('headline') if pass_through else \
-            LocatorMapper().get_formatted_headline(article, category.get('qcode').upper())
+        headline = LocatorMapper().get_formatted_headline(article, category.get('qcode').upper())
         odbc_item['headline'] = to_ascii(headline.replace('\'', '\'\'').replace('\xA0', ' '))
 
         self.expand_subject_codes(odbc_item)
