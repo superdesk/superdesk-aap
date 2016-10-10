@@ -9,23 +9,19 @@
 # at https://www.sourcefabric.org/superdesk/license
 
 from ..field_mappers import FieldMapper
-from superdesk.publish.formatters import Formatter
 
 
 class SluglineMapper(FieldMapper):
     def map(self, article, category, **kwargs):
         """
         Based on the category and genre code it returns a prefix for the slugline
+
         :param dict article: original article
         :param str category: category of the article
         :param dict kwargs: keyword args
         :return: if found then the locator as string else None
         """
-        formatter = Formatter()
-        slugline = formatter.append_legal(article=article, truncate=kwargs.get('truncate', False))
-
-        if slugline.upper().startswith('LEGAL:'):
-            return slugline
+        slugline = article.get('slugline', '') or ''
 
         # Any Article with genre Explainer gets a locator EXP
         if [x for x in article.get('genre', []) if x['qcode'] == 'Explainer']:
@@ -36,5 +32,8 @@ class SluglineMapper(FieldMapper):
         if category == 'F' and [x for x in article.get('genre', []) if x['qcode'] == 'Feature']:
             if not article.get('slugline', '').startswith('FINEX:'):
                 slugline = 'FINEX: {}'.format(article.get('slugline', ''))
+
+        if article.get('flags', {}).get('marked_for_legal', False):
+            slugline = 'Legal: {}'.format(slugline)
 
         return slugline[:24] if kwargs.get('truncate', False) else slugline

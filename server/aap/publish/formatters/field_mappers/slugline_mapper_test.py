@@ -65,5 +65,5 @@ class SelectorcodeMapperTest(TestCase):
     def test_finex_explainer_locator(self):
         self.assertEqual(self.slugline_map.map(self.article1, 'F', truncate=True), 'FINEX: SLUG1')
         self.assertEqual(self.slugline_map.map(self.article2, 'F', truncate=True), 'EXP: SLUG2')
-        self.assertEqual(self.slugline_map.map(self.article3, 'F', truncate=True), 'Legal: SLUG3')
+        self.assertEqual(self.slugline_map.map(self.article3, 'F', truncate=True), 'Legal: EXP: SLUG3')
         self.assertEqual(self.slugline_map.map(self.article4, 'F', truncate=True), 'EXP: ')
