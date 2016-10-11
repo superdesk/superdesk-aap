@@ -474,3 +474,134 @@ class AapBulletinBuilderFormatterTest(TestCase):
         self.assertEqual(test_article['first_category']['qcode'], 'c')
         self.assertEqual(len(test_article['anpa_category']), 1)
         self.assertEqual(test_article['anpa_category'][0]['qcode'], 'c')
+
+    def test_auto_publish_with_abstract(self):
+        article = {
+            'source': 'AP',
+            'anpa_category': [{'qcode': 'c'}],
+            'headline': 'This is a test headline',
+            'abstract': 'This is a test abstract',
+            'auto_publish': True,
+            'byline': 'joe',
+            'slugline': 'slugline',
+            'subject': [{'qcode': '15017000'}],
+            'anpa_take_key': 'take_key',
+            'unique_id': '1',
+            'type': 'text',
+            'format': 'HTML',
+            'body_html': 'The story body',
+            'word_count': '1',
+            'priority': '1',
+            'firstcreated': utcnow(),
+            'versioncreated': utcnow(),
+            'lock_user': ObjectId(),
+            'task': {
+                'desk': self.desks[0][config.ID_FIELD]
+            }
+        }
+
+        subscriber = self.app.data.find('subscribers', None, None)[0]
+        seq, item = self._formatter.format(article, subscriber)[0]
+        item = json.loads(item)
+        self.assertGreater(int(seq), 0)
+        test_article = json.loads(item.get('data'))
+        self.assertEqual(test_article['source'], 'AP')
+        self.assertEqual(test_article['abstract'], 'This is a test abstract')
+
+    def test_auto_publish_without_abstract_ap_content(self):
+        article = {
+            'source': 'AP',
+            'anpa_category': [{'qcode': 'c'}],
+            'headline': 'This is a test headline',
+            'auto_publish': True,
+            'byline': 'joe',
+            'slugline': 'slugline',
+            'subject': [{'qcode': '15017000'}],
+            'anpa_take_key': 'take_key',
+            'unique_id': '1',
+            'type': 'text',
+            'format': 'HTML',
+            'body_html': 'Sydney (AP) _ The story body text.',
+            'word_count': '1',
+            'priority': '1',
+            'firstcreated': utcnow(),
+            'versioncreated': utcnow(),
+            'lock_user': ObjectId(),
+            'task': {
+                'desk': self.desks[0][config.ID_FIELD]
+            }
+        }
+
+        subscriber = self.app.data.find('subscribers', None, None)[0]
+        seq, item = self._formatter.format(article, subscriber)[0]
+        item = json.loads(item)
+        self.assertGreater(int(seq), 0)
+        test_article = json.loads(item.get('data'))
+        self.assertEqual(test_article['source'], 'AP')
+        self.assertEqual(test_article['abstract'], 'The story body text.')
+
+    def test_auto_publish_without_abstract_Reuters_content(self):
+        article = {
+            'source': 'Reuters',
+            'anpa_category': [{'qcode': 'c'}],
+            'headline': 'This is a test headline',
+            'auto_publish': True,
+            'slugline': '123456789012345678901234567890',
+            'byline': 'joe',
+            'subject': [{'qcode': '15017000'}],
+            'anpa_take_key': 'take_key',
+            'unique_id': '1',
+            'type': 'text',
+            'format': 'HTML',
+            'body_html': 'Sydney (Reuters) - The story body text.',
+            'word_count': '1',
+            'priority': '1',
+            'firstcreated': utcnow(),
+            'versioncreated': utcnow(),
+            'lock_user': ObjectId(),
+            'task': {
+                'desk': self.desks[0][config.ID_FIELD]
+            }
+        }
+
+        subscriber = self.app.data.find('subscribers', None, None)[0]
+        seq, item = self._formatter.format(article, subscriber)[0]
+        item = json.loads(item)
+        self.assertGreater(int(seq), 0)
+        test_article = json.loads(item.get('data'))
+        self.assertEqual(test_article['source'], 'Reuters')
+        self.assertEqual(test_article['abstract'], 'The story body text.')
+        self.assertEqual(test_article['slugline'], '123456789012345678901234567890')
+
+    def test_auto_publish_without_abstract_other_source(self):
+        article = {
+            'source': 'AAP',
+            'anpa_category': [{'qcode': 'c'}],
+            'headline': 'This is a test headline',
+            'auto_publish': True,
+            'byline': 'joe',
+            'slugline': 'slugline',
+            'subject': [{'qcode': '15017000'}],
+            'anpa_take_key': 'take_key',
+            'unique_id': '1',
+            'type': 'text',
+            'format': 'HTML',
+            'body_html': 'Sydney (REUTERS) - The story body text.',
+            'word_count': '1',
+            'priority': '1',
+            'firstcreated': utcnow(),
+            'versioncreated': utcnow(),
+            'lock_user': ObjectId(),
+            'task': {
+                'desk': self.desks[0][config.ID_FIELD]
+            }
+        }
+
+        subscriber = self.app.data.find('subscribers', None, None)[0]
+        seq, item = self._formatter.format(article, subscriber)[0]
+        item = json.loads(item)
+        self.assertGreater(int(seq), 0)
+        test_article = json.loads(item.get('data'))
+        self.assertEqual(test_article['source'], 'AAP')
+        self.assertEqual(test_article['abstract'], 'This is a test headline')
+        self.assertEqual(test_article['slugline'], 'slugline')
