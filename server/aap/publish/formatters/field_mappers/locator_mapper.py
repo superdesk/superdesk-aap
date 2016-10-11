@@ -156,9 +156,8 @@ class LocatorMapper(FieldMapper):
         :return: Headline with locator prefix
         """
         headline = article.get('headline') or ''
-        if headline and ':' in (headline[:6]):
-            # If headline contains ':' in first six characters (legacy auto publish)
-            # could be done better with list of all locators.
+
+        if article.get('auto_publish', False):
             return headline
 
         headline_prefix = LocatorMapper().map(article, category)

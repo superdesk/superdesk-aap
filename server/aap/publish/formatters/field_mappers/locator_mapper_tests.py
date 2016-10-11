@@ -114,6 +114,7 @@ class SelectorcodeMapperTest(TestCase):
         article = {
             'headline': 'VOL:This is test headline',
             'subject': [{'qcode': '15063000'}],
+            'auto_publish': True,
             'place': [{
                 'name': 'NSW',
                 'state': '',

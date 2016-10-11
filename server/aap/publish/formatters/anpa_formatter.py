@@ -118,7 +118,8 @@ class AAPAnpaFormatter(Formatter):
                 else:
                     body = to_ascii(formatted_article.get('body_html', ''))
                     # we need to inject the dateline
-                    if is_first_part and formatted_article.get('dateline', {}).get('text'):
+                    if is_first_part and formatted_article.get('dateline', {}).get('text') \
+                            and not article.get('auto_publish', False):
                         soup = BeautifulSoup(body, "html.parser")
                         ptag = soup.find('p')
                         if ptag is not None:

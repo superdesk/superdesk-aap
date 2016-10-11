@@ -35,14 +35,16 @@ class AAPIpNewsFormatter(Formatter, AAPODBCFormatter):
     def format_for_source(self, article, subscriber, source, codes=None):
         """
         Constructs a dictionary that represents the parameters passed to the IPNews InsertNews stored procedure
+        :type article: object
         :return: returns the sequence number of the subscriber and the constructed parameter dictionary
         """
+        pass_through = article.get('auto_publish', False)
         try:
             docs = []
             for category in self._get_category_list(article.get('anpa_category')):
                 # All NZN sourced content is AAP content for the AAP output formatted
                 article['source'] = source
-                pub_seq_num, odbc_item = self.get_odbc_item(article, subscriber, category, codes)
+                pub_seq_num, odbc_item = self.get_odbc_item(article, subscriber, category, codes, pass_through)
                 # determine if this is the last take
                 is_last_take = self.is_last_take(article)
 
@@ -58,7 +60,8 @@ class AAPIpNewsFormatter(Formatter, AAPODBCFormatter):
                         to_ascii(self.append_body_footer(article) if is_last_take
                                  else article.get('body_html', ''))).replace('\'', '\'\'')
                     # if this is the first take and we have a dateline inject it
-                    if self.is_first_part(article) and 'dateline' in article and 'text' in article.get('dateline', {}):
+                    if self.is_first_part(article) and 'dateline' in article and 'text' in article.get('dateline', {})\
+                            and not pass_through:
                         if body.startswith('   '):
                             body = '   {} {}'.format(article.get('dateline')
                                                      .get('text').replace('\'', '\'\''),
