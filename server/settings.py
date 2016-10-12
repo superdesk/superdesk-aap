@@ -201,3 +201,6 @@ ELASTICSEARCH_AUTO_AGGREGATIONS = False
 
 # This setting is used to overide the desk/stage expiry for items to expire from the spike
 SPIKE_EXPIRY_MINUTES = int(env('SPIKE_EXPIRY_MINUTES', 3 * 24 * 60))
+
+#: The number of minutes before content items are purged (3 days)
+CONTENT_EXPIRY_MINUTES = int(env('CONTENT_EXPIRY_MINUTES', 3 * 24 * 60))
