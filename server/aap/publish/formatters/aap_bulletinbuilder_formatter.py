@@ -68,7 +68,7 @@ class AAPBulletinBuilderFormatter(Formatter):
                 formatted_article['anpa_category'] = [cat for cat in (formatted_article.get('anpa_category') or [])
                                                       if cat.get('qcode') != 'c']
 
-            self.set_abstract_for_auto_publish(formatted_article)
+            self._handle_auto_publish(formatted_article)
 
             # get the first category and derive the locator
             category = next((iter((formatted_article.get('anpa_category') or []))), None)
@@ -131,14 +131,14 @@ class AAPBulletinBuilderFormatter(Formatter):
         else:
             tag.replace_with('')
 
-    def set_abstract_for_auto_publish(self, article):
+    def _handle_auto_publish(self, article):
         """ Set the abstract from body_text if not specified in the article.
 
         :param dict article:
         """
         source_dateline = {
             'REUTERS': ' (Reuters) - ',
-            'AP': ' (AP) _ '
+            'AP': ' (AP) - '
         }
 
         if not article.get('auto_publish'):
@@ -154,12 +154,18 @@ class AAPBulletinBuilderFormatter(Formatter):
 
         source = (article.get('source') or '').upper()
 
+        # remove editorial notice
+        if 'EDS:' in (article.get('byline') or '').upper():
+            article['byline'] = ''
+
         if source in source_dateline:
             first, source, last = article.get('body_text').partition(source_dateline.get(source))
             if last:
                 lines = last.splitlines()
                 if lines[0].strip():
                     article['abstract'] = lines[0].strip()
+                    # strip dateline from body_text
+                    article['body_text'] = last.strip()
                     return
 
         # if not matching dateline patterns get the headline.
