@@ -54,20 +54,24 @@ class ZCZCPMFParser(ZCZCFeedParser):
                                                                                                  '')
                         item[self.ITEM_SUBJECT] = [{'qcode': '15030003', 'name': subject_codes['15030003']}]
                 else:
-                    if item.get(self.ITEM_SLUGLINE, '').find('Greyhound') != -1:
-                        item[self.ITEM_SUBJECT] = [{'qcode': '15082000', 'name': subject_codes['15082000']}]
-                    if item.get(self.ITEM_SLUGLINE, '').find('Trot') != -1:
-                        item[self.ITEM_SUBJECT] = [{'qcode': '15030003', 'name': subject_codes['15030003']}]
-                    if item.get(self.ITEM_SLUGLINE, '').find('Gallop') != -1:
-                        item[self.ITEM_SUBJECT] = [{'qcode': '15030001', 'name': subject_codes['15030001']}]
+                    # Dividends
+                    if item.get(self.ITEM_HEADLINE, '').find('TAB DIVS') != -1:
+                        item[self.ITEM_HEADLINE] = '{} {}'.format(item[self.ITEM_SLUGLINE], item[self.ITEM_HEADLINE])
+                        if item.get(self.ITEM_SLUGLINE, '').find('Greyhound') != -1:
+                            item[self.ITEM_SLUGLINE] = item.get(self.ITEM_SLUGLINE, '').replace('Greyhound', 'Greys')
+                            item[self.ITEM_SUBJECT] = [{'qcode': '15082000', 'name': subject_codes['15082000']}]
+                        if item.get(self.ITEM_SLUGLINE, '').find('Trot') != -1:
+                            item[self.ITEM_SUBJECT] = [{'qcode': '15030003', 'name': subject_codes['15030003']}]
+                        if item.get(self.ITEM_SLUGLINE, '').find('Gallop') != -1:
+                            item[self.ITEM_SUBJECT] = [{'qcode': '15030001', 'name': subject_codes['15030001']}]
 
-                genre_map = superdesk.get_resource_service('vocabularies').find_one(req=None, _id='genre')
-                item['genre'] = [x for x in genre_map.get('items', []) if
-                                 x['qcode'] == 'Results (sport)' and x['is_active']]
                 item[self.ITEM_ANPA_CATEGORY] = [{'qcode': 'r'}]
             elif item.get(self.ITEM_SLUGLINE, '').find('AFL') != -1:
                 item[self.ITEM_ANPA_CATEGORY] = [{'qcode': 't'}]
                 item[self.ITEM_SUBJECT] = [{'qcode': '15084000', 'name': subject_codes['15084000']}]
+                genre_map = superdesk.get_resource_service('vocabularies').find_one(req=None, _id='genre')
+                item['genre'] = [x for x in genre_map.get('items', []) if
+                                 x['qcode'] == 'Results (sport)' and x['is_active']]
             else:
                 item[self.ITEM_ANPA_CATEGORY] = [{'qcode': 'f'}]
                 item[self.ITEM_SUBJECT] = [{'qcode': '04000000', 'name': subject_codes['04000000']}]
