@@ -31,8 +31,17 @@ class ZCZCMedianetParser(ZCZCFeedParser):
         self.header_map = {'%': None, self.TAKEKEY: self.ITEM_TAKE_KEY}
 
     def post_process_item(self, item, provider):
-        item['slugline'] = 'Media Release'
-        item['headline'] = 'Media Release: ' + item.get(self.ITEM_TAKE_KEY, '')
+
+        InvestorRelease = (len(item.get('anpa_category', [])) and
+                           item['anpa_category'][0].get('qcode', '').lower() == 'k')
+
+        if InvestorRelease:
+            # IRW News Release:
+            item['slugline'] = 'IRW News Release'
+            item['headline'] = 'IRW News Release: ' + item.get(self.ITEM_TAKE_KEY, '')
+        else:
+            item['slugline'] = 'Media Release'
+            item['headline'] = 'Media Release: ' + item.get(self.ITEM_TAKE_KEY, '')
 
         genre_map = superdesk.get_resource_service('vocabularies').find_one(req=None, _id='genre')
         item['genre'] = [x for x in genre_map.get('items', []) if
@@ -40,7 +49,11 @@ class ZCZCMedianetParser(ZCZCFeedParser):
         soup = BeautifulSoup(item.get('body_html', ''), "html.parser")
         ptag = soup.find('pre')
         if ptag is not None:
-            ptag.insert(0, NavigableString('{} '.format('Media release distributed by AAP Medianet. \r\n\r\n\r\n')))
+            if InvestorRelease:
+                ptag.insert(0, NavigableString(
+                    '{} '.format('Investor Relations news release distributed by AAP Medianet. \r\n\r\n\r\n')))
+            else:
+                ptag.insert(0, NavigableString('{} '.format('Media release distributed by AAP Medianet. \r\n\r\n\r\n')))
             item['body_html'] = str(soup)
 
         return item

@@ -39,6 +39,8 @@ class ZCZCBOBParser(ZCZCFeedParser):
             item['body_html'] = '<p>{}</p>'.format(
                 re.sub('<p>   ', '<p>', item.get('body_html', '').replace('\n\n', '\n').replace('\n', '</p><p>')))
             if self.ITEM_PLACE in item:
+                if item[self.ITEM_PLACE]:
+                    item['headline'] = '{}: {}'.format(item[self.ITEM_PLACE], item.get(self.ITEM_HEADLINE, ''))
                 locator_map = superdesk.get_resource_service('vocabularies').find_one(req=None, _id='locators')
                 place = [x for x in locator_map.get('items', []) if
                          x['qcode'] == item.get(self.ITEM_PLACE, '').upper()]
@@ -50,6 +52,9 @@ class ZCZCBOBParser(ZCZCFeedParser):
             item['genre'] = [x for x in genre_map.get('items', []) if
                              x['qcode'] == 'Broadcast Script' and x['is_active']]
 
+            # Remove the attribution
+            item['body_html'] = item.get('body_html', '').replace('<p>AAP RTV</p>', '')
+            item['sign_off'] = 'RTV'
         except Exception as ex:
             logger.exception(ex)
 

@@ -54,16 +54,18 @@ class ZCZCTestCase(TestCase):
         "qcode": "VIC",
         "country": "Australia",
         "is_active": True,
-        "world_region": "Oceania"
-    }]}, {'_id': 'genre', 'items': [{
-        "name": "Broadcast Script",
-        "is_active": True,
-        "qcode": "Broadcast Script"},
-        {
-            "name": "Results (sport)",
-            "is_active": True,
-            "qcode": "Results (sport)"}
-    ]}]
+        "world_region": "Oceania"},
+        {"name": "QLD", "qcode": "QLD"}]},
+        {'_id': 'genre',
+         'items': [{
+             "name": "Broadcast Script",
+             "is_active": True,
+             "qcode": "Broadcast Script"},
+             {
+                 "name": "Results (sport)",
+                 "is_active": True,
+                 "qcode": "Results (sport)"}
+         ]}]
 
     def setUp(self):
         self.app.data.insert('validators', self.validators)
@@ -100,6 +102,14 @@ class ZCZCTestCase(TestCase):
         self.items = ZCZCMedianetParser().parse(fixture, self.provider)
         self.assertEqual(self.items.get('headline'), 'Media Release: Australian Financial Security Authority')
 
+    def test_medianet_investor_relations_format(self):
+        filename = 'ED_867485_4_2.tst'
+        dirname = os.path.dirname(os.path.realpath(__file__))
+        fixture = os.path.normpath(os.path.join(dirname, '../fixtures', filename))
+        self.provider['source'] = 'MNET'
+        self.items = ZCZCMedianetParser().parse(fixture, self.provider)
+        self.assertEqual(self.items.get('headline'), 'IRW News Release: Master Builders Australia')
+
     def test_pagemasters_format(self):
         filename = 'Darwin GR - Greys - Sun 11 Oct, 2015.tst'
         dirname = os.path.dirname(os.path.realpath(__file__))
@@ -110,7 +120,6 @@ class ZCZCTestCase(TestCase):
         self.assertEqual(self.items.get('slugline'), 'Darwin Grey')
         self.assertEqual(self.items.get('anpa_category')[0]['qcode'], 'r')
         self.assertEqual(self.items.get('subject')[0]['qcode'], '15082000')
-        self.assertEqual(self.items.get('genre')[0]['qcode'], 'Results (sport)')
 
     def test_racing_format(self):
         filename = 'viflda004_7257.tst'
@@ -123,13 +132,36 @@ class ZCZCTestCase(TestCase):
         self.assertEqual(self.items.get('anpa_category')[0]['qcode'], 'h')
         self.assertEqual(self.items.get('subject')[0]['qcode'], '15030001')
 
+    def test_racing_format_2(self):
+        filename = 'vifrc7_5254.tst'
+        dirname = os.path.dirname(os.path.realpath(__file__))
+        fixture = os.path.normpath(os.path.join(dirname, '../fixtures', filename))
+        self.provider['source'] = 'BRA'
+        self.items = ZCZCRacingParser().parse(fixture, self.provider)
+        self.assertEqual(self.items.get('headline'), 'Wodonga Comment Saturday races 1-6')
+        self.assertEqual(self.items.get('slugline'), 'Wodonga Comment')
+        self.assertEqual(self.items.get('anpa_take_key'), 'Saturday races 1-6')
+        self.assertEqual(self.items.get('anpa_category')[0]['qcode'], 'h')
+        self.assertEqual(self.items.get('subject')[0]['qcode'], '15030001')
+
+    def test_racing_format_3(self):
+        filename = 'vicomb004_8511.tst'
+        dirname = os.path.dirname(os.path.realpath(__file__))
+        fixture = os.path.normpath(os.path.join(dirname, '../fixtures', filename))
+        self.provider['source'] = 'BRA'
+        self.items = ZCZCRacingParser().parse(fixture, self.provider)
+        self.assertEqual(self.items.get('headline'), 'Eagle Farm MARKET DAY')
+        self.assertEqual(self.items.get('slugline'), 'Eagle Farm MARKET DAY')
+        self.assertEqual(self.items.get('anpa_category')[0]['qcode'], 'h')
+        self.assertEqual(self.items.get('subject')[0]['qcode'], '15030001')
+
     def test_trot_tab_divs(self):
         filename = 'Wagga Trot VIC TAB DIVS 1-4 Friday.tst'
         dirname = os.path.dirname(os.path.realpath(__file__))
         fixture = os.path.normpath(os.path.join(dirname, '../fixtures', filename))
         self.provider['source'] = 'PMF'
         self.items = ZCZCPMFParser().parse(fixture, self.provider)
-        self.assertEqual(self.items.get('headline'), 'VIC TAB DIVS 1-4 Friday')
+        self.assertEqual(self.items.get('headline'), 'Wagga Trot VIC TAB DIVS 1-4 Friday')
         self.assertEqual(self.items.get('slugline'), 'Wagga Trot')
         self.assertEqual(self.items.get('anpa_category')[0]['qcode'], 'r')
         self.assertEqual(self.items.get('subject')[0]['qcode'], '15030003')
@@ -164,7 +196,7 @@ class ZCZCTestCase(TestCase):
         self.items = ZCZCBOBParser().parse(fixture, self.provider)
         self.assertEqual(self.items.get('slugline'), 'Legionella_BC1')
         self.assertEqual(self.items.get('anpa_category')[0]['qcode'], 'A')
-        self.assertEqual(self.items.get('headline'), 'Legionella found in Qld hospital')
+        self.assertEqual(self.items.get('headline'), 'QLD: Legionella found in Qld hospital')
         self.assertEqual(self.items.get('anpa_take_key'), '(BRISBANE)')
         self.assertEqual(self.items.get('subject')[0]['qcode'], '07000000')
         self.assertTrue(self.items.get('body_html').startswith('<p>Legionella bacteria has been found in a regional'))
@@ -177,10 +209,19 @@ class ZCZCTestCase(TestCase):
         self.items = ZCZCBOBParser().parse(fixture, self.provider)
         self.assertEqual(self.items.get('slugline'), 'Legal: Causevic_BC6')
         self.assertEqual(self.items.get('anpa_category')[0]['qcode'], 'A')
-        self.assertEqual(self.items.get('headline'), 'GPS device to come off Vic teen ')
+        self.assertEqual(self.items.get('headline'), 'Vic: GPS device to come off Vic teen ')
         self.assertEqual(self.items.get('anpa_take_key'), '(MELBOURNE)')
         self.assertEqual(self.items.get('subject')[0]['qcode'], '02000000')
         self.assertTrue(self.items.get('body_html').startswith('<p>A former Melbourne terror suspect no '
                                                                'longer needs to wear'))
         self.assertEqual(self.items.get('place')[0].get('state'), 'Victoria')
         self.assertEqual(self.items.get('genre')[0].get('name'), 'Broadcast Script')
+
+    def test_greyhound_divs(self):
+        filename = 'Warragul Greyhound NSW TAB DIVS 1-11 Thursday.tst'
+        dirname = os.path.dirname(os.path.realpath(__file__))
+        fixture = os.path.normpath(os.path.join(dirname, '../fixtures', filename))
+        self.provider['source'] = 'PMF'
+        self.items = ZCZCPMFParser().parse(fixture, self.provider)
+        self.assertEqual(self.items.get('headline'), 'Warragul Greyhound NSW TAB DIVS 1-11 Thursday')
+        self.assertEqual(self.items.get('slugline'), 'Warragul Greys')
