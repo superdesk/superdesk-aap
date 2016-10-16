@@ -24,6 +24,13 @@ class ZCZCRacingParser(ZCZCFeedParser):
         super().set_item_defaults(item, provider)
         item[FORMAT] = FORMATS.PRESERVED
 
+    def _scan_lines(self, item, lines):
+        for line_num in range(3, min(len(lines), 6)):
+            if lines[line_num] != '':
+                item[self.ITEM_HEADLINE] = lines[line_num].strip()
+                item[self.ITEM_SLUGLINE] = lines[line_num].strip()
+                break
+
     def post_process_item(self, item, provider):
         try:
             # Pagemasters sourced content is Greyhound or Trot related, maybe AFL otherwise financial
@@ -38,19 +45,23 @@ class ZCZCRacingParser(ZCZCFeedParser):
             elif lines[1] and lines[1].find('RACING : ') != -1:
                 item[self.ITEM_HEADLINE] = lines[1][8:]
                 item[self.ITEM_SLUGLINE] = lines[1][8:]
-            elif lines[0] and lines[0].find('YY FORM') != -1:
-                item[self.ITEM_HEADLINE] = lines[1]
-                item[self.ITEM_SLUGLINE] = lines[1]
             elif lines[1] and lines[1].find(':POTTED :') != -1:
                 item[self.ITEM_HEADLINE] = lines[1][9:]
                 item[self.ITEM_SLUGLINE] = lines[1][9:]
+            elif lines[1] and lines[1].find(':PREMIERSHIP') != -1:
+                self._scan_lines(item, lines)
+            elif lines[1] and lines[1].find(' WEIGHTS ') != -1:
+                self._scan_lines(item, lines)
+            elif lines[0] and lines[0].find('YY ') != -1:
+                item[self.ITEM_HEADLINE] = lines[1]
+                item[self.ITEM_SLUGLINE] = lines[1]
+                if lines[1].find(' Comment ') != -1:
+                    item[self.ITEM_SLUGLINE] = lines[1][:(lines[1].find(' Comment ') + 8)]
+                    item[self.ITEM_TAKE_KEY] = lines[1][(lines[1].find(' Comment ') + 9):]
             else:
-                for line_num in range(3, min(len(lines), 6)):
-                    if lines[line_num] != '':
-                        item[self.ITEM_HEADLINE] = lines[line_num].strip()
-                        item[self.ITEM_SLUGLINE] = lines[line_num].strip()
-                        break
-            # Truncate the slugline and headline to the lengths defined on the validators if required if required
+                self._scan_lines(item, lines)
+
+            # Truncate the slugline and headline to the lengths defined on the validators if required
             lookup = {'act': ITEM_PUBLISH, 'type': CONTENT_TYPE.TEXT}
             validators = superdesk.get_resource_service('validators').get(req=None, lookup=lookup)
             if validators.count():
