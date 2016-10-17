@@ -13,7 +13,7 @@ import requests
 from superdesk.utc import utcnow
 from eve.utils import ParsedRequest
 import json
-from superdesk.factory.default_settings import ELASTICSEARCH_INDEX, ELASTICSEARCH_URL
+from superdesk.default_settings import ELASTICSEARCH_INDEX, ELASTICSEARCH_URL
 
 
 class CompareRepositories(superdesk.Command):
