@@ -521,7 +521,7 @@ class AapBulletinBuilderFormatterTest(TestCase):
             'unique_id': '1',
             'type': 'text',
             'format': 'HTML',
-            'body_html': 'Sydney (AP) _ The story body text.',
+            'body_html': '<p>Sydney (AP) - The story body text.</p><p>This is second paragraph</p>',
             'word_count': '1',
             'priority': '1',
             'firstcreated': utcnow(),
@@ -539,6 +539,7 @@ class AapBulletinBuilderFormatterTest(TestCase):
         test_article = json.loads(item.get('data'))
         self.assertEqual(test_article['source'], 'AP')
         self.assertEqual(test_article['abstract'], 'The story body text.')
+        self.assertEqual(test_article['body_text'], 'The story body text.\r\n\r\nThis is second paragraph')
 
     def test_auto_publish_without_abstract_Reuters_content(self):
         article = {
@@ -572,6 +573,7 @@ class AapBulletinBuilderFormatterTest(TestCase):
         self.assertEqual(test_article['source'], 'Reuters')
         self.assertEqual(test_article['abstract'], 'The story body text.')
         self.assertEqual(test_article['slugline'], '123456789012345678901234567890')
+        self.assertEqual(test_article['body_text'], 'The story body text.')
 
     def test_auto_publish_without_abstract_other_source(self):
         article = {
@@ -586,7 +588,7 @@ class AapBulletinBuilderFormatterTest(TestCase):
             'unique_id': '1',
             'type': 'text',
             'format': 'HTML',
-            'body_html': 'Sydney (REUTERS) - The story body text.',
+            'body_html': 'Sydney, AAP - The story body text.',
             'word_count': '1',
             'priority': '1',
             'firstcreated': utcnow(),
@@ -605,3 +607,4 @@ class AapBulletinBuilderFormatterTest(TestCase):
         self.assertEqual(test_article['source'], 'AAP')
         self.assertEqual(test_article['abstract'], 'This is a test headline')
         self.assertEqual(test_article['slugline'], 'slugline')
+        self.assertEqual(test_article['body_text'], 'Sydney, AAP - The story body text.')
