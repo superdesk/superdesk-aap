@@ -57,7 +57,7 @@ class ZCZCPMFParser(ZCZCFeedParser):
                 else:
                     # Dividends
                     if item.get(self.ITEM_HEADLINE, '').find('TAB DIVS') != -1:
-                        item[self.ITEM_TAKE_KEY] = re.sub(' Monday$| Tuesday$| Wednesay$| Thursday$| Friday$',
+                        item[self.ITEM_TAKE_KEY] = re.sub(' Monday$| Tuesday$| Wednesday$| Thursday$| Friday$',
                                                           '', item[self.ITEM_HEADLINE])
                         item[self.ITEM_HEADLINE] = '{} {}'.format(item[self.ITEM_SLUGLINE], item[self.ITEM_HEADLINE])
                         if item.get(self.ITEM_SLUGLINE, '').find('Greyhound') != -1:
