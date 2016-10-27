@@ -35,6 +35,7 @@ class LocatorMapper(FieldMapper):
     iptc_sports_locators = {
         '15084000': 'AFL',
         '15005000': 'ATHS',
+        '15004000': 'ARC',
         '15006000': 'BAD',
         '15007000': 'BASE',
         '15008000': 'BASK',
@@ -43,6 +44,7 @@ class LocatorMapper(FieldMapper):
         '15067001': 'BVO',
         '15017000': 'CRIK',
         '15019000': 'CYCLE',
+        '10001002': 'CHESS',  # chess is not a sport according to IPTC
         '15100000': 'DAR',
         '15021000': 'DIVE',
         '15022000': 'EQN',
@@ -56,7 +58,9 @@ class LocatorMapper(FieldMapper):
         '15066000': 'TRI',  # and IRON
         '15033000': 'JUDO',
         '15015000': 'KAYAK',  # and CANOE
-        '15039000': 'MOTOR',
+        '15039000': 'MOTOR',  # motor racing
+        '15040000': 'MOTOR',  # motor rallying
+        '15041000': 'MOTOR',  # motor cycling
         '15042000': 'NET',
         '15003001': 'NFL',
         '15073001': 'OLY',
@@ -86,7 +90,8 @@ class LocatorMapper(FieldMapper):
         '15067000': 'VOL',
         '15070000': 'WGHT',
         '15068000': 'WPOL',
-        '15072000': 'WRES'
+        '15072000': 'WRES',
+        '15069000': 'WSKI'
     }
 
     sport_categories = {'S', 'T', 'R'}
