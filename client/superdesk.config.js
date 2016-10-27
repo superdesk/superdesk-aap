@@ -30,7 +30,7 @@ module.exports = function() {
             slugline: 1, headline: 1, unique_name: 1, story_text: 1,
             byline: 1, keywords: 1, creator: 1, from_desk: 1,
             to_desk: 1, spike: 1, scheduled: 1, company_codes: 1,
-            useDefaultTimezone: 1, ingest_provider: 1
+            useDefaultTimezone: 1, ingest_provider: 1, raw_search: 1
         },
         
         previewFormats: [{
@@ -85,6 +85,7 @@ module.exports = function() {
 
         langOverride: {
             'en': {
+                "Advanced Search": "Advanced",
                 "URGENCY": "NEWS VALUE",
                 "Urgency": "News Value",
                 "urgency": "news value",
@@ -101,6 +102,7 @@ module.exports = function() {
             },
 
             'en_GB': {
+                "Advanced Search": "Advanced",
                 "URGENCY": "NEWS VALUE",
                 "Urgency": "News Value",
                 "urgency": "news value",
@@ -117,6 +119,7 @@ module.exports = function() {
             },
 
             'en_US': {
+                "Advanced Search": "Advanced",
                 "URGENCY": "NEWS VALUE",
                 "Urgency": "News Value",
                 "urgency": "news value",
@@ -133,6 +136,7 @@ module.exports = function() {
             },
 
             'en_AU': {
+                "Advanced Search": "Advanced",
                 "URGENCY": "NEWS VALUE",
                 "Urgency": "News Value",
                 "urgency": "news value",
