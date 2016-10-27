@@ -14,6 +14,7 @@ from aap.errors import AAPParserError
 from datetime import datetime
 from superdesk.io.iptc import subject_codes
 from superdesk.logging import logger
+import re
 import superdesk
 
 
@@ -56,6 +57,8 @@ class ZCZCPMFParser(ZCZCFeedParser):
                 else:
                     # Dividends
                     if item.get(self.ITEM_HEADLINE, '').find('TAB DIVS') != -1:
+                        item[self.ITEM_TAKE_KEY] = re.sub(' Monday$| Tuesday$| Wednesday$| Thursday$| Friday$',
+                                                          '', item[self.ITEM_HEADLINE])
                         item[self.ITEM_HEADLINE] = '{} {}'.format(item[self.ITEM_SLUGLINE], item[self.ITEM_HEADLINE])
                         if item.get(self.ITEM_SLUGLINE, '').find('Greyhound') != -1:
                             item[self.ITEM_SLUGLINE] = item.get(self.ITEM_SLUGLINE, '').replace('Greyhound', 'Greys')
