@@ -48,7 +48,8 @@ module.exports = function() {
             {value: 'Racing_zczc', name: 'AAP ZCZC (BRA) Parser'},
             {value: 'Sportsresults_zczc', name: 'AAP ZCZC (Sports Results) Parser'},
             {value: 'text_file', name: 'AAP Text File'},
-            {value: 'News Bites', name: 'AAP News Bites'}
+            {value: 'News Bites', name: 'AAP News Bites'},
+            {value: 'PDAResults', name: 'PDA Results'}
         ],
 
         defaultTimezone: 'Australia/Sydney',
