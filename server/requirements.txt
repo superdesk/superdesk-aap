@@ -3,4 +3,4 @@ honcho==0.6.6
 pyodbc==3.0.10
 unidecode==0.04.19
 
-git+git://github.com/superdesk/superdesk-core.git@92f9c8f5b#egg=Superdesk-Core
+git+git://github.com/superdesk/superdesk-core.git@741998d72#egg=Superdesk-Core
