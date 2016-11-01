@@ -26,7 +26,7 @@ class AAPSMSFormatter(Formatter):
         """
         try:
             pub_seq_num = superdesk.get_resource_service('subscribers').generate_sequence_number(subscriber)
-            sms_message = article.get('sms_message', article.get('headline', '')).replace('\'', '\'\'')
+            sms_message = article.get('sms_message', article.get('abstract', '')).replace('\'', '\'\'')
 
             # category = 1 is used to indicate a test message
             category = '1' if superdesk.app.config.get('TEST_SMS_OUTPUT', True) is True \
@@ -63,7 +63,7 @@ class AAPSMSFormatter(Formatter):
                 "filter": {
                     "and": [
                         {"term": {"state": CONTENT_STATE.PUBLISHED}},
-                        {"term": {"sms_message": article.get('sms_message', article.get('headline', ''))}},
+                        {"term": {"sms_message": article.get('sms_message', article.get('abstract', ''))}},
                         {"term": {"flags.marked_for_sms": True}},
                         {"not": {"term": {"queue_state": "in_progress"}}}
                     ]

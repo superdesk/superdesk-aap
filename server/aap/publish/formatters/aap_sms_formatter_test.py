@@ -27,7 +27,7 @@ class AapSMSFormatterTest(TestCase):
     article1 = {
         'priority': 1,
         'anpa_category': [{'qcode': 'a'}],
-        'headline': 'This is a test headline',
+        'abstract': 'This is a test headline',
         'type': 'text',
         'body_html': 'The story body',
         'body_footer': 'call helpline 999 if you are planning to quit smoking'
@@ -36,7 +36,7 @@ class AapSMSFormatterTest(TestCase):
     article2 = {
         'priority': 1,
         'anpa_category': [{'qcode': 'a'}],
-        'headline': 'This is a test headline',
+        'abstract': 'This is a test headline',
         'sms_message': 'This is the sms message',
         'type': 'text',
         'body_html': 'The story body',
@@ -46,7 +46,7 @@ class AapSMSFormatterTest(TestCase):
     article3 = {
         'priority': 1,
         'anpa_category': [{'qcode': 'a'}],
-        'headline': 'This is a test headline',
+        'abstract': 'This is a test headline',
         'sms_message': 'dont send again',
         'type': 'text',
         'body_html': 'The story body',
@@ -56,7 +56,7 @@ class AapSMSFormatterTest(TestCase):
     article4 = {
         'priority': 1,
         'anpa_category': [{'qcode': 'a'}],
-        'headline': 'This is a test headline',
+        'abstract': 'This is a test headline',
         'sms_message': '<p>not marked up string</p>',
         'type': 'text',
         'body_html': 'The story body',
