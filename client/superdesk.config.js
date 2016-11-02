@@ -78,8 +78,7 @@ module.exports = function() {
                 'updated',
                 'category',
                 'provider',
-                'expiry',
-                'desk'
+                'expiry'
             ]
         },
 
