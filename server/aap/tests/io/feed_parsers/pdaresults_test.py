@@ -1,0 +1,73 @@
+# -*- coding: utf-8; -*-
+#
+# This file is part of Superdesk.
+#
+# Copyright 2013, 2014 Sourcefabric z.u. and contributors.
+#
+# For the full copyright and license information, please see the
+# AUTHORS and LICENSE files distributed with this source code, or
+# at https://www.sourcefabric.org/superdesk/license
+
+import os
+from aap.io.feed_parsers.pdaresults import PDAResultsParser
+from superdesk.tests import TestCase
+
+
+class PDAResultsTestCase(TestCase):
+    provider = {'name': 'test provder', 'provider': {}}
+
+    def test_default_format(self):
+        filename = 'RR_20161025_CRANBOURNE_6.tst'
+        dirname = os.path.dirname(os.path.realpath(__file__))
+        fixture = os.path.normpath(os.path.join(dirname, '../fixtures', filename))
+        self.provider['source'] = 'SOMETHING'
+        self.items = PDAResultsParser().parse(fixture, self.provider)
+        self.assertEqual(self.items.get('headline'), 'CRANBOURNE Gallop Result 6 Melbourne Tuesday')
+        self.assertEqual(self.items.get('anpa_category')[0]['qcode'], 'r')
+        self.assertEqual(self.items.get('subject')[0]['qcode'], '15030001')
+        self.assertEqual(self.items.get('slugline'), 'CRANBOURNE Gallop')
+        self.assertIn('versioncreated', self.items)
+
+    def test_news_format(self):
+        filename = 'NLRR_20161026_DOOMBEN_6.tst'
+        dirname = os.path.dirname(os.path.realpath(__file__))
+        fixture = os.path.normpath(os.path.join(dirname, '../fixtures', filename))
+        self.provider['source'] = 'SOMETHING'
+        self.items = PDAResultsParser().parse(fixture, self.provider)
+        self.assertEqual(self.items.get('headline'), 'NEWS: DOOMBEN Gallop Result 6 Brisbane Wednesday')
+        self.assertEqual(self.items.get('anpa_category')[0]['qcode'], 'r')
+        self.assertEqual(self.items.get('subject')[0]['qcode'], '15030001')
+        self.assertEqual(self.items.get('slugline'), 'NEWS: DOOMBEN Gallop')
+        self.assertIn('versioncreated', self.items)
+
+    def test_shdrace_format(self):
+        filename = 'HRRR_20161026_CANTERBURY_6.tst'
+        dirname = os.path.dirname(os.path.realpath(__file__))
+        fixture = os.path.normpath(os.path.join(dirname, '../fixtures', filename))
+        self.provider['source'] = 'SOMETHING'
+        self.items = PDAResultsParser().parse(fixture, self.provider)
+        self.assertEqual(self.items.get('headline'), 'SHDRACE: CANTERBURY Gallop Result 6 Sydney Wednesday')
+        self.assertEqual(self.items.get('anpa_category')[0]['qcode'], 'r')
+        self.assertEqual(self.items.get('subject')[0]['qcode'], '15030001')
+        self.assertEqual(self.items.get('slugline'), 'SHDRACE: CANTERBURY Gallop')
+        self.assertIn('versioncreated', self.items)
+
+    def test_multiple_race_number_format(self):
+        filename = 'RR_20161026_CANTERBURY_1-1.tst'
+        dirname = os.path.dirname(os.path.realpath(__file__))
+        fixture = os.path.normpath(os.path.join(dirname, '../fixtures', filename))
+        self.provider['source'] = 'SOMETHING'
+        self.items = PDAResultsParser().parse(fixture, self.provider)
+        self.assertEqual(self.items.get('headline'), 'RPTG CRTG CANTERBURY Gallop Results 1-1 Sydney Wednesday')
+        self.assertEqual(self.items.get('anpa_category')[0]['qcode'], 'r')
+        self.assertEqual(self.items.get('subject')[0]['qcode'], '15030001')
+        self.assertEqual(self.items.get('slugline'), 'CANTERBURY Gallop')
+        self.assertEqual(self.items.get('anpa_take_key'), 'Results 1-1 Sydney')
+        self.assertIn('versioncreated', self.items)
+
+    def test_can_parse(self):
+        filename = 'RR_20161026_CANTERBURY_1-1.tst'
+        dirname = os.path.dirname(os.path.realpath(__file__))
+        fixture = os.path.normpath(os.path.join(dirname, '../fixtures', filename))
+        result = PDAResultsParser().can_parse(fixture)
+        self.assertTrue(result)
