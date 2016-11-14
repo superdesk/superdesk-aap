@@ -225,3 +225,4 @@ class ZCZCTestCase(TestCase):
         self.items = ZCZCPMFParser().parse(fixture, self.provider)
         self.assertEqual(self.items.get('headline'), 'Warragul Greyhound NSW TAB DIVS 1-11 Thursday')
         self.assertEqual(self.items.get('slugline'), 'Warragul Greys')
+        self.assertEqual(self.items.get('anpa_take_key'), 'NSW TAB DIVS 1-11')
