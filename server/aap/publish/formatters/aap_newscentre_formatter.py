@@ -53,9 +53,10 @@ class AAPNewscentreFormatter(Formatter, AAPODBCFormatter):
                             body = '   {} {}'.format(article.get('dateline').get('text'), body[3:])
                     odbc_item['article_text'] = body.replace('\'', '\'\'')
 
-                if self.is_first_part(article):
+                if self.is_first_part(article) and not pass_through:
                     self.add_ednote(odbc_item, article)
                     self.add_embargo(odbc_item, article)
+                    self.add_byline(odbc_item, article)
 
                 if not is_last_take:
                     odbc_item['article_text'] += '\r\nMORE'
@@ -73,6 +74,20 @@ class AAPNewscentreFormatter(Formatter, AAPODBCFormatter):
             return docs
         except Exception as ex:
             raise FormatterError.AAPNewscentreFormatterError(ex, subscriber)
+
+    def add_byline(self, odbc_item, article):
+        """
+        Add the byline to the article text
+        :param odbc_item:
+        :param article:
+        :return:
+        """
+        if article.get('byline') and article.get('byline') != '':
+            byline = BeautifulSoup(article.get('byline', ''), 'html.parser').text
+            if len(byline) >= 3 and byline[:2].upper() != 'BY':
+                byline = 'By ' + byline
+            byline = '   {}\r\n\r\n'.format(byline).replace('\'', '\'\'')
+            odbc_item['article_text'] = byline + odbc_item['article_text']
 
     def _get_category_list(self, category_list):
         return get_aap_category_list(category_list)

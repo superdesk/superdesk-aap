@@ -80,7 +80,8 @@ class AapIpNewsFormatterTest(TestCase):
         self.assertDictEqual(item,
                              {'category': 'a', 'texttab': 't', 'fullStory': 1, 'ident': '0',
                               'headline': 'VIC:This is a test headline', 'service_level': 'a', 'originator': 'AAP',
-                              'take_key': 'take_key', 'article_text': 'The story body\r\nAAP', 'priority': 'f',
+                              'take_key': 'take_key', 'article_text': '\x19   By joe\x19\r\nThe story body\r\nAAP',
+                              'priority': 'f',
                               'usn': '1',
                               'subject_matter': 'international law', 'news_item_type': 'News',
                               'subject_reference': '02011001', 'subject': 'crime, law and justice',
@@ -118,8 +119,8 @@ class AapIpNewsFormatterTest(TestCase):
         seq, item = f.format(article, subscriber)[0]
         item = json.loads(item)
 
-        expected = '   The story body line 1\r\nLine 2\r\n   abcdefghi abcdefghi abcdefghi abcdefghi ' \
-                   'abcdefghi abcdefghi abcdefghi abcdefghi\r\n\r\nMORE'
+        expected = '\x19   By joe\x19\r\n   The story body line 1\r\nLine 2\r\n   abcdefghi abcdefghi abcdefghi ' \
+                   'abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi\r\n\r\nMORE'
         self.assertEqual(item['article_text'], expected)
         self.assertEqual(item['headline'], 'This is a test headline')
         self.assertEqual(item['author'], 'joe')
@@ -153,7 +154,8 @@ class AapIpNewsFormatterTest(TestCase):
         f = AAPIpNewsFormatter()
         seq, item = f.format(article, subscriber)[0]
         item = json.loads(item)
-        expected = '   The story body line 1\r\nLine 2\r\n   abcdefghi abcdefghi abcdefghi abcdefghi ' \
+        expected = '\x19   By joe\x19\r\n   The story body line 1\r\nLine 2\r\n   abcdefghi abcdefghi ' \
+                   'abcdefghi abcdefghi ' \
                    'abcdefghi abcdefghi abcdefghi abcdefghi\r\n\r\nAAP'
         self.assertEqual(item['article_text'], expected)
 
@@ -194,7 +196,8 @@ class AapIpNewsFormatterTest(TestCase):
         seq, item = f.format(article, subscriber)[0]
         item = json.loads(item)
 
-        expected = '   Kathmandu Holdings has lodged a claim in the New Zealand HighCourt for the \r\n' + \
+        expected = '\x19   By joe\x19\r\n   Kathmandu Holdings has lodged a claim in ' + \
+            'the New Zealand HighCourt for the \r\n' + \
             'recovery of costs associated with last years takeover bid from BriscoeGroup.\r\n' + \
             '   Kathmandu Holdings has lodged a claim in the New Zealand High Court for the \r\nrecovery of ' + \
             'costs associated with last years takeover bid from Briscoe Group.\r\n   Kathmandu ' + \
@@ -266,7 +269,7 @@ class AapIpNewsFormatterTest(TestCase):
         expected = '   * 74.98 US cents, from 74.41 cents on Wednesday'
 
         self.maxDiff = None
-        self.assertEqual(item['article_text'].split('\x19\r\n')[11], expected)
+        self.assertEqual(item['article_text'].split('\x19\r\n')[12], expected)
 
     def testStraySpaceContent(self):
         article = {
@@ -297,7 +300,7 @@ class AapIpNewsFormatterTest(TestCase):
         f = AAPIpNewsFormatter()
         seq, item = f.format(article, subscriber)[0]
         item = json.loads(item)
-        expected = '   "However\r\n   "The proposed\r\n\r\nAAP'
+        expected = '\x19   By joe\x19\r\n   "However\r\n   "The proposed\r\n\r\nAAP'
         self.maxDiff = None
         self.assertEqual(item['article_text'], expected)
 
@@ -328,7 +331,7 @@ class AapIpNewsFormatterTest(TestCase):
         f = AAPIpNewsFormatter()
         seq, item = f.format(article, subscriber)[0]
         item = json.loads(item)
-        expected = '   Tommi Makinen crashes a Skoda in Appelbo\r\n\r\nAAP'
+        expected = '\x19   By joe\x19\r\n   Tommi Makinen crashes a Skoda in Appelbo\r\n\r\nAAP'
         self.maxDiff = None
         self.assertEqual(item['article_text'], expected)
 
@@ -359,7 +362,7 @@ class AapIpNewsFormatterTest(TestCase):
         f = AAPIpNewsFormatter()
         seq, item = f.format(article, subscriber)[0]
         item = json.loads(item)
-        expected = '   a b c d e f g\r\n\r\nAAP'
+        expected = '\x19   By joe\x19\r\n   a b c d e f g\r\n\r\nAAP'
         self.assertEqual(item['article_text'], expected)
 
     def testNullTakeKeyContent(self):
@@ -420,7 +423,7 @@ class AapIpNewsFormatterTest(TestCase):
         f = AAPIpNewsFormatter()
         seq, item = f.format(article, subscriber)[0]
         item = json.loads(item)
-        expected = '     \r\n\r\nAAP'
+        expected = '\x19   By joe\x19\r\n     \r\n\r\nAAP'
         self.assertEqual(item['article_text'], expected)
 
     def testMultipleCategories(self):
@@ -647,7 +650,8 @@ class AapIpNewsFormatterTest(TestCase):
                              {'category': 'a', 'texttab': 't', 'fullStory': 1, 'ident': '0',
                               'headline': 'VIC:This is a test headline', 'service_level': 'a', 'originator': 'AAP',
                               'take_key': 'take_key',
-                              'article_text': 'The story body\r\ncall helpline 999 if you are planning to '
+                              'article_text': '\x19   By joe\x19\r\nThe story body\r\ncall helpline 999 if you '
+                              'are planning to '
                               'quit smoking\r\nAAP',
                               'priority': 'f', 'usn': '1',
                               'subject_matter': 'international law', 'news_item_type': 'News',
@@ -675,7 +679,8 @@ class AapIpNewsFormatterTest(TestCase):
                              {'category': 'a', 'texttab': 't', 'fullStory': 1, 'ident': '0',
                               'headline': 'VIC:This is a test headline', 'service_level': 'a', 'originator': 'AAP',
                               'take_key': 'take_key',
-                              'article_text': '  The story\r\n body\r\n  second line\r\n\r\n\r\ncall helpline '
+                              'article_text': '\x19   By joe\x19\r\n  The story\r\n body\r\n  second '
+                                              'line\r\n\r\n\r\ncall helpline '
                                               '999 if you are planning to quit smoking\r\nAAP',
                               'priority': 'f', 'usn': '1',
                               'subject_matter': 'international law', 'news_item_type': 'News',
@@ -712,7 +717,8 @@ class AapIpNewsFormatterTest(TestCase):
         f = AAPIpNewsFormatter()
         seq, item = f.format(article, subscriber)[0]
         item = json.loads(item)
-        expected = '   Economy\r\n   The latest national accounts.\r\n   Farm\r\n   If you ask Treasurer\r\n   ' \
+        expected = '\x19   By joe\x19\r\n   Economy\r\n   The latest national accounts.' \
+            '\r\n   Farm\r\n   If you ask Treasurer\r\n   ' \
             'Turnbull Howard\r\n   Former prime minister John Howard believes\r\n\r\nAAP'
         self.assertEqual(item['article_text'], expected)
 
@@ -814,6 +820,29 @@ class AapIpNewsFormatterTest(TestCase):
         seq, item = f.format(article, subscriber)[0]
         item = json.loads(item)
         self.assertEqual(item['service_level'], 's')
+
+    def testHeadlineEscape(self):
+        article = {
+            '_id': '3',
+            'source': 'AAP',
+            'anpa_category': [{'qcode': 's'}],
+            'headline': 'Arrested man ‘punched me in nose’: officer',
+            'byline': 'joe',
+            'slugline': 'slugline',
+            'subject': [{'qcode': '02011001'}],
+            'anpa_take_key': 'take_key',
+            'unique_id': '1',
+            'type': 'text',
+            'body_html': '<p>Test</p>',
+            'word_count': 150,
+            'priority': 1,
+        }
+        subscriber = self.app.data.find('subscribers', None, None)[0]
+
+        f = AAPIpNewsFormatter()
+        seq, item = f.format(article, subscriber)[0]
+        item = json.loads(item)
+        self.assertEqual(item['headline'], 'Arrested man \'\'punched me in nose\'\': officer')
 
 
 class DefaultSubjectTest(TestCase):
