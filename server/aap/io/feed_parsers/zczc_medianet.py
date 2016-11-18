@@ -58,6 +58,7 @@ class ZCZCMedianetParser(ZCZCFeedParser):
 
         return item
 
+
 try:
     register_feed_parser(ZCZCMedianetParser.NAME, ZCZCMedianetParser())
 except AlreadyExistsError as ex:
