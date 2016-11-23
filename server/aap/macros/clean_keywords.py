@@ -35,6 +35,7 @@ def clean_keywords(**kwargs):
 
         counter += 1
 
+
 name = 'clean_keywords'
 callback = clean_keywords
 access_type = 'backend'
