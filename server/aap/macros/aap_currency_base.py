@@ -12,6 +12,7 @@ import requests
 import re
 from . import macro_replacement_fields
 from decimal import Decimal
+from superdesk.cache import cache
 
 RATE_SERVICE = 'http://download.finance.yahoo.com/d/quotes.csv?s={}=X&f=nl1d1'
 SUFFIX_REGEX = r'((\s*\-?\s*)((mln)|(bln)|([mM]illion)|([bB]illion)|[mb]))?\)?'
@@ -67,6 +68,7 @@ def to_currency(value, places=2, curr='', sep=',', dp='.', pos='', neg='-', trai
     return ''.join(reversed(result))
 
 
+@cache(ttl=21600)
 def get_rate(from_currency, to_currency):
     """Get the exchange rate."""
     r = requests.get(RATE_SERVICE.format(from_currency + to_currency), timeout=5)
@@ -157,6 +159,10 @@ def do_conversion(item, rate, currency, search_param, match_index, value_index, 
             converted_value = to_currency(to_value, places=precision, curr=currency)
             diff.setdefault(match_item, format_output(match_item, converted_value, suffix_item, src_currency))
             return diff[match_item]
+
+    # if the rate is returned from the cache it's type will be float, we need to change it to Decimal
+    if isinstance(rate, float):
+        rate = Decimal(rate)
 
     for field in macro_replacement_fields:
         if item.get(field, None):
