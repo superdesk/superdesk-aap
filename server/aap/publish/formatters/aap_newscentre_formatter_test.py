@@ -72,8 +72,8 @@ class AapNewscentreFormatterTest(TestCase):
         self.assertDictEqual(item,
                              {'category': 'A', 'fullStory': 1, 'ident': '0',
                               'headline': 'VIC:This is a test headline', 'originator': 'AAP',
-                              'take_key': 'take_key', 'article_text': 'The story body\r\nAAP', 'usn': '1',
-                              'subject_matter': 'international law', 'news_item_type': 'News',
+                              'take_key': 'take_key', 'article_text': '   By joe\r\n\r\nThe story body\r\nAAP',
+                              'usn': '1', 'subject_matter': 'international law', 'news_item_type': 'News',
                               'subject_reference': '02011001', 'subject': 'crime, law and justice',
                               'subject_detail': 'international court or tribunal',
                               'selector_codes': ' ',
@@ -102,7 +102,8 @@ class AapNewscentreFormatterTest(TestCase):
         seq, item = f.format(article, subscriber)[0]
         item = json.loads(item)
 
-        expected = '   The story body line 1\r\nLine 2\r\n\r\n   abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi ' + \
+        expected = '   By joe\r\n\r\n   The story body line 1\r\nLine 2\r\n\r\n   abcdefghi ' \
+            'abcdefghi abcdefghi abcdefghi abcdefghi ' + \
             'abcdefghi abcdefghi abcdefghi more\r\n\r\n\r\nAAP'
         self.assertEqual(item['article_text'], expected)
 
@@ -210,7 +211,8 @@ class AapNewscentreFormatterTest(TestCase):
                              {'category': 'A', 'fullStory': 1, 'ident': '0',
                               'headline': 'VIC:This is a test headline', 'originator': 'AAP',
                               'take_key': 'take_key',
-                              'article_text': 'The story body\r\ncall helpline 999 if you are planning '
+                              'article_text': '   By joe\r\n\r\nThe story body\r\ncall helpline 999 if you are '
+                              'planning '
                               'to quit smoking\r\nAAP',
                               'usn': '1',
                               'subject_matter': 'international law', 'news_item_type': 'News',

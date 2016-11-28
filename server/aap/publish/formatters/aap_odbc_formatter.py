@@ -53,8 +53,8 @@ class AAPODBCFormatter():
         odbc_item['ident'] = '0'  # @ident
         odbc_item['selector_codes'] = ' '.join(codes) if codes else ' '
 
-        headline = LocatorMapper().get_formatted_headline(article, category.get('qcode').upper())
-        odbc_item['headline'] = to_ascii(headline.replace('\'', '\'\'').replace('\xA0', ' '))
+        headline = to_ascii(LocatorMapper().get_formatted_headline(article, category.get('qcode').upper()))
+        odbc_item['headline'] = headline.replace('\'', '\'\'').replace('\xA0', ' ')
 
         self.expand_subject_codes(odbc_item)
         self.set_usn(odbc_item, article)
@@ -82,6 +82,20 @@ class AAPODBCFormatter():
         if article.get('ednote'):
             ednote = 'EDS:{}\r\n'.format(article.get('ednote').replace('\'', '\'\''))
             odbc_item['article_text'] = ednote + odbc_item['article_text']
+
+    def add_byline(self, odbc_item, article):
+        """
+        Add the byline to the article text
+        :param odbc_item:
+        :param article:
+        :return:
+        """
+        if article.get('byline') and article.get('byline') != '':
+            byline = BeautifulSoup(article.get('byline', ''), 'html.parser').text
+            if len(byline) >= 3 and byline[:2].upper() != 'BY':
+                byline = 'By ' + byline
+            byline = '\x19   {}\x19\r\n'.format(byline).replace('\'', '\'\'')
+            odbc_item['article_text'] = byline + odbc_item['article_text']
 
     def expand_subject_codes(self, odbc_item):
         """
