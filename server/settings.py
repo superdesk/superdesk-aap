@@ -206,3 +206,12 @@ SPIKE_EXPIRY_MINUTES = int(env('SPIKE_EXPIRY_MINUTES', 3 * 24 * 60))
 
 #: The number of minutes before content items are purged (3 days)
 CONTENT_EXPIRY_MINUTES = int(env('CONTENT_EXPIRY_MINUTES', 3 * 24 * 60))
+
+# list of allowed media types from AAP Multimedia System.
+AAP_MM_SEARCH_MEDIA_TYPES = ['image']
+
+# copies the metadata from parent for associated item.
+COPY_METADATA_FROM_PARENT = env('COPY_METADATA_FROM_PARENT', True)
+
+#: The number of minutes before published content items are purged (3 days)
+PUBLISHED_CONTENT_EXPIRY_MINUTES = int(env('PUBLISHED_CONTENT_EXPIRY_MINUTES', 3 * 24 * 60))
