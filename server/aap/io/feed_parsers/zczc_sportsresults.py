@@ -29,6 +29,7 @@ class ZCZCSportsResultsParser(ZCZCFeedParser):
                          x['qcode'] == 'Results (sport)' and x['is_active']]
         return item
 
+
 try:
     register_feed_parser(ZCZCSportsResultsParser.NAME, ZCZCSportsResultsParser())
 except AlreadyExistsError as ex:

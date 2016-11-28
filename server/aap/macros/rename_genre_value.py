@@ -43,6 +43,7 @@ def rename_genre_value(**kwargs):
 
         counter += 1
 
+
 name = 'rename_genre_value'
 callback = rename_genre_value
 access_type = 'backend'

@@ -60,6 +60,7 @@ class ZCZCBOBParser(ZCZCFeedParser):
 
         return item
 
+
 try:
     register_feed_parser(ZCZCBOBParser.NAME, ZCZCBOBParser())
 except AlreadyExistsError as ex:
