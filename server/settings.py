@@ -30,6 +30,7 @@ def env(variable, fallback_value=None):
         else:
             return env_value
 
+
 ABS_PATH = os.path.abspath(os.path.dirname(__file__))
 INIT_DATA_PATH = os.path.join(ABS_PATH, 'data')
 
@@ -202,3 +203,9 @@ ELASTICSEARCH_AUTO_AGGREGATIONS = False
 
 # This setting is used to overide the desk/stage expiry for items to expire from the spike
 SPIKE_EXPIRY_MINUTES = int(env('SPIKE_EXPIRY_MINUTES', 3 * 24 * 60))
+
+#: The number of minutes before content items are purged (3 days)
+CONTENT_EXPIRY_MINUTES = int(env('CONTENT_EXPIRY_MINUTES', 3 * 24 * 60))
+
+#: The number of minutes before published content items are purged (3 days)
+PUBLISHED_CONTENT_EXPIRY_MINUTES = int(env('PUBLISHED_CONTENT_EXPIRY_MINUTES', 3 * 24 * 60))

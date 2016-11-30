@@ -79,6 +79,7 @@ class TextFileParser(FileFeedParser):
         except Exception as ex:
             logging.exception(ex)
 
+
 try:
     register_feed_parser(TextFileParser.NAME, TextFileParser())
 except AlreadyExistsError as ex:
