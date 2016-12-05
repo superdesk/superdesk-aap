@@ -13,11 +13,27 @@ from superdesk.io import register_feed_parser
 from aap.errors import AAPParserError
 import superdesk
 from bs4 import BeautifulSoup, NavigableString
+from superdesk.io.iptc import subject_codes
 
 
 class ZCZCMedianetParser(ZCZCFeedParser):
-
     NAME = 'Meadinet_zczc'
+
+    place_map = {'MNETALL': 'FED',
+                 'MNETNSW': 'NSW',
+                 'MNETQLD': 'QLD',
+                 'MNETVIC': 'VIC',
+                 'MNETSA': 'SA',
+                 'MNETWA': 'WA',
+                 'MNETACT': 'ACT',
+                 'MNETNT': 'NT',
+                 'MNETTAS': 'TAS'}
+
+    subject_map = {'MFI': '04000000',
+                   'MEN': '01021000',
+                   'MSP': '15000000',
+                   'MHE': '07001000',
+                   'MIT': '13010000'}
 
     def set_item_defaults(self, item, provider):
         super().set_item_defaults(item, provider)
@@ -27,8 +43,9 @@ class ZCZCMedianetParser(ZCZCFeedParser):
         item['urgency'] = 8
         self.CATEGORY = '$'
         self.TAKEKEY = ':'
+        self.PLACE = '%'
 
-        self.header_map = {'%': None, self.TAKEKEY: self.ITEM_TAKE_KEY}
+        self.header_map = {self.PLACE: self.ITEM_PLACE, self.TAKEKEY: self.ITEM_TAKE_KEY}
 
     def post_process_item(self, item, provider):
 
@@ -56,7 +73,23 @@ class ZCZCMedianetParser(ZCZCFeedParser):
                 ptag.insert(0, NavigableString('{} '.format('Media release distributed by AAP Medianet. \r\n\r\n\r\n')))
             item['body_html'] = str(soup)
 
+        locator_map = superdesk.get_resource_service('vocabularies').find_one(req=None, _id='locators')
+        place_strs = item.pop('place').split(' ')
+        for place in place_strs:
+            if place in self.place_map:
+                replace = [x for x in locator_map.get('items', []) if
+                           x['qcode'] == self.place_map.get(place, '').upper()]
+                if replace is not None:
+                    item[self.ITEM_PLACE] = replace
+
+            if place in self.subject_map:
+                if item.get(self.ITEM_SUBJECT) is None:
+                    item[self.ITEM_SUBJECT] = []
+                item['subject'].append(
+                    {'qcode': self.subject_map.get(place), 'name': subject_codes[self.subject_map.get(place)]})
+
         return item
+
 
 try:
     register_feed_parser(ZCZCMedianetParser.NAME, ZCZCMedianetParser())
