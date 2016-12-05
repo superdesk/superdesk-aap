@@ -14,7 +14,8 @@ from superdesk.errors import ParserError
 class AAPParserError(ParserError):
 
     ParserError._codes.update({1100: 'ZCZC input could not be processed',
-                               1101: 'News Bites input could not be processed'})
+                               1101: 'News Bites input could not be processed',
+                               1102: 'PDA Results input could not be processed'})
 
     @classmethod
     def ZCZCParserError(cls, exception=None, provider=None):
@@ -23,3 +24,7 @@ class AAPParserError(ParserError):
     @classmethod
     def NewsBitesParserError(cls, exception=None, provider=None):
         return ParserError(1101, exception, provider)
+
+    @classmethod
+    def PDAResulstParserError(cls, exception=None, provider=None):
+        return ParserError(1102, exception, provider)
