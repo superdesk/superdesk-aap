@@ -16,6 +16,15 @@ from superdesk.tests import TestCase
 class PDAResultsTestCase(TestCase):
     provider = {'name': 'test provder', 'provider': {}}
 
+    vocab = [{'_id': 'genre',
+              'items': [{
+                  "name": "Results (sport)",
+                  "is_active": True,
+                  "qcode": "Results (sport)"}]}]
+
+    def setUp(self):
+        self.app.data.insert('vocabularies', self.vocab)
+
     def test_default_format(self):
         filename = 'RR_20161025_CRANBOURNE_6.tst'
         dirname = os.path.dirname(os.path.realpath(__file__))
@@ -26,6 +35,7 @@ class PDAResultsTestCase(TestCase):
         self.assertEqual(self.items.get('anpa_category')[0]['qcode'], 'r')
         self.assertEqual(self.items.get('subject')[0]['qcode'], '15030001')
         self.assertEqual(self.items.get('slugline'), 'CRANBOURNE Gallop')
+        self.assertEqual(self.items.get('genre')[0]['name'], 'Results (sport)')
         self.assertIn('versioncreated', self.items)
 
     def test_news_format(self):

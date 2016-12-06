@@ -12,6 +12,8 @@ from superdesk.io.feed_parsers import FileFeedParser
 from superdesk.errors import AlreadyExistsError
 from superdesk.utc import utcnow
 from superdesk.metadata.item import ITEM_TYPE, CONTENT_TYPE, FORMAT, FORMATS
+from aap.errors import AAPParserError
+import superdesk
 import logging
 import re
 import uuid
@@ -57,7 +59,7 @@ class PDAResultsParser(FileFeedParser):
                     b'\x1f([Y|N])' +
                     b'\x1f([Y|N])' +
                     b'\x1f(.*)' +
-                    b'\x1f(Monday|Tuesday|Wednesday|Thursday|Friday)', lines[0], flags=re.I)
+                    b'\x1f(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)', lines[0], flags=re.I)
                 if m:
                     state = m.group(5).decode('ascii')
                     item['slugline'] = m.group(1).decode('ascii') + ' Gallop'
@@ -88,6 +90,8 @@ class PDAResultsParser(FileFeedParser):
                         if abandoned == 'Y':
                             item['anpa_take_key'] = item.get('anpa_take_key', '') + ' ABANDONED'
                             item['headline'] = item.get('headline', '') + ' ABANDONED'
+                else:
+                    raise AAPParserError.PDAResulstParserError()
 
                 item['body_html'] = '<pre>' + b'\n'.join(lines[1:]).decode('ascii') + '</pre>'
                 # remove the sign off as recieved, it will get put back on when published
@@ -97,7 +101,11 @@ class PDAResultsParser(FileFeedParser):
 
                 item['subject'] = [{'qcode': '15030001'}]
                 item['anpa_category'] = [{'qcode': 'r'}]
-            return item
+                genre_map = superdesk.get_resource_service('vocabularies').find_one(req=None, _id='genre')
+                if genre_map:
+                    item['genre'] = [x for x in genre_map.get('items', []) if
+                                     x['qcode'] == 'Results (sport)' and x['is_active']]
+                return item
         except Exception as ex:
             logging.exception(ex)
 
