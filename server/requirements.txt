@@ -35,4 +35,4 @@ mongolock==1.3.4
 PyYAML==3.12,
 pyjwt==1.4.2
 
-git+git://github.com/superdesk/superdesk-core.git@b0e7700a2#egg=Superdesk-Core
+git+git://github.com/superdesk/superdesk-core.git@24266b78eb1614305866186839c7b44d6a4cf2b9#egg=Superdesk-Core
