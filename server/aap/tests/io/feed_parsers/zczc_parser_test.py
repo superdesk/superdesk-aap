@@ -123,6 +123,7 @@ class ZCZCTestCase(TestCase):
         self.assertEqual(self.items.get('slugline'), 'Darwin Grey')
         self.assertEqual(self.items.get('anpa_category')[0]['qcode'], 'r')
         self.assertEqual(self.items.get('subject')[0]['qcode'], '15082000')
+        self.assertEqual(self.items.get('genre')[0]['name'], 'Results (sport)')
 
     def test_racing_format(self):
         filename = 'viflda004_7257.tst'
@@ -168,6 +169,7 @@ class ZCZCTestCase(TestCase):
         self.assertEqual(self.items.get('slugline'), 'Wagga Trot')
         self.assertEqual(self.items.get('anpa_category')[0]['qcode'], 'r')
         self.assertEqual(self.items.get('subject')[0]['qcode'], '15030003')
+        self.assertEqual(self.items.get('genre')[0]['name'], 'Results (sport)')
 
     def test_leading_jockeys(self):
         filename = 'vinlpt_8390.tst'
@@ -229,3 +231,4 @@ class ZCZCTestCase(TestCase):
         self.assertEqual(self.items.get('headline'), 'Warragul Greyhound NSW TAB DIVS 1-11 Thursday')
         self.assertEqual(self.items.get('slugline'), 'Warragul Greys')
         self.assertEqual(self.items.get('anpa_take_key'), 'NSW TAB DIVS 1-11')
+        self.assertEqual(self.items.get('genre')[0]['name'], 'Results (sport)')
