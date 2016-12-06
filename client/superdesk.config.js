@@ -62,14 +62,27 @@ module.exports = function() {
                 'priority'
             ],
             'firstLine': [
-                'slugline',
-                'takekey',
                 'wordcount',
+                'slugline',
+                'highlights',
                 'headline',
-                'versioncreator',
                 'versioncreated'
             ],
-            'thinRows': true
+            'secondLine': [
+                'profile',      
+                'state',      
+                'embargo',        
+                'takekey',        
+                'takepackage',        
+                'signal',     
+                'broadcast',      
+                'flags',      
+                'updated',        
+                'category',       
+                'provider',       
+                'expiry',     
+                'desk'
+            ]
         },
 
         langOverride: {
