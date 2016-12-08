@@ -111,7 +111,7 @@ class AAPMMDatalayer(DataLayer):
 
             if 'terms' in criterion:
                 if 'type' in criterion.get('terms', {}):
-                    fields.update({'MediaTypes': criterion['terms']['type']})
+                    fields.update({'MediaTypes': [self.map_types(key, False) for key in criterion['terms']['type']]})
                 if 'credit' in criterion.get('terms', {}):
                     fields.update({'Credits': criterion['terms']['credit']})
                 if 'anpa_category.name' in criterion.get('terms', {}):
@@ -124,6 +124,10 @@ class AAPMMDatalayer(DataLayer):
                         else:
                             cat_list.append(cat)
                     fields.update({'Categories': cat_list})
+
+        # restricting only to image for initial implementation.
+        if not fields.get('MediaTypes'):
+            fields.update({'MediaTypes': self._app.config['AAP_MM_SEARCH_MEDIA_TYPES']})
 
         size = int(req.get('size', '25')) if int(req.get('size', '25')) > 0 else 25
         query = {'Query': query_keywords, 'pageSize': str(size),
@@ -148,14 +152,13 @@ class AAPMMDatalayer(DataLayer):
         new_doc['_type'] = 'externalsource'
         # entry that the client can use to identify the fetch endpoint
         new_doc['fetch_endpoint'] = PROVIDER_NAME
+        new_doc[ITEM_TYPE] = self.map_types(doc['AssetType'].lower())
         if doc['AssetType'] == 'VIDEO':
-            new_doc[ITEM_TYPE] = CONTENT_TYPE.VIDEO
             purl = '{}?assetType=VIDEO&'.format(self._app.config['AAP_MM_CDN_URL'])
             purl += 'path=/rest/aap/archives/imagearc/dossiers/{}'.format(doc['AssetId'])
             purl += '/files/ipod&assetId={}&mimeType=video/mp4&dummy.mp4'.format(doc['AssetId'])
             new_doc['renditions'] = {'original': {'href': purl, 'mimetype': 'video/mp4'}}
         else:
-            new_doc[ITEM_TYPE] = CONTENT_TYPE.PICTURE
             new_doc['renditions'] = {
                 'viewImage': {'href': doc.get('Preview', doc.get('Layout'))['Href']},
                 'thumbnail': {'href': doc.get('Thumbnail', doc.get('Layout'))['Href']},
@@ -193,6 +196,11 @@ class AAPMMDatalayer(DataLayer):
                 if cat['DisplayName'] in name_set:
                     buckets.append({'doc_count': cat['Count'], 'key': cat['DisplayName'] + '/' + cat['Name'],
                                     'qcode': cat['Name']})
+
+                elif facet == "MediaTypes":
+                    buckets.append({'doc_count': cat['Count'],
+                                    'key': self.map_types(cat['DisplayName'].lower()), 'qcode': cat['Name']})
+                    name_set.add(cat['DisplayName'])
                 else:
                     buckets.append({'doc_count': cat['Count'], 'key': cat['DisplayName'], 'qcode': cat['Name']})
                     name_set.add(cat['DisplayName'])
@@ -350,3 +358,22 @@ class AAPMMDatalayer(DataLayer):
 
     def combine_queries(self, query_a, query_b):
         raise NotImplementedError()
+
+    def map_types(self, key, to_superdesk=True):
+        """
+
+        :param key:
+        :param to_superdesk:
+        :return:
+        """
+        aap_to_superdesk = {
+            'image': 'picture',
+            'video': 'video',
+            'audio': 'audio',
+            'graphics': 'graphic',
+            'interactive': 'interactive'
+        }
+
+        superdesk_to_aap = dict(reversed(item) for item in aap_to_superdesk.items())
+
+        return aap_to_superdesk.get(key, 'Unknown') if to_superdesk else superdesk_to_aap.get(key, 'Unknown')
