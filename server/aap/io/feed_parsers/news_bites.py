@@ -9,8 +9,8 @@
 # at https://www.sourcefabric.org/superdesk/license*.
 import datetime
 import pytz
-from superdesk.io import register_feed_parser
-from superdesk.io import register_feeding_service_error
+from superdesk.io.registry import register_feed_parser
+from superdesk.io.registry import register_feeding_service_error
 from superdesk.errors import AlreadyExistsError
 from aap.errors import AAPParserError
 from superdesk.io.feed_parsers import FileFeedParser
