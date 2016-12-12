@@ -63,10 +63,25 @@ module.exports = function() {
             ],
             'firstLine': [
                 'slugline',
+                'highlights',
                 'takekey',
-                'wordcount',
+                'state',
+                'update',
+                'takepackage',
+                'embargo',
+                'flags',
+                'updated',
                 'headline',
+                'wordcount',
+                'provider',
                 'versioncreator',
+                'versioncreated'
+            ],
+            'narrowView': [
+                'slugline',
+                'takekey',
+                'state',
+                'provider',
                 'versioncreated'
             ],
             'thinRows': true
