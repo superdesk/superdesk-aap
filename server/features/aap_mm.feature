@@ -46,7 +46,7 @@ Feature: AAP Multimedia Feature
 	    """
         [{"search_provider": "aapmm", "source": "AAP One", "config": {"password":"", "username":""}}]
 	    """
-        When we get "/aapmm?source={"post_filter":{"and":[{"terms":{"type":["image"]}},{"terms":{"credit":["aapimage"]}}]},"query":{"filtered":{}},"size":48}"
+        When we get "/aapmm?source={"post_filter":{"and":[{"terms":{"type":["picture"]}},{"terms":{"credit":["aapimage"]}}]},"query":{"filtered":{}},"size":48}"
         Then we get list with +1 items
 
     @auth
