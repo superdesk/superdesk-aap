@@ -7,9 +7,9 @@
 
 from .zczc import ZCZCFeedParser
 from superdesk.metadata.item import CONTENT_TYPE, FORMAT, FORMATS
-from superdesk.io import register_feeding_service_error
+from superdesk.io.registry import register_feeding_service_error
 from superdesk.errors import AlreadyExistsError
-from superdesk.io import register_feed_parser
+from superdesk.io.registry import register_feed_parser
 from aap.errors import AAPParserError
 from superdesk.io.iptc import subject_codes
 from superdesk.logging import logger
