@@ -65,11 +65,12 @@ module.exports = function() {
             'firstLine': [
                 'slugline',
                 'highlights',
+                'associated',
                 'takekey',
                 'state',
                 'update',
                 'takepackage',
-                'embargo',
+                 'embargo',
                 'flags',
                 'updated',
                 'headline',
