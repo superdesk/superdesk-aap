@@ -73,6 +73,7 @@ module.exports = function() {
                 'flags',
                 'updated',
                 'headline',
+		'markedDesks',
                 'wordcount',
                 'provider',
                 'versioncreator',
