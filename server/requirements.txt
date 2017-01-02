@@ -36,4 +36,4 @@ PyYAML==3.12
 pyjwt==1.4.2
 
 
-git+git://github.com/superdesk/superdesk-core.git@65769492#egg=Superdesk-Core
+git+git://github.com/superdesk/superdesk-core.git@a3ff51e7#egg=Superdesk-Core
