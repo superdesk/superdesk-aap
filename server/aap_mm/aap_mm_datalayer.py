@@ -20,7 +20,6 @@ from eve_elastic.elastic import ElasticCursor
 from flask import url_for
 import pytz
 
-from . import PROVIDER_NAME
 from superdesk.errors import SuperdeskApiError
 from superdesk.io.iptc import subject_codes
 from superdesk.media.media_operations import process_file_from_stream, decode_metadata
@@ -45,10 +44,7 @@ class AAPMMDatalayer(DataLayer):
 
         self._headers = {'cookie': r.getheader('set-cookie'), 'Content-Type': 'application/json'}
 
-    def set_credentials(self, provider_config):
-        username = provider_config.get('username')
-        password = provider_config.get('password')
-
+    def set_credentials(self, username, password):
         if username and username != self._username and password and password != self._password:
             self._username = username
             self._password = password
@@ -151,7 +147,7 @@ class AAPMMDatalayer(DataLayer):
         # This must match the action
         new_doc['_type'] = 'externalsource'
         # entry that the client can use to identify the fetch endpoint
-        new_doc['fetch_endpoint'] = PROVIDER_NAME
+        new_doc['fetch_endpoint'] = 'search_providers_proxy'
         new_doc[ITEM_TYPE] = self.map_types(doc['AssetType'].lower())
         if doc['AssetType'] == 'VIDEO':
             purl = '{}?assetType=VIDEO&'.format(self._app.config['AAP_MM_CDN_URL'])

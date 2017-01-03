@@ -10,21 +10,16 @@
 
 from apps.search_providers import register_search_provider
 from superdesk import intrinsic_privilege
+from apps.io.search_ingest import SearchIngestService, SearchIngestResource
+from .aap_mm_datalayer import AAPMMDatalayer
 
 PROVIDER_NAME = 'aapmm'
 
 
 def init_app(app):
-    # Must be imported here as the constant PROVIDER_NAME is referenced by the below modules
-    from .aap_mm_datalayer import AAPMMDatalayer
-    from .resource import AAPMMResource
-    from .service import AAPMMService
-
-    app.data.aapmm = AAPMMDatalayer(app)
-
-    aapmm_service = AAPMMService(datasource=None, backend=app.data.aapmm)
-    AAPMMResource(endpoint_name=PROVIDER_NAME, app=app, service=aapmm_service)
-
+    aapmm_datalayer = AAPMMDatalayer(app)
+    service = SearchIngestService(datasource=None, backend=aapmm_datalayer, source=PROVIDER_NAME)
+    SearchIngestResource(endpoint_name=PROVIDER_NAME, service=service, app=app)
     intrinsic_privilege(resource_name=PROVIDER_NAME, method=['GET', 'POST'])
 
 
