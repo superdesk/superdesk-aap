@@ -114,10 +114,15 @@ class AAPIpNewsFormatter(Formatter, AAPODBCFormatter):
         # remove runs os spaces and stray line feeds
         para_text = re.sub(r' +', ' ', re.sub(r'(?<!\r)\n+', ' ', tag.get_text()).strip().replace('\xA0', ' '))
         # remove control chars except \r and \n
-        para_text = re.sub('[\x00-\x09\x0b\x0c\x0e-\x1f]', '', para_text)
+        para_text = re.sub('[\x00-\x09\x0b\x0c\x0f-\x1f]', '', para_text)
+        # Special case x0e denotes a line break
+        para_text = re.sub('\x0e', '\r\n', para_text)
+        # Wrap line if to long
         if len(para_text) > 80:
             para_text = textwrap.fill(para_text, 80).replace('\n', ' \r\n')
-        if para_text != '':
+        if para_text == '\r\n':
+            tag.replace_with('\r\n')
+        elif para_text != '':
             tag.replace_with('   {}\x19\r\n'.format(para_text))
         else:
             tag.replace_with('')
