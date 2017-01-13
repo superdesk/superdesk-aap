@@ -426,6 +426,38 @@ class AapIpNewsFormatterTest(TestCase):
         expected = '\x19   By joe\x19\r\n     \r\n\r\nAAP'
         self.assertEqual(item['article_text'], expected)
 
+    def testLineSpecialLineBreak(self):
+        article = {
+            '_id': '3',
+            'source': 'AAP',
+            'anpa_category': [{'qcode': 'a'}],
+            'headline': 'This is a test headline',
+            'byline': 'joe',
+            'slugline': 'slugline',
+            'subject': [{'qcode': '02011001'}],
+            'anpa_take_key': 'take_key',
+            'unique_id': '1',
+            'type': 'text',
+            'body_html': '<p>AAP Rolling News Bulletin for Jan 11 at 1000</p><p>\u000e</p><p>\u000e</p>'
+                         '<p>Entitlements_BC4 (CANBERRA)</p>',
+            'word_count': '1',
+            'priority': 1,
+            "linked_in_packages": [
+                {
+                    "package": "package",
+                    "package_type": "takes"
+                }
+            ],
+        }
+        subscriber = self.app.data.find('subscribers', None, None)[0]
+
+        f = AAPIpNewsFormatter()
+        seq, item = f.format(article, subscriber)[0]
+        item = json.loads(item)
+        expected = '   By joe\r\n   AAP Rolling News Bulletin for Jan 11 at 1000\r\n\r\n\r\n   ' \
+            'Entitlements_BC4 (CANBERRA)\r\n\r\nAAP'
+        self.assertEqual(item['article_text'], expected)
+
     def testMultipleCategories(self):
         article = {
             'source': 'AAP',
