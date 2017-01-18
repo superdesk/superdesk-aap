@@ -3,7 +3,7 @@ honcho==0.6.6
 pyodbc==3.0.10
 unidecode==0.04.19
 newrelic>=2.66,<2.67
-celery[redis]==3.1.25
+celery[redis]>=4.0.2,<4.1
 redis==2.10.5
 eve==0.6.4
 eve-elastic==0.6
