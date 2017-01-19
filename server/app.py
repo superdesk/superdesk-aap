@@ -21,7 +21,7 @@ from superdesk.logging import configure_logging
 logger = logging.getLogger(__name__)
 
 
-def get_app(config=None):
+def get_app(config=None, init_elastic=False):
     """App factory.
 
     :param config: configuration that can override config from `settings.py`
@@ -43,7 +43,7 @@ def get_app(config=None):
 
     config['DOMAIN'] = {}
 
-    app = superdesk_app(config, media_storage)
+    app = superdesk_app(config, media_storage, init_elastic=init_elastic)
     configure_logging(config['LOG_CONFIG_FILE'])
     return app
 
