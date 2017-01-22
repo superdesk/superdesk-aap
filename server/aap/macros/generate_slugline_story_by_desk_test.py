@@ -89,7 +89,7 @@ class SluglineStoryByDesk(TestCase):
                     }
                 },
                 'state': 'submitted',
-                'versioncreated': local_time + timedelta(days=-1),
+                'versioncreated': local_time + timedelta(days=-2),
                 'task': {
                     'desk': self.desks[1].get('_id'),
                     'last_authoring_desk': self.desks[0].get('_id')

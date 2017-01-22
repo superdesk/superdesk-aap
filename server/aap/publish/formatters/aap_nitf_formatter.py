@@ -11,8 +11,8 @@ import superdesk
 from superdesk.publish.formatters.nitf_formatter import NITFFormatter
 from superdesk.errors import FormatterError
 from superdesk.metadata.item import ITEM_TYPE, CONTENT_TYPE, SIGN_OFF
-import xml.etree.ElementTree as etree
-from xml.etree.ElementTree import SubElement
+from lxml import etree as etree
+from lxml.etree import SubElement
 import re
 from bs4 import BeautifulSoup
 from .unicodetoascii import to_ascii

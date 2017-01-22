@@ -34,5 +34,6 @@ websockets==3.2
 mongolock==1.3.4
 PyYAML==3.12
 pyjwt==1.4.2
+lxml==3.7.2
 
-git+git://github.com/superdesk/superdesk-core.git@4294f0e98#egg=Superdesk-Core
+git+git://github.com/superdesk/superdesk-core.git@4551c93be#egg=Superdesk-Core
