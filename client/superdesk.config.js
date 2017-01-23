@@ -20,7 +20,8 @@ module.exports = function() {
         features: {
             elasticHighlight: 1,
             swimlane: {columnsLimit: 4},
-            editFeaturedImage: 1
+            editFeaturedImage: 1,
+            confirmMediaOnUpdate: 1
         },
 
         view: {

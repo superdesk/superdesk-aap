@@ -8,7 +8,7 @@ DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
 python3 python3-dev python3-pip python3-lxml \
 build-essential libffi-dev git \
 libtiff5-dev libjpeg8-dev zlib1g-dev \
-libfreetype6-dev liblcms2-dev libwebp-dev \
+libfreetype6-dev liblcms2-dev libwebp-dev libxml2-dev libxslt1-dev\
 curl libfontconfig nodejs npm nginx \
 unixodbc-dev
 
@@ -38,6 +38,7 @@ EXPOSE 80
 # server ports
 EXPOSE 5000
 EXPOSE 5100
+EXPOSE 5400
 
 # set env vars for the server
 ENV PYTHONUNBUFFERED 1
