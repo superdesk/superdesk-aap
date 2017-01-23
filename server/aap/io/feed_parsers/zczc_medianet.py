@@ -17,7 +17,7 @@ from superdesk.io.iptc import subject_codes
 
 
 class ZCZCMedianetParser(ZCZCFeedParser):
-    NAME = 'Meadinet_zczc'
+    NAME = 'Medianet_zczc'
 
     place_map = {'MNETALL': 'FED',
                  'MNETNSW': 'NSW',
@@ -32,7 +32,7 @@ class ZCZCMedianetParser(ZCZCFeedParser):
     subject_map = {'MFI': '04000000',
                    'MEN': '01021000',
                    'MSP': '15000000',
-                   'MHE': '07001000',
+                   'MHE': '07007000',
                    'MIT': '13010000'}
 
     def set_item_defaults(self, item, provider):
@@ -40,7 +40,7 @@ class ZCZCMedianetParser(ZCZCFeedParser):
         # Medianet
         item[FORMAT] = FORMATS.PRESERVED
         item['original_source'] = 'Medianet'
-        item['urgency'] = 8
+        item['urgency'] = 5
         self.CATEGORY = '$'
         self.TAKEKEY = ':'
         self.PLACE = '%'
