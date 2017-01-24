@@ -12,6 +12,3 @@ docker-compose -p sddemo -f ./docker-compose-prebuilt.yml run superdesk ./script
   echo '+++ sample data was prepopulated' ;\
   python3 manage.py users:create -u admin -p admin -e 'admin@example.com' --admin ;\
   echo '+++ new user has been created'"
-docker-compose -p sddemo -f ./docker-compose-prebuilt.yml run pubapi bash ./scripts/fig_wrapper.sh bash -c "\
-  python3 content_api_manage.py app:prepopulate ;\
-  echo '+++ public api was prepopulated'"
