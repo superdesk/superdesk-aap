@@ -33,8 +33,7 @@ class AAPIpNewsFormatter(Formatter, AAPODBCFormatter):
         return self.format_for_source(formatted_article, subscriber, mapped_source, codes)
 
     def format_for_source(self, article, subscriber, source, codes=None):
-        """
-        Constructs a dictionary that represents the parameters passed to the IPNews InsertNews stored procedure
+        """Constructs a dictionary that represents the parameters passed to the IPNews InsertNews stored procedure
         :type article: object
         :return: returns the sequence number of the subscriber and the constructed parameter dictionary
         """
@@ -93,8 +92,7 @@ class AAPIpNewsFormatter(Formatter, AAPODBCFormatter):
             raise FormatterError.AAPIpNewsFormatterError(ex, subscriber)
 
     def get_wrapped_text_content(self, content):
-        """
-        get a version of the body text that is warapped
+        """Get a version of the body text that is wrapped
         :param content:
         :return:
         """

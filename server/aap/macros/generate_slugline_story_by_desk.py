@@ -23,8 +23,7 @@ from apps.desks import DeskTypes
 class GenerateBodyHtml(metaclass=ABCMeta):
 
     def get_articles(self, query, repo):
-        """
-        Get the articles using search endpoint
+        """Get the articles using search endpoint
         :param dict query:
         :param list repo:
         :return:
@@ -144,8 +143,7 @@ class GenerateBodyHtmlForPublishedArticlesByDesk(GenerateBodyHtml):
 
 
 def generate_published_slugline_story_by_desk(item, **kwargs):
-    """
-    marco function to generate slugline story by desk
+    """Marco function to generate slugline story by desk
     :param dict item: item on a desk
     :param kwargs:
     :return dict: modified item

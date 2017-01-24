@@ -141,8 +141,7 @@ class SelectorcodeMapper(FieldMapper):
             handler(article, subscriber['name'], formatted_item, category)
 
     def _get_geo_abbreviation(self, name):
-        """
-        passed the name that is kept in the article uses it to find the value from the vocabulary
+        """Passed the name that is kept in the article uses it to find the value from the vocabulary
         :param name:
         :return: the abbreviatoin for the geographical restriction
         """

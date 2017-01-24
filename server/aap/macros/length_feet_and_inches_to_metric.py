@@ -15,8 +15,7 @@ from decimal import Decimal
 
 
 def convert(feet, inches):
-    """
-    Converts from feet and inches to cm or m
+    """Converts from feet and inches to cm or m
     If feet contains '-' then inches won't have '-'
     If inches contains '-' then feet value will be 0
     :param feet: Feet value in string
@@ -49,7 +48,7 @@ def convert(feet, inches):
 
 
 def do_conversion(item, converter, formatter, search_param):
-    """ Performs the conversion """
+    """Performs the conversion"""
     diff = {}
 
     # Group indexes
