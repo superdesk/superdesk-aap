@@ -21,7 +21,8 @@ module.exports = function() {
             elasticHighlight: 1,
             swimlane: {columnsLimit: 4},
             editFeaturedImage: 1,
-            confirmMediaOnUpdate: 1
+            confirmMediaOnUpdate: 1,
+            hideLiveSuggestions: 1
         },
 
         view: {
