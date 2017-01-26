@@ -29,13 +29,12 @@ def format_converted(converted_value, precision):
 
 
 def format_output(original, converted, symbol):
-    """ Returns the replacement string for the given original value """
+    """Returns the replacement string for the given original value"""
     return '{} ({} {})'.format(original, converted, symbol)
 
 
 def do_conversion(item, converter, formatter, search_param, match_index, value_index):
-    """
-    Performs the conversion
+    """Performs the conversion
     :param item: story
     :param converter: function to perform conversion
     :param formatter: function to do string formatting

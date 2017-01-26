@@ -132,7 +132,7 @@ class AAPBulletinBuilderFormatter(Formatter):
             tag.replace_with('')
 
     def _handle_auto_publish(self, article):
-        """ Set the abstract from body_text if not specified in the article.
+        """Set the abstract from body_text if not specified in the article.
 
         :param dict article:
         """

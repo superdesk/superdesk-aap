@@ -76,13 +76,12 @@ def get_rate(from_currency, to_currency):
 
 
 def update_suffix(value, suffix, precision=0):
-    '''
-    Updates the
+    """Updates the
     :param value:
     :param suffix:
     :param precision:
     :return:
-    '''
+    """
     thousand = Decimal(1000)
     million = Decimal(1000000)
     billion = Decimal(1000000000)
@@ -119,7 +118,7 @@ def update_suffix(value, suffix, precision=0):
 
 
 def format_output(original, converted, suffix, src_currency):
-    """ Returns the replacement string for the given original value """
+    """Returns the replacement string for the given original value"""
     original = original if src_currency is None or src_currency in original \
         else original.replace('$', src_currency)
     if suffix:

@@ -3,7 +3,7 @@
 flake8
 nose
 pep8
-pyflakes<=1.1
+pyflakes<=1.5
 httmock
 wooper
 requests-mock
