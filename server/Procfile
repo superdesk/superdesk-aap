@@ -5,4 +5,4 @@ expiry: celery -A worker -Q expiry  worker
 legal: celery -A worker -Q legal  worker
 publish: celery -A worker -Q publish  worker
 beat: celery -A worker beat --pid=
-capi: gunicorn -c gunicorn_config.py content_api.wsgi
+capi: gunicorn -b 0.0.0.0:5400 -c gunicorn_config.py content_api.wsgi
