@@ -46,7 +46,8 @@ class RemoteSyncCommand(superdesk.Command):
         """
         try:
             post_data = {'username': username, 'password': password}
-            response = requests.post('{}/{}'.format(remote, 'auth'), json=post_data, verify=False, headers=self.headers)
+            response = requests.post('{}/{}'.format(remote, 'auth_db'), json=post_data, verify=False,
+                                     headers=self.headers)
             if int(response.status_code) // 100 == 2:
                 content = json.loads(response.content.decode('UTF-8'))
                 self.token = content.get('token')
@@ -66,11 +67,10 @@ class RemoteSyncCommand(superdesk.Command):
             from_count = 0
             while True:
                 # The query excludes spiked items and returns only text items that are the last published version
-                query = {"query": {"filtered": {"filter": {"and": [{"not": {"term": {"state": "spiked"}}}, {"not": {
+                query = {"query": {"filtered": {"filter": {"and": [{"terms": {"type": ["text"]}}, {"not": {
                     "and": [{"term": {"_type": "published"}}, {"term": {"package_type": "takes"}},
                             {"term": {"last_published_version": False}}]}}]}}},
                          "sort": [{"versioncreated": "asc"}],
-                         "post_filter": {"and": [{"terms": {"type": ["text"]}}]},
                          "size": 100, "from": from_count}
                 params = {'repo': 'published', 'source': json.dumps(query)}
                 response = requests.get('{}/{}'.format(self.url, 'search'), auth=HTTPBasicAuth(self.token, None),
