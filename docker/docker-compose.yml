@@ -6,14 +6,11 @@ logstash:
   - elastic
 
 mongodb:
+  ports:
+  - 27017:27017
   extends:
     file: common.yml
     service: mongodb
-
-redis:
-  extends:
-    file: common.yml
-    service: redis
 
 kibana:
   extends:
@@ -22,29 +19,35 @@ kibana:
   links:
   - elastic
   ports:
-  - "5601:5601"
+  - 5601:5601
 
 elastic:
+  ports:
+  - 9200:9200
+  - 9300:9300
   extends:
     file: common.yml
     service: elastic
-
-postfix:
-  extends:
-    file: common.yml
-    service: postfix
 
 superdesk:
   extends:
     file: common.yml
     service: superdesk
   links:
-   - mongodb
-   - redis
-   - elastic
-   - logstash
-   - postfix
+  - mongodb
+  - rabbitmq
+  - elastic
+  - logstash
   ports:
-   - "443:443"
-   - "80:80"
-   - "5400:5400"
+  - 5555:5555
+  - 443:443
+  - 80:80
+  - 5400:5400
+
+rabbitmq:
+  ports:
+  - 15672:15672
+  extends:
+    file: common.yml
+    service: rabbitmq
+
