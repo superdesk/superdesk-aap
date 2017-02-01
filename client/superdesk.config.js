@@ -61,7 +61,7 @@ module.exports = function() {
                 'state',
                 'update',
                 'takepackage',
-                 'embargo',
+                'embargo',
                 'flags',
                 'updated',
                 'headline',
@@ -71,6 +71,15 @@ module.exports = function() {
                 'versioncreator',
                 'versioncreated'
             ],
+	    'secondLine': [
+		'signal',
+		'broadcast',
+		'updated',
+		'category',
+		'expiry',
+		'desk',
+		'fetchedDesk'
+	    ],
             'narrowView': [
                 'slugline',
                 'takekey',
@@ -78,7 +87,6 @@ module.exports = function() {
                 'provider',
                 'versioncreated'
             ],
-            'thinRows': true
         },
 
         langOverride: {
