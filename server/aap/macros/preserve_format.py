@@ -59,3 +59,4 @@ label = 'Preserve Format'
 callback = preserve
 access_type = 'frontend'
 action_type = 'direct'
+order = 6

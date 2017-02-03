@@ -47,3 +47,4 @@ label = 'Area square feet to metric'
 callback = square_feet_to_metric
 access_type = 'frontend'
 action_type = 'interactive'
+group = 'area'

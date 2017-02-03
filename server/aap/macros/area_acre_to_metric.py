@@ -47,3 +47,4 @@ label = 'Area acres to metric'
 callback = acre_to_metric
 access_type = 'frontend'
 action_type = 'interactive'
+group = 'area'

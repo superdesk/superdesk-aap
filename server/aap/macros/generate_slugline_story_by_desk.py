@@ -172,3 +172,4 @@ label = 'Skeds By Desk'
 callback = generate_published_slugline_story_by_desk
 access_type = 'frontend'
 action_type = 'direct'
+order = 5
