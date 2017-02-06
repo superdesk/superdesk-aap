@@ -47,3 +47,4 @@ label = 'Area square inch to metric'
 callback = square_inch_to_metric
 access_type = 'frontend'
 action_type = 'interactive'
+group = 'area'

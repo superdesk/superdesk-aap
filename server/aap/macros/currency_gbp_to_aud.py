@@ -42,3 +42,4 @@ label = 'Currency GBP to AUD'
 callback = gbp_to_aud
 access_type = 'frontend'
 action_type = 'interactive'
+group = 'currency'

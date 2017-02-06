@@ -40,3 +40,4 @@ label = 'Temperature °F to °C'
 callback = fahrenheit_to_celsius
 access_type = 'frontend'
 action_type = 'interactive'
+group = 'Temperature And Weight'

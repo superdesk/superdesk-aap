@@ -47,3 +47,4 @@ label = 'Area square miles to metric'
 callback = square_mile_to_metric
 access_type = 'frontend'
 action_type = 'interactive'
+group = 'area'

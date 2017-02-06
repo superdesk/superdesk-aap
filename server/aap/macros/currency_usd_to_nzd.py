@@ -43,3 +43,4 @@ label = 'Currency USD to NZD'
 callback = usd_to_nzd
 access_type = 'frontend'
 action_type = 'interactive'
+group = 'currency'

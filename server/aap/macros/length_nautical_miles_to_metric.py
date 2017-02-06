@@ -38,3 +38,4 @@ label = 'Length nautical miles to kilometres'
 callback = nautical_miles_to_metric
 access_type = 'frontend'
 action_type = 'interactive'
+group = 'length'

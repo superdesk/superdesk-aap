@@ -42,3 +42,4 @@ label = 'Currency AUD to NZD'
 callback = aud_to_nzd
 access_type = 'frontend'
 action_type = 'interactive'
+group = 'currency'

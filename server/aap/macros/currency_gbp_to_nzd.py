@@ -42,3 +42,4 @@ label = 'Currency GBP to NZD'
 callback = gbp_to_nzd
 access_type = 'frontend'
 action_type = 'interactive'
+group = 'currency'

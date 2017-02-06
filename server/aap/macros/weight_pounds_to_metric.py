@@ -38,3 +38,4 @@ label = 'Weight pounds to metric'
 callback = pounds_to_metric
 access_type = 'frontend'
 action_type = 'interactive'
+group = 'Temperature And Weight'

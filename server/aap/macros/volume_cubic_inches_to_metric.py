@@ -48,3 +48,4 @@ label = 'Volume cubic inches to metric'
 callback = cubic_inches_to_metric
 access_type = 'frontend'
 action_type = 'interactive'
+group = 'volume'

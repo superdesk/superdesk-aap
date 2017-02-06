@@ -42,3 +42,4 @@ label = 'Currency CNY to AUD'
 callback = yuan_to_aud
 access_type = 'frontend'
 action_type = 'interactive'
+group = 'currency'
