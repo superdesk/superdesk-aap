@@ -44,7 +44,8 @@ module.exports = function() {
             swimlane: {columnsLimit: 4},
             editFeaturedImage: 1,
             confirmMediaOnUpdate: 1,
-            hideLiveSuggestions: 1
+            hideLiveSuggestions: 1,
+            preview: 1
         },
 
         view: {
@@ -94,9 +95,6 @@ module.exports = function() {
                 'broadcast',
                 'flags',
                 'updated',
-                'headline',
-		        'markedDesks',
-                'wordcount',
                 'category',
                 'provider',
                 'expiry',
