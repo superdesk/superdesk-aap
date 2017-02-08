@@ -76,31 +76,31 @@ module.exports = function() {
                 'priority'
             ],
             'firstLine': [
+                'wordcount',
                 'slugline',
                 'highlights',
                 'associations',
-                'takekey',
+                'headline',
+                'markedDesks',
+                'versioncreated'
+            ],
+            'secondLine': [
+                'profile',
                 'state',
-                'update',
-                'takepackage',
                 'embargo',
+                'takekey',
+                'takepackage',
+                'signal',
+                'broadcast',
                 'flags',
                 'updated',
                 'headline',
 		        'markedDesks',
                 'wordcount',
-                'provider',
-                'versioncreator',
-                'versioncreated'
-            ],
-            'secondLine': [
-                'signal',
-                'broadcast',
-                'updated',
                 'category',
+                'provider',
                 'expiry',
-                'desk',
-                'fetchedDesk'
+                'desk'
             ],
             'narrowView': [
                 'slugline',
@@ -110,7 +110,6 @@ module.exports = function() {
                 'versioncreated'
             ]
         },
-
         langOverride: {
             'en': {
                 "Advanced Search": "Advanced",
