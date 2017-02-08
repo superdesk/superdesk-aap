@@ -65,6 +65,13 @@ module.exports = function() {
             outputType: 'json',
             outputField: 'article_text'
         }],
+	    
+	langOverride: {
+            'en': {
+                'ANPA Category': 'Category',
+                'ANPA CATEGORY': 'CATEGORY'
+            }
+        },
 
         defaultTimezone: 'Australia/Sydney',
         shortDateFormat: 'DD/MM',
