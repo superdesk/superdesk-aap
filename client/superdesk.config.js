@@ -1,7 +1,29 @@
 module.exports = function() {
     return {
         defaultRoute: '/workspace',
-
+        validatorMediaMetadata: {
+            headline: {
+                required: true
+            },
+            alt_text: {
+                required: true
+            },
+            description_text: {
+                required: true
+            },
+            copyrightholder: {
+                required: false
+            },
+            byline: {
+                required: false
+            },
+            usageterms: {
+                required: false
+            },
+            copyrightnotice: {
+                required: false
+            }
+        },
         workspace: {
             ingest: 1,
             content: 1,
@@ -65,28 +87,28 @@ module.exports = function() {
                 'flags',
                 'updated',
                 'headline',
-		'markedDesks',
+		        'markedDesks',
                 'wordcount',
                 'provider',
                 'versioncreator',
                 'versioncreated'
             ],
-	    'secondLine': [
-		'signal',
-		'broadcast',
-		'updated',
-		'category',
-		'expiry',
-		'desk',
-		'fetchedDesk'
-	    ],
+            'secondLine': [
+                'signal',
+                'broadcast',
+                'updated',
+                'category',
+                'expiry',
+                'desk',
+                'fetchedDesk'
+            ],
             'narrowView': [
                 'slugline',
                 'takekey',
                 'state',
                 'provider',
                 'versioncreated'
-            ],
+            ]
         },
 
         langOverride: {
