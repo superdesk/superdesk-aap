@@ -74,6 +74,16 @@ class ZCZCPMFParser(ZCZCFeedParser):
                             item[self.ITEM_SUBJECT] = [{'qcode': '15030001', 'name': subject_codes['15030001']}]
                 item[self.ITEM_ANPA_CATEGORY] = [{'qcode': 'r'}]
                 self._set_results_genre(item)
+            elif item.get(self.ITEM_SLUGLINE, '').find(' Betting') != -1:
+                try:
+                    raceday = datetime.strptime(item.get(self.ITEM_HEADLINE, ''), '%d/%m/%Y')
+                    item[self.ITEM_TAKE_KEY] = raceday.strftime('%A')
+                except:
+                    pass
+                item[self.ITEM_SLUGLINE] = item.get(self.ITEM_SLUGLINE, '').replace(' Betting', ' Market')
+                item[self.ITEM_HEADLINE] = '{} {}'.format(item[self.ITEM_SLUGLINE], item[self.ITEM_TAKE_KEY])
+                item[self.ITEM_SUBJECT] = [{'qcode': '15030001', 'name': subject_codes['15030001']}]
+                item[self.ITEM_ANPA_CATEGORY] = [{'qcode': 'r'}]
             elif item.get(self.ITEM_SLUGLINE, '').find('AFL') != -1:
                 item[self.ITEM_ANPA_CATEGORY] = [{'qcode': 't'}]
                 item[self.ITEM_SUBJECT] = [{'qcode': '15084000', 'name': subject_codes['15084000']}]

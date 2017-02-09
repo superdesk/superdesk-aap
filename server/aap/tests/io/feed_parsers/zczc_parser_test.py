@@ -232,3 +232,15 @@ class ZCZCTestCase(TestCase):
         self.assertEqual(self.items.get('slugline'), 'Warragul Greys')
         self.assertEqual(self.items.get('anpa_take_key'), 'NSW TAB DIVS 1-11')
         self.assertEqual(self.items.get('genre')[0]['name'], 'Results (sport)')
+
+    def test_pagemasters_market(self):
+        filename = 'Caulfield RA - Betting - Sat 11 Feb, 2017.tst'
+        dirname = os.path.dirname(os.path.realpath(__file__))
+        fixture = os.path.normpath(os.path.join(dirname, '../fixtures', filename))
+        self.provider['source'] = 'PMF'
+        parser = ZCZCPMFParser()
+        self.items = parser.parse(fixture, self.provider)
+        parser.post_process_item(self.items, self.provider)
+        self.assertEqual(self.items.get('slugline'), 'Caulfield Market')
+        self.assertEqual(self.items.get('anpa_take_key'), 'Saturday')
+        self.assertEqual(self.items.get('headline'), 'Caulfield Market Saturday')
