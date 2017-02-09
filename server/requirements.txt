@@ -36,4 +36,4 @@ PyYAML==3.12
 pyjwt==1.4.2
 lxml==3.7.2
 
-git+git://github.com/superdesk/superdesk-core.git@99753cf1c#egg=Superdesk-Core
+git+git://github.com/superdesk/superdesk-core.git@f61dde14c#egg=Superdesk-Core
