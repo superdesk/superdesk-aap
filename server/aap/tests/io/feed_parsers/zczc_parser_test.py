@@ -104,6 +104,7 @@ class ZCZCTestCase(TestCase):
         self.assertEqual(self.items.get('headline'), 'Media Release: Australian Financial Security Authority')
         self.assertEqual(self.items.get('place')[0], {'qcode': 'FED', 'name': 'FED'})
         self.assertEqual(self.items.get('subject')[0]['qcode'], '04000000')
+        self.assertEqual(len(self.items.get('anpa_take_key')), 24)
 
     def test_medianet_investor_relations_format(self):
         filename = 'ED_867485_4_2.tst'
