@@ -60,6 +60,10 @@ class ZCZCMedianetParser(ZCZCFeedParser):
             item['slugline'] = 'Media Release'
             item['headline'] = 'Media Release: ' + item.get(self.ITEM_TAKE_KEY, '')
 
+        # Truncate the take key if required
+        if len(item.get(self.ITEM_TAKE_KEY, '')) > 24:
+            item[self.ITEM_TAKE_KEY] = item.get(self.ITEM_TAKE_KEY, '')[0:24]
+
         genre_map = superdesk.get_resource_service('vocabularies').find_one(req=None, _id='genre')
         item['genre'] = [x for x in genre_map.get('items', []) if
                          x['qcode'] == 'Press Release' and x['is_active']]
