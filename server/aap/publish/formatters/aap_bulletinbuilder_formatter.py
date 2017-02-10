@@ -15,7 +15,7 @@ from eve.utils import config
 from superdesk.utils import json_serialize_datetime_objectId
 from superdesk.utc import utcnow
 from superdesk.errors import FormatterError
-from superdesk.metadata.item import ITEM_TYPE, PACKAGE_TYPE, ITEM_STATE, CONTENT_STATE
+from superdesk.metadata.item import ITEM_TYPE, PACKAGE_TYPE, ITEM_STATE, CONTENT_STATE, ASSOCIATIONS, CONTENT_TYPE
 from bs4 import BeautifulSoup
 from .field_mappers.locator_mapper import LocatorMapper
 from .field_mappers.slugline_mapper import SluglineMapper
@@ -84,6 +84,8 @@ class AAPBulletinBuilderFormatter(Formatter):
                     to_ascii(SluglineMapper().map(article=formatted_article,
                                                   category=category.get('qcode').upper(),
                                                   truncate=(not formatted_article.get('auto_publish')))).strip())
+
+            self.format_associated_item(formatted_article)
 
             odbc_item = {
                 'id': formatted_article.get(config.ID_FIELD),
@@ -170,3 +172,18 @@ class AAPBulletinBuilderFormatter(Formatter):
 
         # if not matching dateline patterns get the headline.
         article['abstract'] = article.get('headline', '')
+
+    def format_associated_item(self, item):
+        if not item.get(ASSOCIATIONS):
+            return
+
+        for assoc, value in item.get(ASSOCIATIONS).items():
+            if value.get(ITEM_TYPE) not in {CONTENT_TYPE.AUDIO, CONTENT_TYPE.VIDEO,
+                                            CONTENT_TYPE.GRAPHIC, CONTENT_TYPE.PICTURE}:
+                continue
+
+            value['description_text'] = to_ascii(self.get_text_content(value.get('description_text'))).strip()
+            value['headline'] = to_ascii(self.get_text_content(value.get('headline'))).strip()
+            value['slugline'] = to_ascii(self.get_text_content(value.get('slugline'))).strip()
+            value['alt_text'] = to_ascii(self.get_text_content(value.get('alt_text'))).strip()
+            value['byline'] = to_ascii(self.get_text_content(value.get('byline'))).strip()
