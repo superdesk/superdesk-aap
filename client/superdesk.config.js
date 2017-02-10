@@ -39,13 +39,18 @@ module.exports = function() {
             }
         },
 
+        ui: {
+            publishSendAdnContinue: false
+        },
+
         features: {
             elasticHighlight: 1,
             swimlane: {columnsLimit: 4},
             editFeaturedImage: 1,
             confirmMediaOnUpdate: 1,
             hideLiveSuggestions: 1,
-            preview: 1
+            preview: 1,
+            noTakes: 1
         },
 
         view: {
