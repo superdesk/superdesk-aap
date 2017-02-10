@@ -16,6 +16,10 @@ from .category_list_map import get_nzn_category_list
 
 
 class NznIpNewsFormatter(AAPIpNewsFormatter):
+    def __init__(self):
+        self.can_preview = False
+        self.can_export = False
+
     def format(self, article, subscriber, codes=None):
         """
         Constructs a dictionary that represents the parameters passed to the IPNews InsertNews stored procedure
