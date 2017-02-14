@@ -81,6 +81,7 @@ module.exports = function() {
                 'slugline',
                 'highlights',
                 'associations',
+                'queueError',
                 'headline',
                 'markedDesks',
                 'versioncreated'
