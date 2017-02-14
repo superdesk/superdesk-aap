@@ -210,5 +210,6 @@ CONTENT_EXPIRY_MINUTES = int(env('CONTENT_EXPIRY_MINUTES', 3 * 24 * 60))
 # list of allowed media types from AAP Multimedia System.
 AAP_MM_SEARCH_MEDIA_TYPES = ['image']
 
-# copies the metadata from parent for associated item.
-COPY_METADATA_FROM_PARENT = env('COPY_METADATA_FROM_PARENT', True)
+NO_TAKES = True
+
+COPY_METADATA_FROM_PARENT = True
