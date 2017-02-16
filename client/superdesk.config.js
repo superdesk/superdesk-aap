@@ -101,13 +101,30 @@ module.exports = function() {
                 'expiry',
                 'desk'
             ],
+            'singleLine': [
+                'slugline',
+                'highlights',
+                'takekey',
+                'state',
+                'update',
+                'takepackage',
+                'embargo',
+                'flags',
+                'updated',
+                'headline',
+                'wordcount',
+                'provider',
+                'versioncreator',
+                'versioncreated'
+            ],
             'narrowView': [
                 'slugline',
                 'takekey',
                 'state',
                 'provider',
                 'versioncreated'
-            ]
+            ],
+            'singleLineView': true 
         },
         langOverride: {
             'en': {
