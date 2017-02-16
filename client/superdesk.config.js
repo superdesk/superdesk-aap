@@ -107,7 +107,8 @@ module.exports = function() {
                 'state',
                 'provider',
                 'versioncreated'
-            ]
+            ],
+            'singleLineView': true
         },
         langOverride: {
             'en': {
