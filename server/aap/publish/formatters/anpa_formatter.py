@@ -114,7 +114,7 @@ class AAPAnpaFormatter(Formatter):
 
                 if formatted_article.get(FORMAT) == FORMATS.PRESERVED:
                     soup = BeautifulSoup(self.append_body_footer(formatted_article), "html.parser")
-                    anpa.append(soup.get_text().encode('ascii', 'replace'))
+                    anpa.append(soup.get_text().replace('\x19', '').encode('ascii', 'replace'))
                 else:
                     body = to_ascii(formatted_article.get('body_html', ''))
                     # we need to inject the dateline
@@ -155,7 +155,7 @@ class AAPAnpaFormatter(Formatter):
             raise FormatterError.AnpaFormatterError(ex, subscriber)
 
     def get_text_content(self, content):
-        content = content.replace('<br>', '<br/>').replace('</br>', '')
+        content = content.replace('<br>', '<br/>').replace('</br>', '').replace('\x19', '')
         soup = BeautifulSoup(content, 'html.parser')
 
         for top_level_tag in soup.find_all(recursive=False):
