@@ -17,6 +17,7 @@ import superdesk
 import logging
 import re
 import uuid
+from titlecase import titlecase
 
 
 class PDAResultsParser(FileFeedParser):
@@ -62,7 +63,7 @@ class PDAResultsParser(FileFeedParser):
                     b'\x1f(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)', lines[0], flags=re.I)
                 if m:
                     state = m.group(5).decode('ascii')
-                    item['slugline'] = m.group(1).decode('ascii') + ' Gallop'
+                    item['slugline'] = titlecase(m.group(1).decode('ascii')) + ' Gallop'
                     item['anpa_take_key'] = ('Result ' if '-' not in m.group(2).decode('ascii') else 'Results ') + \
                         m.group(2).decode('ascii') + ' ' + self.CityMap.get(state, '')
                     correction = m.group(3).decode('ascii')
