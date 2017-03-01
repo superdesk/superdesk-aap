@@ -50,7 +50,7 @@ class AapBulletinBuilderFormatterTest(TestCase):
             'subject': [{'qcode': '02011001'}],
             'anpa_take_key': 'take_key',
             'unique_id': '1',
-            'type': 'preformatted',
+            'type': 'text',
             'body_html': 'The story body',
             'abstract': 'abstract',
             'word_count': '1',
@@ -186,7 +186,7 @@ class AapBulletinBuilderFormatterTest(TestCase):
             'subject': [{'qcode': '15017000'}],
             'anpa_take_key': 'take_key',
             'unique_id': '1',
-            'type': 'preformatted',
+            'type': 'text',
             'body_html': 'The story body',
             'word_count': '1',
             'priority': '1',
@@ -223,8 +223,8 @@ class AapBulletinBuilderFormatterTest(TestCase):
             'anpa_take_key': 'take_key',
             'unique_id': '1',
             'type': 'text',
-            'format': 'preserved',
-            'body_html': 'The story body',
+            'format': 'html',
+            'body_html': '<div>The story body</div>',
             'word_count': '1',
             'priority': '1',
             'firstcreated': utcnow(),
@@ -239,7 +239,7 @@ class AapBulletinBuilderFormatterTest(TestCase):
 
         formatted_article = json.loads(item.get('data'))
         self.assertEqual(formatted_article['body_text'],
-                         'The story body\r\ncall helpline 999 if you are planning to quit smoking')
+                         'The story body\r\n\r\ncall helpline 999 if you are planning to quit smoking')
 
     def test_strip_html_mixed_tags(self):
         html = '<div>This is mixed&nbsp;<span style=\\\"background-color: transparent;\\\">content' \

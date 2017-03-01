@@ -6,7 +6,7 @@ newrelic>=2.66,<2.67
 celery[redis]>=4.0.2,<4.1
 redis==2.10.5
 eve==0.6.4
-eve-elastic==0.6
+eve-elastic==2.0
 elasticsearch==1.9.0
 flask==0.10.1
 flask-mail==0.9.1
@@ -37,4 +37,4 @@ pyjwt==1.4.2
 lxml==3.7.2
 titlecase==0.8.2
 
-git+git://github.com/superdesk/superdesk-core.git@3e7ef09c2#egg=Superdesk-Core
+git+git://github.com/superdesk/superdesk-core.git@9ff8a64c9#egg=Superdesk-Core
