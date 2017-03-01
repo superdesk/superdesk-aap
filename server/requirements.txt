@@ -37,4 +37,4 @@ pyjwt==1.4.2
 lxml==3.7.2
 titlecase==0.8.2
 
-git+git://github.com/superdesk/superdesk-core.git@a0e02fd#egg=Superdesk-Core
+git+git://github.com/superdesk/superdesk-core.git@08c26599#egg=Superdesk-Core
