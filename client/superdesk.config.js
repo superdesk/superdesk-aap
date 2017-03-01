@@ -112,6 +112,7 @@ module.exports = function() {
                 'flags',
                 'updated',
                 'headline',
+                'markedDesks',
                 'wordcount',
                 'provider',
                 'versioncreator',
@@ -121,6 +122,7 @@ module.exports = function() {
                 'slugline',
                 'takekey',
                 'state',
+                'markedDesks',
                 'provider',
                 'versioncreated'
             ],
