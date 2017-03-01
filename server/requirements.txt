@@ -35,5 +35,6 @@ mongolock==1.3.4
 PyYAML==3.12
 pyjwt==1.4.2
 lxml==3.7.2
+titlecase==0.8.2
 
 git+git://github.com/superdesk/superdesk-core.git@a0e02fd#egg=Superdesk-Core
