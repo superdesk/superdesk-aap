@@ -13,6 +13,7 @@ from datetime import datetime
 import io
 from apps.publish import init_app
 from superdesk.publish.subscribers import SUBSCRIBER_TYPES
+from superdesk.metadata.item import FORMAT, FORMATS
 from superdesk.tests import TestCase
 
 from .aap_formatter_common import map_priority
@@ -373,3 +374,20 @@ class ANPAFormatterTest(TestCase):
             'anpa_take_key': None, 'byline': None, 'abstract': None})
         resp = f.format(item, subscriber)[0]
         self.assertTrue('encoded_item' in resp)
+
+    def test_EM_html(self):
+        f = AAPAnpaFormatter()
+        subscriber = self.app.data.find('subscribers', None, None)[0]
+        item = self.article.copy()
+        item['body_html'] = '<p>stuff\x19\r\nmore stuff<\p>'
+        resp = f.format(item, subscriber)[0]
+        self.assertTrue('stuff\r\nmore stuff' in resp['encoded_item'].decode('ascii'))
+
+    def test_EM_preserved(self):
+        f = AAPAnpaFormatter()
+        subscriber = self.app.data.find('subscribers', None, None)[0]
+        item = self.article.copy()
+        item[FORMAT] = FORMATS.PRESERVED
+        item['body_html'] = 'stuff\x19\r\nmore stuff'
+        resp = f.format(item, subscriber)[0]
+        self.assertTrue('stuff\r\nmore stuff' in resp['encoded_item'].decode('ascii'))
