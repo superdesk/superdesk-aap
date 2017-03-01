@@ -31,10 +31,10 @@ class PDAResultsTestCase(TestCase):
         fixture = os.path.normpath(os.path.join(dirname, '../fixtures', filename))
         self.provider['source'] = 'SOMETHING'
         self.items = PDAResultsParser().parse(fixture, self.provider)
-        self.assertEqual(self.items.get('headline'), 'CRANBOURNE Gallop Result 6 Melbourne Tuesday')
+        self.assertEqual(self.items.get('headline'), 'Cranbourne Gallop Result 6 Melbourne Tuesday')
         self.assertEqual(self.items.get('anpa_category')[0]['qcode'], 'r')
         self.assertEqual(self.items.get('subject')[0]['qcode'], '15030001')
-        self.assertEqual(self.items.get('slugline'), 'CRANBOURNE Gallop')
+        self.assertEqual(self.items.get('slugline'), 'Cranbourne Gallop')
         self.assertEqual(self.items.get('genre')[0]['name'], 'Results (sport)')
         self.assertIn('versioncreated', self.items)
 
@@ -44,10 +44,10 @@ class PDAResultsTestCase(TestCase):
         fixture = os.path.normpath(os.path.join(dirname, '../fixtures', filename))
         self.provider['source'] = 'SOMETHING'
         self.items = PDAResultsParser().parse(fixture, self.provider)
-        self.assertEqual(self.items.get('headline'), 'NEWS: DOOMBEN Gallop Result 6 Brisbane Wednesday')
+        self.assertEqual(self.items.get('headline'), 'News: Doomben Gallop Result 6 Brisbane Wednesday')
         self.assertEqual(self.items.get('anpa_category')[0]['qcode'], 'r')
         self.assertEqual(self.items.get('subject')[0]['qcode'], '15030001')
-        self.assertEqual(self.items.get('slugline'), 'NEWS: DOOMBEN Gallop')
+        self.assertEqual(self.items.get('slugline'), 'News: Doomben Gallop')
         self.assertIn('versioncreated', self.items)
 
     def test_shdrace_format(self):
@@ -56,10 +56,10 @@ class PDAResultsTestCase(TestCase):
         fixture = os.path.normpath(os.path.join(dirname, '../fixtures', filename))
         self.provider['source'] = 'SOMETHING'
         self.items = PDAResultsParser().parse(fixture, self.provider)
-        self.assertEqual(self.items.get('headline'), 'SHDRACE: CANTERBURY Gallop Result 6 Sydney Wednesday')
+        self.assertEqual(self.items.get('headline'), 'Shdrace: Canterbury Gallop Result 6 Sydney Wednesday')
         self.assertEqual(self.items.get('anpa_category')[0]['qcode'], 'r')
         self.assertEqual(self.items.get('subject')[0]['qcode'], '15030001')
-        self.assertEqual(self.items.get('slugline'), 'SHDRACE: CANTERBURY Gallop')
+        self.assertEqual(self.items.get('slugline'), 'Shdrace: Canterbury Gallop')
         self.assertIn('versioncreated', self.items)
 
     def test_multiple_race_number_format(self):
@@ -68,10 +68,10 @@ class PDAResultsTestCase(TestCase):
         fixture = os.path.normpath(os.path.join(dirname, '../fixtures', filename))
         self.provider['source'] = 'SOMETHING'
         self.items = PDAResultsParser().parse(fixture, self.provider)
-        self.assertEqual(self.items.get('headline'), 'RPTG CRTG CANTERBURY Gallop Results 1-1 Sydney Wednesday')
+        self.assertEqual(self.items.get('headline'), 'RPTG CRTG Canterbury Gallop Results 1-1 Sydney Wednesday')
         self.assertEqual(self.items.get('anpa_category')[0]['qcode'], 'r')
         self.assertEqual(self.items.get('subject')[0]['qcode'], '15030001')
-        self.assertEqual(self.items.get('slugline'), 'CANTERBURY Gallop')
+        self.assertEqual(self.items.get('slugline'), 'Canterbury Gallop')
         self.assertEqual(self.items.get('anpa_take_key'), 'Results 1-1 Sydney')
         self.assertIn('versioncreated', self.items)
 
