@@ -178,8 +178,8 @@ class AAPBulletinBuilderFormatter(Formatter):
             return
 
         for assoc, value in item.get(ASSOCIATIONS).items():
-            if value.get(ITEM_TYPE) not in {CONTENT_TYPE.AUDIO, CONTENT_TYPE.VIDEO,
-                                            CONTENT_TYPE.GRAPHIC, CONTENT_TYPE.PICTURE}:
+            if not value or value.get(ITEM_TYPE) not in {CONTENT_TYPE.AUDIO, CONTENT_TYPE.VIDEO,
+                                                         CONTENT_TYPE.GRAPHIC, CONTENT_TYPE.PICTURE}:
                 continue
 
             value['description_text'] = to_ascii(self.get_text_content(value.get('description_text'))).strip()
