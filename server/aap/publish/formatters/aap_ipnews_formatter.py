@@ -25,6 +25,12 @@ import textwrap
 
 
 class AAPIpNewsFormatter(Formatter, AAPODBCFormatter):
+    def __init__(self):
+        self.format_type = 'AAP IPNEWS'
+        self.output_field = 'article_text'
+        self.can_preview = True
+        self.can_export = True
+
     def format(self, article, subscriber, codes=None):
         formatted_article = deepcopy(article)
         # Anyhting sourced as NZN is passed off as AAP
@@ -129,4 +135,12 @@ class AAPIpNewsFormatter(Formatter, AAPODBCFormatter):
         return get_aap_category_list(category_list)
 
     def can_format(self, format_type, article):
-        return format_type == 'AAP IPNEWS' and article[ITEM_TYPE] in [CONTENT_TYPE.TEXT]
+        return format_type == self.format_type and article[ITEM_TYPE] in [CONTENT_TYPE.TEXT]
+
+    def export(self, item):
+        if self.can_format(self.format_type, item):
+            sequence, formatted_doc = self.format(item, {'_id': '0'}, None)[0]
+            formatted_doc = json.loads(formatted_doc)
+            return formatted_doc.get(self.output_field, '').replace('\'\'', '\'')
+        else:
+            raise Exception()

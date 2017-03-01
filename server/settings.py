@@ -77,6 +77,7 @@ else:
 
 INSTALLED_APPS.extend([
     'superdesk.upload',
+    'superdesk.download',
     'superdesk.sequences',
     'superdesk.notification',
     'superdesk.data_updates',
@@ -126,6 +127,7 @@ INSTALLED_APPS.extend([
     'apps.validate',
     'apps.workspace',
     'apps.macros',
+    'apps.export',
     'apps.archive_broadcast',
     'apps.search_providers',
     'apps.feature_preview',

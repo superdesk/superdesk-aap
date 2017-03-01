@@ -45,7 +45,8 @@ module.exports = function() {
             editFeaturedImage: 1,
             confirmMediaOnUpdate: 1,
             hideLiveSuggestions: 1,
-            preview: 1
+            preview: 1,
+            previewFormats: 1
         },
 
         view: {
@@ -61,12 +62,6 @@ module.exports = function() {
             featuremedia: 1
         },
         
-        previewFormats: [{
-            name: 'AAPIpNewsFormatter',
-            outputType: 'json',
-            outputField: 'article_text'
-        }],
-
         defaultTimezone: 'Australia/Sydney',
         shortDateFormat: 'DD/MM',
         ArchivedDateFormat: 'D/MM/YYYY',
