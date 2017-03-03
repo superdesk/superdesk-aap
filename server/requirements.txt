@@ -7,7 +7,6 @@ celery[redis]>=4.0.2,<4.1
 redis==2.10.5
 eve==0.6.4
 eve-elastic==2.0
-elasticsearch==1.9.0
 flask==0.10.1
 flask-mail==0.9.1
 flask-script==2.0.5
