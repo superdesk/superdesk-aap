@@ -11,16 +11,7 @@ module.exports = function() {
             description_text: {
                 required: true
             },
-            copyrightholder: {
-                required: false
-            },
             byline: {
-                required: false
-            },
-            usageterms: {
-                required: false
-            },
-            copyrightnotice: {
                 required: false
             }
         },
@@ -28,6 +19,10 @@ module.exports = function() {
             ingest: 1,
             content: 1,
             tasks: 0
+        },
+
+        item_profile: {
+            change_profile: 1
         },
 
         editor: {
