@@ -121,13 +121,21 @@ class AAPIpNewsFormatter(Formatter, AAPODBCFormatter):
         para_text = re.sub('[\x00-\x09\x0b\x0c\x0f-\x1f]', '', para_text)
         # Special case x0e denotes a line break
         para_text = re.sub('\x0e', '\r\n', para_text)
-        # Wrap line if to long
-        if len(para_text) > 80:
-            para_text = textwrap.fill(para_text, 80).replace('\n', ' \r\n')
-        if para_text == '\r\n':
+
+        wrapped_text = ''
+        # for each line in the paragraph we may need to wrap
+        for line in para_text.split('\n'):
+            # Wrap line if to long
+            if len(line) > 80:
+                line = textwrap.fill(line, 80)
+                wrapped_text += line.replace('\n', ' \r\n')
+            else:
+                wrapped_text += '{}\n'.format(line) if line.endswith('\r') else line
+
+        if wrapped_text == '\r\n':
             tag.replace_with('\r\n')
-        elif para_text != '':
-            tag.replace_with('   {}\x19\r\n'.format(para_text))
+        elif wrapped_text != '':
+            tag.replace_with('   {}\x19\r\n'.format(wrapped_text))
         else:
             tag.replace_with('')
 

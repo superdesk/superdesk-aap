@@ -95,6 +95,17 @@ class ZCZCTestCase(TestCase):
         self.assertEqual(self.items.get('genre')[0]['qcode'], 'Results (sport)')
         self.assertIn('versioncreated', self.items)
 
+    def test_sports_results_preview_format(self):
+        filename = 'AFL_FormGuide__636241349261119029.tst'
+        dirname = os.path.dirname(os.path.realpath(__file__))
+        fixture = os.path.normpath(os.path.join(dirname, '../fixtures', filename))
+        self.provider['source'] = 'SOMETHING'
+        self.items = ZCZCSportsResultsParser().parse(fixture, self.provider)
+        self.assertEqual(self.items.get('headline'), 'AFL: AFL Round 23 preview panel')
+        self.assertTrue(self.items.get('body_html').startswith('<p>MELBOURNE, March 3 AAP - Preview of '
+                                                               'AFL Round 23 matches (all times AEDT):</p>'))
+        self.assertTrue('<br>Tip:' in self.items.get('body_html'))
+
     def test_medianet_format(self):
         filename = 'ED_841066_2_1.tst'
         dirname = os.path.dirname(os.path.realpath(__file__))
