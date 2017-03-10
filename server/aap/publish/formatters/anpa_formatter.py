@@ -13,7 +13,6 @@ from .aap_formatter_common import map_priority, get_service_level
 from apps.archive.common import get_utc_schedule
 import superdesk
 from superdesk.errors import FormatterError
-from bs4 import BeautifulSoup, NavigableString
 import datetime
 from superdesk.metadata.item import ITEM_TYPE, CONTENT_TYPE, BYLINE, EMBARGO, FORMAT, FORMATS
 from .field_mappers.locator_mapper import LocatorMapper
@@ -23,6 +22,7 @@ from eve.utils import config
 from .unicodetoascii import to_ascii
 from .category_list_map import get_aap_category_list
 import re
+from superdesk.etree import parse_html, to_string, etree, get_text
 
 
 class AAPAnpaFormatter(Formatter):
@@ -108,24 +108,21 @@ class AAPAnpaFormatter(Formatter):
                     anpa.append(ednote.encode('ascii', 'replace'))
 
                 if formatted_article.get(BYLINE):
-                    anpa.append(BeautifulSoup(formatted_article.get(BYLINE), 'html.parser').text.encode
-                                ('ascii', 'ignore'))
+                    anpa.append(get_text(formatted_article.get(BYLINE)).encode('ascii', 'replace'))
                     anpa.append(b'\x0D\x0A')
 
                 if formatted_article.get(FORMAT) == FORMATS.PRESERVED:
-                    soup = BeautifulSoup(self.append_body_footer(formatted_article), "html.parser")
-                    anpa.append(soup.get_text().encode('ascii', 'replace'))
+                    anpa.append(self.append_body_footer(formatted_article).encode('ascii', 'replace'))
                 else:
                     body = to_ascii(formatted_article.get('body_html', ''))
                     # we need to inject the dateline
                     if is_first_part and formatted_article.get('dateline', {}).get('text') \
                             and not article.get('auto_publish', False):
-                        soup = BeautifulSoup(body, "html.parser")
-                        ptag = soup.find('p')
+                        body_html_elem = parse_html(formatted_article.get('body_html'))
+                        ptag = body_html_elem.find('.//p')
                         if ptag is not None:
-                            ptag.insert(0, NavigableString(
-                                '{} '.format(formatted_article.get('dateline').get('text')).encode('ascii', 'ignore')))
-                            body = str(soup)
+                            ptag.text = formatted_article['dateline']['text'] + ' ' + (ptag.text or '')
+                            body = to_string(body_html_elem)
                     anpa.append(self.get_text_content(body))
                     if formatted_article.get('body_footer'):
                         anpa.append(self.get_text_content(to_ascii(formatted_article.get('body_footer', ''))))
@@ -156,28 +153,28 @@ class AAPAnpaFormatter(Formatter):
 
     def get_text_content(self, content):
         content = content.replace('<br>', '<br/>').replace('</br>', '')
-        soup = BeautifulSoup(content, 'html.parser')
+        content = re.sub('[\x00-\x09\x0b\x0c\x0e-\x1f]', '', content)
+        content = content.replace('\xA0', ' ')
 
-        for top_level_tag in soup.find_all(recursive=False):
-            self.format_text_content(top_level_tag)
+        parsed = parse_html(content, content='html')
 
-        return soup.get_text().encode('ascii', 'replace')
+        for br in parsed.xpath('//br'):
+            br.tail = '\r\n' + br.tail if br.tail else '\r\n'
+        etree.strip_elements(parsed, 'br', with_tail=False)
 
-    def format_text_content(self, tag):
-        for child_tag in tag.find_all():
-            if child_tag.name == 'br':
-                child_tag.replace_with('\r\n{}'.format(child_tag.get_text()))
+        for tag in parsed.xpath('//*'):
+            if tag.getparent() is not None and tag.getparent().tag == 'body' and tag.tag not in ('br') \
+                    and tag.text is not None and tag.text.strip() != '':
+                tag.text = '   ' + re.sub(' +', ' ', re.sub('(?<!\r)\n+', ' ', tag.text)) if tag.text else ''
+                tag.tail = '\r\n' + tag.tail if tag.tail else '\r\n'
 
-        para_text = re.sub(' +', ' ', re.sub('(?<!\r)\n+', ' ', tag.get_text()).strip().replace('\xA0', ' '))
-        para_text = re.sub('[\x00-\x09\x0b\x0c\x0e-\x1f]', '', para_text)
-        if para_text != '':
-            tag.replace_with('   {}\r\n'.format(para_text))
-        else:
-            tag.replace_with('')
+        para_text = "".join(x for x in parsed.itertext())
+        para_text = para_text.replace('\xA0', ' ')
+        return para_text.encode('ascii', 'replace')
 
     def _process_headline(self, anpa, article, category):
         # prepend the locator to the headline if required
-        article['headline'] = BeautifulSoup(article.get('headline', ''), 'html.parser').text
+        article['headline'] = get_text(article.get('headline', ''))
         headline = to_ascii(LocatorMapper().get_formatted_headline(article, category.decode('UTF-8').upper()))
 
         # Set the maximum size to 64 including the sequence number if any

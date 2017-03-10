@@ -57,7 +57,7 @@ class PreserveFormatTestCase(unittest.TestCase):
 
         item = {'body_html': text}
         res, diff = preserve(item)
-        self.assertEqual(item['body_html'], '<pre>A\nB\n\n\nC\n\nD\n</pre>')
+        self.assertEqual(item['body_html'], '<pre>A\nB\n\nC\n\nD\n</pre>')
 
     def test_story_with_pre_tags(self):
         text = '<pre>A\n</pre>' \
@@ -100,4 +100,10 @@ class PreserveFormatTestCase(unittest.TestCase):
 
         item = {'body_html': text}
         res, diff = preserve(item)
-        self.assertEqual(item['body_html'], '<pre>AB\n\nC\nD\n</pre>')
+        self.assertEqual(item['body_html'], '<pre>A\nB\n\nC\n\nD\n</pre>')
+
+    def test_story_with_ampersand(self):
+        text = '<pre>a&amp;b</pre>'
+        item = {'body_html': text}
+        res, diff = preserve(item)
+        self.assertEqual(item['body_html'], '<pre>a&amp;b\n</pre>')

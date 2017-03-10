@@ -14,8 +14,8 @@ from superdesk.metadata.item import ITEM_TYPE, CONTENT_TYPE, SIGN_OFF
 from lxml import etree as etree
 from lxml.etree import SubElement
 import re
-from bs4 import BeautifulSoup
 from .unicodetoascii import to_ascii
+from superdesk.etree import parse_html, get_text, to_string
 
 
 class AAPNITFFormatter(NITFFormatter):
@@ -88,9 +88,12 @@ class AAPNITFFormatter(NITFFormatter):
         :return:
         """
         html = html.replace('<br>', '<br/>').replace('</br>', '')
-        soup = BeautifulSoup(html, 'html.parser')
-        for top_level_tag in soup.find_all(recursive=False):
-            para_text = top_level_tag.get_text().strip().replace('\n', ' ')
-            para_text = re.sub('[\x00-\x09\x0b\x0c\x0e-\x1f]', '', para_text)
-            para_text = re.sub(' +', ' ', para_text)
-            SubElement(element, 'p').text = to_ascii(para_text)
+        html = re.sub('[\x00-\x09\x0b\x0c\x0e-\x1f]', '', html)
+        html = html.replace('\n', ' ')
+        html = re.sub(r'\s\s+', ' ', html)
+        parsed = parse_html(html, content='html')
+        for tag in parsed.xpath('//*'):
+            if tag.getparent() is not None and tag.getparent().tag == 'body':
+                p = etree.Element('p')
+                p.text = to_ascii(get_text(to_string(tag, method='html'), content='html'))
+                element.append(p)

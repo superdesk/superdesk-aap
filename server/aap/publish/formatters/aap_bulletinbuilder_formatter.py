@@ -16,13 +16,13 @@ from superdesk.utils import json_serialize_datetime_objectId
 from superdesk.utc import utcnow
 from superdesk.errors import FormatterError
 from superdesk.metadata.item import ITEM_TYPE, PACKAGE_TYPE, ITEM_STATE, CONTENT_STATE, ASSOCIATIONS, CONTENT_TYPE
-from bs4 import BeautifulSoup
 from .field_mappers.locator_mapper import LocatorMapper
 from .field_mappers.slugline_mapper import SluglineMapper
 from .aap_formatter_common import set_subject
 from .unicodetoascii import to_ascii
 from copy import deepcopy
 import json
+from superdesk.etree import parse_html, etree
 
 
 class AAPBulletinBuilderFormatter(Formatter):
@@ -83,7 +83,7 @@ class AAPBulletinBuilderFormatter(Formatter):
                 formatted_article['slugline'] = self.get_text_content(
                     to_ascii(SluglineMapper().map(article=formatted_article,
                                                   category=category.get('qcode').upper(),
-                                                  truncate=(not formatted_article.get('auto_publish')))).strip())
+                                                  truncate=(not formatted_article.get('auto_publish'))))).strip()
 
             self.format_associated_item(formatted_article)
 
@@ -107,31 +107,33 @@ class AAPBulletinBuilderFormatter(Formatter):
 
     def get_text_content(self, content):
         content = content.replace('<br>', '<br/>').replace('</br>', '')
-        soup = BeautifulSoup(content, 'html.parser')
+        # remove control chars except \n
+        content = re.sub('[\x00-\x09\x0b-\x1f]', '', content)
+        # new lines are spaces
+        content = re.sub('[\n]', ' ', content)
+        if content == '':
+            return ''
 
-        for top_level_tag in soup.find_all(recursive=False):
-            self.format_text_content(top_level_tag)
+        parsed = parse_html(content, content='html', space_on_elements=True)
 
-        return re.sub(' +', ' ', soup.get_text())
+        # breaks are replaced with spaces
+        for br in parsed.xpath('//br'):
+            br.tail = ' ' + br.tail if br.tail else ' '
+        etree.strip_elements(parsed, 'br', with_tail=False)
 
-    def remove_tags(self, tag, tag_name):
-        for replace_tag in tag.find_all(tag_name):
-            # remove the <br> tag
-            replace_tag.replace_with(' {}'.format(replace_tag.get_text().replace('\n', ' ')))
+        text = ''
+        for top_level_tag in parsed.iter():
+            if top_level_tag.getparent() is not None and top_level_tag.getparent().tag == 'body':
+                text += self.format_text_content(top_level_tag)
+
+        return re.sub(' +', ' ', text)
 
     def format_text_content(self, tag):
-        for child_tag in tag.find_all():
-            if child_tag.name == 'br':
-                child_tag.replace_with(' {}'.format(child_tag.get_text()))
-            else:
-                child_tag.replace_with('{}'.format(child_tag.get_text().replace('\n', ' ')))
-
-        para_text = tag.get_text().strip().replace('\n', ' ').replace('\xa0', ' ')
-        para_text = re.sub('[\x00-\x1f]', '', para_text)
+        para_text = ''.join(tag.itertext(with_tail=True)).strip().replace('\n', ' ').replace('\xa0', ' ')
         if para_text != '':
-            tag.replace_with('{}\r\n\r\n'.format(para_text))
+            return '{}\r\n\r\n'.format(para_text)
         else:
-            tag.replace_with('')
+            return ''
 
     def _handle_auto_publish(self, article):
         """Set the abstract from body_text if not specified in the article.

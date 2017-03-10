@@ -8,7 +8,6 @@
 # AUTHORS and LICENSE files distributed with this source code, or
 # at https://www.sourcefabric.org/superdesk/license
 from superdesk.publish.formatters import Formatter
-from bs4 import BeautifulSoup
 from superdesk.errors import FormatterError
 from superdesk.metadata.item import ITEM_TYPE, CONTENT_TYPE, FORMAT, FORMATS
 from .aap_odbc_formatter import AAPODBCFormatter
@@ -17,6 +16,7 @@ import json
 from .unicodetoascii import to_ascii
 from copy import deepcopy
 from .category_list_map import get_aap_category_list
+from superdesk.etree import parse_html, etree, get_text
 
 
 class AAPNewscentreFormatter(Formatter, AAPODBCFormatter):
@@ -39,9 +39,10 @@ class AAPNewscentreFormatter(Formatter, AAPODBCFormatter):
                 pub_seq_num, odbc_item = self.get_odbc_item(article, subscriber, category, codes, pass_through)
                 is_last_take = self.is_last_take(article)
                 if article.get(FORMAT) == FORMATS.PRESERVED:  # @article_text
-                    soup = BeautifulSoup(self.append_body_footer(article) if is_last_take else
-                                         article.get('body_html', ''), "html.parser")
-                    odbc_item['article_text'] = soup.get_text().replace('\'', '\'\'')
+                    body = get_text(
+                        self.append_body_footer(article) if is_last_take else
+                        article.get('body_html', ''), content='html')
+                    odbc_item['article_text'] = body.replace('\'', '\'\'')
                 else:
                     body = self.get_text_content(
                         to_ascii(self.append_body_footer(article) if is_last_take else
@@ -83,7 +84,7 @@ class AAPNewscentreFormatter(Formatter, AAPODBCFormatter):
         :return:
         """
         if article.get('byline') and article.get('byline') != '':
-            byline = BeautifulSoup(article.get('byline', ''), 'html.parser').text
+            byline = get_text(article.get('byline', ''), content='html')
             if len(byline) >= 3 and byline[:2].upper() != 'BY':
                 byline = 'By ' + byline
             byline = '   {}\r\n\r\n'.format(byline).replace('\'', '\'\'')
@@ -93,25 +94,34 @@ class AAPNewscentreFormatter(Formatter, AAPODBCFormatter):
         return get_aap_category_list(category_list)
 
     def get_text_content(self, content):
+        text = ''
         content = content.replace('<br>', '<br/>').replace('</br>', '')
-        soup = BeautifulSoup(content, 'html.parser')
+        content = re.sub(' +', ' ', re.sub('(?<!\r)\n+', ' ', content).strip())
+        content = re.sub('[\x00-\x09\x0b\x0c\x0e-\x1f]', '', content)
 
-        for top_level_tag in soup.find_all(recursive=False):
-            self.format_text_content(top_level_tag)
+        parsed = parse_html(content, content='html')
 
-        return soup.get_text()
+        for br in parsed.xpath('//br'):
+            br.tail = '\r\n' + br.tail if br.tail else '\r\n'
+        etree.strip_elements(parsed, 'br', with_tail=False)
 
-    def format_text_content(self, tag):
-        for child_tag in tag.find_all():
-            if child_tag.name == 'br':
-                child_tag.replace_with('\r\n{}'.format(child_tag.get_text()))
+        for tag in parsed.xpath('//*'):
+            if tag.getparent() is not None and tag.getparent().tag == 'body':
+                ptext = ''
+                for x in tag.itertext():
+                    ptext += x
+                text += self.format_text_content(ptext)
 
-        para_text = re.sub(' +', ' ', re.sub('(?<!\r)\n+', ' ', tag.get_text()).strip().replace('\xA0', ' '))
-        para_text = re.sub('[\x00-\x09\x0b\x0c\x0e-\x1f]', '', para_text)
+        return text
+
+    def format_text_content(self, para_text):
+
         if para_text != '':
-            tag.replace_with('   {}\r\n\r\n'.format(para_text))
+            para_text = '   {}\r\n\r\n'.format(para_text)
         else:
-            tag.replace_with('')
+            para_text = ''
+        para_text = para_text.replace('\xA0', ' ')
+        return para_text
 
     def can_format(self, format_type, article):
         return format_type == 'AAP NEWSCENTRE' and article[ITEM_TYPE] in [CONTENT_TYPE.TEXT]

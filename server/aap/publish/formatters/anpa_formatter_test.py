@@ -326,7 +326,7 @@ class ANPAFormatterTest(TestCase):
         resp = f.format(item, subscriber)[0]
         out = resp['encoded_item']
         lines = io.StringIO(out.decode())
-        self.assertTrue(lines.getvalue().split('\n')[6].find('   Kathmandu incurred costs in relation') == 0)
+        self.assertTrue(lines.getvalue().split('\n')[7].find('   Kathmandu incurred costs in relation') == 0)
 
     def test_span_body(self):
         f = AAPAnpaFormatter()

@@ -12,10 +12,10 @@ from superdesk.publish.formatters import Formatter
 from .aap_formatter_common import map_priority
 from apps.archive.common import get_utc_schedule
 import superdesk
-from bs4 import BeautifulSoup
 from superdesk.errors import FormatterError
 from superdesk.metadata.item import ITEM_TYPE, CONTENT_TYPE, EMBARGO, CONTENT_STATE, ITEM_STATE
 import json
+from superdesk.etree import get_text
 
 
 class AAPSMSFormatter(Formatter):
@@ -33,7 +33,7 @@ class AAPSMSFormatter(Formatter):
                 else article.get('anpa_category', [{}])[0].get('qcode').upper()
 
             odbc_item = {'Sequence': pub_seq_num, 'Category': category,
-                         'Headline': BeautifulSoup(sms_message, 'html.parser').text,
+                         'Headline': get_text(sms_message, content='html'),
                          'Priority': map_priority(article.get('priority'))}
 
             body = self.append_body_footer(article)
@@ -43,7 +43,7 @@ class AAPSMSFormatter(Formatter):
                 body = embargo + body
 
             if article[ITEM_TYPE] == CONTENT_TYPE.TEXT:
-                body = BeautifulSoup(body, "html.parser").text
+                body = get_text(body, content='html')
 
             odbc_item['StoryText'] = body.replace('\'', '\'\'')  # @article_text
             odbc_item['ident'] = '0'

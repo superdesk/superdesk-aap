@@ -13,8 +13,8 @@ from .reuters_derive_dateline import reuters_derive_dateline
 import datetime
 
 
-class DPADeriveDatelineTests(TestCase):
-    def simple_case_test(self):
+class ReutersDeriveDatelineTests(TestCase):
+    def test_simple_case(self):
         item = dict()
         item['firstcreated'] = datetime.datetime(2015, 10, 26, 11, 45, 19, 0)
         item['body_html'] = '<p>DETROIT (Reuters) - General Motors Co <GM.N> Chief Financial Officer Chuck Stevens \
@@ -28,7 +28,7 @@ class DPADeriveDatelineTests(TestCase):
         reuters_derive_dateline(item)
         self.assertEqual(item['dateline']['located']['city'], 'Detroit')
 
-    def with_a_date_test(self):
+    def test_with_a_date(self):
         item = dict()
         item['firstcreated'] = datetime.datetime(2015, 10, 26, 11, 45, 19, 0)
         item['body_html'] = '<p>PARIS, Oct 22 (Reuters) - Eurotunnel said on\nThursday that third-quarter revenue \
@@ -51,7 +51,7 @@ class DPADeriveDatelineTests(TestCase):
         reuters_derive_dateline(item)
         self.assertEqual(item['dateline']['located']['city'], 'PARIS')
 
-    def with_a_byline_test(self):
+    def test_with_a_byline(self):
         item = dict()
         item['firstcreated'] = datetime.datetime(2015, 10, 26, 11, 45, 19, 0)
         item['byline'] = 'By Karl Plume'
@@ -67,7 +67,7 @@ class DPADeriveDatelineTests(TestCase):
         reuters_derive_dateline(item)
         self.assertEqual(item['dateline']['located']['city'], 'Chicago')
 
-    def with_a_dateline_already_leave_it_alone_test(self):
+    def test_with_a_dateline_already_leave_it_alone(self):
         item = dict()
         item['firstcreated'] = datetime.datetime(2015, 10, 26, 11, 45, 19, 0)
         item['dateline'] = {'located': {'city': 'Chicargo'}}
@@ -83,7 +83,7 @@ class DPADeriveDatelineTests(TestCase):
         reuters_derive_dateline(item)
         self.assertEqual(item['dateline']['located']['city'], 'Chicargo')
 
-    def with_just_a_date_test(self):
+    def test_with_just_a_date(self):
         item = dict()
         item['firstcreated'] = datetime.datetime(2015, 10, 26, 11, 45, 19, 0)
         item['body_html'] = '<p>Oct 22 (Reuters) - Eurotunnel said on\nThursday that third-quarter revenue \
@@ -94,7 +94,7 @@ class DPADeriveDatelineTests(TestCase):
         reuters_derive_dateline(item)
         self.assertNotIn('dateline', item)
 
-    def from_bagalore_test(self):
+    def test_from_bagalore(self):
         item = {'dateline': {'located': {'city': 'Bangalore'}}}
         item['firstcreated'] = datetime.datetime(2015, 10, 26, 11, 45, 19, 0)
         item['body_html'] = '<p>Wagga Wagga (Reuters) - Chicago Cubs supporters have \

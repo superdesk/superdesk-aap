@@ -325,7 +325,7 @@ class AAPNitfFormatterTest(TestCase):
         }
         doc = self.formatter.format(article, {'name': 'Test Subscriber'})[0]
         nitf_xml = etree.fromstring(doc['formatted_item'])
-        self.assertEqual(nitf_xml.find('body/body.content/p').text, ' ')
+        self.assertEqual(nitf_xml.find('body/body.content/p').text, '   ')
 
     def testNullTakeKeyContent(self):
         article = {

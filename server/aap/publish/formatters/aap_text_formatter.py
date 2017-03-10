@@ -9,12 +9,12 @@
 # at https://www.sourcefabric.org/superdesk/license
 
 
-from bs4 import BeautifulSoup
 from .aap_ipnews_formatter import AAPIpNewsFormatter
 from superdesk.errors import FormatterError
 from superdesk.metadata.item import ITEM_TYPE, CONTENT_TYPE, FORMAT, FORMATS
 import json
 from .unicodetoascii import to_ascii
+from superdesk.etree import get_text
 
 
 class AAPTextFormatter(AAPIpNewsFormatter):
@@ -26,18 +26,18 @@ class AAPTextFormatter(AAPIpNewsFormatter):
     def format(self, article, subscriber, codes=None):
         try:
             formatted_doc = {}
-            formatted_doc['headline'] = BeautifulSoup(article.get('headline', ''), 'html.parser').text
+            formatted_doc['headline'] = get_text(article.get('headline', ''), content='html')
             formatted_doc['headline'] = formatted_doc['headline'].replace('\'', '\'\'').replace('\xA0', ' ')
             formatted_doc['keyword'] = article.get('slugline', '').replace('\'', '\'\'')
 
             # body formatting
             is_last_take = self.is_last_take(article)
             if article.get(FORMAT) == FORMATS.PRESERVED:
-                soup = BeautifulSoup(
+                body = get_text(
                     self.append_body_footer(article) if is_last_take else
                     article.get('body_html', ''),
-                    "html.parser")
-                formatted_doc['article_text'] = soup.get_text().replace('\'', '\'\'')
+                    content='html')
+                formatted_doc['article_text'] = body.replace('\'', '\'\'')
             elif article.get(FORMAT, FORMATS.HTML) == FORMATS.HTML:
                 body = self.get_wrapped_text_content(
                     to_ascii(self.append_body_footer(article) if is_last_take
