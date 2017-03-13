@@ -41,7 +41,8 @@ module.exports = function() {
             confirmMediaOnUpdate: 1,
             hideLiveSuggestions: 1,
             preview: 1,
-            previewFormats: 1
+            previewFormats: 1,
+            noTakes: 1
         },
 
         view: {
@@ -54,7 +55,7 @@ module.exports = function() {
             byline: 1, keywords: 1, creator: 1, from_desk: 1,
             to_desk: 1, spike: 1, scheduled: 1, company_codes: 1,
             useDefaultTimezone: 1, ingest_provider: 1, raw_search: 1,
-            featuremedia: 1
+            featuremedia: 1, marked_desks: 1
         },
         
         defaultTimezone: 'Australia/Sydney',

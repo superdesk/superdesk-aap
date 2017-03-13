@@ -81,12 +81,12 @@ class ExportLegalArchiveToArchived(superdesk.Command):
         return desk_id
 
     def _export_to_archived(self):
-        """Export legal archive content to archived
+        """Export legal archive content to archived.
 
-         Copy all legal archive content that belongs to the desk provided
-         into archived
+        Copy all legal archive content that belongs to the desk provided
+        into archived
 
-         :return list: list of ids imported into archived, else if an error occurred reply with an empty list
+        :return list: list of ids imported into archived, else if an error occurred reply with an empty list
         """
         logger.info('Exporting legal archive content to archived.')
         items = list()

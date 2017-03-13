@@ -712,7 +712,7 @@ class AapIpNewsFormatterTest(TestCase):
                               'headline': 'VIC:This is a test headline', 'service_level': 'a', 'originator': 'AAP',
                               'take_key': 'take_key',
                               'article_text': '\x19   By joe\x19\r\n  The story\r\n body\r\n  second '
-                                              'line\r\n\r\n\r\ncall helpline '
+                                              'line\r\n\n\r\ncall helpline '
                                               '999 if you are planning to quit smoking\r\nAAP',
                               'priority': 'f', 'usn': '1',
                               'subject_matter': 'international law', 'news_item_type': 'News',
@@ -745,7 +745,6 @@ class AapIpNewsFormatterTest(TestCase):
             ],
         }
         subscriber = self.app.data.find('subscribers', None, None)[0]
-
         f = AAPIpNewsFormatter()
         seq, item = f.format(article, subscriber)[0]
         item = json.loads(item)
