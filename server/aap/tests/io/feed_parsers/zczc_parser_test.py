@@ -44,6 +44,20 @@ class ZCZCTestCase(TestCase):
             'type': 'text',
             'act': 'publish',
             '_id': 'publish_text'
+        },
+        {
+            'schema': {
+                'slugline': {
+                    'required': True,
+                    'maxlength': 30,
+                    'empty': False,
+                    'nullable': False,
+                    'type': "string"
+                }
+            },
+            'type': 'text',
+            'act': 'auto_publish',
+            '_id': 'auto_publish_text'
         }
     ]
 
@@ -256,3 +270,13 @@ class ZCZCTestCase(TestCase):
         self.assertEqual(self.items.get('slugline'), 'Caulfield Market')
         self.assertEqual(self.items.get('anpa_take_key'), 'Saturday')
         self.assertEqual(self.items.get('headline'), 'Caulfield Market Saturday')
+
+    def test_truncate_pagemasters_slugline(self):
+        filename = 'National Top Ten By Volume at Close - March 13.tst'
+        dirname = os.path.dirname(os.path.realpath(__file__))
+        fixture = os.path.normpath(os.path.join(dirname, '../fixtures', filename))
+        self.provider['source'] = 'PMF'
+        parser = ZCZCPMFParser()
+        self.items = parser.parse(fixture, self.provider)
+        parser.post_process_item(self.items, self.provider)
+        self.assertEqual(self.items.get('slugline'), 'National Top Ten By Volume at ')
