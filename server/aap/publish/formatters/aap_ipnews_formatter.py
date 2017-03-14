@@ -9,7 +9,6 @@
 # at https://www.sourcefabric.org/superdesk/license
 
 
-from bs4 import BeautifulSoup
 from .aap_odbc_formatter import AAPODBCFormatter
 from .aap_formatter_common import map_priority
 from superdesk.publish.formatters import Formatter
@@ -22,6 +21,7 @@ from .category_list_map import get_aap_category_list
 from .aap_formatter_common import get_service_level
 import re
 import textwrap
+from superdesk.etree import parse_html, etree, get_text
 
 
 class AAPIpNewsFormatter(Formatter, AAPODBCFormatter):
@@ -54,11 +54,10 @@ class AAPIpNewsFormatter(Formatter, AAPODBCFormatter):
                 is_last_take = self.is_last_take(article)
 
                 if article.get(FORMAT) == FORMATS.PRESERVED:  # @article_text
-                    soup = BeautifulSoup(
+                    body = get_text(
                         self.append_body_footer(article) if is_last_take else
-                        article.get('body_html', ''),
-                        "html.parser")
-                    odbc_item['article_text'] = soup.get_text().replace('\'', '\'\'')
+                        article.get('body_html', ''), content='html')
+                    odbc_item['article_text'] = body.replace('\'', '\'\'')
                     odbc_item['texttab'] = 't'
                 elif article.get(FORMAT, FORMATS.HTML) == FORMATS.HTML:
                     body = self.get_wrapped_text_content(
@@ -102,25 +101,35 @@ class AAPIpNewsFormatter(Formatter, AAPODBCFormatter):
         :param content:
         :return:
         """
+        text = ''
         content = content.replace('<br>', '<br/>').replace('</br>', '')
-        soup = BeautifulSoup(content, 'html.parser')
-
-        for top_level_tag in soup.find_all(recursive=False):
-            self.format_wrapped_text_content(top_level_tag)
-
-        return soup.get_text()
-
-    def format_wrapped_text_content(self, tag):
-        for child_tag in tag.find_all():
-            if child_tag.name == 'br':
-                child_tag.replace_with('\r\n{}'.format(child_tag.get_text()))
-
-        # remove runs os spaces and stray line feeds
-        para_text = re.sub(r' +', ' ', re.sub(r'(?<!\r)\n+', ' ', tag.get_text()).strip().replace('\xA0', ' '))
         # remove control chars except \r and \n
-        para_text = re.sub('[\x00-\x09\x0b\x0c\x0f-\x1f]', '', para_text)
+        content = re.sub('[\x00-\x09\x0b\x0c\x0f-\x1f]', '', content)
         # Special case x0e denotes a line break
-        para_text = re.sub('\x0e', '\r\n', para_text)
+        content = re.sub('\x0e', '\r\n', content)
+        # remove runs of spaces and stray line feeds
+        content = re.sub(r' +', ' ', re.sub(r'(?<!\r)\n+', ' ', content).strip())
+
+        parsed = parse_html(content, content='html')
+
+        for br in parsed.xpath('//br'):
+            br.tail = '\r\n' + br.tail if br.tail else '\r\n'
+        etree.strip_elements(parsed, 'br', with_tail=False)
+
+        for tag in parsed.xpath('//*'):
+            if tag.getparent() is not None and tag.getparent().tag == 'body':
+                ptext = ''
+                for x in tag.itertext():
+                    ptext += x
+                text += self.format_wrapped_text_content(ptext)
+
+        return text
+
+    def format_wrapped_text_content(self, para_text):
+        if para_text is None:
+            return ''
+        if para_text == '\r\n':
+            return '\r\n'
 
         wrapped_text = ''
         # for each line in the paragraph we may need to wrap
@@ -132,12 +141,14 @@ class AAPIpNewsFormatter(Formatter, AAPODBCFormatter):
             else:
                 wrapped_text += '{}\n'.format(line) if line.endswith('\r') else line
 
-        if wrapped_text == '\r\n':
-            tag.replace_with('\r\n')
-        elif wrapped_text != '':
-            tag.replace_with('   {}\x19\r\n'.format(wrapped_text))
+        wrapped_text = wrapped_text.strip()
+        # inject the paragarph mark
+        if wrapped_text != '':
+            text = '   {}\x19\r\n'.format(wrapped_text)
         else:
-            tag.replace_with('')
+            text = ''
+        text = text.replace('\xA0', ' ')
+        return text
 
     def _get_category_list(self, category_list):
         return get_aap_category_list(category_list)

@@ -3,7 +3,6 @@ honcho==0.6.6
 pyodbc==4.0.14
 unidecode==0.04.19
 newrelic>=2.66,<2.67
-beautifulsoup4==4.5.1
 titlecase==0.8.2
 
 git+git://github.com/superdesk/superdesk-core.git@c1a621adf#egg=Superdesk-Core

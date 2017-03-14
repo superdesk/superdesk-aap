@@ -8,12 +8,12 @@
 # AUTHORS and LICENSE files distributed with this source code, or
 # at https://www.sourcefabric.org/superdesk/license
 
-from bs4 import BeautifulSoup
 import logging
 from apps.archive.common import format_dateline_to_locmmmddsrc
 from superdesk.utc import get_date
 from superdesk.metadata.item import BYLINE
 from flask import current_app as app
+from superdesk.etree import parse_html
 
 logger = logging.getLogger(__name__)
 
@@ -28,13 +28,13 @@ def reuters_derive_dateline(item, **kwargs):
     try:
         html = item.get('body_html')
         if html:
-            soup = BeautifulSoup(html, "html.parser")
-            pars = soup.findAll('p')
+            parsed = parse_html(html, content='xml')
+            pars = parsed.xpath('//p')
             if len(pars) >= 2:
-                if BYLINE in item and item.get(BYLINE) in pars[0].get_text():
-                    first = pars[1].get_text()
+                if BYLINE in item and item.get(BYLINE) in ''.join(pars[0].itertext()):
+                    first = ''.join(pars[1].itertext())
                 else:
-                    first = pars[0].get_text()
+                    first = ''.join(pars[0].itertext())
                 city, source, the_rest = first.partition(' (Reuters) - ')
                 if source:
                     # sometimes the city is followed by a comma and either a date or a state

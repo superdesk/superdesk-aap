@@ -17,7 +17,7 @@ from superdesk.metadata.item import EMBARGO
 from eve.utils import config
 import superdesk
 from .unicodetoascii import to_ascii
-from bs4 import BeautifulSoup
+from superdesk.etree import get_text
 
 
 class AAPODBCFormatter():
@@ -32,12 +32,11 @@ class AAPODBCFormatter():
         :param pass_through:
         :return:
         """
-        article['headline'] = BeautifulSoup(article.get('headline', ''), 'html.parser').text
+        article['headline'] = get_text(article.get('headline', ''), content='html')
         pub_seq_num = superdesk.get_resource_service('subscribers').generate_sequence_number(subscriber)
         odbc_item = dict(originator=article.get('source', None), sequence=pub_seq_num,
                          category=category.get('qcode').lower(),
-                         author=BeautifulSoup(article.get('byline', '') or '', 'html.parser').text.replace
-                         ('\'', '\'\''),
+                         author=get_text(article.get('byline', '') or '', content='html').replace('\'', '\'\''),
                          keyword=SluglineMapper().map(article=article,
                                                       category=category.get('qcode').upper(),
                                                       truncate=True).replace('\'', '\'\'') if not pass_through else
@@ -91,7 +90,7 @@ class AAPODBCFormatter():
         :return:
         """
         if article.get('byline') and article.get('byline') != '':
-            byline = BeautifulSoup(article.get('byline', ''), 'html.parser').text
+            byline = get_text(article.get('byline', ''), content='html')
             if len(byline) >= 3 and byline[:2].upper() != 'BY':
                 byline = 'By ' + byline
             byline = '\x19   {}\x19\r\n'.format(byline).replace('\'', '\'\'')

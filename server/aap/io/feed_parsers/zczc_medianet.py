@@ -12,8 +12,8 @@ from superdesk.errors import AlreadyExistsError
 from superdesk.io.registry import register_feed_parser
 from aap.errors import AAPParserError
 import superdesk
-from bs4 import BeautifulSoup, NavigableString
 from superdesk.io.iptc import subject_codes
+from superdesk.etree import parse_html, to_string
 
 
 class ZCZCMedianetParser(ZCZCFeedParser):
@@ -67,15 +67,15 @@ class ZCZCMedianetParser(ZCZCFeedParser):
         genre_map = superdesk.get_resource_service('vocabularies').find_one(req=None, _id='genre')
         item['genre'] = [x for x in genre_map.get('items', []) if
                          x['qcode'] == 'Press Release' and x['is_active']]
-        soup = BeautifulSoup(item.get('body_html', ''), "html.parser")
-        ptag = soup.find('pre')
+        body_html_elem = parse_html(item.get('body_html', '<pre> </pre>'))
+        ptag = body_html_elem.find('.//pre')
         if ptag is not None:
             if InvestorRelease:
-                ptag.insert(0, NavigableString(
-                    '{} '.format('Investor Relations news release distributed by AAP Medianet. \r\n\r\n\r\n')))
+                ptag.text = '{} '.format('Investor Relations news release distributed by AAP Medianet. \r\n\r\n\r\n') \
+                            + ptag.text
             else:
-                ptag.insert(0, NavigableString('{} '.format('Media release distributed by AAP Medianet. \r\n\r\n\r\n')))
-            item['body_html'] = str(soup)
+                ptag.text = '{} '.format('Media release distributed by AAP Medianet. \r\n\r\n\r\n') + ptag.text
+            item['body_html'] = to_string(body_html_elem)
 
         locator_map = superdesk.get_resource_service('vocabularies').find_one(req=None, _id='locators')
         place_strs = item.pop('place').split(' ')

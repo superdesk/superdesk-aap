@@ -9,7 +9,6 @@
 # at https://www.sourcefabric.org/superdesk/license
 
 import re
-from bs4 import BeautifulSoup
 from io import StringIO
 from flask import current_app as app
 from apps.archive.common import format_dateline_to_locmmmddsrc
@@ -18,6 +17,7 @@ from datetime import datetime
 from pytz import timezone
 from superdesk.errors import SuperdeskApiError
 import superdesk
+from superdesk.etree import get_text
 
 
 def ap_weather_format(item, **kwargs):
@@ -25,8 +25,8 @@ def ap_weather_format(item, **kwargs):
         raise SuperdeskApiError.badRequestError("Article should be an AP sourced weather table")
     item['slugline'] = 'WORLD WEATHER'
 
-    soup = BeautifulSoup(item['body_html'], 'html.parser')
-    lines = soup.get_text().splitlines()
+    text = get_text(item['body_html'], content='html')
+    lines = text.splitlines()
     if not lines[0] == 'BC-WEA--Global Weather-Celsius,<':
         raise SuperdeskApiError.badRequestError("Table should be in Celsius only")
 

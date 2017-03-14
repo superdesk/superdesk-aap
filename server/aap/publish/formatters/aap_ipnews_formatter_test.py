@@ -200,11 +200,11 @@ class AapIpNewsFormatterTest(TestCase):
             'the New Zealand HighCourt for the \r\n' + \
             'recovery of costs associated with last years takeover bid from BriscoeGroup.\r\n' + \
             '   Kathmandu Holdings has lodged a claim in the New Zealand High Court for the \r\nrecovery of ' + \
-            'costs associated with last years takeover bid from Briscoe Group.\r\n   Kathmandu ' + \
+            'costs associated with last years takeover bid from Briscoe Group.\r\n\r\n   Kathmandu ' + \
             'incurred costs in relation to the takeover bid. After an initial \r\nrequest for payment on ' + \
             'November 20, 2015 and subsequent correspondence, Briscoe \r\nmade a payment of $637,711.65 on May ' + \
             '25, 2016 without prejudice to its position \r\non what sum Kathmandu is entitled to ' + \
-            'recover.\r\n   Kathmandu considers the full amount claimed is recoverable and has ' + \
+            'recover.\r\n\r\n   Kathmandu considers the full amount claimed is recoverable and has ' + \
             'issued legal \r\nproceedings for the balance of monies owed.\r\n\r\nAAP'
 
         self.maxDiff = None
@@ -362,7 +362,7 @@ class AapIpNewsFormatterTest(TestCase):
         f = AAPIpNewsFormatter()
         seq, item = f.format(article, subscriber)[0]
         item = json.loads(item)
-        expected = '\x19   By joe\x19\r\n   a b c d e f g\r\n\r\nAAP'
+        expected = '\x19   By joe\x19\r\n   a b c d e  f g\r\n\r\nAAP'
         self.assertEqual(item['article_text'], expected)
 
     def testNullTakeKeyContent(self):
@@ -423,7 +423,7 @@ class AapIpNewsFormatterTest(TestCase):
         f = AAPIpNewsFormatter()
         seq, item = f.format(article, subscriber)[0]
         item = json.loads(item)
-        expected = '\x19   By joe\x19\r\n     \r\n\r\nAAP'
+        expected = '\x19   By joe\x19\r\n\r\nAAP'
         self.assertEqual(item['article_text'], expected)
 
     def testLineSpecialLineBreak(self):
@@ -712,7 +712,7 @@ class AapIpNewsFormatterTest(TestCase):
                               'headline': 'VIC:This is a test headline', 'service_level': 'a', 'originator': 'AAP',
                               'take_key': 'take_key',
                               'article_text': '\x19   By joe\x19\r\n  The story\r\n body\r\n  second '
-                                              'line\r\n\n\r\ncall helpline '
+                                              'line\r\n\r\n\r\ncall helpline '
                                               '999 if you are planning to quit smoking\r\nAAP',
                               'priority': 'f', 'usn': '1',
                               'subject_matter': 'international law', 'news_item_type': 'News',
@@ -874,6 +874,30 @@ class AapIpNewsFormatterTest(TestCase):
         seq, item = f.format(article, subscriber)[0]
         item = json.loads(item)
         self.assertEqual(item['headline'], 'Arrested man \'\'punched me in nose\'\': officer')
+
+    def testAmpersandinBody(self):
+        article = {
+            '_id': '3',
+            'source': 'AAP',
+            'anpa_category': [{'qcode': 's'}],
+            'headline': 'test',
+            'byline': 'joe',
+            'slugline': 'slugline',
+            'subject': [{'qcode': '02011001'}],
+            'anpa_take_key': 'take_key',
+            'unique_id': '1',
+            'type': 'text',
+            'body_html': '<pre>a&amp;b</pre>',
+            'word_count': 150,
+            'priority': 1,
+            'format': 'preserved'
+        }
+        subscriber = self.app.data.find('subscribers', None, None)[0]
+
+        f = AAPIpNewsFormatter()
+        seq, item = f.format(article, subscriber)[0]
+        item = json.loads(item)
+        self.assertEqual(item['article_text'], '\x19   By joe\x19\r\na&b\r\nAAP')
 
 
 class DefaultSubjectTest(TestCase):

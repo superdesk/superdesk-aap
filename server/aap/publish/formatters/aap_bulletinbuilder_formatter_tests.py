@@ -230,7 +230,7 @@ class AapBulletinBuilderFormatterTest(TestCase):
             'firstcreated': utcnow(),
             'versioncreated': utcnow(),
             'lock_user': ObjectId(),
-            'body_footer': 'call helpline 999 if you are planning to quit smoking'
+            'body_footer': '<p>call helpline 999 if you are planning to quit smoking</p>'
         }
 
         subscriber = self.app.data.find('subscribers', None, None)[0]
@@ -239,12 +239,12 @@ class AapBulletinBuilderFormatterTest(TestCase):
 
         formatted_article = json.loads(item.get('data'))
         self.assertEqual(formatted_article['body_text'],
-                         'The story body\r\n\r\ncall helpline 999 if you are planning to quit smoking')
+                         'The story body\r\n\r\ncall helpline 999 if you are planning to quit smoking\r\n\r\n')
 
     def test_strip_html_mixed_tags(self):
         html = '<div>This is mixed&nbsp;<span style=\\\"background-color: transparent;\\\">content' \
                ' <p>this is para1</p></div>' \
-               '<p>This is&nbsp;&nbsp;&nbsp;mixed content<div> this is para2</div></p>'
+               '<p>This is&nbsp;&nbsp;&nbsp;mixed content<span> this is para2</span></p>'
         formatted_content = self._formatter.get_text_content(html)
 
         body_text = ('This is mixed content this is para1\r\n\r\n'
@@ -607,7 +607,7 @@ class AapBulletinBuilderFormatterTest(TestCase):
         self.assertEqual(test_article['source'], 'AAP')
         self.assertEqual(test_article['abstract'], 'This is a test headline')
         self.assertEqual(test_article['slugline'], 'slugline')
-        self.assertEqual(test_article['body_text'], 'Sydney, AAP - The story body text.')
+        self.assertEqual(test_article['body_text'], 'Sydney, AAP - The story body text.\r\n\r\n')
 
     def test_associated_item(self):
         article = {
