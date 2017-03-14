@@ -1,25 +1,57 @@
 language: python
 
-python: 3.4
-
-sudo: false
+sudo: required
+dist: trusty
 
 services:
-    - mongodb
     - elasticsearch
     - redis-server
 
 addons:
   apt:
-    sources:
-    - mongodb-3.0-precise
     packages:
-    - mongodb-org-server
     - unixodbc
     - unixodbc-dev
     - freetds-dev
     - freetds-bin
     - tdsodbc
+
+matrix:
+    include:
+        - env: ELASTIC2X
+          python: "3.5"
+          addons:
+              apt:
+                  sources:
+                      - elasticsearch-2.x
+                      - mongodb-3.0-precise
+                  packages:
+                      - elasticsearch
+                      - mongodb-org-server
+
+        - env: ELASTIC17
+          python: "3.4"
+          addons:
+              apt:
+                  sources:
+                      - elasticsearch-1.7
+                      - mongodb-3.0-precise
+                  packages:
+                      - elasticsearch
+                      - mongodb-org-server
+
+
+        - env: ELASTIC17
+          python: "3.5"
+          addons:
+              apt:
+                  sources:
+                      - elasticsearch-1.7
+                      - mongodb-3.0-precise
+                  packages:
+                      - elasticsearch
+                      - mongodb-org-server
+
 
 cache:
   directories:
@@ -43,6 +75,11 @@ before_install:
 install:
     - cd server && pip install -r dev-requirements.txt && cd ..
     - cd client && npm install --python=python2.7 && cd ..
+
+before_script: >
+    df -h
+    && sudo sed -i 's\enabled: true\enabled: false\' /etc/mongod.conf
+    && sudo service mongod restart
 
 script:
     - cd client && npm test && cd ..

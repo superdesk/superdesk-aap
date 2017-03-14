@@ -68,12 +68,11 @@ class CompareRepositories(superdesk.Command):
 
     def get_elastic_items(self, elasticsearch_index, elasticsearch_url):
         # get the all hits from elastic
-        post_data = {'fields': '_etag'}
-        response = requests.post('{}/{}/{}'.format(elasticsearch_url,
-                                                   elasticsearch_index,
-                                                   '_search?size=250000&q=*:*'),
-                                 params=post_data)
-        elastic_results = response.json()["hits"]["hits"]
+        post_data = {'fields': ['_etag']}
+        response = requests.get('{}/{}/{}'.format(elasticsearch_url,
+                                                  elasticsearch_index, '_search?size=5000&q=*:*'), params=post_data)
+
+        elastic_results = response.json()["hits"]['hits']
         elastic_items = [(elastic_item['_id'], elastic_item["fields"]['_etag'][0])
                          for elastic_item in elastic_results]
         return elastic_items
