@@ -22,8 +22,34 @@ class PDAResultsTestCase(TestCase):
                   "is_active": True,
                   "qcode": "Results (sport)"}]}]
 
+    validators = [
+        {
+            'schema': {
+                'headline': {
+                    'required': True,
+                    'maxlength': 255,
+                    'empty': False,
+                    'nullable': False,
+                    'type': "string"
+                },
+                'slugline': {
+                    'required': True,
+                    'maxlength': 30,
+                    'empty': False,
+                    'nullable': False,
+                    'type': "string"
+                }
+
+            },
+            'type': 'text',
+            'act': 'auto_publish',
+            '_id': 'auto_publish_text'
+        }
+    ]
+
     def setUp(self):
         self.app.data.insert('vocabularies', self.vocab)
+        self.app.data.insert('validators', self.validators)
 
     def test_default_format(self):
         filename = 'RR_20161025_CRANBOURNE_6.tst'
@@ -81,3 +107,11 @@ class PDAResultsTestCase(TestCase):
         fixture = os.path.normpath(os.path.join(dirname, '../fixtures', filename))
         result = PDAResultsParser().can_parse(fixture)
         self.assertTrue(result)
+
+    def test_truncate_slugline(self):
+        filename = 'NLRR_20170311_MORPHETTVILLE PARKS_2.tst'
+        dirname = os.path.dirname(os.path.realpath(__file__))
+        fixture = os.path.normpath(os.path.join(dirname, '../fixtures', filename))
+        self.provider['source'] = 'SOMETHING'
+        self.items = PDAResultsParser().parse(fixture, self.provider)
+        self.assertEqual(self.items['slugline'], 'News: Morphettville Parks Gall')

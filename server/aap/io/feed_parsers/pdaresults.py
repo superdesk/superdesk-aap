@@ -18,6 +18,7 @@ import logging
 import re
 import uuid
 from titlecase import titlecase
+from superdesk import get_resource_service
 
 
 class PDAResultsParser(FileFeedParser):
@@ -106,9 +107,29 @@ class PDAResultsParser(FileFeedParser):
                 if genre_map:
                     item['genre'] = [x for x in genre_map.get('items', []) if
                                      x['qcode'] == 'Results (sport)' and x['is_active']]
+                self.truncate_fields(item)
                 return item
         except Exception as ex:
             logging.exception(ex)
+
+    def truncate_fields(self, item):
+        """
+        Given an item it will truncate the headline and slugline to the lengths defined in the auto publish validation
+        schema
+        :param item:
+        :return:
+        """
+        lookup = {'act': 'auto_publish', 'type': CONTENT_TYPE.TEXT}
+        validators = get_resource_service('validators').get(req=None, lookup=lookup)
+        if validators.count():
+            max_slugline_len = validators[0]['schema']['slugline']['maxlength']
+            max_headline_len = validators[0]['schema']['headline']['maxlength']
+            if 'headline' in item:
+                item['headline'] = item['headline'][:max_headline_len] \
+                    if len(item['headline']) > max_headline_len else item['headline']
+            if 'slugline' in item:
+                item['slugline'] = item['slugline'][:max_slugline_len] \
+                    if len(item['slugline']) > max_slugline_len else item['slugline']
 
 
 try:

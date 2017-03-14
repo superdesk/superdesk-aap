@@ -6,7 +6,7 @@
 # at https://www.sourcefabric.org/superdesk/license*.
 
 from .zczc import ZCZCFeedParser
-from superdesk.metadata.item import FORMAT, FORMATS
+from superdesk.metadata.item import FORMAT, FORMATS, CONTENT_TYPE
 from superdesk.io.registry import register_feeding_service_error
 from superdesk.errors import AlreadyExistsError
 from superdesk.io.registry import register_feed_parser
@@ -16,6 +16,7 @@ from superdesk.io.iptc import subject_codes
 from superdesk.logging import logger
 import re
 import superdesk
+from superdesk import get_resource_service
 
 
 class ZCZCPMFParser(ZCZCFeedParser):
@@ -91,6 +92,16 @@ class ZCZCPMFParser(ZCZCFeedParser):
             else:
                 item[self.ITEM_ANPA_CATEGORY] = [{'qcode': 'f'}]
                 item[self.ITEM_SUBJECT] = [{'qcode': '04000000', 'name': subject_codes['04000000']}]
+
+            # truncate the slugline to the length defined in the validation schema
+            lookup = {'act': 'auto_publish', 'type': CONTENT_TYPE.TEXT}
+            validators = get_resource_service('validators').get(req=None, lookup=lookup)
+            if validators.count():
+                max_slugline_len = validators[0]['schema']['slugline']['maxlength']
+                if 'slugline' in item:
+                    item['slugline'] = item['slugline'][:max_slugline_len] \
+                        if len(item['slugline']) > max_slugline_len else item['slugline']
+
             return item
 
         except Exception as ex:
