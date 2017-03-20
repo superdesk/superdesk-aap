@@ -42,7 +42,9 @@ module.exports = function() {
             hideLiveSuggestions: 1,
             preview: 1,
             previewFormats: 1,
-            noTakes: 1
+            noTakes: 1,
+            searchShortcut: 1
+
         },
 
         view: {
@@ -95,6 +97,7 @@ module.exports = function() {
             'singleLine': [
                 'slugline',
                 'highlights',
+                'associations',
                 'takekey',
                 'state',
                 'update',
