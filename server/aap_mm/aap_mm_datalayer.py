@@ -136,7 +136,8 @@ class AAPMMDatalayer(DataLayer):
 
     def _parse_doc(self, doc):
         new_doc = {'_id': doc['AssetId'], 'guid': doc['AssetId'], 'headline': doc['Title'],
-                   'description_text': doc['Description'], 'source': doc['Credit']}
+                   'description_text': doc['Description'], 'archive_description': doc['Description'],
+                   'source': doc['Credit']}
         if 'Source' in doc:
             new_doc['original_source'] = doc['Credit'] + '/' + str(doc.get('Source', ''))
         else:

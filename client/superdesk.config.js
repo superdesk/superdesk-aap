@@ -11,6 +11,9 @@ module.exports = function() {
             description_text: {
                 required: true
             },
+            archive_description: {
+                required: false
+            },
             byline: {
                 required: false
             }
