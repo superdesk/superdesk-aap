@@ -70,7 +70,7 @@ class RemoteSyncCommand(superdesk.Command):
                 query = {"query": {"filtered": {"filter": {"and": [{"terms": {"type": ["text"]}}, {"not": {
                     "and": [{"term": {"_type": "published"}}, {"term": {"package_type": "takes"}},
                             {"term": {"last_published_version": False}}]}}]}}},
-                         "sort": [{"versioncreated": "asc"}],
+                         "sort": [{"publish_sequence_no": "asc"}],
                          "size": 100, "from": from_count}
                 params = {'repo': 'published', 'source': json.dumps(query)}
                 response = requests.get('{}/{}'.format(self.url, 'search'), auth=HTTPBasicAuth(self.token, None),
