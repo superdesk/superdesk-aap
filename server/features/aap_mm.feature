@@ -96,3 +96,29 @@ Feature: AAP Multimedia Feature
         """
         {"_status": "ERR", "_message": "Deleting a Search Provider after receiving items is prohibited."}
         """
+
+    @auth @test
+    Scenario: Can get item from external source to a specific desk and stage
+        Given "search_providers"
+	    """
+        [{"search_provider": "aapmm", "source": "aapmm", "config": {"password":"", "username":""}}]
+	    """
+        And "desks"
+        """
+        [{"name": "Sports"}]
+        """
+        And "stages"
+        """
+        [{"name": "schedule", "desk": "#desks._id#"}]
+        """
+        When we post to "search_providers_proxy?repo=#search_providers._id#"
+        """
+        {"guid": "20150329001116807745", "desk": "#desks._id#", "stage": "#stages._id#"}
+        """
+        Then we get OK response
+        When we get "archive/#search_providers_proxy._id#"
+        Then we get existing resource
+        """
+        {"guid": "20150329001116807745", "task" : {"desk": "#desks._id#", "stage": "#stages._id#"}}
+        """
+
