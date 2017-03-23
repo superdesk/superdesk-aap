@@ -59,7 +59,7 @@ class AAPTextFormatter(AAPIpNewsFormatter):
         return article[ITEM_TYPE] in [CONTENT_TYPE.TEXT]
 
     def refine_article_body(self, formatted_doc, article):
-        body = formatted_doc.get('article_text').lstrip().replace('\r\n', '\r\n   ')
+        body = formatted_doc.get('article_text').lstrip().replace('\r\n', '\r\n   ').replace('\x19', '')
 
         if 'dateline' in article and 'text' in article.get('dateline', {}):
             if body.startswith('   '):
