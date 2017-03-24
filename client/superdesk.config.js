@@ -3,13 +3,16 @@ module.exports = function() {
         defaultRoute: '/workspace',
         validatorMediaMetadata: {
             headline: {
-                required: true
+                required: true,
+                maxlength: 42
             },
             alt_text: {
-                required: true
+                required: true,
+                maxlength: 70
             },
             description_text: {
-                required: true
+                required: true,
+                maxlength: 100
             },
             archive_description: {
                 required: false
