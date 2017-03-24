@@ -47,7 +47,6 @@ module.exports = function() {
             previewFormats: 1,
             noTakes: 1,
             searchShortcut: 1
-
         },
 
         view: {
@@ -121,7 +120,7 @@ module.exports = function() {
                 'provider',
                 'versioncreated'
             ],
-            'singleLineView': true 
+            'singleLineView': false
         },
         langOverride: {
             'en': {
