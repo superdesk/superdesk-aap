@@ -15,7 +15,8 @@ class AAPParserError(ParserError):
 
     ParserError._codes.update({1100: 'ZCZC input could not be processed',
                                1101: 'News Bites input could not be processed',
-                               1102: 'PDA Results input could not be processed'})
+                               1102: 'PDA Results input could not be processed',
+                               1103: 'AsiaNet input could not be processed'})
 
     @classmethod
     def ZCZCParserError(cls, exception=None, provider=None):
@@ -28,3 +29,7 @@ class AAPParserError(ParserError):
     @classmethod
     def PDAResulstParserError(cls, exception=None, provider=None):
         return ParserError(1102, exception, provider)
+
+    @classmethod
+    def AsiaNetParserError(cls, exception=None, provider=None):
+        return ParserError(1103, exception, provider)
