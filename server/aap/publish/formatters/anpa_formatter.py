@@ -10,11 +10,10 @@
 from copy import deepcopy
 from superdesk.publish.formatters import Formatter
 from .aap_formatter_common import map_priority, get_service_level
-from apps.archive.common import get_utc_schedule
 import superdesk
 from superdesk.errors import FormatterError
 import datetime
-from superdesk.metadata.item import ITEM_TYPE, CONTENT_TYPE, BYLINE, EMBARGO, FORMAT, FORMATS
+from superdesk.metadata.item import ITEM_TYPE, CONTENT_TYPE, BYLINE, FORMAT, FORMATS
 from .field_mappers.locator_mapper import LocatorMapper
 from .field_mappers.slugline_mapper import SluglineMapper
 from apps.packages import TakesPackageService
@@ -97,11 +96,6 @@ class AAPAnpaFormatter(Formatter):
                 take_key = (formatted_article.get('anpa_take_key', '') or '').encode('ascii', 'ignore')
                 anpa.append((b'\x20' + take_key) if len(take_key) > 0 else b'')
                 anpa.append(b'\x0D\x0A')
-
-                if formatted_article.get(EMBARGO):
-                    embargo = '{}{}\r\n'.format('Embargo Content. Timestamp: ',
-                                                get_utc_schedule(formatted_article, EMBARGO).isoformat())
-                    anpa.append(embargo.encode('ascii', 'replace'))
 
                 if formatted_article.get('ednote', '') != '':
                     ednote = '{}\r\n'.format(to_ascii(formatted_article.get('ednote')))
