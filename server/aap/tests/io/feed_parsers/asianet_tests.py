@@ -175,6 +175,7 @@ class AsiaNetFeedParserTestCase(TestCase):
 
     def setUp(self):
         self.provider = {'name': 'Test'}
+        self.maxDiff = None
 
     def test_can_parse(self):
         for i in range(1, 10):

@@ -10,12 +10,12 @@
 
 import html
 import uuid
-from datetime import datetime
+from dateutil.parser import parse as date_parser
 from flask import current_app as app
 
 from superdesk.io.feed_parsers import FileFeedParser
 from superdesk.metadata.item import ITEM_TYPE, CONTENT_TYPE, FORMAT, FORMATS
-from superdesk.utc import utcnow, utc
+from superdesk.utc import utc
 from superdesk.io.registry import register_feed_parser, register_feeding_service_error
 from superdesk.errors import AlreadyExistsError
 from aap.errors import AAPParserError
@@ -54,24 +54,45 @@ class AsiaNetFeedParser(FileFeedParser):
                 data = f.read().replace('\r', '')
 
             header, dateline_data, data = data.split('\n\n', 2)
-            slugline, take_key, headline = header.split('\n', 2)
 
-            slugline = slugline[8:].strip()
-            headline = headline.replace('\n', '')
-
-            item['slugline'] = slugline
-            item['headline'] = headline
-            item['anpa_take_key'] = take_key[14:]
-            item['original_source'] = 'AsiaNet'
-            item['word_count'] = get_text_word_count(data)
-
+            self._process_header(item, header)
             self._process_dateline(item, dateline_data)
 
+            item['original_source'] = 'AsiaNet'
+            item['word_count'] = get_text_word_count(data)
             item['body_html'] = '<pre>' + html.escape(data) + '</pre>'
 
             return item
         except Exception as e:
             raise AAPParserError.AsiaNetParserError(file_path, e)
+
+    def _process_header(self, item, header):
+        """Process the header of the file, that contains the slugline, take key and headline
+
+        It is possible that the source line is spread across multiple lines, as well as the headline.
+        So iterate over them to make sure we get all the data. The only assumption is that media release is only
+        1 line in the header
+
+        :param dict item: The item where the data will be stored
+        :param str header: The header of the file
+        """
+        source = 'slugline'
+        for line in header.split('\n'):
+            if line.lower().startswith('media release'):
+                source = 'anpa_take_key'
+
+            if source not in item:
+                item[source] = line
+            else:
+                item[source] += line
+
+            if source == 'anpa_take_key':
+                source = 'headline'
+
+        # Clean up the header entries
+        item['slugline'] = item['slugline'][8:].replace('\n', '').strip()
+        item['anpa_take_key'] = item['anpa_take_key'][14:]
+        item['headline'] = item['headline'].replace('\n', '')
 
     def _process_dateline(self, item, dateline):
         """Process the dateline string to get the individual elements.
@@ -81,56 +102,27 @@ class AsiaNetFeedParser(FileFeedParser):
         LONDON, Feb. 1 /PRNewswire-AsiaNet / --
         NEW YORK, LONDON and BEIJING, Feb. 2, 2017 /PRNewswire-AsiaNet/ --
 
-        :param: dict item: The item where the data will be stored
+        :param dict item: The item where the data will be stored
         :param str dateline: The string from the dateline int file
         """
         item.setdefault('dateline', {})
+        dateline, source = dateline.split('/', 1)
 
-        # Get the first section of the data:
-        # ['AUSTIN, Texas, Feb. 1, 2017', 'PRNewswire-AsiaNet/ --']
-        # ['LONDON, Feb. 1', 'PRNewswire-AsiaNet /--']
-        # ['NEW YORK, LONDON and Beijing, Feb. 2, 2017', 'PRNewswire-Asianet/ --']
-        dateline, source = dateline.split(' /', 1)
-
-        item['dateline']['source'] = source[:-4].strip()
-        item['dateline']['text'] = dateline
-
-        # Now split the locations and date:
-        # ['AUSTIN, Texas, Feb', '1, 2017']
-        # ['LONDON, Feb', '1']
-        # ['NEW YORK, LONDON and BEIJING, Feb', '2, 2017']
-        data = dateline.split('. ')
-
-        # Attempt to get the day and year
-        # If a ValueError is raised, that means there is no year in the dateline
-        # So set the year to the current year
-        try:
-            day, year = data[1].split(', ')
-        except ValueError:
-            day = data[1]
-            year = utcnow().year
-
-        # Split up the data again to get the following:
-        # ['AUSTIN', 'Texas', 'Feb]
-        # ['LONDON', 'Feb']
-        # ['NEW YORK', 'LONDON', 'BEIJING', 'Feb']
-        data = data[0].replace(' and', ', ').split(', ')
-
-        month = data[-1]
-
-        date = datetime.strptime('{}-{:02}-{}'.format(month, int(day), year), '%b-%d-%Y').replace(tzinfo=utc)
+        date = date_parser(dateline, fuzzy=True).replace(tzinfo=utc)
         item['firstcreated'] = item['versioncreated'] = item['dateline']['date'] = date
+        item['dateline']['source'] = source[:-4].strip()
+        item['dateline']['text'] = dateline.strip()
 
         # Attempt to set the city data to the dateline.location key
         cities = app.locators.find_cities()
-        for city in data[:-1]:
-            located = [c for c in cities if c['city'].lower() == city.lower()]
+        for city in dateline.replace(' and ', ',').split(','):
+            located = [c for c in cities if c['city'].lower() == city.strip().lower()]
             if len(located) > 0:
                 item['dateline']['located'] = located[0]
                 break
 
         if 'located' not in item['dateline']:
-            city = data[:-1][0]
+            city = dateline.split(',')[0]
             item['dateline']['located'] = {
                 'city_code': city,
                 'city': city,
