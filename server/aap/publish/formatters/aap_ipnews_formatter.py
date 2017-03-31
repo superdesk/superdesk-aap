@@ -76,7 +76,6 @@ class AAPIpNewsFormatter(Formatter, AAPODBCFormatter):
 
                 if self.is_first_part(article) and not pass_through:
                     self.add_ednote(odbc_item, article)
-                    self.add_embargo(odbc_item, article)
                     self.add_byline(odbc_item, article)
 
                 if not is_last_take:

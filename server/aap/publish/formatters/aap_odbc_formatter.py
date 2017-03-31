@@ -10,10 +10,8 @@
 from superdesk.io.iptc import subject_codes
 from apps.packages import TakesPackageService
 from .aap_formatter_common import set_subject
-from apps.archive.common import get_utc_schedule
 from .field_mappers.locator_mapper import LocatorMapper
 from .field_mappers.slugline_mapper import SluglineMapper
-from superdesk.metadata.item import EMBARGO
 from eve.utils import config
 import superdesk
 from .unicodetoascii import to_ascii
@@ -59,17 +57,6 @@ class AAPODBCFormatter():
         self.set_usn(odbc_item, article)
 
         return pub_seq_num, odbc_item
-
-    def add_embargo(self, odbc_item, article):
-        """
-        Add the embargo text to the article if required
-        :param odbc_item:
-        :param article:
-        :return:
-        """
-        if article.get(EMBARGO):
-            embargo = '{}{}\r\n'.format('Embargo Content. Timestamp: ', get_utc_schedule(article, EMBARGO).isoformat())
-            odbc_item['article_text'] = embargo + odbc_item['article_text']
 
     def add_ednote(self, odbc_item, article):
         """
