@@ -40,7 +40,7 @@ class SendEmailTestCase(TestCase):
             with self.app.mail.record_messages() as outbox:
                 assert len(outbox) == 0
                 article = {
-                    'headline': 'headline',
+                    'headline': 'Rugby world cup cancelled',
                     'place': [{'qcode': 'NSW', 'name': 'NSW'}],
                     'slugline': 'slugline',
                     'dateline': {
@@ -55,7 +55,7 @@ class SendEmailTestCase(TestCase):
                 }
                 send_article_killed_email(article, ['test@sd.io'], utcnow())
                 self.assertEqual(len(outbox), 1)
-                self.assertEqual(outbox[0].subject, 'Transmission from circuit: E_KILL_')
+                self.assertEqual(outbox[0].subject, 'Rugby world cup cancelled')
                 self.assertIn('body', outbox[0].body)
 
     def test_send_email_kill_for_AAP(self):
@@ -63,7 +63,6 @@ class SendEmailTestCase(TestCase):
             with self.app.mail.record_messages() as outbox:
                 assert len(outbox) == 0
                 article = {
-                    'headline': 'headline',
                     'place': [{'qcode': 'NSW', 'name': 'NSW'}],
                     'slugline': 'slugline',
                     'dateline': {
@@ -78,5 +77,5 @@ class SendEmailTestCase(TestCase):
                 }
                 send_article_killed_email(article, ['test@sd.io'], utcnow())
                 self.assertEqual(len(outbox), 1)
-                self.assertEqual(outbox[0].subject, 'Transmission from circuit: E_KILL_')
+                self.assertEqual(outbox[0].subject, 'Kill Notification')
                 self.assertIn('body', outbox[0].body)
