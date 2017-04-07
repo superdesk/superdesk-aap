@@ -15,7 +15,7 @@ from flask import current_app as app
 
 from superdesk.io.feed_parsers import FileFeedParser
 from superdesk.metadata.item import ITEM_TYPE, CONTENT_TYPE, FORMAT, FORMATS
-from superdesk.utc import utc
+from superdesk.utc import utc, utcnow
 from superdesk.io.registry import register_feed_parser, register_feeding_service_error
 from superdesk.errors import AlreadyExistsError
 from aap.errors import AAPParserError
@@ -46,8 +46,9 @@ class AsiaNetFeedParser(FileFeedParser):
             item = {
                 'guid': '{}-{}'.format(file_path, uuid.uuid4()),
                 'pubstatus': 'usable',
+                'versioncreated': utcnow(),
                 ITEM_TYPE: CONTENT_TYPE.TEXT,
-                FORMAT: FORMATS.PRESERVED
+                FORMAT: FORMATS.PRESERVED,
             }
 
             with open(file_path, 'r', encoding='windows-1252') as f:
@@ -109,7 +110,8 @@ class AsiaNetFeedParser(FileFeedParser):
         dateline, source = dateline.split('/', 1)
 
         date = date_parser(dateline, fuzzy=True).replace(tzinfo=utc)
-        item['firstcreated'] = item['versioncreated'] = item['dateline']['date'] = date
+        item['dateline']['date'] = date
+
         item['dateline']['source'] = source[:-4].strip()
         item['dateline']['text'] = dateline.strip()
 

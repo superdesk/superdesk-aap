@@ -26,8 +26,6 @@ class AsiaNetFeedParserTestCase(TestCase):
             'headline': 'Digital Turbine Partners with Axiata Digital On Carrier Billing Platform Integration',
             'anpa_take_key': 'PR67276',
             'original_source': 'AsiaNet',
-            'versioncreated': datetime(2017, 2, 1, 0, 0, tzinfo=utc),
-            'firstcreated': datetime(2017, 2, 1, 0, 0, tzinfo=utc),
             'dateline': {
                 'date': datetime(2017, 2, 1, 0, 0, tzinfo=utc),
                 'source': 'PRNewswire-AsiaNet',
@@ -43,8 +41,6 @@ class AsiaNetFeedParserTestCase(TestCase):
             'headline': 'Queen Elizabeth Prize for Engineering Awarded to the Creators of Digital Imaging Sensors',
             'anpa_take_key': 'PR67254',
             'original_source': 'AsiaNet',
-            'versioncreated': datetime(2017, 2, 1, 0, 0, tzinfo=utc),
-            'firstcreated': datetime(2017, 2, 1, 0, 0, tzinfo=utc),
             'dateline': {
                 'date': datetime(2017, 2, 1, 0, 0, tzinfo=utc),
                 'source': 'PRNewswire',
@@ -60,8 +56,6 @@ class AsiaNetFeedParserTestCase(TestCase):
             'headline': 'Animal rights come to Brazil\'s Carnival for a show with no feathers',
             'anpa_take_key': 'PR67255',
             'original_source': 'AsiaNet',
-            'versioncreated': datetime(2017, 2, 1, 0, 0, tzinfo=utc),
-            'firstcreated': datetime(2017, 2, 1, 0, 0, tzinfo=utc),
             'dateline': {
                 'date': datetime(2017, 2, 1, 0, 0, tzinfo=utc),
                 'source': 'PRNewswire-AsiaNet',
@@ -78,8 +72,6 @@ class AsiaNetFeedParserTestCase(TestCase):
                         'Director of Australia',
             'anpa_take_key': 'PR67257',
             'original_source': 'AsiaNet',
-            'versioncreated': datetime(2017, 2, 2, 0, 0, tzinfo=utc),
-            'firstcreated': datetime(2017, 2, 2, 0, 0, tzinfo=utc),
             'dateline': {
                 'date': datetime(2017, 2, 2, 0, 0, tzinfo=utc),
                 'source': 'PRNewswire-AsiaNet',
@@ -95,8 +87,6 @@ class AsiaNetFeedParserTestCase(TestCase):
             'headline': 'OMRON Launches Promotional Website for AI-equipped Mobile Robot LD Series',
             'anpa_take_key': 'PR67261',
             'original_source': 'AsiaNet',
-            'versioncreated': datetime(2017, 2, 1, 0, 0, tzinfo=utc),
-            'firstcreated': datetime(2017, 2, 1, 0, 0, tzinfo=utc),
             'dateline': {
                 'date': datetime(2017, 2, 1, 0, 0, tzinfo=utc),
                 'source': 'Kyodo JBN-AsiaNet',
@@ -110,8 +100,6 @@ class AsiaNetFeedParserTestCase(TestCase):
             'headline': 'OnApp v5.3 Simplifies Add-on Services for Cloud Providers',
             'anpa_take_key': 'PR67266',
             'original_source': 'AsiaNet',
-            'versioncreated': datetime(2017, 2, 1, 0, 0, tzinfo=utc),
-            'firstcreated': datetime(2017, 2, 1, 0, 0, tzinfo=utc),
             'dateline': {
                 'date': datetime(2017, 2, 1, 0, 0, tzinfo=utc),
                 'source': 'PRNewswire-AsiaNet',
@@ -127,8 +115,6 @@ class AsiaNetFeedParserTestCase(TestCase):
             'headline': 'Shinetech Software, Inc. Reports 16% Growth in 2016',
             'anpa_take_key': 'PR67271',
             'original_source': 'AsiaNet',
-            'versioncreated': datetime(2017, 2, 2, 0, 0, tzinfo=utc),
-            'firstcreated': datetime(2017, 2, 2, 0, 0, tzinfo=utc),
             'dateline': {
                 'date': datetime(2017, 2, 2, 0, 0, tzinfo=utc),
                 'source': 'PRNewswire-AsiaNet',
@@ -144,8 +130,6 @@ class AsiaNetFeedParserTestCase(TestCase):
             'headline': 'Huntsman Family Investments to Acquire GTA TeleGuam',
             'anpa_take_key': 'PR67275',
             'original_source': 'AsiaNet',
-            'versioncreated': datetime(2017, 2, 1, 0, 0, tzinfo=utc),
-            'firstcreated': datetime(2017, 2, 1, 0, 0, tzinfo=utc),
             'dateline': {
                 'date': datetime(2017, 2, 1, 0, 0, tzinfo=utc),
                 'source': 'PRNewswire-AsiaNet',
@@ -159,8 +143,6 @@ class AsiaNetFeedParserTestCase(TestCase):
             'headline': 'Neovia Enrolls First Patient in Cancer Trial for Immunotherapy Enhancing Drug',
             'anpa_take_key': 'PR67278',
             'original_source': 'AsiaNet',
-            'versioncreated': datetime(2017, 2, 2, 0, 0, tzinfo=utc),
-            'firstcreated': datetime(2017, 2, 2, 0, 0, tzinfo=utc),
             'dateline': {
                 'date': datetime(2017, 2, 2, 0, 0, tzinfo=utc),
                 'source': 'PRNewswire-AsiaNet',
@@ -182,7 +164,7 @@ class AsiaNetFeedParserTestCase(TestCase):
             self.assertTrue(AsiaNetFeedParser().can_parse(self._get_fixture(i)))
 
     def test_feed_parser(self):
-        test_keys = ['slugline', 'headline', 'firstcreated', 'versioncreated', 'anpa_take_key',
+        test_keys = ['slugline', 'headline', 'anpa_take_key',
                      'original_source', 'dateline']
         for i in range(1, 10):
             item = AsiaNetFeedParser().parse(self._get_fixture(i), self.provider)
