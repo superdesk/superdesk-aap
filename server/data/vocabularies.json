@@ -307,9 +307,31 @@
         "type": "manageable",
         "unique_field": "name",
         "items": [
-            {"is_active": true, "name": "Suicide", "value": "<p>Readers seeking support and information about suicide prevention can contact Lifeline on 13 11 14.</p><p>Suicide Call Back Service 1300 659 467.</p><p>MensLine Australia 1300 78 99 78.</p><p>Multicultural Mental Health Australia www.mmha.org.au.</p><p>Local Aboriginal Medical Service available from www.vibe.com.au.</p>"},
-            {"is_active": true, "name": "Children", "value": "<p>Kids Helpline 1800 55 1800 (for young people aged 5 to 25).</p>"},
-            {"is_active": true, "name": "Domestic Violence", "value": "<p>National domestic violence helpline: 1800 737 732  or 1800RESPECT. In an emergency call triple-zero.</p>"}
+            {
+                "value": "<p>* Readers seeking support and information about suicide prevention can contact Lifeline's 24-hour telephone counselling service on 0800 543 354.</p> <p>Depression Helpline (8am to 12 midnight) - 0800 111 757</p> <p>Healthline - 0800 611 116</p> <p>Samaritans - 0800 726 666 (for callers from the Lower North Island, Christchurch and West Coast) or 0800 211 211 / (04) 473 9739 (for callers from all other regions)</p> <p>Suicide Crisis Helpline (aimed at those in distress, or those who are concerned about the wellbeing of someone else) - 0508 828 865 (0508 TAUTOKO)</p> <p>Youthline - 0800 376 633, free text 234 or email talk@youthline.co.nz</p> <p>What's Up (for 5-18 year olds; 1 pm to 11 pm) - 0800 942 8787</p> <p>Kidsline (aimed at children up to 14 years of age; 4pm to 6pm weekdays)  0800 54 37 54 (0800 kidsline)</p>",
+                "is_active": true,
+                "name": "NZN"
+            },
+            {
+                "value": "<p>Readers seeking support and information about suicide prevention can contact Lifeline on 13 11 14.</p><p>Suicide Call Back Service 1300 659 467.</p><p>MensLine Australia 1300 78 99 78.</p><p>Multicultural Mental Health Australia www.mmha.org.au.</p><p>Local Aboriginal Medical Service available from www.vibe.com.au.</p>",
+                "is_active": true,
+                "name": "Suicide"
+            },
+            {
+                "value": "<p>Kids Helpline 1800 55 1800 (for young people aged 5 to 25).</p>",
+                "is_active": true,
+                "name": "Children"
+            },
+            {
+                "value": "<p>National domestic violence helpline: 1800 737 732  or 1800RESPECT. In an emergency call triple-zero.</p>",
+                "is_active": true,
+                "name": "Domestic Violence"
+            },
+            {
+                "value": "<p>Australian readers seeking support and information about depression can contact Lifeline on 13 11 14.</p>",
+                "is_active": true,
+                "name": "Depression"
+            }
         ]
     },
     {

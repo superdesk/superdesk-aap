@@ -26,6 +26,7 @@ class AsiaNetFeedParser(FileFeedParser):
     """
     Feed Parser which can parse if the feed is in AsiaNet format
     """
+
     NAME = 'asianet'
     label = 'AsiaNet'
 
