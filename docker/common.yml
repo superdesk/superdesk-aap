@@ -29,7 +29,7 @@ elastic:
   - ES_HEAP_SIZE=2g
   - TZ=Australia/Sydney
   - TERM=xterm
-  image: elasticsearch:1.5
+  image: elasticsearch:2.4
   volumes:
   - ../../data/elastic:/usr/share/elasticsearch/data
   - ../../data-archive/:/backups
