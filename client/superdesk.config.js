@@ -1,5 +1,6 @@
 module.exports = function() {
     return {
+        apps: ['superdesk-planning'],
         defaultRoute: '/workspace',
         validatorMediaMetadata: {
             headline: {
@@ -49,7 +50,8 @@ module.exports = function() {
             preview: 1,
             previewFormats: 1,
             noTakes: 1,
-            searchShortcut: 1
+            searchShortcut: 1,
+            planning: true
         },
 
         view: {
