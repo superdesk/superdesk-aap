@@ -73,7 +73,6 @@ EXPOSE 5400
 ENV PYTHONUNBUFFERED=1 C_FORCE_ROOT="False" CELERYBEAT_SCHEDULE_FILENAME=/tmp/celerybeatschedule.db
 COPY ./server/requirements.txt /tmp/requirements.txt
 COPY ./server /opt/superdesk
-#COPY ./client/package.json /opt/superdesk/client/
 COPY ./client /opt/superdesk/client
 
 # install server and client dependencies and sources
