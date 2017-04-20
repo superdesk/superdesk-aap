@@ -47,7 +47,9 @@ ENV CELERYBEAT_SCHEDULE_FILENAME /tmp/celerybeatschedule.db
 
 # install server dependencies
 COPY ./server/requirements.txt /tmp/requirements.txt
+RUN cd /tmp && pip3 install -U pip setuptools
 RUN cd /tmp && pip3 install -U -r /tmp/requirements.txt
+#RUN cd /tmp && pip3 install -U pip setuptools && cd /tmp && pip3 install -U -r /tmp/requirements.txt
 
 # install client dependencies
 COPY ./client/package.json /opt/superdesk/client/
