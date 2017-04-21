@@ -12,7 +12,7 @@ logstash:
   environment:
   - TZ=Australia/Sydney
   - TERM=xterm
-  image: logstash:1.5
+  image: logstash:2.4
   volumes:
   - ./logstash:/usr/share/logstash
 
