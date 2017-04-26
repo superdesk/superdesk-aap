@@ -43,7 +43,7 @@ def get_app(config=None, init_elastic=False):
 
     config['DOMAIN'] = {}
 
-    app = superdesk_app(config, media_storage, init_elastic=init_elastic)
+    app = superdesk_app(config, media_storage)
     configure_logging(config['LOG_CONFIG_FILE'])
     return app
 
