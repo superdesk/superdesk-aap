@@ -5,5 +5,6 @@ unidecode==0.04.19
 newrelic>=2.66,<2.67
 titlecase==0.8.2
 
-git+git://github.com/superdesk/superdesk-core.git@4235f4b34#egg=Superdesk-Core
-git+git://github.com/superdesk/superdesk-planning.git@a79d428d8#egg=superdesk-planning
+
+git+git://github.com/superdesk/superdesk-core.git@1493e6d#egg=Superdesk-Core
+git+git://github.com/superdesk/superdesk-planning.git@57a2485#egg=superdesk-planning
