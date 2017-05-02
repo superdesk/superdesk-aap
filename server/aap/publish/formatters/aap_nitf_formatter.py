@@ -92,8 +92,7 @@ class AAPNITFFormatter(NITFFormatter):
         html = html.replace('\n', ' ')
         html = re.sub(r'\s\s+', ' ', html)
         parsed = parse_html(html, content='html')
-        for tag in parsed.xpath('//*'):
-            if tag.getparent() is not None and tag.getparent().tag == 'body':
-                p = etree.Element('p')
-                p.text = to_ascii(get_text(to_string(tag, method='html'), content='html'))
-                element.append(p)
+        for tag in parsed.xpath('/html/div/child::*'):
+            p = etree.Element('p')
+            p.text = to_ascii(get_text(to_string(tag, method='html'), content='html'))
+            element.append(p)

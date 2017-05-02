@@ -33,9 +33,9 @@ def sanitize_tags(item):
         br.tail = '\n' + br.tail if br.tail else '\n'
     etree.strip_elements(parsed, 'br', with_tail=False)
 
-    for tag in parsed.iter():
-        if tag.getparent() is not None and tag.getparent().tag == 'body':
-            format_text_content(tag)
+    for tag in parsed.xpath('/html/div/child::*'):
+        format_text_content(tag)
+
     item['body_html'] = '<pre>{}</pre>'.format(html.escape(''.join(parsed.itertext())))
     item[FORMAT] = FORMATS.PRESERVED
     return item

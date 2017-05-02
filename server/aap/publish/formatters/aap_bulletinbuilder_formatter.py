@@ -122,9 +122,8 @@ class AAPBulletinBuilderFormatter(Formatter):
         etree.strip_elements(parsed, 'br', with_tail=False)
 
         text = ''
-        for top_level_tag in parsed.iter():
-            if top_level_tag.getparent() is not None and top_level_tag.getparent().tag == 'body':
-                text += self.format_text_content(top_level_tag)
+        for top_level_tag in parsed.xpath('/html/div/child::*'):
+            text += self.format_text_content(top_level_tag)
 
         return re.sub(' +', ' ', text)
 
