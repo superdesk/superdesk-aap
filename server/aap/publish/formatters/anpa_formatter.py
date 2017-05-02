@@ -106,7 +106,8 @@ class AAPAnpaFormatter(Formatter):
                     anpa.append(b'\x0D\x0A')
 
                 if formatted_article.get(FORMAT) == FORMATS.PRESERVED:
-                    anpa.append(self.append_body_footer(formatted_article).encode('ascii', 'replace'))
+                    anpa.append(get_text(self.append_body_footer(formatted_article),
+                                         content='html').encode('ascii', 'replace'))
                 else:
                     body = to_ascii(formatted_article.get('body_html', ''))
                     # we need to inject the dateline

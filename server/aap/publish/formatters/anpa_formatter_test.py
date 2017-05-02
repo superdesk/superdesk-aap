@@ -373,3 +373,17 @@ class ANPAFormatterTest(TestCase):
             'anpa_take_key': None, 'byline': None, 'abstract': None})
         resp = f.format(item, subscriber)[0]
         self.assertTrue('encoded_item' in resp)
+
+    def test_preformated(self):
+        f = AAPAnpaFormatter()
+        subscriber = self.app.data.find('subscribers', None, None)[0]
+        item = self.article.copy()
+        item.update({
+            'body_html': '<pre>Test line 1\rTest line 2</pre>',
+            'format': 'preserved'})
+        resp = f.format(item, subscriber)[0]
+        out = resp['encoded_item']
+
+        lines = io.StringIO(out.decode())
+        self.assertTrue(lines.getvalue().split('\r')[3].lstrip(), 'Test line 1')
+        self.assertTrue(lines.getvalue().split('\r')[4], 'Test line 2')
