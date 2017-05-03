@@ -157,9 +157,8 @@ class AAPAnpaFormatter(Formatter):
             br.tail = '\r\n' + br.tail if br.tail else '\r\n'
         etree.strip_elements(parsed, 'br', with_tail=False)
 
-        for tag in parsed.xpath('//*'):
-            if tag.getparent() is not None and tag.getparent().tag == 'body' and tag.tag not in ('br') \
-                    and tag.text is not None and tag.text.strip() != '':
+        for tag in parsed.xpath('/html/div/child::*'):
+            if tag.tag not in ('br') and tag.text is not None and tag.text.strip() != '':
                 tag.text = '   ' + re.sub(' +', ' ', re.sub('(?<!\r)\n+', ' ', tag.text)) if tag.text else ''
                 tag.tail = '\r\n' + tag.tail if tag.tail else '\r\n'
 
