@@ -18,10 +18,11 @@ from superdesk.etree import get_text
 
 
 class AAPTextFormatter(AAPIpNewsFormatter):
-    def __int__(self):
+    def __init__(self):
         self.can_preview = True
         self.can_export = True
         self.output_field = 'article_text'
+        self.format_type = 'AAP TEXT'
 
     def format(self, article, subscriber, codes=None):
         try:
@@ -56,7 +57,7 @@ class AAPTextFormatter(AAPIpNewsFormatter):
             raise FormatterError.AAPTextFormatterError(ex, subscriber)
 
     def can_format(self, format_type, article):
-        return article[ITEM_TYPE] in [CONTENT_TYPE.TEXT]
+        return format_type == self.format_type and article[ITEM_TYPE] in [CONTENT_TYPE.TEXT]
 
     def refine_article_body(self, formatted_doc, article):
         body = formatted_doc.get('article_text').lstrip().replace('\r\n', '\r\n   ').replace('\x19', '')
