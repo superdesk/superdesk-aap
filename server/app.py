@@ -21,7 +21,7 @@ from superdesk.logging import configure_logging
 logger = logging.getLogger(__name__)
 
 
-def get_app(config=None, init_elastic=False):
+def get_app(config=None):
     """App factory.
 
     :param config: configuration that can override config from `settings.py`
@@ -36,14 +36,9 @@ def get_app(config=None, init_elastic=False):
         if key.isupper():
             config.setdefault(key, getattr(settings, key))
 
-    media_storage = None
-    if config['AMAZON_CONTAINER_NAME']:
-        from superdesk.storage.amazon.amazon_media_storage import AmazonMediaStorage
-        media_storage = AmazonMediaStorage
-
     config['DOMAIN'] = {}
 
-    app = superdesk_app(config, media_storage)
+    app = superdesk_app(config)
     configure_logging(config['LOG_CONFIG_FILE'])
     return app
 
