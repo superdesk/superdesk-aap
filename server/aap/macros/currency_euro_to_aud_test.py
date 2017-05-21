@@ -37,6 +37,10 @@ class CurrencyTestCase(unittest.TestCase):
                'This is a  EUR(540,000) million note. ' \
                'This is a  EUR (55,233.00) million note. ' \
                'This is a  EUR (55,233.00 billion) note. ' \
+               'This is a  52 Euro note. ' \
+               'This is a  52 million euro note. ' \
+               'This is a  54,000 EUR note. ' \
+               'This is a  54,000 € note. ' \
 
         item = {'body_html': text}
         res, diff = euro_to_aud(item, rate=Decimal(2))
@@ -56,3 +60,8 @@ class CurrencyTestCase(unittest.TestCase):
         self.assertEqual(diff['EUR(540,000) million'], 'EUR(540,000) million ($A1,080 billion)')
         self.assertEqual(diff['EUR (55,233.00) million'], 'EUR (55,233.00) million ($A110.47 billion)')
         self.assertEqual(diff['EUR (55,233.00 billion)'], 'EUR (55,233.00 billion) ($A110.47 trillion)')
+
+        self.assertEqual(diff['52 Euro'], '52 Euro ($A104)')
+        self.assertEqual(diff['52 million euro'], '52 million euro ($A104 million)')
+        self.assertEqual(diff['54,000 EUR'], '54,000 EUR ($A108,000)')
+        self.assertEqual(diff['54,000 €'], '54,000 € ($A108,000)')
