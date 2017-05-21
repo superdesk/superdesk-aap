@@ -32,6 +32,9 @@ class CurrencyTestCase(unittest.TestCase):
                'This is a  CHF(540,000) million note. ' \
                'This is a  CHF (55,233.00) million note. ' \
                'This is a  CHF (55,233.00 billion) note. ' \
+               'This is a 40 Franks note. ' \
+               'This is a 4,648,382 Fr note. ' \
+               'This is a 52 million CHF note. ' \
 
         item = {'body_html': text}
         res, diff = chf_to_aud(item, rate=Decimal(2))
@@ -51,3 +54,7 @@ class CurrencyTestCase(unittest.TestCase):
         self.assertEqual(diff['CHF(540,000) million'], 'CHF(540,000) million ($A1,080 billion)')
         self.assertEqual(diff['CHF (55,233.00) million'], 'CHF (55,233.00) million ($A110.47 billion)')
         self.assertEqual(diff['CHF (55,233.00 billion)'], 'CHF (55,233.00 billion) ($A110.47 trillion)')
+
+        self.assertEqual(diff['40 Franks'], '40 Franks ($A80)')
+        self.assertEqual(diff['4,648,382 Fr'], '4,648,382 Fr ($A9.3 million)')
+        self.assertEqual(diff['52 million CHF'], '52 million CHF ($A104 million)')

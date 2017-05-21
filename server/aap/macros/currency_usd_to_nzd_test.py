@@ -42,6 +42,14 @@ class CurrencyTestCase(unittest.TestCase):
                'This is a  $US(540,000) million note. ' \
                'This is a  $US (55,233.00) million note. ' \
                'This is a  $US (55,233.00 billion) note. ' \
+               'This is a  1 million dollars note. ' \
+               'This is a  4,648,382.20 USD note. ' \
+               'This is a  52 mln $US note. ' \
+               'This is a  53 b dollars note. ' \
+               'This is a  52-million dollars note. ' \
+               'This is a  200-USD note. ' \
+               'This is a  (55,233.00) USD note. ' \
+
 
         item = {'body_html': text}
         res, diff = usd_to_nzd(item, rate=Decimal(2))
@@ -66,3 +74,11 @@ class CurrencyTestCase(unittest.TestCase):
         self.assertEqual(diff['$US(540,000) million'], '$US(540,000) million ($NZ1,080 billion)')
         self.assertEqual(diff['$US (55,233.00) million'], '$US (55,233.00) million ($NZ110.47 billion)')
         self.assertEqual(diff['$US (55,233.00 billion)'], '$US (55,233.00 billion) ($NZ110.47 trillion)')
+
+        self.assertEqual(diff['1 million dollars'], '1 million dollars ($NZ2.0 million)')
+        self.assertEqual(diff['4,648,382.20 USD'], '4,648,382.20 USD ($NZ9.30 million)')
+        self.assertEqual(diff['52 mln $US'], '52 mln $US ($NZ104 mln)')
+        self.assertEqual(diff['53 b dollars'], '53 b dollars ($NZ106 b)')
+        self.assertEqual(diff['52-million dollars'], '52-million dollars ($NZ104 million)')
+        self.assertEqual(diff['200-USD'], '200-USD ($NZ400)')
+        self.assertEqual(diff['(55,233.00) USD'], '(55,233.00) USD ($NZ110,466.00)')

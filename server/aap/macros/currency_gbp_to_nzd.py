@@ -11,6 +11,7 @@
 import os
 from . import aap_currency_base as currency_base
 from decimal import Decimal
+from copy import deepcopy
 
 GBP_TO_NZD = Decimal('2.06')  # backup
 
@@ -30,11 +31,33 @@ def gbp_to_nzd(item, **kwargs):
     if os.environ.get('BEHAVE_TESTING'):
         rate = GBP_TO_NZD
 
-    regex = r'([£]|(GBP)|(STG))\s*\-?\s*\(?(((\d{1,3}((\,\d{3})*|\d*))?' \
-            r'(\.\d{1,4})?)|((\d{1,3}((\,\d{3})*|\d*))(\.\d{0,4})?))\)?' \
-            + currency_base.SUFFIX_REGEX
+    symbol_first_regex = r'([£]|(GBP)|(STG))\s*\-?\s*\(?(((\d{1,3}((\,\d{3})*|\d*))?' \
+                         r'(\.\d{1,4})?)|((\d{1,3}((\,\d{3})*|\d*))(\.\d{0,4})?))\)?' \
+                         + currency_base.SUFFIX_REGEX
 
-    return currency_base.do_conversion(item, rate, '$NZ', regex, match_index=0, value_index=4, suffix_index=17)
+    symbol_last_regex = r'\(?(((\d{1,3}((\,\d{3})*|\d*))?(\.\d{1,4})?)((\d{1,3}((\,\d{3})*|\d*))(\.\d{0,4})?))' \
+                        + currency_base.SECONDARY_SUFFIX_REGEX \
+                        + '\s?([£]|(GBP)|(STG)|([p|P]ounds?))'
+
+    symbol_first_result = currency_base.do_conversion(deepcopy(item),
+                                                      rate,
+                                                      '$NZ',
+                                                      symbol_first_regex,
+                                                      match_index=0,
+                                                      value_index=4,
+                                                      suffix_index=17)
+
+    symbol_last_result = currency_base.do_conversion(deepcopy(item),
+                                                     rate,
+                                                     '$NZ',
+                                                     symbol_last_regex,
+                                                     match_index=0,
+                                                     value_index=1,
+                                                     suffix_index=13)
+
+    symbol_first_result[1].update(symbol_last_result[1])
+
+    return symbol_first_result
 
 
 name = 'gbp_to_nzd'
