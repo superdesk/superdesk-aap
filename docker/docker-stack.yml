@@ -1,0 +1,123 @@
+version: "3"
+
+services:
+  mongodb:
+    environment:
+    - TZ=Australia/Sydney
+    - TERM=xterm
+    image: mongo:2.6
+    networks:
+    - frontend
+    ports:
+    - 27017:27017
+    volumes:
+    - /home/superdesk/data/mongodb:/data/db
+    - /home/superdesk/data-archive/:/backups
+  
+  logstash:
+    command: logstash -f /usr/share/logstash/logstash.conf
+    environment:
+    - TZ=Australia/Sydney
+    - TERM=xterm
+    image: logstash:2.4
+    networks:
+    - frontend
+    volumes:
+    - /home/superdesk/deploy/docker/logstash:/usr/share/logstash
+  
+  kibana:
+    image: docker_kibana
+    environment:
+    - TZ=Australia/Sydney
+    - TERM=xterm
+    networks:
+    - frontend
+    ports:
+    - 5601:5601
+  
+  elastic:
+    command: elasticsearch
+    environment:
+    - ES_HEAP_SIZE=2g
+    - TZ=Australia/Sydney
+    - TERM=xterm
+    image: elasticsearch:2.4
+    networks:
+    - frontend
+    ports:
+    - 9200:9200
+    - 9300:9300
+    volumes:
+    - /home/superdesk/data/elastic:/usr/share/elasticsearch/data
+    - /home/superdesk/data-archive/:/backups
+  
+  superdesk:
+    image: docker_superdesk
+    environment:
+    - TZ=Australia/Sydney
+    - TERM=xterm
+    - SUPERDESK_URL=http://127.0.0.1/api
+    - SUPERDESK_WS_URL=ws://127.0.0.1/ws
+    - CONTENTAPI_URL=http://127.0.0.1/capi
+    - SUPERDESK_CLIENT_URL=http://127.0.0.1
+    - SUPERDESK_TESTING=True
+    - DEFAULT_SOURCE_VALUE_FOR_MANUAL_ARTICLES=AAP
+    - ODBC_PUBLISH=True
+    - MONGO_URI=mongodb://mongodb/superdesk
+    - LEGAL_ARCHIVE_URI=mongodb://mongodb/superdesk_la
+    - ARCHIVED_URI=mongodb://mongodb/superdesk_ar
+    - CONTENTAPI_MONGO_URI=mongodb://mongodb/superdesk_ca
+    - ELASTICSEARCH_URL=http://elastic:9200
+    - ELASTICSEARCH_INDEX=superdesk
+    - CELERY_BROKER_URL=amqp://guest:guest@rabbitmq:5672//
+    - CELERY_RESULT_BACKEND=amqp://guest:guest@rabbitmq:5672//
+    - REDIS_URL=amqp://guest:guest@rabbitmq:5672//
+    - LOG_SERVER_ADDRESS=logstash
+    - LOG_SERVER_PORT=5555
+    - AMAZON_ACCESS_KEY_ID
+    - AMAZON_CONTAINER_NAME
+    - AMAZON_REGION
+    - AMAZON_SECRET_ACCESS_KEY
+    - REUTERS_USERNAME
+    - REUTERS_PASSWORD
+    - MAIL_SERVER=mail-relay.aap.com.au
+    - MAIL_PORT=25
+    - MAIL_USE_TLS=false
+    - MAIL_USE_SSL=false
+    - SENTRY_DSN
+    - VIEW_DATE_FORMAT
+    - VIEW_TIME_FORMAT
+    networks:
+    - frontend
+    ports:
+    - 5555:5555
+    - 443:443
+    - 80:80
+    - 5400:5400
+    volumes:
+    - /home/superdesk/deploy/results/server/unit:/opt/superdesk/results-unit/
+    - /home/superdesk/deploy/results/server/behave:/opt/superdesk/results-behave/
+    - /home/superdesk/deploy/results/client/unit:/opt/superdesk/client/unit-test-results
+    - /var/input/:/var/input/
+    - /var/ingest/:/var/ingest/
+  
+  rabbitmq:
+    environment:
+    - TZ=Australia/Sydney
+    - TERM=xterm
+    hostname: HOSTNAME
+    image: rabbitmq-plus:3-management
+    networks:
+    - frontend
+    ports:
+    - 15672:15672
+    volumes:
+    - /home/superdesk/data/rabbitmq:/var/lib/rabbitmq
+  
+networks:
+  frontend:
+
+volumes:
+  db-data:
+  
+  
