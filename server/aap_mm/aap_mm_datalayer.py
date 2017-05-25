@@ -34,15 +34,27 @@ logger = logging.getLogger(__name__)
 
 class AAPMMDatalayer(DataLayer):
     def __set_auth_cookie(self, app):
-        if self._username is not None and self._password is not None:
-            url = app.config['AAP_MM_SEARCH_URL'] + '/Users/login'
-            values = {'username': self._username, 'password': self._password}
-            r = self._http.urlopen('POST', url, headers={'Content-Type': 'application/json'}, body=json.dumps(values))
-        else:
-            url = app.config['AAP_MM_SEARCH_URL'] + '/Users/AnonymousToken'
-            r = self._http.request('GET', url, redirect=False)
-
-        self._headers = {'cookie': r.getheader('set-cookie'), 'Content-Type': 'application/json'}
+        try:
+            if self._username is not None and self._password is not None:
+                url = app.config['AAP_MM_SEARCH_URL'] + '/Users/login'
+                values = {'username': self._username, 'password': self._password}
+                r = self._http.urlopen('POST', url, headers={'Content-Type': 'application/json'},
+                                       body=json.dumps(values))
+            else:
+                url = app.config['AAP_MM_SEARCH_URL'] + '/Users/AnonymousToken'
+                r = self._http.request('GET', url, redirect=False)
+        except Exception as ex:
+            logger.exception(ex)
+            r = None
+        finally:
+            # If the login failed then do not set the headers
+            if r and not r.status // 100 in {4, 5}:
+                self._headers = {'cookie': r.getheader('set-cookie'), 'Content-Type': 'application/json'}
+                self._login_tries = 0
+                return True
+            else:
+                self._login_tries += 1
+                return False
 
     def set_credentials(self, username, password):
         if username and username != self._username and password and password != self._password:
@@ -55,6 +67,7 @@ class AAPMMDatalayer(DataLayer):
         app.config.setdefault('AAP_MM_CDN_URL', 'http://one-cdn.aap.com.au/Preview.mp4')
         self._app = app
         self._headers = None
+        self._login_tries = 0
         self._username = None
         self._password = None
         self._http = urllib3.PoolManager()
@@ -70,7 +83,8 @@ class AAPMMDatalayer(DataLayer):
         :return:
         """
         if self._headers is None:
-            self.__set_auth_cookie(self._app)
+            if not self.__set_auth_cookie(self._app):
+                raise SuperdeskApiError.internalError("Unable to log into the image archive")
 
         url = self._app.config['AAP_MM_SEARCH_URL'] + '/Assets/search'
         query_keywords = '*:*'
@@ -128,9 +142,21 @@ class AAPMMDatalayer(DataLayer):
         size = int(req.get('size', '25')) if int(req.get('size', '25')) > 0 else 25
         query = {'Query': query_keywords, 'pageSize': str(size),
                  'pageNumber': str(int(req.get('from', '0')) // size + 1)}
+        try:
+            r = self._http.urlopen('POST', url + '?' + urllib.parse.urlencode(query),
+                                   body=json.dumps(fields), headers=self._headers)
+        except Exception as ex:
+            logger.exception(ex)
+            r = None
+        finally:
+            # if the response is unathorized or an error or exception try again a few times
+            if not r or r.status // 100 in {4, 5}:
+                if self._login_tries < 3:
+                    self._headers = None
+                    return self.find(resource, req, lookup)
+                else:
+                    SuperdeskApiError.internalError("Unable to access the image archive")
 
-        r = self._http.urlopen('POST', url + '?' + urllib.parse.urlencode(query),
-                               body=json.dumps(fields), headers=self._headers)
         hits = self._parse_hits(json.loads(r.data.decode('UTF-8')))
         return ElasticCursor(docs=hits['docs'], hits={'hits': hits, 'aggregations': self._parse_aggregations(hits)})
 
