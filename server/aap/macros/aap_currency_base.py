@@ -16,6 +16,7 @@ from superdesk.cache import cache
 
 RATE_SERVICE = 'http://download.finance.yahoo.com/d/quotes.csv?s={}=X&f=nl1d1'
 SUFFIX_REGEX = r'((\s*\-?\s*)((mln)|(bln)|([mM]illion)|([bB]illion)|[mb]))?\)?'
+SECONDARY_SUFFIX_REGEX = r'(\s*\-?\s*)((mln)|(bln)|([mM]illion)|([bB]illion)|[mb])?\)?'
 
 
 def to_currency(value, places=2, curr='', sep=',', dp='.', pos='', neg='-', trailneg=''):

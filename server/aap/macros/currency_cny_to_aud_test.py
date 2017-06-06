@@ -41,6 +41,11 @@ class CurrencyTestCase(unittest.TestCase):
                'This is a  CNY(540,000) million note. ' \
                'This is a  CNY (55,233.00) million note. ' \
                'This is a  CNY (55,233.00 billion) note. ' \
+               'This is a 41 Yen note. ' \
+               'This is a 52-million Renminbi note. ' \
+               'This is a 52 mln CNY note. ' \
+               'This is a 55,233.00 CN¥ note. ' \
+               'This is a (55,233.00) ¥ note. ' \
 
         item = {'body_html': text}
         res, diff = yuan_to_aud(item, rate=Decimal(2))
@@ -64,3 +69,9 @@ class CurrencyTestCase(unittest.TestCase):
         self.assertEqual(diff['CNY(540,000) million'], 'CNY(540,000) million ($A1,080 billion)')
         self.assertEqual(diff['CNY (55,233.00) million'], 'CNY (55,233.00) million ($A110.47 billion)')
         self.assertEqual(diff['CNY (55,233.00 billion)'], 'CNY (55,233.00 billion) ($A110.47 trillion)')
+
+        self.assertEqual(diff['41 Yen'], '41 Yen ($A82)')
+        self.assertEqual(diff['52-million Renminbi'], '52-million Renminbi ($A104 million)')
+        self.assertEqual(diff['52 mln CNY'], '52 mln CNY ($A104 mln)')
+        self.assertEqual(diff['55,233.00 CN¥'], '55,233.00 CN¥ ($A110,466.00)')
+        self.assertEqual(diff['(55,233.00) ¥'], '(55,233.00) ¥ ($A110,466.00)')
