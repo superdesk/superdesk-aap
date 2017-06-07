@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Response Status_Code="OK" Status_Message="" Status_Session="2f549bbf-022e-49fc-bdff-7fef922b7e7e">
+  <Fixtures Sport="Soccer">
+    <Series ID="int-314" Code="int-314" Name="World Cup Qualification AFC" Season="2018" Match_Type="" Category="" Gender="M" />
+    <Teams>
+      <Team ID="int-0" Name="To be Decided" Short="" Code="" />
+      <Team ID="int-3032" Name="Iraq" Short="IRQ" Code="IRQ" />
+      <Team ID="int-3033" Name="Iran" Short="IRN" Code="IRN" />
+      <Team ID="int-3034" Name="United Arab Emirates" Short="UAE" Code="UAE" />
+      <Team ID="int-3050" Name="Bahrain" Short="BHR" Code="BHR" />
+      <Team ID="int-3052" Name="Lebanon" Short="LIB" Code="LIB" />
+      <Team ID="int-3053" Name="India" Short="IND" Code="IND" />
+      <Team ID="int-3055" Name="Thailand" Short="THA" Code="THA" />
+      <Team ID="int-3059" Name="Australia" Short="AUS" Code="AUS" />
+      <Team ID="int-3060" Name="Kuwait" Short="KUW" Code="KUW" />
+      <Team ID="int-3061" Name="Korea DPR" Short="PRK" Code="PRK" />
+      <Team ID="int-3062" Name="Japan" Short="JPN" Code="JPN" />
+      <Team ID="int-3068" Name="Korea Republic" Short="KOR" Code="KOR" />
+      <Team ID="int-3070" Name="China PR" Short="CHN" Code="CHN" />
+      <Team ID="int-3072" Name="Saudi Arabia" Short="KSA" Code="KSA" />
+      <Team ID="int-3073" Name="Malaysia" Short="MAS" Code="MAS" />
+      <Team ID="int-3082" Name="Hong Kong" Short="HKG" Code="HKG" />
+      <Team ID="int-3087" Name="Myanmar" Short="MYA" Code="MYA" />
+      <Team ID="int-3089" Name="Syria" Short="SYR" Code="SYR" />
+      <Team ID="int-3094" Name="Oman" Short="OMA" Code="OMA" />
+      <Team ID="int-3102" Name="Pakistan" Short="PAK" Code="PAK" />
+      <Team ID="int-3103" Name="Bangladesh" Short="BAN" Code="BAN" />
+      <Team ID="int-102361" Name="Cambodia" Short="CAM" Code="CAM" />
+      <Team ID="int-102362" Name="Chinese Taipei" Short="TPE" Code="TPE" />
+      <Team ID="int-102363" Name="Jordan" Short="JOR" Code="JOR" />
+      <Team ID="int-102365" Name="Kyrgyzstan" Short="KGZ" Code="KGZ" />
+      <Team ID="int-102366" Name="Macau" Short="MAC" Code="MAC" />
+      <Team ID="int-102367" Name="Maldives" Short="MDV" Code="MDV" />
+      <Team ID="int-102368" Name="Nepal" Short="NEP" Code="NEP" />
+      <Team ID="int-102369" Name="Philippines" Short="PHI" Code="PHI" />
+      <Team ID="int-102370" Name="Qatar" Short="QAT" Code="QAT" />
+      <Team ID="int-102371" Name="Singapore" Short="SIN" Code="SIN" />
+      <Team ID="int-102372" Name="Sri Lanka" Short="SRI" Code="SRI" />
+      <Team ID="int-102373" Name="Tajikistan" Short="TJK" Code="TJK" />
+      <Team ID="int-102374" Name="Turkmenistan" Short="TKM" Code="TKM" />
+      <Team ID="int-102375" Name="Uzbekistan" Short="UZB" Code="UZB" />
+      <Team ID="int-102376" Name="Vietnam" Short="VIE" Code="VIE" />
+      <Team ID="int-102377" Name="Yemen" Short="YEM" Code="YEM" />
+      <Team ID="int-103057" Name="Afghanistan" Short="AFG" Code="AFG" />
+      <Team ID="int-103062" Name="Brunei" Short="BRU" Code="BRU" />
+      <Team ID="int-103068" Name="Laos" Short="LAO" Code="LAO" />
+      <Team ID="int-103715" Name="Palestine" Short="PLE" Code="PLE" />
+      <Team ID="int-103769" Name="Bhutan" Short="BHU" Code="BHU" />
+      <Team ID="int-103773" Name="Guam" Short="GUM" Code="GUM" />
+      <Team ID="int-103776" Name="Mongolia" Short="MNG" Code="MNG" />
+      <Team ID="int-112478" Name="Timor-Leste" Short="TLS" Code="TLS" />
+    </Teams>
+    <Venues>
+      <Venue ID="int-0" Name="" Location="" Country="" />
+      <Venue ID="int-19085" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-21635" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-21637" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-21901" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-21963" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-22742" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-22819" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-23140" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-25498" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-25688" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-25688" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-25691" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-25691" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-26160" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-26160" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-26181" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-26294" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-26298" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-26933" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-28946" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-28947" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-28953" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-36133" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-36134" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-36135" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-36228" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-36328" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-36705" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-37443" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-37884" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-37886" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-37886" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-37995" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-38011" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-38582" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-39316" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-39317" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-39639" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-39837" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-39838" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-39841" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-40429" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-40498" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-40501" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-40502" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-40503" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-40519" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-45414" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-45500" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-45625" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-46075" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-46076" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-46078" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-49243" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-49249" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-50917" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-50917" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-51023" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-51297" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-51852" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-52580" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-52844" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-53662" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-53663" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-54448" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-54449" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-54450" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-54453" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-54722" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-54753" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-54754" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-54815" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-55084" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-55088" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-55366" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-55458" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-55459" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-55461" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-55559" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-56136" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-56243" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+      <Venue ID="int-57674" Name="Adelaide Oval" Location="Adelaide" Country="Australia" />
+    </Venues>
+    <Rounds>
+      <Round No="1" Description="1st Round" Is_Final="0" Is_Grand_Final="0">
+        <Matches>
+          <Match Fixture_ID="1" Match_ID="int-1966697" Date="2015-03-13" Start_Time="00:30" Match_No="" TeamA_ID="int-3053" TeamB_ID="int-102368" Home_Team_ID="int-3053" Venue_ID="int-54450" Pool="" TeamA_Score="2" TeamB_Score="0" />
+          <Match Fixture_ID="2" Match_ID="int-1966703" Date="2015-03-17" Start_Time="20:45" Match_No="" TeamA_ID="int-102368" TeamB_ID="int-3053" Home_Team_ID="int-102368" Venue_ID="int-40502" Pool="" TeamA_Score="0" TeamB_Score="0" />
+          <Match Fixture_ID="3" Match_ID="int-1966696" Date="2015-03-13" Start_Time="02:30" Match_No="" TeamA_ID="int-102377" TeamB_ID="int-3102" Home_Team_ID="int-102377" Venue_ID="int-22742" Pool="" TeamA_Score="3" TeamB_Score="1" />
+          <Match Fixture_ID="4" Match_ID="int-1966702" Date="2015-03-24" Start_Time="02:30" Match_No="" TeamA_ID="int-3102" TeamB_ID="int-102377" Home_Team_ID="int-3102" Venue_ID="int-51023" Pool="" TeamA_Score="0" TeamB_Score="0" />
+          <Match Fixture_ID="5" Match_ID="int-1966695" Date="2015-03-12" Start_Time="18:00" Match_No="" TeamA_ID="int-112478" TeamB_ID="int-103776" Home_Team_ID="int-112478" Venue_ID="int-54453" Pool="" TeamA_Score="4" TeamB_Score="1" />
+          <Match Fixture_ID="6" Match_ID="int-1966701" Date="2015-03-17" Start_Time="19:00" Match_No="" TeamA_ID="int-103776" TeamB_ID="int-112478" Home_Team_ID="int-103776" Venue_ID="int-46075" Pool="" TeamA_Score="0" TeamB_Score="1" />
+          <Match Fixture_ID="7" Match_ID="int-1966694" Date="2015-03-12" Start_Time="20:00" Match_No="" TeamA_ID="int-102361" TeamB_ID="int-102366" Home_Team_ID="int-102361" Venue_ID="int-49243" Pool="" TeamA_Score="3" TeamB_Score="0" />
+          <Match Fixture_ID="8" Match_ID="int-1966700" Date="2015-03-17" Start_Time="23:00" Match_No="" TeamA_ID="int-102366" TeamB_ID="int-102361" Home_Team_ID="int-102366" Venue_ID="int-45625" Pool="" TeamA_Score="1" TeamB_Score="1" />
+          <Match Fixture_ID="9" Match_ID="int-1966693" Date="2015-03-12" Start_Time="22:00" Match_No="" TeamA_ID="int-102362" TeamB_ID="int-103062" Home_Team_ID="int-102362" Venue_ID="int-54449" Pool="" TeamA_Score="0" TeamB_Score="1" />
+          <Match Fixture_ID="10" Match_ID="int-1966699" Date="2099-03-17" Start_Time="23:15" Match_No="" TeamA_ID="int-103062" TeamB_ID="int-102362" Home_Team_ID="int-103062" Venue_ID="int-45500" Pool="" TeamA_Score="0" TeamB_Score="2" />
+          <Match Fixture_ID="11" Match_ID="int-1966692" Date="2099-03-12" Start_Time="20:30" Match_No="" TeamA_ID="int-102372" TeamB_ID="int-103769" Home_Team_ID="int-102372" Venue_ID="int-38011" Pool="" TeamA_Score="0" TeamB_Score="1" />
+          <Match Fixture_ID="12" Match_ID="int-1966698" Date="2099-03-17" Start_Time="21:00" Match_No="" TeamA_ID="int-103769" TeamB_ID="int-102372" Home_Team_ID="int-103769" Venue_ID="int-54448" Pool="" TeamA_Score="2" TeamB_Score="1" />
+        </Matches>
+      </Round>
+      <Round No="4" Description="4th Round" Is_Final="0" Is_Grand_Final="0">
+        <Matches>
+          <Match Fixture_ID="225" Match_ID="int-1966924" Date="2099-10-05" Start_Time="09:00" Match_No="" TeamA_ID="int-0" TeamB_ID="int-0" Home_Team_ID="int-0" Venue_ID="int-0" Pool="" TeamA_Score="" TeamB_Score="" />
+          <Match Fixture_ID="226" Match_ID="int-1966925" Date="2099-10-10" Start_Time="09:00" Match_No="" TeamA_ID="int-0" TeamB_ID="int-0" Home_Team_ID="int-0" Venue_ID="int-0" Pool="" TeamA_Score="" TeamB_Score="" />
+        </Matches>
+      </Round>
+    </Rounds>
+  </Fixtures>
+</Response>

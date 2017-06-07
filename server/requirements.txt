@@ -4,6 +4,7 @@ pyodbc==4.0.14
 unidecode==0.04.19
 newrelic>=2.66,<2.67
 titlecase==0.8.2
+geopy==1.11.0
 
 git+git://github.com/superdesk/superdesk-core.git@aee40b8#egg=Superdesk-Core
 git+git://github.com/superdesk/superdesk-planning.git@20e5a6f#egg=superdesk-planning
