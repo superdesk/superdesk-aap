@@ -38,10 +38,12 @@ class AAPSportsHTTPFeedingService(HTTPFeedingService):
         self.provider = provider
         parser = self.get_feed_parser(provider)
 
-        # <Response Status_Code="OK" Status_Message="" Status_Session="ae86c219-fef6-45d5-92cd-bdc67123f408"/>
+        # get the current year, it is used to filter fixtures for this year and next
         year = int(utcnow().year) % 100
         config = provider.get('config', {})
         content = self._request(config.get('login_url').format(config.get('username'), config.get('password')))
+        # get the configured sports
+        configured_sports = config.get('sports').split(',')
         xml = ET.fromstring(content)
         if xml.attrib['Status_Code'] == 'OK':
             session = xml.attrib['Status_Session']
@@ -49,6 +51,8 @@ class AAPSportsHTTPFeedingService(HTTPFeedingService):
             xml = ET.fromstring(content)
             for s in xml.findall('.//Sports/Sport'):
                 sport_id = s.attrib['SportID']
+                if sport_id not in configured_sports:
+                    continue
                 sport_name = s.attrib['SportName']
                 content = self._request(config.get('fixtures_url').format(session, sport_id, '', ''))
                 sport_xml = ET.fromstring(content)
