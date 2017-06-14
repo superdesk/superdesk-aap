@@ -1,6 +1,6 @@
 module.exports = function() {
     return {
-        apps: ['superdesk-planning'],
+        apps: ['superdesk-planning', 'aap'],
         defaultRoute: '/workspace',
         validatorMediaMetadata: {
             headline: {
