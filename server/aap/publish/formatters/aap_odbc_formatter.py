@@ -9,7 +9,7 @@
 # at https://www.sourcefabric.org/superdesk/license
 from superdesk.io.iptc import subject_codes
 from apps.packages import TakesPackageService
-from .aap_formatter_common import set_subject
+from .aap_formatter_common import set_subject, get_tag_list
 from .field_mappers.locator_mapper import LocatorMapper
 from .field_mappers.slugline_mapper import SluglineMapper
 from eve.utils import config
@@ -123,3 +123,6 @@ class AAPODBCFormatter():
 
     def is_first_part(self, article):
         return article.get('sequence', 1) == 1
+
+    def get_tag_list(self, parsed):
+        return get_tag_list(parsed)

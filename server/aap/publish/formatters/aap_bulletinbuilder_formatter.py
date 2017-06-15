@@ -18,7 +18,7 @@ from superdesk.errors import FormatterError
 from superdesk.metadata.item import ITEM_TYPE, PACKAGE_TYPE, ITEM_STATE, CONTENT_STATE, ASSOCIATIONS, CONTENT_TYPE
 from .field_mappers.locator_mapper import LocatorMapper
 from .field_mappers.slugline_mapper import SluglineMapper
-from .aap_formatter_common import set_subject
+from .aap_formatter_common import set_subject, get_tag_list
 from .unicodetoascii import to_ascii
 from copy import deepcopy
 import json
@@ -122,7 +122,7 @@ class AAPBulletinBuilderFormatter(Formatter):
         etree.strip_elements(parsed, 'br', with_tail=False)
 
         text = ''
-        for top_level_tag in parsed.xpath('/html/div/child::*'):
+        for top_level_tag in get_tag_list(parsed):
             text += self.format_text_content(top_level_tag)
 
         return re.sub(' +', ' ', text)

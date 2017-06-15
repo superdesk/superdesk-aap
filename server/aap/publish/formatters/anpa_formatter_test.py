@@ -387,3 +387,28 @@ class ANPAFormatterTest(TestCase):
         lines = io.StringIO(out.decode())
         self.assertTrue(lines.getvalue().split('\r')[3].lstrip(), 'Test line 1')
         self.assertTrue(lines.getvalue().split('\r')[4], 'Test line 2')
+
+    def test_content_wrappedin_div(self):
+        f = AAPAnpaFormatter()
+        subscriber = self.app.data.find('subscribers', None, None)[0]
+        item = self.article.copy()
+        item.update({
+            'body_html': '<div><p>Giants Netball have won through to the inaugural Super Netball grand '
+                         'final with a clinical 65-57 victory over Melbourne Vixens at Hisense Arena on Saturday '
+                         'night.</p><p>The eight-goal win secures the Giants a grand final berth against Sunshine '
+                         'Coast Lightning at Brisbane Entertainment Centre next Saturday. </p><p>It wasn’t to be for '
+                         'the Vixens who completed the regular season as minor premiers but lost both of their finals '
+                         'matches.</p><p>Kristina Brice began the season on the Giants bench but showed she has the '
+                         'skill and composure of a strike shooter with a match-high 42 goals, from 44 attempts at 95 '
+                         'per cent accuracy.</p></div>',
+            'format': 'HTML'})
+        resp = f.format(item, subscriber)[0]
+        out = resp['encoded_item']
+        lines = io.StringIO(out.decode())
+        self.assertTrue(lines.getvalue().split('\r')[3].lstrip(), '\n   Giants Netball have won through to the '
+                                                                  'inaugural Super Netball grand final with a '
+                                                                  'clinical 65-57 victory over Melbourne Vixens at '
+                                                                  'Hisense Arena on Saturday night.')
+        self.assertTrue(lines.getvalue().split('\r')[4], '\n   The eight-goal win secures the Giants a grand final '
+                                                         'berth against Sunshine Coast Lightning at Brisbane '
+                                                         'Entertainment Centre next Saturday. ')

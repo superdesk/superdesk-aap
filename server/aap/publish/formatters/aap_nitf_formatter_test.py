@@ -353,3 +353,33 @@ class AAPNitfFormatterTest(TestCase):
         resp = self.formatter.format(article, {'name': 'Test Subscriber'})[0]
         nitf_xml = etree.fromstring(resp['formatted_item'])
         self.assertIsNone(nitf_xml.find('head/meta[@name="anpa-takekey"]'))
+
+    def test_content_wrapped_in_div(self):
+        article = {
+            '_id': '3',
+            'source': 'AAP',
+            'anpa_category': [{'qcode': 'a'}],
+            'headline': 'This is a test headline',
+            'byline': None,
+            'slugline': 'slugline',
+            'subject': [{'qcode': '02011001'}],
+            'anpa_take_key': None,
+            'unique_id': '1',
+            'type': 'text',
+            'body_html': '<div><p>Giants Netball have won through to the inaugural Super Netball grand '
+                         'final with a clinical 65-57 victory over Melbourne Vixens at Hisense Arena on Saturday '
+                         'night.</p><p>The eight-goal win secures the Giants a grand final berth against Sunshine '
+                         'Coast Lightning at Brisbane Entertainment Centre next Saturday. </p><p>It wasn''t to be for '
+                         'the Vixens who completed the regular season as minor premiers but lost both of their finals '
+                         'matches.</p><p>Kristina Brice began the season on the Giants bench but showed she has the '
+                         'skill and composure of a strike shooter with a match-high 42 goals, from 44 attempts at 95 '
+                         'per cent accuracy.</p></div>',
+            'word_count': '1',
+            'priority': 1
+        }
+        resp = self.formatter.format(article, {'name': 'Test Subscriber'})[0]
+        nitf_xml = etree.fromstring(resp['formatted_item'])
+        self.assertEqual(nitf_xml.findall('body/body.content/p')[1].text, 'The eight-goal win secures the Giants a '
+                                                                          'grand final berth against Sunshine Coast '
+                                                                          'Lightning at Brisbane Entertainment '
+                                                                          'Centre next Saturday. ')

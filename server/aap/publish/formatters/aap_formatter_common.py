@@ -69,3 +69,11 @@ def get_service_level(category, article):
         return category.get('qcode', 'a').lower()
 
     return 'a'
+
+
+def get_tag_list(parsed):
+    tag_list = parsed.xpath('/html/div/child::*')
+    # In some rare cases we get an article with the content wrapped in a single div
+    if len(tag_list) == 1 and tag_list[0].tag == 'div' and len(list(tag_list[0])) > 0:
+        tag_list = list(tag_list[0])
+    return tag_list

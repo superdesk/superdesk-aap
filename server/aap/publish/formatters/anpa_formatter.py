@@ -9,7 +9,7 @@
 # at https://www.sourcefabric.org/superdesk/license
 from copy import deepcopy
 from superdesk.publish.formatters import Formatter
-from .aap_formatter_common import map_priority, get_service_level
+from .aap_formatter_common import map_priority, get_service_level, get_tag_list
 import superdesk
 from superdesk.errors import FormatterError
 import datetime
@@ -157,7 +157,7 @@ class AAPAnpaFormatter(Formatter):
             br.tail = '\r\n' + br.tail if br.tail else '\r\n'
         etree.strip_elements(parsed, 'br', with_tail=False)
 
-        for tag in parsed.xpath('/html/div/child::*'):
+        for tag in get_tag_list(parsed):
             if tag.tag not in ('br') and tag.text is not None and tag.text.strip() != '':
                 tag.text = '   ' + re.sub(' +', ' ', re.sub('(?<!\r)\n+', ' ', tag.text)) if tag.text else ''
                 tag.tail = '\r\n' + tag.tail if tag.tail else '\r\n'

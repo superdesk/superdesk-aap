@@ -899,6 +899,80 @@ class AapIpNewsFormatterTest(TestCase):
         item = json.loads(item)
         self.assertEqual(item['article_text'], '\x19   By joe\x19\r\na&b\r\nAAP')
 
+    def test_aap_newscentre_formatter_with_parent_div(self):
+        subscriber = self.app.data.find('subscribers', None, None)[0]
+        article = {
+            "_id": "1",
+            "pubstatus": "usable",
+            "format": "HTML",
+            "subject": [
+                {
+                    "qcode": "15042000",
+                    "name": "netball",
+                    "parent": "15000000"
+                }
+            ],
+            "dateline": {
+                "text": "MELBOURNE, June 10 AAP -",
+                "source": "AAP",
+                "located": {
+                    "state_code": "VIC",
+                    "alt_name": "",
+                    "country_code": "AU",
+                    "tz": "Australia/Melbourne",
+                    "dateline": "city",
+                    "country": "Australia",
+                    "state": "Victoria",
+                    "city": "Melbourne",
+                    "city_code": "Melbourne"
+                }
+            },
+            "genre": [
+                {
+                    "name": "Article (news)",
+                    "qcode": "Article"
+                }
+            ],
+            "type": "text",
+            "priority": 6,
+            "place": [
+                {
+                    "name": "VIC",
+                    "group": "Australia",
+                    "world_region": "Oceania",
+                    "country": "Australia",
+                    "qcode": "VIC",
+                    "state": "Victoria"
+                }
+            ],
+            "byline": "Samantha Sonogan",
+            "source": "AAP",
+            "state": "published",
+            "slugline": "Net Vixens",
+            "anpa_category": [
+                {
+                    "name": "Domestic Sport",
+                    "qcode": "A",
+                    "subject": "15000000"
+                }
+            ],
+            "headline": "Giants beat Vixens to reach netball GF",
+            "body_html": "<div><p>Giants Netball have won through to the inaugural Super Netball grand "
+                         "final with a clinical 65-57 victory over Melbourne Vixens at Hisense Arena on Saturday "
+                         "night.</p><p>The eight-goal win secures the Giants a grand final berth against Sunshine "
+                         "Coast Lightning at Brisbane Entertainment Centre next Saturday. </p><p>It wasn’t to be for "
+                         "the Vixens who completed the regular season as minor premiers but lost both of their finals "
+                         "matches.</p><p>Kristina Brice began the season on the Giants bench but showed she has the "
+                         "skill and composure of a strike shooter with a match-high 42 goals, from 44 attempts at 95 "
+                         "per cent accuracy.</p></div>",
+        }
+
+        f = AAPIpNewsFormatter()
+        seq, item = f.format(article, subscriber, ['Axx'])[0]
+        item = json.loads(item)
+        self.assertTrue(item['article_text'].startswith('   By Samantha Sonogan\r\n   MELBOURNE, June 10 AAP - '
+                                                        'Giants Netball'))
+
 
 class DefaultSubjectTest(TestCase):
 
