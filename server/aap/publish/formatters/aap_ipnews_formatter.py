@@ -50,22 +50,16 @@ class AAPIpNewsFormatter(Formatter, AAPODBCFormatter):
                 # All NZN sourced content is AAP content for the AAP output formatted
                 article['source'] = source
                 pub_seq_num, odbc_item = self.get_odbc_item(article, subscriber, category, codes, pass_through)
-                # determine if this is the last take
-                is_last_take = self.is_last_take(article)
 
                 if article.get(FORMAT) == FORMATS.PRESERVED:  # @article_text
-                    body = get_text(
-                        self.append_body_footer(article) if is_last_take else
-                        article.get('body_html', ''), content='html')
+                    body = get_text(self.append_body_footer(article))
                     odbc_item['article_text'] = body.replace('\'', '\'\'')
                     odbc_item['texttab'] = 't'
                 elif article.get(FORMAT, FORMATS.HTML) == FORMATS.HTML:
                     body = self.get_wrapped_text_content(
-                        to_ascii(self.append_body_footer(article) if is_last_take
-                                 else article.get('body_html', ''))).replace('\'', '\'\'')
-                    # if this is the first take and we have a dateline inject it
-                    if self.is_first_part(article) and 'dateline' in article and 'text' in article.get('dateline', {})\
-                            and not pass_through:
+                        to_ascii(self.append_body_footer(article))).replace('\'', '\'\'')
+                    # if we have a dateline inject it
+                    if 'dateline' in article and 'text' in article.get('dateline', {}) and not pass_through:
                         if body.startswith('   '):
                             body = '   {} {}'.format(article.get('dateline')
                                                      .get('text').replace('\'', '\'\''),
@@ -74,14 +68,11 @@ class AAPIpNewsFormatter(Formatter, AAPODBCFormatter):
                     odbc_item['article_text'] = body
                     odbc_item['texttab'] = 'x'
 
-                if self.is_first_part(article) and not pass_through:
+                if not pass_through:
                     self.add_ednote(odbc_item, article)
                     self.add_byline(odbc_item, article)
 
-                if not is_last_take:
-                    odbc_item['article_text'] += '\r\nMORE'
-                else:
-                    odbc_item['article_text'] += '\r\n' + article.get('source', '')
+                odbc_item['article_text'] += '\r\n' + article.get('source', '')
                 sign_off = article.get('sign_off', '') or ''
                 if len(sign_off) > 0:
                     odbc_item['article_text'] += ' ' + sign_off

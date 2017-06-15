@@ -220,8 +220,5 @@ PUBLISHED_CONTENT_EXPIRY_MINUTES = int(env('PUBLISHED_CONTENT_EXPIRY_MINUTES', 3
 # Enable/Disable Content API Publishing
 CONTENTAPI_ENABLED = json.loads(env('CONTENTAPI_ENABLED', 'False').lower())
 
-# Enable/Disable Takes Publishing
-NO_TAKES = json.loads(env('NO_TAKES', 'False').lower())
-
 # Make sure legal archive is enabled
 LEGAL_ARCHIVE = True

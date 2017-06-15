@@ -16,7 +16,6 @@ import datetime
 from superdesk.metadata.item import ITEM_TYPE, CONTENT_TYPE, BYLINE, FORMAT, FORMATS
 from .field_mappers.locator_mapper import LocatorMapper
 from .field_mappers.slugline_mapper import SluglineMapper
-from apps.packages import TakesPackageService
 from eve.utils import config
 from .unicodetoascii import to_ascii
 from .category_list_map import get_aap_category_list
@@ -33,8 +32,6 @@ class AAPAnpaFormatter(Formatter):
                 mapped_source = self._get_mapped_source(formatted_article)
                 formatted_article[config.ID_FIELD] = formatted_article.get('item_id',
                                                                            formatted_article.get(config.ID_FIELD))
-                is_last_take = TakesPackageService().is_last_takes_package_item(formatted_article)
-                is_first_part = formatted_article.get('sequence', 1) == 1
                 pub_seq_num = superdesk.get_resource_service('subscribers').generate_sequence_number(subscriber)
                 anpa = []
 
@@ -111,8 +108,7 @@ class AAPAnpaFormatter(Formatter):
                 else:
                     body = to_ascii(formatted_article.get('body_html', ''))
                     # we need to inject the dateline
-                    if is_first_part and formatted_article.get('dateline', {}).get('text') \
-                            and not article.get('auto_publish', False):
+                    if formatted_article.get('dateline', {}).get('text') and not article.get('auto_publish', False):
                         body_html_elem = parse_html(formatted_article.get('body_html'))
                         ptag = body_html_elem.find('.//p')
                         if ptag is not None:
@@ -123,10 +119,7 @@ class AAPAnpaFormatter(Formatter):
                         anpa.append(self.get_text_content(to_ascii(formatted_article.get('body_footer', ''))))
 
                 anpa.append(b'\x0D\x0A')
-                if not is_last_take:
-                    anpa.append('MORE'.encode('ascii'))
-                else:
-                    anpa.append(mapped_source.encode('ascii'))
+                anpa.append(mapped_source.encode('ascii'))
                 sign_off = (formatted_article.get('sign_off', '') or '').encode('ascii')
                 anpa.append((b'\x20' + sign_off) if len(sign_off) > 0 else b'')
                 anpa.append(b'\x0D\x0A')
