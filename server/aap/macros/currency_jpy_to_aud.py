@@ -31,11 +31,11 @@ def yen_to_aud(item, **kwargs):
     if os.environ.get('BEHAVE_TESTING'):
         rate = JPY_TO_AUD
 
-    symbol_first_regex = r'([¥]|(JPY))\s*\-?\s*\(?(((\d{1,3}((\,\d{3})*|\d*))?' \
-                         r'(\.\d{1,4})?)|((\d{1,3}((\,\d{3})*|\d*))(\.\d{0,4})?))\)?' \
+    symbol_first_regex = r'([¥]|(JPY))\s*\-?\s*\(?(((\d{1,}((\,\d{3})*|\d*))?' \
+                         r'(\.\d{1,4})?)|((\d{1,}((\,\d{3})*|\d*))(\.\d{0,4})?))\)?' \
                          + currency_base.SUFFIX_REGEX
 
-    symbol_last_regex = r'\(?(((\d{1,3}((\,\d{3})*|\d*))?(\.\d{1,4})?)|((\d{1,3}((\,\d{3})*|\d*))(\.\d{0,4})?))' \
+    symbol_last_regex = r'\(?(((\d{1,}((\,\d{3})*|\d*))?(\.\d{1,4})?)|((\d{1,}((\,\d{3})*|\d*))(\.\d{0,4})?))' \
                         + currency_base.SECONDARY_SUFFIX_REGEX \
                         + '\s?([¥]|(JPY)|([y|Y]en))'
 
