@@ -653,3 +653,79 @@ class AapBulletinBuilderFormatterTest(TestCase):
         self.assertEqual(test_article['associations']['featuremedia']['alt_text'], 'Hello world')
         self.assertEqual(test_article['associations']['featuremedia']['slugline'], 'Hello world')
         self.assertEqual(test_article['associations']['featuremedia']['byline'], 'Hello world')
+
+    def test_content_wrapped_in_a_div(self):
+        article = {
+            'source': 'AAP',
+            'anpa_category': [{'qcode': 's'}],
+            'headline': 'This is a test headline',
+            'byline': 'joe',
+            'slugline': 'slugline',
+            'subject': [{'qcode': '15017000'}],
+            'anpa_take_key': 'take_key',
+            'unique_id': '1',
+            'type': 'text',
+            "format": "HTML",
+            'body_html': '<div><p>Giants Netball have won through to the inaugural Super Netball grand '
+                         'final with a clinical 65-57 victory over Melbourne Vixens at Hisense Arena on Saturday '
+                         'night.</p><p>The eight-goal win secures the Giants a grand final berth against Sunshine '
+                         'Coast Lightning at Brisbane Entertainment Centre next Saturday. </p><p>It wasn''t to be for '
+                         'the Vixens who completed the regular season as minor premiers but lost both of their finals '
+                         'matches.</p><p>Kristina Brice began the season on the Giants bench but showed she has the '
+                         'skill and composure of a strike shooter with a match-high 42 goals, from 44 attempts at 95 '
+                         'per cent accuracy.</p></div>',
+            'word_count': '1',
+            'priority': '1',
+            'firstcreated': utcnow(),
+            'versioncreated': utcnow(),
+            'lock_user': ObjectId(),
+            'task': {
+                'desk': self.desks[0][config.ID_FIELD]
+            }
+        }
+
+        subscriber = self.app.data.find('subscribers', None, None)[0]
+        seq, item = self._formatter.format(article, subscriber)[0]
+        item = json.loads(item)
+        self.assertGreater(int(seq), 0)
+        test_article = json.loads(item.get('data'))
+        self.maxDiff = None
+        self.assertEqual(test_article['body_text'],
+                         'Giants Netball have won through to the inaugural Super Netball grand final with a clinical '
+                         '65-57 victory over Melbourne Vixens at Hisense Arena on Saturday night.\r\n\r\nThe eight-goal'
+                         ' win secures the Giants a grand final berth against Sunshine Coast Lightning at Brisbane '
+                         'Entertainment Centre next Saturday.\r\n\r\nIt wasn''t to be for the Vixens who completed the '
+                         'regular season as minor premiers but lost both of their finals matches.\r\n\r\nKristina Brice'
+                         ' began the season on the Giants bench but showed she has the skill and composure of '
+                         'a strike shooter with a match-high 42 goals, from 44 attempts at 95 per cent '
+                         'accuracy.\r\n\r\n')
+
+    def test_content_wrapped_in_a_div_with_no_children(self):
+        article = {
+            'source': 'AAP',
+            'anpa_category': [{'qcode': 's'}],
+            'headline': 'This is a test headline',
+            'byline': 'joe',
+            'slugline': 'slugline',
+            'subject': [{'qcode': '15017000'}],
+            'anpa_take_key': 'take_key',
+            'unique_id': '1',
+            'type': 'text',
+            "format": "HTML",
+            'body_html': '<div>stuff</div>',
+            'word_count': '1',
+            'priority': '1',
+            'firstcreated': utcnow(),
+            'versioncreated': utcnow(),
+            'lock_user': ObjectId(),
+            'task': {
+                'desk': self.desks[0][config.ID_FIELD]
+            }
+        }
+
+        subscriber = self.app.data.find('subscribers', None, None)[0]
+        seq, item = self._formatter.format(article, subscriber)[0]
+        item = json.loads(item)
+        self.assertGreater(int(seq), 0)
+        test_article = json.loads(item.get('data'))
+        self.assertEqual(test_article['body_text'], 'stuff\r\n\r\n')

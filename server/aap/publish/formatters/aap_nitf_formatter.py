@@ -16,6 +16,7 @@ from lxml.etree import SubElement
 import re
 from .unicodetoascii import to_ascii
 from superdesk.etree import parse_html, get_text, to_string
+from .aap_formatter_common import get_tag_list
 
 
 class AAPNITFFormatter(NITFFormatter):
@@ -92,7 +93,7 @@ class AAPNITFFormatter(NITFFormatter):
         html = html.replace('\n', ' ')
         html = re.sub(r'\s\s+', ' ', html)
         parsed = parse_html(html, content='html')
-        for tag in parsed.xpath('/html/div/child::*'):
+        for tag in get_tag_list(parsed):
             p = etree.Element('p')
             p.text = to_ascii(get_text(to_string(tag, method='html'), content='html'))
             element.append(p)

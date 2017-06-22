@@ -104,7 +104,7 @@ class AAPNewscentreFormatter(Formatter, AAPODBCFormatter):
             br.tail = '\r\n' + br.tail if br.tail else '\r\n'
         etree.strip_elements(parsed, 'br', with_tail=False)
 
-        for tag in parsed.xpath('/html/div/child::*'):
+        for tag in self.get_tag_list(parsed):
             ptext = ''
             for x in tag.itertext():
                 ptext += x
