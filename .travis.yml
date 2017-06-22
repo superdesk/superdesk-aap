@@ -18,7 +18,7 @@ addons:
 
 matrix:
     include:
-        - env: ELASTIC2X
+        - env: ELASTIC=24
           python: "3.5"
           addons:
               apt:
@@ -29,7 +29,7 @@ matrix:
                       - elasticsearch
                       - mongodb-org-server
 
-        - env: ELASTIC17
+        - env: ELASTIC=17
           python: "3.4"
           addons:
               apt:
@@ -41,7 +41,7 @@ matrix:
                       - mongodb-org-server
 
 
-        - env: ELASTIC17
+        - env: ELASTIC=17
           python: "3.5"
           addons:
               apt:
@@ -59,8 +59,11 @@ cache:
     - $HOME/.npm
 
 before_install:
-    - nvm install 6.10
-    - nvm use 6.10
+    - sudo apt-get purge elasticsearch -y
+    - if [[ "$ELASTIC" == "24" ]]; then sudo apt-get install elasticsearch=2.4.4 && sudo service elasticsearch start; fi
+    - if [[ "$ELASTIC" == "17" ]]; then sudo apt-get install elasticsearch=1.7.5 && sudo service elasticsearch start; fi
+    - nvm install node
+    - nvm use node
     - node --version
     - npm install -g npm@latest
     - npm install -g grunt-cli
@@ -74,7 +77,7 @@ before_install:
 
 install:
     - cd server && pip install -r dev-requirements.txt && cd ..
-    - cd client && npm install && cd ..
+    - cd client && npm install --python=python2.7 && cd ..
 
 before_script: >
     df -h
