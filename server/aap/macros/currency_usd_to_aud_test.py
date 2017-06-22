@@ -50,6 +50,7 @@ class CurrencyTestCase(unittest.TestCase):
                'This is a  52-million dollars note. ' \
                'This is a  200-USD note. ' \
                'This is a  (55,233.00) USD note. ' \
+               'This is a $ 4000 note.' \
 
         item = {'body_html': text}
         res, diff = usd_to_aud(item, rate=Decimal(2))
@@ -83,3 +84,4 @@ class CurrencyTestCase(unittest.TestCase):
         self.assertEqual(diff['52-million dollars'], '52-million dollars ($A104 million)')
         self.assertEqual(diff['200-USD'], '200-USD ($A400)')
         self.assertEqual(diff['(55,233.00) USD'], '(55,233.00) USD ($A110,466.00)')
+        self.assertEqual(diff['$ 4000'], '$US 4000 ($A8,000)')

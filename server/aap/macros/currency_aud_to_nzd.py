@@ -30,8 +30,8 @@ def aud_to_nzd(item, **kwargs):
     if os.environ.get('BEHAVE_TESTING'):
         rate = AUD_TO_NZD
 
-    regex = r'((AUD)|(\$A)|(\$AU)|(\$))\s*\-?\s*\(?(((\d{1,3}((\,\d{3})*|\d*))?' \
-            r'(\.\d{1,4})?)|((\d{1,3}((\,\d{3})*|\d*))(\.\d{0,4})?))\)?' \
+    regex = r'((AUD)|(\$A)|(\$AU)|(\$))\s*\-?\s*\(?(((\d{1,}((\,\d{3})*|\d*))?' \
+            r'(\.\d{1,4})?)|((\d{1,}((\,\d{3})*|\d*))(\.\d{0,4})?))\)?' \
             + currency_base.SUFFIX_REGEX
 
     return currency_base.do_conversion(item, rate, '$NZ', regex, match_index=0, value_index=6, suffix_index=17)
