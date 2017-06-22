@@ -49,7 +49,10 @@ class CurrencyTestCase(unittest.TestCase):
                'This is a  52-million dollars note. ' \
                'This is a  200-USD note. ' \
                'This is a  (55,233.00) USD note. ' \
-
+               'This is a  $US3434 note. ' \
+               'This is a  $US3,434 note. ' \
+               'This is a  3434 USD note. ' \
+               'This is a  3434 dollars. ' \
 
         item = {'body_html': text}
         res, diff = usd_to_nzd(item, rate=Decimal(2))
@@ -82,3 +85,8 @@ class CurrencyTestCase(unittest.TestCase):
         self.assertEqual(diff['52-million dollars'], '52-million dollars ($NZ104 million)')
         self.assertEqual(diff['200-USD'], '200-USD ($NZ400)')
         self.assertEqual(diff['(55,233.00) USD'], '(55,233.00) USD ($NZ110,466.00)')
+        self.assertEqual(diff['$US3434'], '$US3434 ($NZ6,868)')
+        self.assertEqual(diff['$US3,434'], '$US3,434 ($NZ6,868)')
+        self.assertEqual(diff['$US3,434'], '$US3,434 ($NZ6,868)')
+        self.assertEqual(diff['3434 USD'], '3434 USD ($NZ6,868)')
+        self.assertEqual(diff['3434 dollars'], '3434 dollars ($NZ6,868)')
