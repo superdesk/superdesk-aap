@@ -62,8 +62,8 @@ before_install:
     - sudo apt-get purge elasticsearch -y
     - if [[ "$ELASTIC" == "24" ]]; then sudo apt-get install elasticsearch=2.4.4 && sudo service elasticsearch start; fi
     - if [[ "$ELASTIC" == "17" ]]; then sudo apt-get install elasticsearch=1.7.5 && sudo service elasticsearch start; fi
-    - nvm install node
-    - nvm use node
+    - nvm install 6
+    - nvm use 6
     - node --version
     - npm install -g npm@latest
     - npm install -g grunt-cli
@@ -85,7 +85,6 @@ before_script: >
     && sudo service mongod restart
 
 script:
-    - cd client && npm test && cd ..
     - cd server && flake8 && cd ..
     - cd server && time behave ./features/ --format progress2 --logging-level ERROR && cd ..
     - cd server && time nosetests && cd ..
