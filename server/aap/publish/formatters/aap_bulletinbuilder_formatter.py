@@ -15,7 +15,7 @@ from eve.utils import config
 from superdesk.utils import json_serialize_datetime_objectId
 from superdesk.utc import utcnow
 from superdesk.errors import FormatterError
-from superdesk.metadata.item import ITEM_TYPE, PACKAGE_TYPE, ITEM_STATE, CONTENT_STATE, ASSOCIATIONS, CONTENT_TYPE
+from superdesk.metadata.item import ITEM_TYPE, ITEM_STATE, CONTENT_STATE, ASSOCIATIONS, CONTENT_TYPE
 from .field_mappers.locator_mapper import LocatorMapper
 from .field_mappers.slugline_mapper import SluglineMapper
 from .aap_formatter_common import set_subject
@@ -91,7 +91,7 @@ class AAPBulletinBuilderFormatter(Formatter):
                 'id': formatted_article.get(config.ID_FIELD),
                 'version': formatted_article.get(config.VERSION),
                 ITEM_TYPE: formatted_article.get(ITEM_TYPE),
-                PACKAGE_TYPE: formatted_article.get(PACKAGE_TYPE, ''),
+                'package_type': '',
                 'headline': formatted_article.get('headline', '').replace('\'', '\'\''),
                 'slugline': formatted_article.get('slugline', '').replace('\'', '\'\''),
                 'data': superdesk.json.dumps(formatted_article,

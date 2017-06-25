@@ -83,40 +83,6 @@ Feature: Content Auto Publishing
         {"_id": "123", "guid": "123", "headline": "test", "_current_version": 2, "state": "published",
          "task": {"desk": "Sports", "stage": "Incoming Stage", "user": "test_user"},
          "slugline": "test",
-         "body_html": "Test Document body", "subject":[{"qcode": "17004000", "name": "Statistics"}]},
-        {"headline": "test", "_current_version": 2, "state": "published", "type": "composite",
-         "package_type": "takes", "task": {"desk": "Sports", "stage": "Incoming Stage", "user": "test_user"},
-         "sequence": 1,
-         "slugline": "test",
-         "groups" : [
-            {
-                "id" : "root",
-                "refs" : [
-                    {
-                        "idRef" : "main"
-                    }
-                ],
-                "role" : "grpRole:NEP"
-            },
-            {
-                "id" : "main",
-                "refs" : [
-                    {
-                        "sequence" : 1,
-                        "renditions" : {},
-                        "type" : "text",
-                        "location" : "legal_archive",
-                        "slugline" : "test",
-                        "itemClass" : "icls:text",
-                        "residRef" : "123",
-                        "headline" : "test",
-                        "guid" : "123",
-                        "_current_version" : 2
-                    }
-                ],
-                "role" : "grpRole:main"
-            }
-         ],
          "body_html": "Test Document body", "subject":[{"qcode": "17004000", "name": "Statistics"}]}
         ]
       }
@@ -132,40 +98,16 @@ Feature: Content Auto Publishing
        ]
       }
       """
-      When we get "/legal_archive/123?version=all"
-      Then we get list with 2 items
-      """
-      {"_items" : [
-        {"_id": "123", "headline": "test", "_current_version": 1, "state": "fetched",
-         "task": {"desk": "Sports", "stage": "Incoming Stage", "user": "test_user"}},
-        {"_id": "123", "headline": "test", "_current_version": 2, "state": "published",
-         "task": {"desk": "Sports", "stage": "Incoming Stage", "user": "test_user"},
-         "body_html": "Test Document body"}
-       ]
-      }
-      """
-      When we get digital item of "123"
-      When we get "/legal_archive/#archive.123.take_package#?version=all"
-      Then we get list with 1 items
-      """
-      {"_items" : [
-
-        {"_id": "#archive.123.take_package#", "headline": "test", "_current_version": 2,
-         "state": "published", "type": "composite", "package_type": "takes",
-         "task": {"desk": "Sports", "stage": "Incoming Stage", "user": "test_user"}}
-       ]
-      }
-      """
       When we enqueue published
       When we get "/publish_queue"
       Then we get list with 2 items
       """
       {
         "_items": [
-          {"state": "pending", "content_type": "composite",
-          "subscriber_id": "#digital#", "item_id": "#archive.123.take_package#", "item_version": 2},
           {"state": "pending", "content_type": "text",
-          "subscriber_id": "#wire#", "item_id": "123", "item_version": 2}
+          "subscriber_id": "#wire#", "item_id": "123", "item_version": 2},
+          {"state": "pending", "content_type": "text",
+          "subscriber_id": "#digital#", "item_id": "123", "item_version": 2}
         ]
       }
       """

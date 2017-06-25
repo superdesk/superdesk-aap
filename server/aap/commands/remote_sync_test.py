@@ -14,7 +14,6 @@ from superdesk.tests import TestCase
 from httmock import urlmatch, HTTMock
 from .remote_sync import RemoteSyncCommand
 import json
-import superdesk
 
 
 class RemoteSuncBaseTest(TestCase):
@@ -39,10 +38,8 @@ class RemoteSyncTest(RemoteSuncBaseTest):
     def test_single_text_item(self):
         cmd = RemoteSyncCommand()
         cmd.run('https://superdesk.com.au/api', 'test', 'test')
-        item = superdesk.get_resource_service('archive').find_one(req=None, _id='1')
-        self.assertTrue('linked_in_packages' in item)
         published = self.app.data.find('published', None, None)
-        self.assertEqual(published.count(), 2)
+        self.assertEqual(published.count(), 1)
 
     def setupRemoteSyncMock(self, context):
         context.mock = HTTMock(*[self.login_request, self.search_request])
@@ -71,7 +68,7 @@ class RemoteSyncTakeStory(RemoteSuncBaseTest):
         cmd = RemoteSyncCommand()
         cmd.run('https://superdesk.com.au/api', 'test', 'test')
         published = self.app.data.find("published", None, None)
-        self.assertEqual(published.count(), 4)
+        self.assertEqual(published.count(), 2)
 
     def setupRemoteSyncMock(self, context):
         context.mock = HTTMock(*[self.login_request, self.search_request, self.archive_request])
@@ -135,7 +132,6 @@ class RemoteSyncTakeStory(RemoteSuncBaseTest):
                     "id": "main",
                     "refs": [
                         {
-                            "sequence": 1,
                             "type": "text",
                             "residRef": "urn:newsml:localhost:2017-01-24T13:00:17.447175:ee7b6fb5-c2c1-4242-a412"
                                         "-cb48f9f599ee",
@@ -150,7 +146,6 @@ class RemoteSyncTakeStory(RemoteSuncBaseTest):
                             "headline": "headline"
                         },
                         {
-                            "sequence": 2,
                             "type": "text",
                             "residRef": "urn:newsml:localhost:2017-01-24T13:00:58.486933:05917203-7162-4f3d-aec2"
                                         "-51d7342731b7",
@@ -168,7 +163,6 @@ class RemoteSyncTakeStory(RemoteSuncBaseTest):
                 }
             ],
             "pubstatus": "usable",
-            "package_type": "takes",
             "sign_off": "MAR",
             "format": "HTML",
             "slugline": "take1",
@@ -190,7 +184,6 @@ class RemoteSyncTakeStory(RemoteSuncBaseTest):
                     "name": "Article (news)"
                 }
             ],
-            "sequence": 2,
             "_etag": "a765e670ff6010137e0711d32d70093d41b1cebe",
             "subject": [
                 {
@@ -280,10 +273,8 @@ class RemoteSyncTakeStory(RemoteSuncBaseTest):
                         "headline": "headline",
                         "word_count": 3,
                         "slugline": "take1",
-                        "sequence": 1,
                         "linked_in_packages": [
                             {
-                                "package_type": "takes",
                                 "package": "urn:newsml:localhost:2017-01-24T13:00:58.541182:c6910856-62ad-49fe"
                                            "-a15b-95fa64a7fa4a"
                             }
@@ -363,12 +354,10 @@ class RemoteSyncTakeStory(RemoteSuncBaseTest):
                     "_etag": "b0afe557d3857584c2505385541e94bf8ef7d19c",
                     "linked_in_packages": [
                         {
-                            "package_type": "takes",
                             "package": "urn:newsml:localhost:2017-01-24T13:00:58.541182:c6910856-62ad-49fe-a15b"
                                        "-95fa64a7fa4a"
                         }
                     ],
-                    "sequence": 2,
                     "body_html": "<p>take 2</p>",
                     "version": 2,
                     "sms_message": "",
@@ -405,7 +394,7 @@ class RemoteSyncUpdatedStory(RemoteSuncBaseTest):
         cmd = RemoteSyncCommand()
         cmd.run('https://superdesk.com.au/api', 'test', 'test')
         published = self.app.data.find("published", None, None)
-        self.assertEqual(published.count(), 2)
+        self.assertEqual(published.count(), 1)
         for item in published:
             self.assertEqual(item['body_html'], '<p>Update second published</p>')
 
@@ -472,7 +461,6 @@ class RemoteSyncUpdatedStory(RemoteSuncBaseTest):
                     "id": "main",
                     "refs": [
                         {
-                            "sequence": 1,
                             "type": "text",
                             "residRef": "urn:newsml:localhost:2017-01-24T15:58:08.595544:d78dff44-32e9-4e7f-8641"
                                         "-005ac8e92b51",
@@ -490,7 +478,6 @@ class RemoteSyncUpdatedStory(RemoteSuncBaseTest):
                 }
             ],
             "pubstatus": "usable",
-            "package_type": "takes",
             "sign_off": "MAR",
             "format": "HTML",
             "slugline": "update",
@@ -515,7 +502,6 @@ class RemoteSyncUpdatedStory(RemoteSuncBaseTest):
                 }
             ],
             "rewrite_sequence": 1,
-            "sequence": 1,
             "anpa_category": [
                 {
                     "qcode": "a",
@@ -613,7 +599,6 @@ class RemoteSyncUpdatedStory(RemoteSuncBaseTest):
                         ],
                         "linked_in_packages": [
                             {
-                                "package_type": "takes",
                                 "package": "urn:newsml:localhost:2017-01-24T15:57:45.531104:5565cc79-ccb8-4f59-b721"
                                            "-15eb8306d06c"
                             }
@@ -703,7 +688,6 @@ class RemoteSyncUpdatedStory(RemoteSuncBaseTest):
                         "sms_message": "",
                         "linked_in_packages": [
                             {
-                                "package_type": "takes",
                                 "package": "urn:newsml:localhost:2017-01-24T15:58:45.916146:42e12bf2-4ae6-4c6f-92dc"
                                            "-51c6ef5eab75"
                             }

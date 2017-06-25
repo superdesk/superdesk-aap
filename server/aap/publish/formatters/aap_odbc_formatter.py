@@ -8,11 +8,9 @@
 # AUTHORS and LICENSE files distributed with this source code, or
 # at https://www.sourcefabric.org/superdesk/license
 from superdesk.io.iptc import subject_codes
-from apps.packages import TakesPackageService
 from .aap_formatter_common import set_subject
 from .field_mappers.locator_mapper import LocatorMapper
 from .field_mappers.slugline_mapper import SluglineMapper
-from eve.utils import config
 import superdesk
 from .unicodetoascii import to_ascii
 from superdesk.etree import get_text
@@ -110,16 +108,4 @@ class AAPODBCFormatter():
         :param article:
         :return:
         """
-        takes_package_service = TakesPackageService()
-        pkg = takes_package_service.get_take_package(article)
-        if pkg is not None:
-            odbc_item['usn'] = pkg.get('unique_id', None)  # @usn
-        else:
-            odbc_item['usn'] = article.get('unique_id', None)  # @usn
-
-    def is_last_take(self, article):
-        article[config.ID_FIELD] = article.get('item_id', article.get(config.ID_FIELD))
-        return TakesPackageService().is_last_takes_package_item(article)
-
-    def is_first_part(self, article):
-        return article.get('sequence', 1) == 1
+        odbc_item['usn'] = article.get('unique_id', None)  # @usn

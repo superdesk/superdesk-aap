@@ -345,8 +345,7 @@ class AAPNitfFormatterTest(TestCase):
             'abstract': None,
             "linked_in_packages": [
                 {
-                    "package": "package",
-                    "package_type": "takes"
+                    "package": "package"
                 }
             ],
         }
