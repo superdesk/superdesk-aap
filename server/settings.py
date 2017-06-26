@@ -140,7 +140,9 @@ INSTALLED_APPS.extend([
     'aap.io.feed_parsers',
     'aap.data_consistency',
     'aap.io.iptc_extension',
-    'instrumentation'
+    'instrumentation',
+    'planning',
+    'aap.io.feeding_services'
 ])
 
 RENDITIONS = {

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Response Status_Code="OK" Status_Message="" Status_Session="e715a149-79e1-4cf4-a32c-1c38475f0f17">
+  <Fixture_List>
+    <Competition>
+      <Competition_Details Comp_ID="int-26669" Comp_Name="D+D Real Czech Masters" Comp_Code="int-26669" Season="2017" Start_Date="2099-08-31" End_Date="2099-09-03" Gender="Men" />
+      <Comp_Fixtures>
+        <Event Event_ID="int-">
+          <Venue Venue_ID="int-4009">
+            <Name Full_Name="" Short_Name="" />
+            <Location City="Prague" State="" Country="Czech Republic" />
+            <Venue_Stats_Golf Length="" Par_Score="">
+              <Holes>18</Holes>
+            </Venue_Stats_Golf>
+          </Venue>
+        </Event>
+      </Comp_Fixtures>
+    </Competition>
+  </Fixture_List>
+</Response>
