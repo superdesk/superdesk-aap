@@ -32,17 +32,12 @@ class AAPTextFormatter(AAPIpNewsFormatter):
             formatted_doc['keyword'] = article.get('slugline', '').replace('\'', '\'\'')
 
             # body formatting
-            is_last_take = self.is_last_take(article)
             if article.get(FORMAT) == FORMATS.PRESERVED:
-                body = get_text(
-                    self.append_body_footer(article) if is_last_take else
-                    article.get('body_html', ''),
-                    content='html')
+                body = get_text(self.append_body_footer(article), content='html')
                 formatted_doc['article_text'] = body.replace('\'', '\'\'')
             elif article.get(FORMAT, FORMATS.HTML) == FORMATS.HTML:
                 body = self.get_wrapped_text_content(
-                    to_ascii(self.append_body_footer(article) if is_last_take
-                             else article.get('body_html', ''))).replace('\'', '\'\'')
+                    to_ascii(self.append_body_footer(article))).replace('\'', '\'\'')
                 formatted_doc['article_text'] = body
 
             self.refine_article_body(formatted_doc, article)

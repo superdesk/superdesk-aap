@@ -13,8 +13,7 @@
 from eve.utils import config
 import superdesk
 from superdesk import get_resource_service
-from apps.packages.takes_package_service import TakesPackageService
-from superdesk.metadata.packages import LAST_TAKE, RESIDREF, SEQUENCE, LINKED_IN_PACKAGES
+from superdesk.metadata.packages import LINKED_IN_PACKAGES
 from superdesk.metadata.item import ITEM_STATE, CONTENT_STATE
 import requests
 from requests.auth import HTTPBasicAuth
@@ -67,9 +66,13 @@ class RemoteSyncCommand(superdesk.Command):
             from_count = 0
             while True:
                 # The query excludes spiked items and returns only text items that are the last published version
-                query = {"query": {"filtered": {"filter": {"and": [{"terms": {"type": ["text"]}}, {"not": {
-                    "and": [{"term": {"_type": "published"}}, {"term": {"package_type": "takes"}},
-                            {"term": {"last_published_version": False}}]}}]}}},
+                query = {"query": {
+                    "filtered": {
+                        "filter": {
+                            "and": [
+                                {"terms": {"type": ["text"]}},
+                                {"not": {"and": [{"term": {"_type": "published"}},
+                                                 {"term": {"last_published_version": False}}]}}]}}},
                          "sort": [{"publish_sequence_no": "asc"}],
                          "size": 100, "from": from_count}
                 params = {'repo': 'published', 'source': json.dumps(query)}
@@ -105,21 +108,6 @@ class RemoteSyncCommand(superdesk.Command):
         """
         item.pop(LINKED_IN_PACKAGES, None)
         get_resource_service('archive').post([item])
-        get_resource_service('archive_publish').patch(id=item[config.ID_FIELD],
-                                                      updates={ITEM_STATE: CONTENT_STATE.PUBLISHED,
-                                                               'auto_publish': True})
-
-    def _inject_take(self, item, take1):
-        """
-        Given the item and a the first take, link the item into the package sequence and publish it.
-        :param item:
-        :param take1:
-        :return:
-        """
-        item.pop(LINKED_IN_PACKAGES, None)
-        get_resource_service('archive').post([item])
-        take1_item = get_resource_service('archive').find_one(req=None, _id=take1.get(RESIDREF))
-        TakesPackageService().link_as_next_take(take1_item, item)
         get_resource_service('archive_publish').patch(id=item[config.ID_FIELD],
                                                       updates={ITEM_STATE: CONTENT_STATE.PUBLISHED,
                                                                'auto_publish': True})
@@ -161,31 +149,8 @@ class RemoteSyncCommand(superdesk.Command):
 
             local_item = service.find_one(req=None, _id=item.get('_id'))
             if local_item is None:
-                # Test if the item is linked into any takes package
-                if 'linked_in_packages' in item and len(item.get('linked_in_packages', [])) > 0 and \
-                        any(p.get('package_type', '') == 'takes' for p in item.get('linked_in_packages', [])):
-                    pkg_id = TakesPackageService().get_take_package_id(item)
-                    remote_pkg = self._get_remote_package(pkg_id)
-                    refs = TakesPackageService().get_package_refs(remote_pkg)
-                    take1 = next((ref for ref in refs if ref.get(SEQUENCE) == 1), None)
-                    if LAST_TAKE not in remote_pkg or remote_pkg[LAST_TAKE] == item[config.ID_FIELD]:
-                        if len(refs) == 1:
-                            # simple safe to publish single take
-                            print("Single take")
-                            self._inject_item(item)
-                        elif len(refs) > 1:
-                            print("Last take")
-                            self._inject_take(item, take1)
-                    else:
-                        if take1.get(RESIDREF) == item[config.ID_FIELD]:
-                            print("Take 1")
-                            self._inject_item(item)
-                        else:
-                            print("Other take")
-                            self._inject_take(item, take1)
-                else:
-                    print("Item is not linked in packages {}".format(item.get('_id', '')))
-                    self._inject_item(item)
+                print("Item is not linked in packages {}".format(item.get('_id', '')))
+                self._inject_item(item)
             else:
                 print("Already Imported")
         else:

@@ -37,31 +37,24 @@ class AAPNewscentreFormatter(Formatter, AAPODBCFormatter):
             for category in self._get_category_list(article.get('anpa_category')):
                 article['source'] = source
                 pub_seq_num, odbc_item = self.get_odbc_item(article, subscriber, category, codes, pass_through)
-                is_last_take = self.is_last_take(article)
                 if article.get(FORMAT) == FORMATS.PRESERVED:  # @article_text
-                    body = get_text(
-                        self.append_body_footer(article) if is_last_take else
-                        article.get('body_html', ''), content='html')
+                    body = get_text(self.append_body_footer(article), content='html')
                     odbc_item['article_text'] = body.replace('\'', '\'\'')
                 else:
                     body = self.get_text_content(
-                        to_ascii(self.append_body_footer(article) if is_last_take else
-                                 article.get('body_html', '')))
+                        to_ascii(self.append_body_footer(article)))
 
-                    if self.is_first_part(article) and 'dateline' in article \
+                    if 'dateline' in article \
                             and 'text' in article.get('dateline', {}) and not pass_through:
                         if body.startswith('   '):
                             body = '   {} {}'.format(article.get('dateline').get('text'), body[3:])
                     odbc_item['article_text'] = body.replace('\'', '\'\'')
 
-                if self.is_first_part(article) and not pass_through:
+                if not pass_through:
                     self.add_ednote(odbc_item, article)
                     self.add_byline(odbc_item, article)
 
-                if not is_last_take:
-                    odbc_item['article_text'] += '\r\nMORE'
-                else:
-                    odbc_item['article_text'] += '\r\n' + source
+                odbc_item['article_text'] += '\r\n' + source
                 sign_off = article.get('sign_off', '') or ''
                 if len(sign_off) > 0:
                     odbc_item['article_text'] += ' ' + sign_off

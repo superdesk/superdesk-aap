@@ -12,7 +12,7 @@ import json
 from apps.publish import init_app
 from bson import ObjectId
 from eve.utils import config
-from superdesk.metadata.item import ITEM_TYPE, PACKAGE_TYPE
+from superdesk.metadata.item import ITEM_TYPE
 from superdesk.publish.subscribers import SUBSCRIBER_TYPES
 from superdesk.tests import TestCase
 from superdesk.utc import utcnow
@@ -67,7 +67,7 @@ class AapBulletinBuilderFormatterTest(TestCase):
         self.assertEqual(article[config.ID_FIELD], item.get('id'))
         self.assertEqual(article[config.VERSION], item.get('version'))
         self.assertEqual(article[ITEM_TYPE], item.get(ITEM_TYPE))
-        self.assertEqual(article.get(PACKAGE_TYPE, ''), item.get(PACKAGE_TYPE))
+        # self.assertEqual(article.get(PACKAGE_TYPE, ''), item.get(PACKAGE_TYPE))
         self.assertEqual(article['headline'], item.get('headline'))
         self.assertEqual(article['slugline'], item.get('slugline'))
         formatted_item = json.loads(item.get('data'))

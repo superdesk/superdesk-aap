@@ -48,11 +48,6 @@ class AapIpNewsFormatterTest(TestCase):
         'genre': []
     }
 
-    pkg = [{'_id': 'package',
-            'type': 'composite',
-            'package_type': 'takes',
-            'last_take': '3'}]
-
     vocab = [{'_id': 'categories', 'items': [
         {'is_active': True, 'name': 'Overseas Sport', 'qcode': 'S', 'subject': '15000000'},
         {'is_active': True, 'name': 'Finance', 'qcode': 'F', 'subject': '04000000'},
@@ -64,7 +59,6 @@ class AapIpNewsFormatterTest(TestCase):
         self.app.data.insert('subscribers', self.subscribers)
         self.app.data.insert('vocabularies', self.vocab)
         self.app.data.insert('desks', self.desks)
-        self.app.data.insert('archive', self.pkg)
         init_app(self.app)
 
     def testIPNewsFormatterWithNoSelector(self):
@@ -107,8 +101,7 @@ class AapIpNewsFormatterTest(TestCase):
             'priority': 1,
             "linked_in_packages": [
                 {
-                    "package": "package",
-                    "package_type": "takes"
+                    "package": "package"
                 }
             ],
         }
@@ -120,7 +113,7 @@ class AapIpNewsFormatterTest(TestCase):
         item = json.loads(item)
 
         expected = '\x19   By joe\x19\r\n   The story body line 1\r\nLine 2\r\n   abcdefghi abcdefghi abcdefghi ' \
-                   'abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi\r\n\r\nMORE'
+                   'abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi\r\n\r\nAAP'
         self.assertEqual(item['article_text'], expected)
         self.assertEqual(item['headline'], 'This is a test headline')
         self.assertEqual(item['author'], 'joe')
@@ -143,8 +136,7 @@ class AapIpNewsFormatterTest(TestCase):
             'priority': 1,
             "linked_in_packages": [
                 {
-                    "package": "package",
-                    "package_type": "takes"
+                    "package": "package"
                 }
             ],
         }
@@ -185,8 +177,7 @@ class AapIpNewsFormatterTest(TestCase):
             'priority': 1,
             "linked_in_packages": [
                 {
-                    "package": "package",
-                    "package_type": "takes"
+                    "package": "package"
                 }
             ],
         }
@@ -255,8 +246,7 @@ class AapIpNewsFormatterTest(TestCase):
             'priority': 1,
             "linked_in_packages": [
                 {
-                    "package": "package",
-                    "package_type": "takes"
+                    "package": "package"
                 }
             ],
         }
@@ -290,8 +280,7 @@ class AapIpNewsFormatterTest(TestCase):
             'priority': 1,
             "linked_in_packages": [
                 {
-                    "package": "package",
-                    "package_type": "takes"
+                    "package": "package"
                 }
             ],
         }
@@ -321,8 +310,7 @@ class AapIpNewsFormatterTest(TestCase):
             'priority': 1,
             "linked_in_packages": [
                 {
-                    "package": "package",
-                    "package_type": "takes"
+                    "package": "package"
                 }
             ],
         }
@@ -352,8 +340,7 @@ class AapIpNewsFormatterTest(TestCase):
             'priority': 1,
             "linked_in_packages": [
                 {
-                    "package": "package",
-                    "package_type": "takes"
+                    "package": "package"
                 }
             ],
         }
@@ -382,8 +369,7 @@ class AapIpNewsFormatterTest(TestCase):
             'priority': 1,
             "linked_in_packages": [
                 {
-                    "package": "package",
-                    "package_type": "takes"
+                    "package": "package"
                 }
             ],
         }
@@ -413,8 +399,7 @@ class AapIpNewsFormatterTest(TestCase):
             'priority': 1,
             "linked_in_packages": [
                 {
-                    "package": "package",
-                    "package_type": "takes"
+                    "package": "package"
                 }
             ],
         }
@@ -444,8 +429,7 @@ class AapIpNewsFormatterTest(TestCase):
             'priority': 1,
             "linked_in_packages": [
                 {
-                    "package": "package",
-                    "package_type": "takes"
+                    "package": "package"
                 }
             ],
         }
@@ -598,7 +582,6 @@ class AapIpNewsFormatterTest(TestCase):
             "sign_off": "SC/TDW/DC/SC",
             "pubstatus": "usable",
             "byline": None,
-            "more_coming": False,
             "body_html": "<h2>One Ruralco export licence lost to BJD</h2>",
             "original_creator": "576b60baa5398f65d12ad0c8",
             "urgency": 3,
@@ -644,7 +627,6 @@ class AapIpNewsFormatterTest(TestCase):
                     "package": "urn:newsml:localhost:2016-07-15T13:04:34.991699:fd7aad03-87a8-4cd5-9fdb-2624f3e02666"
                 },
                 {
-                    "package_type": "takes",
                     "package": "urn:newsml:localhost:2016-07-15T13:59:19.157701:7c7bd386-25ea-42d7-9543-4eff5bceef40"
                 }
             ],
@@ -739,8 +721,7 @@ class AapIpNewsFormatterTest(TestCase):
             'priority': 1,
             "linked_in_packages": [
                 {
-                    "package": "package",
-                    "package_type": "takes"
+                    "package": "package"
                 }
             ],
         }
@@ -770,8 +751,7 @@ class AapIpNewsFormatterTest(TestCase):
             'priority': 1,
             "linked_in_packages": [
                 {
-                    "package": "package",
-                    "package_type": "takes"
+                    "package": "package"
                 }
             ],
         }

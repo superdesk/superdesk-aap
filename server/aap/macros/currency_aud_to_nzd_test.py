@@ -37,6 +37,7 @@ class CurrencyTestCase(unittest.TestCase):
                'This is a  AUD(540,000) million note. ' \
                'This is a  AUD (55,233.00) million note. ' \
                'This is a  AUD (55,233.00 billion) note. ' \
+               'This is a $A 4000 note. ' \
 
         item = {'body_html': text}
         res, diff = aud_to_nzd(item, rate=Decimal(2))
@@ -59,3 +60,4 @@ class CurrencyTestCase(unittest.TestCase):
         self.assertEqual(diff['$A4,648,820.20'], '$A4,648,820.20 ($NZ9.30 million)')
         self.assertEqual(diff['$A4,648,382.20'], '$A4,648,382.20 ($NZ9.30 million)')
         self.assertEqual(diff['AUD 52-million'], 'AUD 52-million ($NZ104 -million)')
+        self.assertEqual(diff['$A 4000'], '$A 4000 ($NZ8,000)')

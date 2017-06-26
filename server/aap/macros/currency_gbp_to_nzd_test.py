@@ -49,6 +49,7 @@ class CurrencyTestCase(unittest.TestCase):
                'This is a  200-GBP note. ' \
                'This is a  (55,233.00) GBP note. ' \
                'This is a  52 mln pounds note. ' \
+               'This is a £ 4000 note.' \
 
         item = {'body_html': text}
         res, diff = gbp_to_nzd(item, rate=Decimal(2))
@@ -77,3 +78,4 @@ class CurrencyTestCase(unittest.TestCase):
         self.assertEqual(diff['200-GBP'], '200-GBP ($NZ400)')
         self.assertEqual(diff['(55,233.00) GBP'], '(55,233.00) GBP ($NZ110,466.00)')
         self.assertEqual(diff['52 mln pounds'], '52 mln pounds ($NZ104 mln)')
+        self.assertEqual(diff['£ 4000'], '£ 4000 ($NZ8,000)')
