@@ -3,55 +3,25 @@ language: python
 sudo: required
 dist: trusty
 
+python:
+  - "3.4"
+  - "3.5"
+
 services:
-    - elasticsearch
     - redis-server
+    - mongodb
 
 addons:
   apt:
+    sources:
+      - elasticsearch-2.x
     packages:
-    - unixodbc
-    - unixodbc-dev
-    - freetds-dev
-    - freetds-bin
-    - tdsodbc
-
-matrix:
-    include:
-        - env: ELASTIC=24
-          python: "3.5"
-          addons:
-              apt:
-                  sources:
-                      - elasticsearch-2.x
-                      - mongodb-3.0-precise
-                  packages:
-                      - elasticsearch
-                      - mongodb-org-server
-
-        - env: ELASTIC=17
-          python: "3.4"
-          addons:
-              apt:
-                  sources:
-                      - elasticsearch-1.7
-                      - mongodb-3.0-precise
-                  packages:
-                      - elasticsearch
-                      - mongodb-org-server
-
-
-        - env: ELASTIC=17
-          python: "3.5"
-          addons:
-              apt:
-                  sources:
-                      - elasticsearch-1.7
-                      - mongodb-3.0-precise
-                  packages:
-                      - elasticsearch
-                      - mongodb-org-server
-
+      - unixodbc
+      - unixodbc-dev
+      - freetds-dev
+      - freetds-bin
+      - tdsodbc
+      - elasticsearch
 
 cache:
   directories:
@@ -60,8 +30,7 @@ cache:
 
 before_install:
     - sudo apt-get purge elasticsearch -y
-    - if [[ "$ELASTIC" == "24" ]]; then sudo apt-get install elasticsearch=2.4.4 && sudo service elasticsearch start; fi
-    - if [[ "$ELASTIC" == "17" ]]; then sudo apt-get install elasticsearch=1.7.5 && sudo service elasticsearch start; fi
+    - sudo apt-get install -y elasticsearch=2.4.4
     - nvm install 6
     - nvm use 6
     - node --version
@@ -80,9 +49,9 @@ install:
     - cd client && npm install --python=python2.7 && cd ..
 
 before_script: >
-    df -h
-    && sudo sed -i 's\enabled: true\enabled: false\' /etc/mongod.conf
+    sudo sed -i 's\enabled: true\enabled: false\' /etc/mongod.conf
     && sudo service mongod restart
+    && sudo service elasticsearch restart
 
 script:
     - cd server && flake8 && cd ..
