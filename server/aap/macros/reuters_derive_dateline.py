@@ -11,7 +11,6 @@
 import logging
 from apps.archive.common import format_dateline_to_locmmmddsrc
 from superdesk.utc import get_date
-from superdesk.metadata.item import BYLINE
 from flask import current_app as app
 from superdesk.etree import parse_html
 
@@ -30,12 +29,10 @@ def reuters_derive_dateline(item, **kwargs):
         if html:
             parsed = parse_html(html, content='xml')
             pars = parsed.xpath('//p')
-            if len(pars) >= 2:
-                if BYLINE in item and item.get(BYLINE) in ''.join(pars[0].itertext()):
-                    first = ''.join(pars[1].itertext())
-                else:
-                    first = ''.join(pars[0].itertext())
-                city, source, the_rest = first.partition(' (Reuters) - ')
+            for par in pars:
+                if not par.text:
+                    continue
+                city, source, the_rest = par.text.partition(' (Reuters) - ')
                 if source:
                     # sometimes the city is followed by a comma and either a date or a state
                     city = city.split(',')[0]
@@ -51,22 +48,23 @@ def reuters_derive_dateline(item, **kwargs):
                             'city').upper():
                         return
 
-                    item['dateline']['located'] = located[0] if len(located) > 0 else {'city_code': city,
-                                                                                       'city': city,
-                                                                                       'tz': 'UTC',
-                                                                                       'dateline': 'city'}
+                    item['dateline']['located'] = located[0] if len(located) == 1 else {'city_code': city,
+                                                                                        'city': city,
+                                                                                        'tz': 'UTC',
+                                                                                        'dateline': 'city'}
                     item['dateline']['source'] = item.get('original_source', 'Reuters')
                     item['dateline']['text'] = format_dateline_to_locmmmddsrc(item['dateline']['located'],
                                                                               get_date(item['firstcreated']),
                                                                               source=item.get('original_source',
                                                                                               'Reuters'))
+                    break
 
         return item
     except:
         logging.exception('Reuters dateline macro exception')
 
 
-name = 'Derive dateline from article text for Reuters'
+name = 'Reuters derive dateline'
 callback = reuters_derive_dateline
 access_type = 'backend'
 action_type = 'direct'
