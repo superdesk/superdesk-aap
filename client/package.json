@@ -2,7 +2,7 @@
     "name": "superdesk",
     "license": "GPL-3.0",
     "dependencies": {
-        "superdesk-core": "superdesk/superdesk-client-core#9a9af6d",
-        "superdesk-planning": "superdesk/superdesk-planning#b97b4b6"
+        "superdesk-core": "superdesk/superdesk-client-core#73b94f35d5",
+        "superdesk-planning": "superdesk/superdesk-planning#0d30612"
     }
 }
