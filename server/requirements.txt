@@ -4,4 +4,5 @@ pyodbc==4.0.14
 unidecode==0.04.19
 newrelic>=2.66,<2.67
 titlecase==0.8.2
-superdesk-core==1.8.4
+
+git+git://github.com/superdesk/superdesk-core.git@a51eed034#egg=Superdesk-Core
