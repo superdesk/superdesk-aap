@@ -52,6 +52,11 @@ module.exports = function() {
             searchShortcut: 1
         },
 
+        activity: {
+            'edit.item.popup': 0,
+            'view.item.popup': 0
+        },
+
         view: {
             timeformat: 'HH:mm',
             dateformat: 'DD/MM/YYYY'
