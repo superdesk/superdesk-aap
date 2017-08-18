@@ -7,4 +7,4 @@ titlecase==0.8.2
 geopy==1.11.0
 
 git+git://github.com/superdesk/superdesk-core.git@12642c7#egg=Superdesk-Core
-git+git://github.com/superdesk/superdesk-planning.git@90fb70e#egg=superdesk-planning
+git+git://github.com/superdesk/superdesk-planning.git@c368c7e#egg=superdesk-planning
