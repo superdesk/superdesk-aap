@@ -12,7 +12,7 @@ import logging
 from superdesk.io.registry import register_feed_parser
 from superdesk.io.feed_parsers import XMLFeedParser
 from datetime import datetime, timedelta
-from superdesk.metadata.item import ITEM_TYPE, CONTENT_TYPE, GUID_FIELD
+from superdesk.metadata.item import ITEM_TYPE, CONTENT_TYPE, GUID_FIELD, CONTENT_STATE
 from superdesk.utc import utcnow, local_to_utc
 from eve.utils import config
 import superdesk
@@ -112,6 +112,8 @@ class AAPSportsFixturesParser(XMLFeedParser):
             # if it has been updated by a user
             if 'version_creator' in old:
                 return False
+            else:
+                return True
         else:
             item['firstcreated'] = utcnow()
             return True
@@ -134,7 +136,8 @@ class AAPSportsFixturesParser(XMLFeedParser):
                                 x['qcode'] == 'eocstat:eos5' and x.get('is_active', True)][0]
         item['occur_status'].pop('is_active', None)
         item['versioncreated'] = utcnow()
-        item['state'] = 'active'
+        item['state'] = CONTENT_STATE.PROGRESS
+        item['pubstatus'] = None
         return item
 
     def _parse_fixtures(self, xml, items):
@@ -157,6 +160,7 @@ class AAPSportsFixturesParser(XMLFeedParser):
                 if self._can_ingest_item(item):
                     item['name'] = '{} {}'.format(self.sport_map.get(fixture.get('sport_id', {}), {}).get('prefix', ''),
                                                   fixture.get('comp_name'))
+                    item['slugline'] = item['name']
                     item['definition_short'] = xml.find('.//Fixture_List/Competition/Competition_Details').attrib.get(
                         'Gender', '')
                     item['dates'] = {
@@ -186,6 +190,8 @@ class AAPSportsFixturesParser(XMLFeedParser):
                     venue_location = match.find('.//Venue').attrib.get('Venue_Location', '')
                     item = self._set_default_item(fixture.get('sport_id'), fixture.get('comp_id'), match_id)
                     if self._can_ingest_item(item):
+                        item['slugline'] = '{} {}'.format(
+                            self.sport_map.get(fixture.get('sport_id', {}), {}).get('prefix', ''), teamA_short)
                         item['name'] = '{} {} V {}'.format(
                             self.sport_map.get(fixture.get('sport_id', {}), {}).get('prefix', ''), teamA_short,
                             teamB_short)
@@ -267,6 +273,9 @@ class AAPSportsFixturesParser(XMLFeedParser):
                     item = self._set_default_item(self.fixture.get('sport_id'), self.fixture.get('comp_id'),
                                                   match.attrib.get('Fixture_ID'))
                     if self._can_ingest_item(item):
+                        item['slugline'] = '{} {}'.format(
+                            self.sport_map.get(self.fixture.get('sport_id', {}), {}).get('prefix', ''),
+                            self.teams.get(match.attrib.get('TeamA_ID')).get('short'))
                         item['name'] = '{} {} V {}'.format(
                             self.sport_map.get(self.fixture.get('sport_id', {}), {}).get('prefix', ''),
                             self.teams.get(match.attrib.get('TeamA_ID')).get('short'),
