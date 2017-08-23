@@ -67,6 +67,10 @@ module.exports = function() {
             featuremedia: 1, marked_desks: 1
         },
         
+        infoRemovedFields: {
+            keywords: true
+        },
+
         defaultTimezone: 'Australia/Sydney',
         shortDateFormat: 'DD/MM',
         ArchivedDateFormat: 'D/MM/YYYY',
