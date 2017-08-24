@@ -132,7 +132,7 @@ module.exports = function() {
                 'provider',
                 'versioncreated'
             ],
-            'singleLineView': false
+            'singleLineView': true
         },
         langOverride: {
             'en': {
