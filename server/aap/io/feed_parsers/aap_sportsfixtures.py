@@ -136,7 +136,7 @@ class AAPSportsFixturesParser(XMLFeedParser):
                                 x['qcode'] == 'eocstat:eos5' and x.get('is_active', True)][0]
         item['occur_status'].pop('is_active', None)
         item['versioncreated'] = utcnow()
-        item['state'] = CONTENT_STATE.PROGRESS
+        item['state'] = CONTENT_STATE.INGESTED
         item['pubstatus'] = None
         return item
 
