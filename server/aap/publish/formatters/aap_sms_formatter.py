@@ -7,14 +7,15 @@
 # For the full copyright and license information, please see the
 # AUTHORS and LICENSE files distributed with this source code, or
 # at https://www.sourcefabric.org/superdesk/license
+import json
+import superdesk
 from eve.utils import ParsedRequest
 from superdesk.publish.formatters import Formatter
 from .aap_formatter_common import map_priority
-import superdesk
 from superdesk.errors import FormatterError
 from superdesk.metadata.item import ITEM_TYPE, CONTENT_TYPE, CONTENT_STATE, ITEM_STATE
-import json
 from superdesk.etree import get_text
+from .unicodetoascii import to_ascii
 
 
 class AAPSMSFormatter(Formatter):
@@ -32,7 +33,7 @@ class AAPSMSFormatter(Formatter):
                 else article.get('anpa_category', [{}])[0].get('qcode').upper()
 
             odbc_item = {'Sequence': pub_seq_num, 'Category': category,
-                         'Headline': get_text(sms_message, content='html'),
+                         'Headline': to_ascii(get_text(sms_message, content='html')),
                          'Priority': map_priority(article.get('priority'))}
 
             body = self.append_body_footer(article)
@@ -40,7 +41,7 @@ class AAPSMSFormatter(Formatter):
             if article[ITEM_TYPE] == CONTENT_TYPE.TEXT:
                 body = get_text(body, content='html')
 
-            odbc_item['StoryText'] = body.replace('\'', '\'\'')  # @article_text
+            odbc_item['StoryText'] = to_ascii(body.replace('\'', '\'\''))  # @article_text
             odbc_item['ident'] = '0'
 
             return [(pub_seq_num, json.dumps(odbc_item))]
