@@ -63,6 +63,17 @@ class AapSMSFormatterTest(TestCase):
         'body_footer': 'call helpline 999 if you are planning to quit smoking'
     }
 
+    article5 = {
+        'priority': 1,
+        'anpa_category': [{'qcode': 'a'}],
+        'abstract': 'This is a test headline',
+        'sms_message': 'The High Court has rejected same-sex marriage advocates’ legal '
+                       'challenge to the government’s postal survey.',
+        'type': 'text',
+        'body_html': 'The story body',
+        'body_footer': 'call helpline 999 if you are planning to quit smoking'
+    }
+
     published = [{"_id": 1, "state": "published", "sms_message": "dont send again", "flags": {"marked_for_sms": True},
                   "queue_state": "queued"}]
 
@@ -130,3 +141,13 @@ class AapSMSFormatterTest(TestCase):
         seq, item = f.format(self.article4, subscriber)[0]
         item = json.loads(item)
         self.assertEqual(item['Headline'], 'not marked up string')
+
+    def test_non_ascii_characters(self):
+        subscriber = self.app.data.find('subscribers', None, None)[0]
+
+        f = AAPSMSFormatter()
+        seq, item = f.format(self.article5, subscriber)[0]
+        item = json.loads(item)
+        self.assertEqual(item['Headline'],
+                         'The High Court has rejected same-sex marriage advocates\' legal '
+                         'challenge to the government\'s postal survey.')
