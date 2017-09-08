@@ -25,7 +25,8 @@ module.exports = function() {
         workspace: {
             ingest: 1,
             content: 1,
-            tasks: 0
+            tasks: 0,
+            assignments: 1
         },
 
         item_profile: {
