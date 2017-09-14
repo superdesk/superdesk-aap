@@ -18,16 +18,23 @@ logger = logging.getLogger(__name__)
 
 def reuters_route_process(item, **kwargs):
     try:
-        remove_subjects(item)
-        remove_place_with_no_qcode(item)
-        reuters_derive_dateline(item)
+        if (item.get('source', '').upper() == 'REUTERS' or item.get('source', '').upper() == 'RAW') and \
+                item.get('state').upper() == 'INGESTED':
+            remove_subjects(item)
+            remove_place_with_no_qcode(item)
+            reuters_derive_dateline(item)
+
+            # set the category as international news
+            item['anpa_category'] = [{'name': 'International News', 'qcode': 'i'}]
+
         return item
     except:
-        logger.warn('Exception caught in macro: reuters route process')
+        logger.warning('Exception caught in macro: reuters route process')
         return item
 
 
-name = 'Reuters route process'
+name = 'reuters_route_process'
+label = 'reuters_route_process'
 callback = reuters_route_process
 access_type = 'backend'
 action_type = 'direct'
