@@ -14,3 +14,4 @@ from .socket_listener import SocketListenerCommand  # noqa
 from .remote_sync import RemoteSyncCommand  # noqa
 from .fix_items_expired import FixItemsExpiry  # noqa
 from .export_legal_archive_to_archived import ExportLegalArchiveToArchived  # noqa
+from .seed_locations import LocationSeedCommand  # noqa
