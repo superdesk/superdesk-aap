@@ -13,10 +13,12 @@ from .reuters_route_process import reuters_route_process
 import datetime
 
 
-class RemoveSubjectsTests(TestCase):
-    def simple_case_test(self):
+class ReutersRouteProcessTests(TestCase):
+    def test_reuters_ingested_story(self):
         firstcreated = datetime.datetime(2015, 10, 26, 11, 45, 19, 0)
         item = {
+            "source": "Reuters",
+            "state": "ingested",
             "_id": "tag:localhost:2017:77b03a97-df04-446e-a112-94941f1bb12c",
             "firstcreated": firstcreated,
             "subject": [
@@ -31,22 +33,6 @@ class RemoveSubjectsTests(TestCase):
                 {
                     "name": "diplomacy",
                     "qcode": "11002000"
-                },
-                {
-                    "name": "human rights",
-                    "qcode": "11007000"
-                },
-                {
-                    "name": "immigration",
-                    "qcode": "14003002"
-                },
-                {
-                    "name": "social issue",
-                    "qcode": "14000000"
-                },
-                {
-                    "name": "demographics",
-                    "qcode": "14003000"
                 }
             ],
             "place": [
@@ -63,7 +49,163 @@ class RemoveSubjectsTests(TestCase):
             profit in Europe since 1999.</p>\n<p> (Reporting by Bernie Woodall and Joseph White; \
             Editing by Chizu Nomiyamam and Jeffrey Benkoe)</p>'
         }
+
         reuters_route_process(item)
         self.assertEqual(item['subject'], [])
         self.assertEqual(item['place'], [])
         self.assertEqual(item['dateline']['located']['city'], 'Detroit')
+        self.assertEqual(item['anpa_category'], [{'name': 'International News', 'qcode': 'i'}])
+
+    def test_aap_ingested_story(self):
+        firstcreated = datetime.datetime(2015, 10, 26, 11, 45, 19, 0)
+        item = {
+            "source": "AAP",
+            "state": "ingested",
+            "_id": "tag:localhost:2017:77b03a97-df04-446e-a112-94941f1bb12c",
+            "firstcreated": firstcreated,
+            "anpa_category": [
+                {
+                    "name": "Finance",
+                    "qcode": "f"
+                }
+            ],
+            "subject": [
+                {
+                    "name": "lifestyle and leisure",
+                    "qcode": "10000000"
+                },
+                {
+                    "name": "politics",
+                    "qcode": "11000000"
+                },
+                {
+                    "name": "diplomacy",
+                    "qcode": "11002000"
+                }
+            ],
+            "place": [{"name": "United States"}],
+            'body_html': '<p>DETROIT (Reuters) - General Motors Co <GM.N> Chief Financial Officer Chuck Stevens \
+            said on Wednesday the macroeconomic challenges in Brazil will remain in the near term but the company \
+            has \"huge upside leverage once the macro situation changes\" in South America\'s largest \
+            economy.</p>\n<p>GM\'s car sales so far in October are up versus a year ago, Stevens said to reporters \
+            after the No. 1 U.S. automaker reported third-quarter financial results.</p>\n<p>Stevens also \
+            reaffirmed GM\'s past forecasts that it will show profit in Europe in 2016. It would be GM\'s first \
+            profit in Europe since 1999.</p>\n<p> (Reporting by Bernie Woodall and Joseph White; \
+            Editing by Chizu Nomiyamam and Jeffrey Benkoe)</p>'
+        }
+
+        reuters_route_process(item)
+        self.assertEqual(item['subject'], [
+            {
+                "name": "lifestyle and leisure",
+                "qcode": "10000000"
+            },
+            {
+                "name": "politics",
+                "qcode": "11000000"
+            },
+            {
+                "name": "diplomacy",
+                "qcode": "11002000"
+            }
+        ])
+        self.assertEqual(item['place'], [{"name": "United States"}])
+        self.assertEqual(item.get('dateline', {}).get('located', {}).get('city', ''), '')
+        self.assertEqual(item['anpa_category'], [{"name": "Finance", "qcode": "f"}])
+
+    def test_reuters_submitted_story(self):
+        firstcreated = datetime.datetime(2015, 10, 26, 11, 45, 19, 0)
+        item = {
+            "source": "raw",
+            "state": "submitted",
+            "_id": "tag:localhost:2017:77b03a97-df04-446e-a112-94941f1bb12c",
+            "firstcreated": firstcreated,
+            "subject": [
+                {
+                    "name": "lifestyle and leisure",
+                    "qcode": "10000000"
+                },
+                {
+                    "name": "politics",
+                    "qcode": "11000000"
+                },
+                {
+                    "name": "diplomacy",
+                    "qcode": "11002000"
+                }
+            ],
+            "place": [{"name": "United States"}],
+            'body_html': '<p>DETROIT (Reuters) - General Motors Co <GM.N> Chief Financial Officer Chuck Stevens \
+            said on Wednesday the macroeconomic challenges in Brazil will remain in the near term but the company \
+            has \"huge upside leverage once the macro situation changes\" in South America\'s largest \
+            economy.</p>\n<p>GM\'s car sales so far in October are up versus a year ago, Stevens said to reporters \
+            after the No. 1 U.S. automaker reported third-quarter financial results.</p>\n<p>Stevens also \
+            reaffirmed GM\'s past forecasts that it will show profit in Europe in 2016. It would be GM\'s first \
+            profit in Europe since 1999.</p>\n<p> (Reporting by Bernie Woodall and Joseph White; \
+            Editing by Chizu Nomiyamam and Jeffrey Benkoe)</p>'
+        }
+        reuters_route_process(item)
+        self.assertEqual(item['subject'], [
+            {
+                "name": "lifestyle and leisure",
+                "qcode": "10000000"
+            },
+            {
+                "name": "politics",
+                "qcode": "11000000"
+            },
+            {
+                "name": "diplomacy",
+                "qcode": "11002000"
+            }
+        ])
+        self.assertEqual(item['place'], [{"name": "United States"}])
+        self.assertEqual(item.get('dateline', {}).get('located', {}).get('city', ''), '')
+
+    def test_reuters_ingested_category(self):
+        firstcreated = datetime.datetime(2015, 10, 26, 11, 45, 19, 0)
+        item = {
+            "source": "Reuters",
+            "state": "ingested",
+            "_id": "tag:localhost:2017:77b03a97-df04-446e-a112-94941f1bb12c",
+            "anpa_category": [
+                {
+                    "name": "Finance",
+                    "qcode": "f"
+                }
+            ],
+            "firstcreated": firstcreated,
+            "subject": [
+                {
+                    "name": "lifestyle and leisure",
+                    "qcode": "10000000"
+                },
+                {
+                    "name": "politics",
+                    "qcode": "11000000"
+                },
+                {
+                    "name": "diplomacy",
+                    "qcode": "11002000"
+                }
+            ],
+            "place": [
+                {
+                    "name": "United States"
+                }
+            ],
+            'body_html': '<p>DETROIT (Reuters) - General Motors Co <GM.N> Chief Financial Officer Chuck Stevens \
+            said on Wednesday the macroeconomic challenges in Brazil will remain in the near term but the company \
+            has \"huge upside leverage once the macro situation changes\" in South America\'s largest \
+            economy.</p>\n<p>GM\'s car sales so far in October are up versus a year ago, Stevens said to reporters \
+            after the No. 1 U.S. automaker reported third-quarter financial results.</p>\n<p>Stevens also \
+            reaffirmed GM\'s past forecasts that it will show profit in Europe in 2016. It would be GM\'s first \
+            profit in Europe since 1999.</p>\n<p> (Reporting by Bernie Woodall and Joseph White; \
+            Editing by Chizu Nomiyamam and Jeffrey Benkoe)</p>'
+        }
+
+        reuters_route_process(item)
+        self.assertEqual(item['subject'], [])
+        self.assertEqual(item['place'], [])
+        self.assertEqual(item['dateline']['located']['city'], 'Detroit')
+        self.assertEqual(item['anpa_category'], [{'name': 'International News', 'qcode': 'i'}])
