@@ -13,7 +13,7 @@ from .field_mappers.locator_mapper import LocatorMapper
 from .field_mappers.slugline_mapper import SluglineMapper
 import superdesk
 from .unicodetoascii import to_ascii
-from superdesk.etree import get_text
+from superdesk.text_utils import get_text
 
 
 class AAPODBCFormatter():

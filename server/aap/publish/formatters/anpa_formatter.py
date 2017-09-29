@@ -20,7 +20,8 @@ from eve.utils import config
 from .unicodetoascii import to_ascii
 from .category_list_map import get_aap_category_list
 import re
-from superdesk.etree import parse_html, to_string, etree, get_text
+from superdesk.etree import parse_html, to_string, etree
+from superdesk.text_utils import get_text
 
 
 class AAPAnpaFormatter(Formatter):

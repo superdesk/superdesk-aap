@@ -333,6 +333,7 @@ class AAPNINJSFormatterTest(TestCase):
                     "versioncreated": "2017-08-31T01:44:24.000Z",
                     "service": [{"name": "International News", "code": "i"}], "type": "text", "version": "2",
                     "genre": [{"name": "Article (news)", "code": "Article"}], "priority": 6, "urgency": 3,
+                    "readtime": 0,
                     "associations": {
                         "featuremedia": {"body_text": "alt text", "byline": "DEAN LEWINS", "headline": "Picture Title",
                                          "renditions": {"original": {"poi": {"x": 3396, "y": 1484},
