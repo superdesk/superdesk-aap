@@ -20,7 +20,7 @@ from superdesk.utc import utcnow
 import uuid
 import re
 from superdesk.io.iptc import subject_codes
-from superdesk.etree import get_word_count
+from superdesk.text_utils import get_word_count
 import html
 
 

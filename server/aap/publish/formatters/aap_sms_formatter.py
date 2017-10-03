@@ -14,7 +14,7 @@ from superdesk.publish.formatters import Formatter
 from .aap_formatter_common import map_priority
 from superdesk.errors import FormatterError
 from superdesk.metadata.item import ITEM_TYPE, CONTENT_TYPE, CONTENT_STATE, ITEM_STATE
-from superdesk.etree import get_text
+from superdesk.text_utils import get_text
 from .unicodetoascii import to_ascii
 
 

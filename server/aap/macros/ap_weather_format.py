@@ -17,7 +17,7 @@ from datetime import datetime
 from pytz import timezone
 from superdesk.errors import SuperdeskApiError
 import superdesk
-from superdesk.etree import get_text
+from superdesk.text_utils import get_text
 
 
 def ap_weather_format(item, **kwargs):

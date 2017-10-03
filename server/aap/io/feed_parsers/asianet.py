@@ -19,7 +19,7 @@ from superdesk.utc import utc, utcnow
 from superdesk.io.registry import register_feed_parser, register_feeding_service_error
 from superdesk.errors import AlreadyExistsError
 from aap.errors import AAPParserError
-from superdesk.etree import get_text_word_count
+from superdesk.text_utils import get_text_word_count
 
 
 class AsiaNetFeedParser(FileFeedParser):
