@@ -14,7 +14,7 @@ from superdesk.errors import FormatterError
 from superdesk.metadata.item import ITEM_TYPE, CONTENT_TYPE, FORMAT, FORMATS
 import json
 from .unicodetoascii import to_ascii
-from superdesk.etree import get_text
+from superdesk.text_utils import get_text
 
 
 class AAPTextFormatter(AAPIpNewsFormatter):

@@ -21,7 +21,8 @@ from .category_list_map import get_aap_category_list
 from .aap_formatter_common import get_service_level
 import re
 import textwrap
-from superdesk.etree import parse_html, etree, get_text
+from superdesk.etree import parse_html, etree
+from superdesk.text_utils import get_text
 
 
 class AAPIpNewsFormatter(Formatter, AAPODBCFormatter):
