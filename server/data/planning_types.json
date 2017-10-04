@@ -1,117 +1,170 @@
 [
     {
         "_id": "events",
-        "name" : "events",
-        "editor" : {
-            "anpa_category" : {
-                "enabled" : true
+        "name": "events",
+        "editor": {
+            "anpa_category": {
+                "enabled": true
             },
-            "calendars" : {
-                "enabled" : true
+            "calendars": {
+                "enabled": true
             },
-            "definition_long" : {
-                "enabled" : false
+            "definition_long": {
+                "enabled": false
             },
-            "definition_short" : {
-                "enabled" : true
+            "definition_short": {
+                "enabled": true
             },
-            "files" : {
-                "enabled" : true
+            "files": {
+                "enabled": true
             },
-            "internal_note" : {
-                "enabled" : true
+            "internal_note": {
+                "enabled": true
             },
-            "links" : {
-                "enabled" : true
+            "links": {
+                "enabled": true
             },
-            "location" : {
-                "enabled" : true
+            "location": {
+                "enabled": true
             },
-            "name" : {
-                "enabled" : true
+            "name": {
+                "enabled": true
             },
-            "occur_status" : {
-                "enabled" : true
+            "occur_status": {
+                "enabled": true
             },
-            "slugline" : {
-                "enabled" : true
+            "slugline": {
+                "enabled": true
             },
 
-            "subject" : {
-                "enabled" : true
+            "subject": {
+                "enabled": true
             }
-
         },
         "schema" : {
-            "anpa_category" : {
-                "type" : "list",
-                "required" : false
+            "anpa_category": {
+                "type": "list",
+                "required": false
             },
-            "calendars" : {
-                "type" : "list",
-                "required" : false
+            "calendars": {
+                "type": "list",
+                "required": false
             },
-            "definition_long" : {
-                "type" : "string",
-                "required" : false
+            "definition_long": {
+                "type": "string",
+                "required": false
             },
             "definition_short" : {
-                "type" : "string",
-                "required" : false
+                "type": "string",
+                "required": false
             },
-            "files" : {
-                "type" : "list",
-                "required" : false
+            "files": {
+                "type": "list",
+                "required": false
             },
-            "internal_note" : {
-                "type" : "string",
-                "required" : false
+            "internal_note": {
+                "type": "string",
+                "required": false
             },
-            "links" : {
-                "type" : "list",
-                "required" : false
+            "links": {
+                "type": "list",
+                "required": false
             },
-            "location" : {
-                "type" : "string",
-                "required" : false
+            "location": {
+                "type": "string",
+                "required": false
             },
-            "name" : {
-                "type" : "string",
-                "required" : true
+            "name": {
+                "type": "string",
+                "required": true
             },
-            "occur_status" : {
-                "type" : "list",
-                "required" : false
+            "occur_status": {
+                "type": "list",
+                "required": false
             },
-            "slugline" : {
-                "type" : "string",
-                "required" : false
+            "slugline": {
+                "type": "string",
+                "required": false
             },
-            "subject" : {
-                "schema" : {
-                    "schema" : {
-                        "name" : {},
-                        "service" : {
-                            "nullable" : true
+            "subject": {
+                "schema": {
+                    "schema": {
+                        "name": {},
+                        "service": {
+                            "nullable": true
                         },
-                        "scheme" : {
-                            "nullable" : true,
-                            "allowed" : [],
-                            "type" : "string",
-                            "required" : true
+                        "scheme": {
+                            "nullable": true,
+                            "allowed": [],
+                            "type": "string",
+                            "required": true
                         },
-                        "parent" : {
-                            "nullable" : true
+                        "parent": {
+                            "nullable": true
                         },
-                        "qcode" : {}
+                        "qcode": {}
                     },
-                    "type" : "dict"
+                    "type": "dict"
                 },
-                "type" : "list",
-                "required" : false,
-                "mandatory_in_list" : {
-                    "scheme" : {}
+                "type": "list",
+                "required": false,
+                "mandatory_in_list": {
+                    "scheme": {}
                 }
+            }
+        }
+    },
+    {
+        "_id": "coverage",
+        "name": "coverage",
+        "schema": {
+            "g2_content_type": {
+                "required": false,
+                "type": "list"
+            },
+            "internal_note": {
+                "required": false,
+                "type": "string"
+            },
+            "slugline": {
+                "required": false,
+                "type": "string"
+            },
+            "genre": {
+                "required": false,
+                "type": "list"
+            },
+            "ednote": {
+                "required": false,
+                "type": "string"
+            },
+            "headline": {
+                "required": false,
+                "type": "string"
+            },
+            "scheduled": {
+                "required": true,
+                "type": "datetime"
+            }
+        },
+        "editor": {
+            "scheduled": {
+                "enabled": true
+            },
+            "g2_content_type": {
+                "enabled":true
+            },
+            "internal_note": {
+                "enabled":true
+            },
+            "slugline": {
+                "enabled":true
+            },
+            "ednote": {
+                "enabled":true
+            },
+            "genre": {
+                "enabled":true
             }
         }
     }
