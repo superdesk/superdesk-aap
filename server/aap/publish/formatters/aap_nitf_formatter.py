@@ -15,7 +15,8 @@ from lxml import etree as etree
 from lxml.etree import SubElement
 import re
 from .unicodetoascii import to_ascii
-from superdesk.etree import parse_html, get_text, to_string
+from superdesk.etree import parse_html, to_string
+from superdesk.text_utils import get_text
 
 
 class AAPNITFFormatter(NITFFormatter):

@@ -19,7 +19,7 @@ from superdesk.utc import utc, utcnow
 from superdesk.io.registry import register_feed_parser, register_feeding_service_error
 from superdesk.errors import AlreadyExistsError
 from aap.errors import AAPParserError
-from superdesk.etree import get_text_word_count
+from superdesk.text_utils import get_word_count
 
 
 class AsiaNetFeedParser(FileFeedParser):
@@ -61,7 +61,7 @@ class AsiaNetFeedParser(FileFeedParser):
             self._process_dateline(item, dateline_data)
 
             item['original_source'] = 'AsiaNet'
-            item['word_count'] = get_text_word_count(data)
+            item['word_count'] = get_word_count(data)
             item['body_html'] = '<pre>' + html.escape(data) + '</pre>'
 
             return item

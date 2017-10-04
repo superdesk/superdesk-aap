@@ -22,7 +22,7 @@ from datetime import datetime
 import time
 from superdesk.metadata.item import ITEM_TYPE, CONTENT_TYPE, ITEM_STATE, CONTENT_STATE, FORMAT, FORMATS
 from superdesk.io.commands.update_ingest import process_iptc_codes
-from superdesk.etree import get_text_word_count
+from superdesk.text_utils import get_word_count
 from apps.archive.common import generate_unique_id_and_name
 import json
 from eve.utils import ParsedRequest
@@ -219,7 +219,7 @@ class AppImportTextArchiveCommand(superdesk.Command):
                     else:
                         item['body_html'] = '<pre>' + story + '</pre>'
                     try:
-                        item['word_count'] = get_text_word_count(item['body_html'])
+                        item['word_count'] = get_word_count(item['body_html'])
                     except:
                         pass
                 else:

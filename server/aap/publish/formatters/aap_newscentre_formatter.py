@@ -16,7 +16,8 @@ import json
 from .unicodetoascii import to_ascii
 from copy import deepcopy
 from .category_list_map import get_aap_category_list
-from superdesk.etree import parse_html, etree, get_text
+from superdesk.etree import parse_html, etree
+from superdesk.text_utils import get_text
 
 
 class AAPNewscentreFormatter(Formatter, AAPODBCFormatter):
