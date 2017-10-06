@@ -145,6 +145,10 @@
             "scheduled": {
                 "required": true,
                 "type": "datetime"
+            },
+            "keyword": {
+                "required": false,
+                "type": "list"
             }
         },
         "editor": {
@@ -164,6 +168,9 @@
                 "enabled":true
             },
             "genre": {
+                "enabled":true
+            },
+            "keyword": {
                 "enabled":true
             }
         }
