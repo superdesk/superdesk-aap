@@ -10,13 +10,11 @@
 
 import json
 import superdesk
-from unittest import mock
 from superdesk.publish.formatters.ninjs_formatter import NINJSFormatter
 from superdesk.utils import json_serialize_datetime_objectId
 from superdesk.errors import FormatterError
 
 
-@mock.patch('superdesk.publish.subscribers.SubscribersService.generate_sequence_number', lambda self, subscriber: 1)
 class AAPNINJSFormatter(NINJSFormatter):
     rendition_properties = ('href', 'width', 'height', 'mimetype', 'poi', 'media', 'CropTop', 'CropBottom',
                             'CropRight', 'CropLeft')
@@ -30,6 +28,8 @@ class AAPNINJSFormatter(NINJSFormatter):
 
     def __init__(self):
         self.format_type = 'aap ninjs'
+        self.can_preview = False
+        self.can_export = False
 
     def format(self, article, subscriber, codes=None):
         try:
