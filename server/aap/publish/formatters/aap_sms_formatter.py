@@ -26,14 +26,14 @@ class AAPSMSFormatter(Formatter):
         """
         try:
             pub_seq_num = superdesk.get_resource_service('subscribers').generate_sequence_number(subscriber)
-            sms_message = article.get('sms_message', article.get('abstract', '')).replace('\'', '\'\'')
+            sms_message = article.get('sms_message', article.get('abstract', ''))
 
             # category = 1 is used to indicate a test message
             category = '1' if superdesk.app.config.get('TEST_SMS_OUTPUT', True) is True \
                 else article.get('anpa_category', [{}])[0].get('qcode').upper()
 
             odbc_item = {'Sequence': pub_seq_num, 'Category': category,
-                         'Headline': to_ascii(get_text(sms_message, content='html')),
+                         'Headline': to_ascii(get_text(sms_message, content='html')).replace('\'', '\'\''),
                          'Priority': map_priority(article.get('priority'))}
 
             body = self.append_body_footer(article)
@@ -41,7 +41,7 @@ class AAPSMSFormatter(Formatter):
             if article[ITEM_TYPE] == CONTENT_TYPE.TEXT:
                 body = get_text(body, content='html')
 
-            odbc_item['StoryText'] = to_ascii(body.replace('\'', '\'\''))  # @article_text
+            odbc_item['StoryText'] = to_ascii(body).replace('\'', '\'\'')  # @article_text
             odbc_item['ident'] = '0'
 
             return [(pub_seq_num, json.dumps(odbc_item))]
