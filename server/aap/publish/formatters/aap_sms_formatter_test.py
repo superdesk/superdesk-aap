@@ -67,7 +67,7 @@ class AapSMSFormatterTest(TestCase):
         'priority': 1,
         'anpa_category': [{'qcode': 'a'}],
         'abstract': 'This is a test headline',
-        'sms_message': 'The High Court has rejected same-sex marriage advocates’ legal '
+        'sms_message': 'The High Court‘s has rejected same-sex marriage advocates’ legal '
                        'challenge to the government’s postal survey.',
         'type': 'text',
         'body_html': 'The story body',
@@ -149,5 +149,5 @@ class AapSMSFormatterTest(TestCase):
         seq, item = f.format(self.article5, subscriber)[0]
         item = json.loads(item)
         self.assertEqual(item['Headline'],
-                         'The High Court has rejected same-sex marriage advocates\' legal '
-                         'challenge to the government\'s postal survey.')
+                         'The High Court\'\'s has rejected same-sex marriage advocates\'\' legal '
+                         'challenge to the government\'\'s postal survey.')
