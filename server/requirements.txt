@@ -6,5 +6,5 @@ newrelic>=2.66,<2.67
 titlecase==0.8.2
 geopy==1.11.0
 
-git+git://github.com/superdesk/superdesk-core.git@43e3eae#egg=Superdesk-Core
-git+git://github.com/superdesk/superdesk-planning.git@d6dfca2#egg=superdesk-planning
+git+git://github.com/superdesk/superdesk-core.git@6734b16#egg=Superdesk-Core
+git+git://github.com/superdesk/superdesk-planning.git@e787667#egg=superdesk-planning
