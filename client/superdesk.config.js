@@ -89,6 +89,7 @@ module.exports = function() {
                 'queueError',
                 'headline',
                 'markedDesks',
+                'assignment',
                 'versioncreated'
             ],
             'secondLine': [
@@ -117,6 +118,7 @@ module.exports = function() {
                 'updated',
                 'headline',
                 'markedDesks',
+                'assignment',
                 'wordcount',
                 'provider',
                 'versioncreator',
