@@ -5,6 +5,7 @@ unidecode==0.04.21
 newrelic>=2.66,<2.67
 titlecase==0.8.2
 geopy==1.11.0
+slackclient==1.0.9
 
 git+git://github.com/superdesk/superdesk-core.git@80826bd#egg=Superdesk-Core
 git+git://github.com/superdesk/superdesk-planning.git@16090bd#egg=superdesk-planning
