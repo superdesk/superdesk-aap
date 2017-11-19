@@ -26,6 +26,7 @@ module.exports = function() {
             ingest: 1,
             content: 1,
             tasks: 0,
+            planning: 1,
             assignments: 1
         },
 
