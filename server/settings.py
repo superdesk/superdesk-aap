@@ -224,3 +224,6 @@ CONTENTAPI_ENABLED = json.loads(env('CONTENTAPI_ENABLED', 'False').lower())
 
 # Make sure legal archive is enabled
 LEGAL_ARCHIVE = True
+
+# The Bot User OAuth Token for access to Slack
+SLACK_BOT_TOKEN = env('SLACK_BOT_TOKEN', '')

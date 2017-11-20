@@ -30,6 +30,10 @@ module.exports = function() {
             assignments: 1
         },
 
+        profile: {
+            jid: false
+        },
+
         item_profile: {
             change_profile: 1
         },
@@ -53,7 +57,8 @@ module.exports = function() {
             previewFormats: 1,
             noTakes: 1,
             searchShortcut: 1,
-            planning: 1
+            planning: 1,
+            slackNotifications: 1
         },
 
         view: {
