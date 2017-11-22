@@ -15,6 +15,7 @@ addons:
   apt:
     sources:
       - elasticsearch-2.x
+      - mongodb-3.4-precise
     packages:
       - unixodbc
       - unixodbc-dev
@@ -22,6 +23,7 @@ addons:
       - freetds-bin
       - tdsodbc
       - elasticsearch
+      - mongodb-org-server
 
 cache:
   directories:
