@@ -71,7 +71,8 @@ class GenerateActivityCountReport(superdesk.Command):
                             "$gte": date_to_str(start_date),
                             "$lte": date_to_str(end_date)
                         },
-                        "user_id": {"$ne": None}
+                        "user_id": {"$ne": None},
+                        "original_item_id": {"$exists": False}
                     }
                 },
 

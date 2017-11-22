@@ -70,6 +70,15 @@ class ActivityReportTestCase(AAPTestCase):
             "version": 1,
             "_updated": get_date("2017-05-10T01:55:47+0000"),
             "user_id": "user2"
+        },
+        {
+            "operation": "create",
+            "_created": get_date("2017-05-10T01:55:47+0000"),
+            "item_id": "item5",
+            "version": 1,
+            "_updated": get_date("2017-05-10T01:55:47+0000"),
+            "user_id": "user2",
+            "original_item_id": "item2"
         }
     ]
 
