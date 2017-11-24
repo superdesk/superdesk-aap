@@ -146,7 +146,7 @@ class AAPNINJSFormatterTest(TestCase):
             "genre": [
                 {
                     "qcode": "Article",
-                    "name": "Article (news)"
+                    "name": "Article"
                 }
             ],
             "slugline": "Article Slugline",
@@ -306,7 +306,7 @@ class AAPNINJSFormatterTest(TestCase):
                     "genre": [
                         {
                             "qcode": "Article",
-                            "name": "Article (news)"
+                            "name": "Article"
                         }
                     ],
                     "unique_id": 32468,
@@ -332,7 +332,7 @@ class AAPNINJSFormatterTest(TestCase):
                     "subject": [{"name": "arts, culture and entertainment", "code": "01000000"}],
                     "versioncreated": "2017-08-31T01:44:24.000Z",
                     "service": [{"name": "International News", "code": "i"}], "type": "text", "version": "2",
-                    "genre": [{"name": "Article (news)", "code": "Article"}], "priority": 6, "urgency": 3,
+                    "genre": [{"name": "Article", "code": "Article"}], "priority": 6, "urgency": 3,
                     "readtime": 0,
                     "associations": {
                         "featuremedia": {"body_text": "alt text", "byline": "DEAN LEWINS", "headline": "Picture Title",
@@ -345,7 +345,7 @@ class AAPNINJSFormatterTest(TestCase):
                                          "description_text": "Picture Caption", "source": "AAP",
                                          "versioncreated": "2017-08-31T01:43:19+0000",
                                          "service": [{"name": "International News", "code": "i"}],
-                                         "genre": [{"name": "Article (news)", "code": "Article"}], "type": "picture",
+                                         "genre": [{"name": "Article", "code": "Article"}], "type": "picture",
                                          "language": "en", "version": "1", "urgency": 3, "pubstatus": "usable",
                                          "priority": 6, "ednote": "", "mimetype": "image/jpeg",
                                          "slugline": "RACING WINX ROSEHILL TRACKWORK",

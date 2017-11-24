@@ -35,7 +35,7 @@ class yonhapTestCase(TestCase):
             "urgency": 3,
             "genre": [
                 {
-                    "name": "Article (news)",
+                    "name": "Article",
                     "qcode": "Article"
                 }
             ],
