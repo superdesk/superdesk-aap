@@ -181,7 +181,7 @@ class RemoteSyncTakeStory(RemoteSuncBaseTest):
             "genre": [
                 {
                     "qcode": "Article",
-                    "name": "Article (news)"
+                    "name": "Article"
                 }
             ],
             "_etag": "a765e670ff6010137e0711d32d70093d41b1cebe",
@@ -263,7 +263,7 @@ class RemoteSyncTakeStory(RemoteSuncBaseTest):
                         "genre": [
                             {
                                 "qcode": "Article",
-                                "name": "Article (news)"
+                                "name": "Article"
                             }
                         ],
                         "sign_off": "MAR",
@@ -348,7 +348,7 @@ class RemoteSyncTakeStory(RemoteSuncBaseTest):
                     "genre": [
                         {
                             "qcode": "Article",
-                            "name": "Article (news)"
+                            "name": "Article"
                         }
                     ],
                     "_etag": "b0afe557d3857584c2505385541e94bf8ef7d19c",
@@ -498,7 +498,7 @@ class RemoteSyncUpdatedStory(RemoteSuncBaseTest):
             "genre": [
                 {
                     "qcode": "Article",
-                    "name": "Article (news)"
+                    "name": "Article"
                 }
             ],
             "rewrite_sequence": 1,
@@ -572,7 +572,7 @@ class RemoteSyncUpdatedStory(RemoteSuncBaseTest):
                         "genre": [
                             {
                                 "qcode": "Article",
-                                "name": "Article (news)"
+                                "name": "Article"
                             }
                         ],
                         "sign_off": "MAR",
@@ -672,7 +672,7 @@ class RemoteSyncUpdatedStory(RemoteSuncBaseTest):
                         "genre": [
                             {
                                 "qcode": "Article",
-                                "name": "Article (news)"
+                                "name": "Article"
                             }
                         ],
                         "rewrite_sequence": 1,
