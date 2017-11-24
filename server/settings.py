@@ -181,7 +181,7 @@ DEFAULT_PRIORITY_VALUE_FOR_MANUAL_ARTICLES = int(env('DEFAULT_PRIORITY_VALUE_FOR
 
 # Defines default value for Urgency to be set for manually created articles
 DEFAULT_URGENCY_VALUE_FOR_MANUAL_ARTICLES = int(env('DEFAULT_URGENCY_VALUE_FOR_MANUAL_ARTICLES', 3))
-DEFAULT_GENRE_VALUE_FOR_MANUAL_ARTICLES = [{'qcode': 'Article', 'name': 'Article (news)'}]
+DEFAULT_GENRE_VALUE_FOR_MANUAL_ARTICLES = [{'qcode': 'Article', 'name': 'Article'}]
 RESET_PRIORITY_VALUE_FOR_UPDATE_ARTICLES = json.loads(env('RESET_PRIORITY_VALUE_FOR_UPDATE_ARTICLES', 'True').lower())
 
 # This value gets injected into NewsML 1.2 and G2 output documents.
