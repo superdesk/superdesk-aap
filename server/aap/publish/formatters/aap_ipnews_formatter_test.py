@@ -593,7 +593,7 @@ class AapIpNewsFormatterTest(TestCase):
             "genre": [
                 {
                     "qcode": "Article",
-                    "name": "Article (news)"
+                    "name": "Article"
                 }
             ],
             "dateline": {
