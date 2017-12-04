@@ -1,0 +1,3048 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<NewsML>
+	<Catalog Href="http://about.reuters.com/newsml/vocabulary/catalog-reuters-3rdParty-master_catalog.xml"/>
+	<NewsEnvelope>
+		<DateAndTime>20050623T19300+0000</DateAndTime>
+	</NewsEnvelope>
+	<NewsItem>
+		<Identification>
+			<NewsIdentifier>
+				<ProviderId>reuters.com</ProviderId>
+				<DateId>20050623</DateId>
+				<NewsItemId>topicset-reuters-3rdParty_news2000</NewsItemId>
+				<RevisionId PreviousRevision = "0" Update = "N">1</RevisionId>
+				<PublicIdentifier>urn:newsml:reuters.com:20050623:topicset-reuters-3rdParty_news2000:1</PublicIdentifier>
+			</NewsIdentifier>
+		</Identification>
+		<NewsManagement>
+			<NewsItemType FormalName = "TopicSet"/>
+			<FirstCreated>20050623T19300+0000</FirstCreated>
+			<ThisRevisionCreated>20050623T19300+0000</ThisRevisionCreated>
+			<Status FormalName = "Usable"/>
+		</NewsManagement>
+		<TopicSet Duid="T000001" FormalName="News2000">
+			<Topic Duid = "News2000-000089">
+				<TopicType FormalName = "BusinessActivities"/>
+				<FormalName Scheme = "N2000">JOB</FormalName>
+				<FormalName Scheme = "IPTC Subject Codes - Subject">iptc:09000000</FormalName>
+				<Description xml:lang = "en">Labour; Employment; Unemployment</Description>
+			</Topic>
+			<Topic Duid = "News2000-000091">
+				<TopicType FormalName = "BusinessActivities"/>
+				<FormalName Scheme = "N2000">DIV</FormalName>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04016015</FormalName>
+				<Description xml:lang = "en">Dividend</Description>
+			</Topic>
+			<Topic Duid = "News2000-000092">
+				<TopicType FormalName = "BusinessActivities"/>
+				<FormalName Scheme = "N2000">RES</FormalName>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04016018</FormalName>
+				<Description xml:lang = "en">Corporate Results</Description>
+			</Topic>
+			<Topic Duid = "News2000-000093">
+				<TopicType FormalName = "BusinessActivities"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04016016</FormalName>
+				<FormalName Scheme = "N2000">RESF</FormalName>
+				<Description xml:lang = "en">Corporate Results Forecasts</Description>
+			</Topic>
+			<Topic Duid = "News2000-000094">
+				<TopicType FormalName = "BusinessActivities"/>
+				<FormalName Scheme = "N2000">CORA</FormalName>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:4016006</FormalName>
+				<Description xml:lang = "en">Corporate Analysis</Description>
+			</Topic>
+			<Topic Duid = "News2000-000095">
+				<TopicType FormalName = "BusinessActivities"/>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:04016000</FormalName>
+				<FormalName Scheme = "N2000">MRG</FormalName>
+				<Description xml:lang = "en">Mergers and Acquisitions (including Changes of Ownership)</Description>
+			</Topic>
+			<Topic Duid = "News2000-100099">
+				<TopicType FormalName = "BusinessActivities"/>
+				<FormalName Scheme = "N2000">BACT</FormalName>
+				<Description xml:lang = "en">Business Activites</Description>
+			</Topic>
+			<Topic Duid = "News2000-100100">
+				<TopicType FormalName = "BusinessActivities"/>
+				<FormalName Scheme = "N2000">BKRT</FormalName>
+				<Description xml:lang = "en">Bankrupcty Proceedings</Description>
+			</Topic>
+			<Topic Duid = "News2000-100104">
+				<TopicType FormalName = "BusinessActivities"/>
+				<FormalName Scheme = "N2000">CFIN</FormalName>
+				<Description xml:lang = "en">Corporate Finance</Description>
+			</Topic>
+			<Topic Duid = "News2000-100112">
+				<TopicType FormalName = "BusinessActivities"/>
+				<FormalName Scheme = "N2000">MNGISS</FormalName>
+				<Description xml:lang = "en">Management issues/policy</Description>
+			</Topic>
+			<Topic Duid = "News2000-000018">
+				<TopicType FormalName = "BusinessSector"/>
+				<FormalName Scheme = "N2000">ENR</FormalName>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:04005000</FormalName>
+				<Description xml:lang = "en">Energy and Resources</Description>
+			</Topic>
+			<Topic Duid = "News2000-000019">
+				<TopicType FormalName = "BusinessSector"/>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:04005000</FormalName>
+				<FormalName Scheme = "N2000">ENQ</FormalName>
+				<Description xml:lang = "en">Energy equipment and services</Description>
+			</Topic>
+			<Topic Duid = "News2000-000031">
+				<TopicType FormalName = "BusinessSector"/>
+				<FormalName Scheme = "IPTC Subject Codes - Subject">iptc:04000000</FormalName>
+				<FormalName Scheme = "N2000">MIS</FormalName>
+				<Description xml:lang = "en">Miscellaneous Materials</Description>
+			</Topic>
+			<Topic Duid = "News2000-000032">
+				<TopicType FormalName = "BusinessSector"/>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:04002000</FormalName>
+				<FormalName Scheme = "N2000">CHE</FormalName>
+				<Description xml:lang = "en">Chemicals</Description>
+			</Topic>
+			<Topic Duid = "News2000-000037">
+				<TopicType FormalName = "BusinessSector"/>
+				<FormalName Scheme = "N2000">MET</FormalName>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04012004</FormalName>
+				<Description xml:lang = "en">Non Ferrous Metals</Description>
+			</Topic>
+			<Topic Duid = "News2000-000038">
+				<TopicType FormalName = "BusinessSector"/>
+				<FormalName Scheme = "N2000">GDM</FormalName>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04012002</FormalName>
+				<Description xml:lang = "en">Gold and Precious Materials</Description>
+			</Topic>
+			<Topic Duid = "News2000-000040">
+				<TopicType FormalName = "BusinessSector"/>
+				<FormalName Scheme = "N2000">STL</FormalName>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04012003</FormalName>
+				<Description xml:lang = "en">Iron and Steel</Description>
+			</Topic>
+			<Topic Duid = "News2000-000041">
+				<TopicType FormalName = "BusinessSector"/>
+				<FormalName Scheme = "N2000">TIM</FormalName>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04001003</FormalName>
+				<Description xml:lang = "en">Forestry and Timber</Description>
+			</Topic>
+			<Topic Duid = "News2000-000056">
+				<TopicType FormalName = "BusinessSector"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04011001</FormalName>
+				<FormalName Scheme = "N2000">AER</FormalName>
+				<Description xml:lang = "en">Aerospace and defense (subindustry)</Description>
+			</Topic>
+			<Topic Duid = "News2000-000057">
+				<TopicType FormalName = "BusinessSector"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04012001</FormalName>
+				<FormalName Scheme = "N2000">BLD</FormalName>
+				<Description xml:lang = "en">Building Materials</Description>
+			</Topic>
+			<Topic Duid = "News2000-000058">
+				<TopicType FormalName = "BusinessSector"/>
+				<FormalName Scheme = "N2000">CON</FormalName>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04004001</FormalName>
+				<Description xml:lang = "en">Construction and engineering (industry)</Description>
+			</Topic>
+			<Topic Duid = "News2000-000059">
+				<TopicType FormalName = "BusinessSector"/>
+				<FormalName Scheme = "N2000">MUL</FormalName>
+				<FormalName Scheme = "IPTC Subject:News">iptc:04000000</FormalName>
+				<Description xml:lang = "en">Industrial conglomerates (industry)</Description>
+			</Topic>
+			<Topic Duid = "News2000-000060">
+				<TopicType FormalName = "BusinessSector"/>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:04011000</FormalName>
+				<FormalName Scheme = "N2000">MAC</FormalName>
+				<Description xml:lang = "en">Machinery</Description>
+			</Topic>
+			<Topic Duid = "News2000-000061">
+				<TopicType FormalName = "BusinessSector"/>
+				<FormalName Scheme = "N2000">IND</FormalName>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04011006</FormalName>
+				<Description xml:lang = "en">Industrial machinery</Description>
+			</Topic>
+			<Topic Duid = "News2000-000062">
+				<TopicType FormalName = "BusinessSector"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04007007</FormalName>
+				<FormalName Scheme = "N2000">WHO</FormalName>
+				<Description xml:lang = "en">Trading companies and distributors (industry)</Description>
+			</Topic>
+			<Topic Duid = "News2000-000063">
+				<TopicType FormalName = "BusinessSector"/>
+				<FormalName Scheme = "N2000">BUS</FormalName>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:04006000</FormalName>
+				<Description xml:lang = "en">Commercial services and supplies (industry group)</Description>
+			</Topic>
+			<Topic Duid = "News2000-000064">
+				<TopicType FormalName = "BusinessSector"/>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:04003000</FormalName>
+				<FormalName Scheme = "N2000">DPR</FormalName>
+				<Description xml:lang = "en">Data processing services</Description>
+			</Topic>
+			<Topic Duid = "News2000-000065">
+				<TopicType FormalName = "BusinessSector"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04015001</FormalName>
+				<FormalName Scheme = "N2000">AIR</FormalName>
+				<Description xml:lang = "en">Air freight and couriers (industry)</Description>
+			</Topic>
+			<Topic Duid = "News2000-000066">
+				<TopicType FormalName = "BusinessSector"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04015004</FormalName>
+				<FormalName Scheme = "N2000">SHP</FormalName>
+				<Description xml:lang = "en">Marine</Description>
+			</Topic>
+			<Topic Duid = "News2000-000067">
+				<TopicType FormalName = "BusinessSector"/>
+				<FormalName Scheme = "N2000">RRL</FormalName>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:04015000</FormalName>
+				<Description xml:lang = "en">Road and Rail</Description>
+			</Topic>
+			<Topic Duid = "News2000-000068">
+				<TopicType FormalName = "BusinessSector"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04011002</FormalName>
+				<FormalName Scheme = "N2000">AUT</FormalName>
+				<Description xml:lang = "en">Automobiles and components</Description>
+			</Topic>
+			<Topic Duid = "News2000-000069">
+				<TopicType FormalName = "BusinessSector"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04011004</FormalName>
+				<FormalName Scheme = "N2000">APL</FormalName>
+				<Description xml:lang = "en">Household durables</Description>
+			</Topic>
+			<Topic Duid = "News2000-000070">
+				<TopicType FormalName = "BusinessSector"/>
+				<FormalName Scheme = "N2000">ELC</FormalName>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04003006</FormalName>
+				<Description xml:lang = "en">Consumer electronics</Description>
+			</Topic>
+			<Topic Duid = "News2000-000071">
+				<TopicType FormalName = "BusinessSector"/>
+				<FormalName Scheme = "N2000">REC</FormalName>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04014003</FormalName>
+				<Description xml:lang = "en">Leisure products</Description>
+			</Topic>
+			<Topic Duid = "News2000-000072">
+				<TopicType FormalName = "BusinessSector"/>
+				<FormalName Scheme = "N2000">TEX</FormalName>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04013007</FormalName>
+				<Description xml:lang = "en">Textiles and apparel</Description>
+			</Topic>
+			<Topic Duid = "News2000-000073">
+				<TopicType FormalName = "BusinessSector"/>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:04014000</FormalName>
+				<FormalName Scheme = "N2000">LEI</FormalName>
+				<Description xml:lang = "en">Leisure facilities</Description>
+			</Topic>
+			<Topic Duid = "News2000-000074">
+				<TopicType FormalName = "BusinessSector"/>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:04010000</FormalName>
+				<FormalName Scheme = "N2000">PUB</FormalName>
+				<Description xml:lang = "en">Media (industry)</Description>
+			</Topic>
+			<Topic Duid = "News2000-000075">
+				<TopicType FormalName = "BusinessSector"/>
+				<FormalName Scheme = "N2000">ADV</FormalName>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04010001</FormalName>
+				<Description xml:lang = "en">Advertising</Description>
+			</Topic>
+			<Topic Duid = "News2000-000076">
+				<TopicType FormalName = "BusinessSector"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04007005</FormalName>
+				<FormalName Scheme = "N2000">RET</FormalName>
+				<Description xml:lang = "en">Retailing</Description>
+			</Topic>
+			<Topic Duid = "News2000-000077">
+				<TopicType FormalName = "BusinessSector"/>
+				<FormalName Scheme = "N2000">BEV</FormalName>
+				<FormalName Scheme = "IPTC Subject Matter:News">IPTC04013000</FormalName>
+				<Description xml:lang = "en">Beverages and Tobacco</Description>
+			</Topic>
+			<Topic Duid = "News2000-000078">
+				<TopicType FormalName = "BusinessSector"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04013002</FormalName>
+				<FormalName Scheme = "N2000">FOD</FormalName>
+				<Description xml:lang = "en">Food products</Description>
+			</Topic>
+			<Topic Duid = "News2000-000079">
+				<TopicType FormalName = "BusinessSector"/>
+				<FormalName Scheme = "N2000">DRU</FormalName>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04002006</FormalName>
+				<Description xml:lang = "en">Pharmaceuticals (sub-industry)</Description>
+			</Topic>
+			<Topic Duid = "News2000-000080">
+				<TopicType FormalName = "BusinessSector"/>
+				<FormalName Scheme = "N2000">FIN</FormalName>
+				<FormalName Scheme = "IPTC Subject:News">iptc:04000000</FormalName>
+				<Description xml:lang = "en">Financial and Business Services (industry group)</Description>
+			</Topic>
+			<Topic Duid = "News2000-000081">
+				<TopicType FormalName = "BusinessSector"/>
+				<FormalName Scheme = "N2000">BNK</FormalName>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04006002</FormalName>
+				<Description xml:lang = "en">Banks (industry group)</Description>
+			</Topic>
+			<Topic Duid = "News2000-000082">
+				<TopicType FormalName = "BusinessSector"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04006006</FormalName>
+				<FormalName Scheme = "N2000">INS</FormalName>
+				<Description xml:lang = "en">Insurance (industry group)</Description>
+			</Topic>
+			<Topic Duid = "News2000-000083">
+				<TopicType FormalName = "BusinessSector"/>
+				<FormalName Scheme = "N2000">REA</FormalName>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04004003</FormalName>
+				<Description xml:lang = "en">Real estate (industry)</Description>
+			</Topic>
+			<Topic Duid = "News2000-000084">
+				<TopicType FormalName = "BusinessSector"/>
+				<FormalName Scheme = "N2000">WWW</FormalName>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04010006</FormalName>
+				<Description xml:lang = "en">Internet software and services (industry)</Description>
+			</Topic>
+			<Topic Duid = "News2000-000085">
+				<TopicType FormalName = "BusinessSector"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04003004</FormalName>
+				<FormalName Scheme = "N2000">ELI</FormalName>
+				<Description xml:lang = "en">Semiconductor equipment and products</Description>
+			</Topic>
+			<Topic Duid = "News2000-000086">
+				<TopicType FormalName = "BusinessSector"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04003007</FormalName>
+				<FormalName Scheme = "N2000">TEL</FormalName>
+				<Description xml:lang = "en">Telecommunication services (sector)</Description>
+			</Topic>
+			<Topic Duid = "News2000-000087">
+				<TopicType FormalName = "BusinessSector"/>
+				<FormalName Scheme = "N2000">ELG</FormalName>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:04005000</FormalName>
+				<Description xml:lang = "en">Utilities</Description>
+			</Topic>
+			<Topic Duid = "News2000-100092">
+				<TopicType FormalName = "BusinessSector"/>
+				<FormalName Scheme = "N2000">GSFT</FormalName>
+				<Description xml:lang = "en">Games software</Description>
+			</Topic>
+			<Topic Duid = "News2000-100094">
+				<TopicType FormalName = "BusinessSector"/>
+				<FormalName Scheme = "N2000">TBCS</FormalName>
+				<Description xml:lang = "en">Television broadcasting</Description>
+			</Topic>
+			<Topic Duid = "News2000-100122">
+				<TopicType FormalName = "BusinessSector"/>
+				<FormalName Scheme = "N2000">PLAS</FormalName>
+				<Description xml:lang = "en">Plastics</Description>
+			</Topic>
+			<Topic Duid = "News2000-100123">
+				<TopicType FormalName = "BusinessSector"/>
+				<FormalName Scheme = "N2000">BIOT</FormalName>
+				<Description xml:lang = "en">Biotechnology</Description>
+			</Topic>
+			<Topic Duid = "News2000-100124">
+				<TopicType FormalName = "BusinessSector"/>
+				<FormalName Scheme = "N2000">HDWR</FormalName>
+				<Description xml:lang = "en">Computer Hardware</Description>
+			</Topic>
+			<Topic Duid = "News2000-100125">
+				<TopicType FormalName = "BusinessSector"/>
+				<FormalName Scheme = "N2000">SFWR</FormalName>
+				<Description xml:lang = "en">Computer Software</Description>
+			</Topic>
+			<Topic Duid = "News2000-000033">
+				<TopicType FormalName = "CommoditiesAndMetals"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04002005</FormalName>
+				<FormalName Scheme = "N2000">PETC</FormalName>
+				<Description xml:lang = "en">Petrochemicals</Description>
+			</Topic>
+			<Topic Duid = "News2000-000034">
+				<TopicType FormalName = "CommoditiesAndMetals"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04002005</FormalName>
+				<FormalName Scheme = "N2000">POLY</FormalName>
+				<Description xml:lang = "en">Polymers</Description>
+			</Topic>
+			<Topic Duid = "News2000-000036">
+				<TopicType FormalName = "CommoditiesAndMetals"/>
+				<FormalName Scheme = "N2000">ALU</FormalName>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04012004</FormalName>
+				<Description xml:lang = "en">Aluminum</Description>
+			</Topic>
+			<Topic Duid = "News2000-000039">
+				<TopicType FormalName = "CommoditiesAndMetals"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04012002</FormalName>
+				<FormalName Scheme = "N2000">GOL</FormalName>
+				<Description xml:lang = "en">Gold and Precious Metals</Description>
+			</Topic>
+			<Topic Duid = "News2000-000043">
+				<TopicType FormalName = "CommoditiesAndMetals"/>
+				<FormalName Scheme = "N2000">COC</FormalName>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04009004</FormalName>
+				<Description xml:lang = "en">Cocoa</Description>
+			</Topic>
+			<Topic Duid = "News2000-000044">
+				<TopicType FormalName = "CommoditiesAndMetals"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04009004</FormalName>
+				<FormalName Scheme = "N2000">COF</FormalName>
+				<Description xml:lang = "en">Coffee</Description>
+			</Topic>
+			<Topic Duid = "News2000-000045">
+				<TopicType FormalName = "CommoditiesAndMetals"/>
+				<FormalName Scheme = "N2000">COT</FormalName>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04009004</FormalName>
+				<Description xml:lang = "en">Cotton and Silk</Description>
+			</Topic>
+			<Topic Duid = "News2000-000046">
+				<TopicType FormalName = "CommoditiesAndMetals"/>
+				<FormalName Scheme = "N2000">ORJ</FormalName>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04009004</FormalName>
+				<Description xml:lang = "en">Orange Juice</Description>
+			</Topic>
+			<Topic Duid = "News2000-000047">
+				<TopicType FormalName = "CommoditiesAndMetals"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04009004</FormalName>
+				<FormalName Scheme = "N2000">RUB</FormalName>
+				<Description xml:lang = "en">Rubber</Description>
+			</Topic>
+			<Topic Duid = "News2000-000048">
+				<TopicType FormalName = "CommoditiesAndMetals"/>
+				<FormalName Scheme = "N2000">SUG</FormalName>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04009004</FormalName>
+				<Description xml:lang = "en">Sugar</Description>
+			</Topic>
+			<Topic Duid = "News2000-000049">
+				<TopicType FormalName = "CommoditiesAndMetals"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04009004</FormalName>
+				<FormalName Scheme = "N2000">TEA</FormalName>
+				<Description xml:lang = "en">Tea</Description>
+			</Topic>
+			<Topic Duid = "News2000-000050">
+				<TopicType FormalName = "CommoditiesAndMetals"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04009004</FormalName>
+				<FormalName Scheme = "N2000">WOO</FormalName>
+				<Description xml:lang = "en">Wool</Description>
+			</Topic>
+			<Topic Duid = "News2000-000052">
+				<TopicType FormalName = "CommoditiesAndMetals"/>
+				<FormalName Scheme = "N2000">GRA</FormalName>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04009004</FormalName>
+				<Description xml:lang = "en">Grains</Description>
+			</Topic>
+			<Topic Duid = "News2000-000053">
+				<TopicType FormalName = "CommoditiesAndMetals"/>
+				<FormalName Scheme = "N2000">LIV</FormalName>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04001004</FormalName>
+				<Description xml:lang = "en">Livestock</Description>
+			</Topic>
+			<Topic Duid = "News2000-000054">
+				<TopicType FormalName = "CommoditiesAndMetals"/>
+				<FormalName Scheme = "N2000">MEAL</FormalName>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04009004</FormalName>
+				<Description xml:lang = "en">Meals and Feeds</Description>
+			</Topic>
+			<Topic Duid = "News2000-000055">
+				<TopicType FormalName = "CommoditiesAndMetals"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04009004</FormalName>
+				<FormalName Scheme = "N2000">OILS</FormalName>
+				<Description xml:lang = "en">Oils</Description>
+			</Topic>
+			<Topic Duid = "News2000-100089">
+				<TopicType FormalName = "CommoditiesAndMetals"/>
+				<FormalName Scheme = "N2000">COR</FormalName>
+				<Description xml:lang = "en">Corn</Description>
+			</Topic>
+			<Topic Duid = "News2000-100027">
+				<TopicType FormalName = "CommoditiesAndMetals"/>
+				<FormalName Scheme = "N2000">GMO</FormalName>
+				<Description xml:lang = "en">Genetically Modified Organisms</Description>
+			</Topic>			
+			<Topic Duid = "News2000-000020">
+				<TopicType FormalName = "Energy"/>
+				<FormalName Scheme = "N2000">CRU</FormalName>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04005004</FormalName>
+				<Description xml:lang = "en">Crude Oil</Description>
+			</Topic>
+			<Topic Duid = "News2000-000021">
+				<TopicType FormalName = "Energy"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04005004</FormalName>
+				<FormalName Scheme = "N2000">NSEA</FormalName>
+				<Description xml:lang = "en">North Sea Oil</Description>
+			</Topic>
+				<Topic Duid = "News2000-000023">
+				<TopicType FormalName = "Energy"/>
+				<FormalName Scheme = "N2000">NGS</FormalName>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04005004</FormalName>
+				<Description xml:lang = "en">Natural Gas</Description>
+			</Topic>
+			<Topic Duid = "News2000-000024">
+				<TopicType FormalName = "Energy"/>
+				<FormalName Scheme = "N2000">PROD</FormalName>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04005003</FormalName>
+				<Description xml:lang = "en">Products from Crude Oil</Description>
+			</Topic>
+			<Topic Duid = "News2000-000025">
+				<TopicType FormalName = "Energy"/>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:04005003</FormalName>
+				<FormalName Scheme = "N2000">JET</FormalName>
+				<Description xml:lang = "en">Jet Fuel</Description>
+			</Topic>
+			<Topic Duid = "News2000-000026">
+				<TopicType FormalName = "Energy"/>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:04005003</FormalName>
+				<FormalName Scheme = "N2000">BUN</FormalName>
+				<Description xml:lang = "en">Bunkers</Description>
+			</Topic>
+			<Topic Duid = "News2000-000027">
+				<TopicType FormalName = "Energy"/>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:04005003</FormalName>
+				<FormalName Scheme = "N2000">HOIL</FormalName>
+				<Description xml:lang = "en">Heating Oil</Description>
+			</Topic>
+			<Topic Duid = "News2000-000028">
+				<TopicType FormalName = "Energy"/>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:04005003</FormalName>
+				<FormalName Scheme = "N2000">LPG</FormalName>
+				<Description xml:lang = "en">Liquid petroleum gas (LPG)</Description>
+			</Topic>
+			<Topic Duid = "News2000-000029">
+				<TopicType FormalName = "Energy"/>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:04005003</FormalName>
+				<FormalName Scheme = "N2000">NAP</FormalName>
+				<Description xml:lang = "en">Naptha</Description>
+			</Topic>
+			<Topic Duid = "News2000-000030">
+				<TopicType FormalName = "Energy"/>
+				<FormalName Scheme = "N2000">COA</FormalName>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:04005002</FormalName>
+				<Description xml:lang = "en">Coal</Description>
+			</Topic>
+			<Topic Duid = "News2000-100119">
+				<TopicType FormalName = "Energy"/>
+				<FormalName Scheme = "N2000">CO2</FormalName>
+				<Description xml:lang = "en">Emissions</Description>
+			</Topic>
+			<Topic Duid = "News2000-000579">
+				<TopicType FormalName = "Genre"/>
+				<FormalName Scheme = "N2000">PRESS</FormalName>
+				<Description xml:lang = "en">Press digests</Description>
+			</Topic>
+			<Topic Duid = "News2000-000583">
+				<TopicType FormalName = "Genre"/>
+				<FormalName Scheme = "N2000">DIARY</FormalName>
+				<Description xml:lang = "en">Diaries of news events</Description>
+			</Topic>
+			<Topic Duid = "News2000-000586">
+				<TopicType FormalName = "Genre"/>
+				<FormalName Scheme = "N2000">RSLT</FormalName>
+				<Description xml:lang = "en">Results, Listings and Statistics (Sports)</Description>
+			</Topic>
+			<Topic Duid = "News2000-100137">
+				<TopicType FormalName = "Genre"/>
+				<FormalName Scheme = "N2000">NEWR</FormalName>
+				<Description xml:lang = "en">News Release</Description>
+			</Topic>		
+			<Topic Duid = "News2000-000572">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">EMRG</FormalName>
+				<Description xml:lang = "en">Emerging countries</Description>
+			</Topic>
+			<Topic Duid = "News2000-000312">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">AFE</FormalName>
+				<Description xml:lang = "en">Africa</Description>
+			</Topic>
+			<Topic Duid = "News2000-000313">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">DZ</FormalName>
+				<Description xml:lang = "en">Algeria</Description>
+			</Topic>
+			<Topic Duid = "News2000-000314">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">AO</FormalName>
+				<Description xml:lang = "en">Angola</Description>
+			</Topic>
+			<Topic Duid = "News2000-000315">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">BJ</FormalName>
+				<Description xml:lang = "en">Benin</Description>
+			</Topic>
+			<Topic Duid = "News2000-000316">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">BW</FormalName>
+				<Description xml:lang = "en">Botswana</Description>
+			</Topic>
+			<Topic Duid = "News2000-000317">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">BF</FormalName>
+				<Description xml:lang = "en">Burkina Faso</Description>
+			</Topic>
+			<Topic Duid = "News2000-000318">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">BI</FormalName>
+				<Description xml:lang = "en">Burundi</Description>
+			</Topic>
+			<Topic Duid = "News2000-000319">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">CM</FormalName>
+				<Description xml:lang = "en">Cameroon</Description>
+			</Topic>
+			<Topic Duid = "News2000-000320">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">CV</FormalName>
+				<Description xml:lang = "en">Cape Verde</Description>
+			</Topic>
+			<Topic Duid = "News2000-000321">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">CF</FormalName>
+				<Description xml:lang = "en">Central African Republic</Description>
+			</Topic>
+			<Topic Duid = "News2000-000322">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">TD</FormalName>
+				<Description xml:lang = "en">Chad</Description>
+			</Topic>
+			<Topic Duid = "News2000-000323">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">KM</FormalName>
+				<Description xml:lang = "en">Comoros</Description>
+			</Topic>
+			<Topic Duid = "News2000-000324">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">CG</FormalName>
+				<Description xml:lang = "en">Congo</Description>
+			</Topic>
+			<Topic Duid = "News2000-000325">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">CI</FormalName>
+				<Description xml:lang = "en">Ivory Coast</Description>
+			</Topic>
+			<Topic Duid = "News2000-000326">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">ZR</FormalName>
+				<Description xml:lang = "en">Democratic Rep of Congo</Description>
+			</Topic>
+			<Topic Duid = "News2000-000327">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">DJ</FormalName>
+				<Description xml:lang = "en">Djibouti</Description>
+			</Topic>
+			<Topic Duid = "News2000-000328">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">ER</FormalName>
+				<Description xml:lang = "en">Eritrea</Description>
+			</Topic>
+			<Topic Duid = "News2000-000329">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">ET</FormalName>
+				<Description xml:lang = "en">Ethiopia</Description>
+			</Topic>
+			<Topic Duid = "News2000-000330">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">GQ</FormalName>
+				<Description xml:lang = "en">Equatorial Guinea</Description>
+			</Topic>
+			<Topic Duid = "News2000-000331">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">GA</FormalName>
+				<Description xml:lang = "en">Gabon</Description>
+			</Topic>
+			<Topic Duid = "News2000-000332">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">GM</FormalName>
+				<Description xml:lang = "en">Gambia</Description>
+			</Topic>
+			<Topic Duid = "News2000-000333">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">GH</FormalName>
+				<Description xml:lang = "en">Ghana</Description>
+			</Topic>
+			<Topic Duid = "News2000-000334">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">GN</FormalName>
+				<Description xml:lang = "en">Guinea</Description>
+			</Topic>
+			<Topic Duid = "News2000-000335">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">GW</FormalName>
+				<Description xml:lang = "en">Guinea-Bissau</Description>
+			</Topic>
+			<Topic Duid = "News2000-000336">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">KE</FormalName>
+				<Description xml:lang = "en">Kenya</Description>
+			</Topic>
+			<Topic Duid = "News2000-000337">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">LS</FormalName>
+				<Description xml:lang = "en">Lesotho</Description>
+			</Topic>
+			<Topic Duid = "News2000-000338">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">LR</FormalName>
+				<Description xml:lang = "en">Liberia</Description>
+			</Topic>
+			<Topic Duid = "News2000-000339">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">LY</FormalName>
+				<Description xml:lang = "en">Libya</Description>
+			</Topic>
+			<Topic Duid = "News2000-000340">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">MG</FormalName>
+				<Description xml:lang = "en">Madagascar</Description>
+			</Topic>
+			<Topic Duid = "News2000-000341">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">MW</FormalName>
+				<Description xml:lang = "en">Malawi</Description>
+			</Topic>
+			<Topic Duid = "News2000-000342">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">ML</FormalName>
+				<Description xml:lang = "en">Mali</Description>
+			</Topic>
+			<Topic Duid = "News2000-000343">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">MR</FormalName>
+				<Description xml:lang = "en">Mauritania</Description>
+			</Topic>
+			<Topic Duid = "News2000-000344">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">MU</FormalName>
+				<Description xml:lang = "en">Mauritius</Description>
+			</Topic>
+			<Topic Duid = "News2000-000345">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">MA</FormalName>
+				<Description xml:lang = "en">Morocco</Description>
+			</Topic>
+			<Topic Duid = "News2000-000346">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">MZ</FormalName>
+				<Description xml:lang = "en">Mozambique</Description>
+			</Topic>
+			<Topic Duid = "News2000-000347">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">NA</FormalName>
+				<Description xml:lang = "en">Namibia</Description>
+			</Topic>
+			<Topic Duid = "News2000-000348">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">NE</FormalName>
+				<Description xml:lang = "en">Niger</Description>
+			</Topic>
+			<Topic Duid = "News2000-000349">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">NG</FormalName>
+				<Description xml:lang = "en">Nigeria</Description>
+			</Topic>
+			<Topic Duid = "News2000-000350">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">RE</FormalName>
+				<Description xml:lang = "en">Reunion</Description>
+			</Topic>
+			<Topic Duid = "News2000-000351">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">RW</FormalName>
+				<Description xml:lang = "en">Rwanda</Description>
+			</Topic>
+			<Topic Duid = "News2000-000352">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">ST</FormalName>
+				<Description xml:lang = "en">Sao Tome et Principe</Description>
+			</Topic>
+			<Topic Duid = "News2000-000353">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">SN</FormalName>
+				<Description xml:lang = "en">Senegal</Description>
+			</Topic>
+			<Topic Duid = "News2000-000354">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">SC</FormalName>
+				<Description xml:lang = "en">Seychelles</Description>
+			</Topic>
+			<Topic Duid = "News2000-000355">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">SL</FormalName>
+				<Description xml:lang = "en">Sierra Leone</Description>
+			</Topic>
+			<Topic Duid = "News2000-000356">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">SO</FormalName>
+				<Description xml:lang = "en">Somalia</Description>
+			</Topic>
+			<Topic Duid = "News2000-000357">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">ZA</FormalName>
+				<Description xml:lang = "en">South Africa</Description>
+			</Topic>
+			<Topic Duid = "News2000-000358">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">SD</FormalName>
+				<Description xml:lang = "en">Sudan</Description>
+			</Topic>
+			<Topic Duid = "News2000-000359">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">SZ</FormalName>
+				<Description xml:lang = "en">Swaziland</Description>
+			</Topic>
+			<Topic Duid = "News2000-000360">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">TZ</FormalName>
+				<Description xml:lang = "en">Tanzania, (United Republic Of)</Description>
+			</Topic>
+			<Topic Duid = "News2000-000361">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">TG</FormalName>
+				<Description xml:lang = "en">Togo</Description>
+			</Topic>
+			<Topic Duid = "News2000-000362">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">TN</FormalName>
+				<Description xml:lang = "en">Tunisia</Description>
+			</Topic>
+			<Topic Duid = "News2000-000363">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">UG</FormalName>
+				<Description xml:lang = "en">Uganda</Description>
+			</Topic>
+			<Topic Duid = "News2000-000364">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">EH</FormalName>
+				<Description xml:lang = "en">Western Sahara</Description>
+			</Topic>
+			<Topic Duid = "News2000-000365">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">ZM</FormalName>
+				<Description xml:lang = "en">Zambia</Description>
+			</Topic>
+			<Topic Duid = "News2000-000366">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">ZW</FormalName>
+				<Description xml:lang = "en">Zimbabwe</Description>
+			</Topic>
+			<Topic Duid = "News2000-000367">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">SH</FormalName>
+				<Description xml:lang = "en">St Helena</Description>
+			</Topic>
+			<Topic Duid = "News2000-000368">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">ASIA</FormalName>
+				<Description xml:lang = "en">Asia</Description>
+			</Topic>
+			<Topic Duid = "News2000-000369">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">AF</FormalName>
+				<Description xml:lang = "en">Afghanistan</Description>
+			</Topic>
+			<Topic Duid = "News2000-000370">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">AS</FormalName>
+				<Description xml:lang = "en">American Samoa</Description>
+			</Topic>
+			<Topic Duid = "News2000-000371">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">AU</FormalName>
+				<Description xml:lang = "en">Australia</Description>
+			</Topic>
+			<Topic Duid = "News2000-000372">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">BD</FormalName>
+				<Description xml:lang = "en">Bangladesh</Description>
+			</Topic>
+			<Topic Duid = "News2000-000373">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">BN</FormalName>
+				<Description xml:lang = "en">Brunei Darussalam</Description>
+			</Topic>
+			<Topic Duid = "News2000-000374">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">BT</FormalName>
+				<Description xml:lang = "en">Bhutan</Description>
+			</Topic>
+			<Topic Duid = "News2000-000375">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">CK</FormalName>
+				<Description xml:lang = "en">Cook Islands</Description>
+			</Topic>
+			<Topic Duid = "News2000-000376">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">CN</FormalName>
+				<Description xml:lang = "en">China</Description>
+			</Topic>
+			<Topic Duid = "News2000-000378">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">KH</FormalName>
+				<Description xml:lang = "en">Cambodia</Description>
+			</Topic>
+			<Topic Duid = "News2000-000379">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">FJ</FormalName>
+				<Description xml:lang = "en">Fiji</Description>
+			</Topic>
+			<Topic Duid = "News2000-000380">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">GU</FormalName>
+				<Description xml:lang = "en">Guam</Description>
+			</Topic>
+			<Topic Duid = "News2000-000381">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">HK</FormalName>
+				<Description xml:lang = "en">Hong Kong</Description>
+			</Topic>
+			<Topic Duid = "News2000-000382">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">ID</FormalName>
+				<Description xml:lang = "en">Indonesia</Description>
+			</Topic>
+			<Topic Duid = "News2000-000383">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">IN</FormalName>
+				<Description xml:lang = "en">India</Description>
+			</Topic>
+			<Topic Duid = "News2000-000384">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">JP</FormalName>
+				<Description xml:lang = "en">Japan</Description>
+			</Topic>
+			<Topic Duid = "News2000-000385">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">KG</FormalName>
+				<Description xml:lang = "en">Kyrgystan</Description>
+			</Topic>
+			<Topic Duid = "News2000-000386">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">KI</FormalName>
+				<Description xml:lang = "en">Kiribati</Description>
+			</Topic>
+			<Topic Duid = "News2000-000387">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">KP</FormalName>
+				<Description xml:lang = "en">Korean Democratic Republic (north)</Description>
+			</Topic>
+			<Topic Duid = "News2000-000388">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">KR</FormalName>
+				<Description xml:lang = "en">Korean Republic (south)</Description>
+			</Topic>
+			<Topic Duid = "News2000-000389">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">KZ</FormalName>
+				<Description xml:lang = "en">Kazakhstan</Description>
+			</Topic>
+			<Topic Duid = "News2000-000390">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">LA</FormalName>
+				<Description xml:lang = "en">Laos</Description>
+			</Topic>
+			<Topic Duid = "News2000-000391">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">MI</FormalName>
+				<Description xml:lang = "en">Midway Islands</Description>
+			</Topic>
+			<Topic Duid = "News2000-000392">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">MN</FormalName>
+				<Description xml:lang = "en">Mongolia</Description>
+			</Topic>
+			<Topic Duid = "News2000-000393">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">MO</FormalName>
+				<Description xml:lang = "en">Macau</Description>
+			</Topic>
+			<Topic Duid = "News2000-000394">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">MV</FormalName>
+				<Description xml:lang = "en">Maldives</Description>
+			</Topic>
+			<Topic Duid = "News2000-000395">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">MY</FormalName>
+				<Description xml:lang = "en">Malaysia</Description>
+			</Topic>
+			<Topic Duid = "News2000-000396">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">MM</FormalName>
+				<Description xml:lang = "en">Myanmar</Description>
+			</Topic>
+			<Topic Duid = "News2000-000397">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">NC</FormalName>
+				<Description xml:lang = "en">New Caledonia</Description>
+			</Topic>
+			<Topic Duid = "News2000-000398">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">NP</FormalName>
+				<Description xml:lang = "en">Nepal</Description>
+			</Topic>
+			<Topic Duid = "News2000-000399">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">NU</FormalName>
+				<Description xml:lang = "en">Niue</Description>
+			</Topic>
+			<Topic Duid = "News2000-000400">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">NR</FormalName>
+				<Description xml:lang = "en">Nauru</Description>
+			</Topic>
+			<Topic Duid = "News2000-000401">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">NZ</FormalName>
+				<Description xml:lang = "en">New Zealand</Description>
+			</Topic>
+			<Topic Duid = "News2000-000402">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">PF</FormalName>
+				<Description xml:lang = "en">French Polynesia</Description>
+			</Topic>
+			<Topic Duid = "News2000-000403">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">PW</FormalName>
+				<Description xml:lang = "en">Palau</Description>
+			</Topic>
+			<Topic Duid = "News2000-000404">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">PG</FormalName>
+				<Description xml:lang = "en">United Arab Emirates</Description>
+			</Topic>
+			<Topic Duid = "News2000-000405">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">PH</FormalName>
+				<Description xml:lang = "en">Philippines</Description>
+			</Topic>
+			<Topic Duid = "News2000-000406">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">PN</FormalName>
+				<Description xml:lang = "en">Pitcairn</Description>
+			</Topic>
+			<Topic Duid = "News2000-000407">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">PK</FormalName>
+				<Description xml:lang = "en">Pakistan</Description>
+			</Topic>
+			<Topic Duid = "News2000-000408">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">SB</FormalName>
+				<Description xml:lang = "en">Solomon Islands</Description>
+			</Topic>
+			<Topic Duid = "News2000-000409">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">WS</FormalName>
+				<Description xml:lang = "en">Samoa</Description>
+			</Topic>
+			<Topic Duid = "News2000-000410">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">SG</FormalName>
+				<Description xml:lang = "en">Singapore</Description>
+			</Topic>
+			<Topic Duid = "News2000-000411">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">LK</FormalName>
+				<Description xml:lang = "en">Sri Lanka</Description>
+			</Topic>
+			<Topic Duid = "News2000-000412">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">TH</FormalName>
+				<Description xml:lang = "en">Thailand</Description>
+			</Topic>
+			<Topic Duid = "News2000-000413">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">TJ</FormalName>
+				<Description xml:lang = "en">Tajikistan</Description>
+			</Topic>
+			<Topic Duid = "News2000-000414">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">TM</FormalName>
+				<Description xml:lang = "en">Turkmenistan</Description>
+			</Topic>
+			<Topic Duid = "News2000-000415">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">TO</FormalName>
+				<Description xml:lang = "en">Tonga</Description>
+			</Topic>
+			<Topic Duid = "News2000-000416">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">TV</FormalName>
+				<Description xml:lang = "en">Tuvalu</Description>
+			</Topic>
+			<Topic Duid = "News2000-000417">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">TW</FormalName>
+				<Description xml:lang = "en">Taiwan</Description>
+			</Topic>
+			<Topic Duid = "News2000-000418">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">UZ</FormalName>
+				<Description xml:lang = "en">Uzbekistan</Description>
+			</Topic>
+			<Topic Duid = "News2000-000419">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">VN</FormalName>
+				<Description xml:lang = "en">Vietnam</Description>
+			</Topic>
+			<Topic Duid = "News2000-000420">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">VU</FormalName>
+				<Description xml:lang = "en">Vanuatu</Description>
+			</Topic>
+			<Topic Duid = "News2000-000421">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">CC</FormalName>
+				<Description xml:lang = "en">Cocos Islands</Description>
+			</Topic>
+			<Topic Duid = "News2000-000422">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">CT</FormalName>
+				<Description xml:lang = "en">Canton and Enderbury</Description>
+			</Topic>
+			<Topic Duid = "News2000-000423">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">FM</FormalName>
+				<Description xml:lang = "en">Micronesia (Federal States of)</Description>
+			</Topic>
+			<Topic Duid = "News2000-000424">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">IO</FormalName>
+				<Description xml:lang = "en">British Indian Ocean Territory</Description>
+			</Topic>
+			<Topic Duid = "News2000-000425">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">MH</FormalName>
+				<Description xml:lang = "en">Marshall Islands</Description>
+			</Topic>
+			<Topic Duid = "News2000-000426">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">NF</FormalName>
+				<Description xml:lang = "en">Norfolk Islands</Description>
+			</Topic>
+			<Topic Duid = "News2000-000427">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">TK</FormalName>
+				<Description xml:lang = "en">Tokelau</Description>
+			</Topic>
+			<Topic Duid = "News2000-000428">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">TP</FormalName>
+				<Description xml:lang = "en">East Timor</Description>
+			</Topic>
+			<Topic Duid = "News2000-000429">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">UM</FormalName>
+				<Description xml:lang = "en">US Minor Outlying Islands</Description>
+			</Topic>
+			<Topic Duid = "News2000-000430">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">WF</FormalName>
+				<Description xml:lang = "en">Wallis and Fortuna Islands</Description>
+			</Topic>
+			<Topic Duid = "News2000-000431">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">EUROPE</FormalName>
+				<Description xml:lang = "en">Europe</Description>
+			</Topic>
+			<Topic Duid = "News2000-000432">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">WEU</FormalName>
+				<Description xml:lang = "en">Western Europe</Description>
+			</Topic>
+			<Topic Duid = "News2000-000433">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">AD</FormalName>
+				<Description xml:lang = "en">Andorra</Description>
+			</Topic>
+			<Topic Duid = "News2000-000434">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">AT</FormalName>
+				<Description xml:lang = "en">Austria</Description>
+			</Topic>
+			<Topic Duid = "News2000-000435">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">BE</FormalName>
+				<Description xml:lang = "en">Belgium</Description>
+			</Topic>
+			<Topic Duid = "News2000-000436">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">CY</FormalName>
+				<Description xml:lang = "en">Cyprus</Description>
+			</Topic>
+			<Topic Duid = "News2000-000437">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">FR</FormalName>
+				<Description xml:lang = "en">France</Description>
+			</Topic>
+			<Topic Duid = "News2000-000438">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">GI</FormalName>
+				<Description xml:lang = "en">Gibraltar</Description>
+			</Topic>
+			<Topic Duid = "News2000-000439">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">GR</FormalName>
+				<Description xml:lang = "en">Greece</Description>
+			</Topic>
+			<Topic Duid = "News2000-000440">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">GB</FormalName>
+				<Description xml:lang = "en">United Kingdom</Description>
+			</Topic>
+			<Topic Duid = "News2000-000441">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">DE</FormalName>
+				<Description xml:lang = "en">Germany</Description>
+			</Topic>
+			<Topic Duid = "News2000-000442">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">IE</FormalName>
+				<Description xml:lang = "en">Ireland</Description>
+			</Topic>
+			<Topic Duid = "News2000-000443">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">IT</FormalName>
+				<Description xml:lang = "en">Italy</Description>
+			</Topic>
+			<Topic Duid = "News2000-000444">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">LI</FormalName>
+				<Description xml:lang = "en">Liechtenstein</Description>
+			</Topic>
+			<Topic Duid = "News2000-000445">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">LU</FormalName>
+				<Description xml:lang = "en">Luxembourg</Description>
+			</Topic>
+			<Topic Duid = "News2000-000446">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">MC</FormalName>
+				<Description xml:lang = "en">Monaco</Description>
+			</Topic>
+			<Topic Duid = "News2000-000447">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">MT</FormalName>
+				<Description xml:lang = "en">Malta</Description>
+			</Topic>
+			<Topic Duid = "News2000-000448">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">NL</FormalName>
+				<Description xml:lang = "en">Netherlands</Description>
+			</Topic>
+			<Topic Duid = "News2000-000449">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">PT</FormalName>
+				<Description xml:lang = "en">Portugal</Description>
+			</Topic>
+			<Topic Duid = "News2000-000450">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">SM</FormalName>
+				<Description xml:lang = "en">San Marino</Description>
+			</Topic>
+			<Topic Duid = "News2000-000451">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">ES</FormalName>
+				<Description xml:lang = "en">Spain</Description>
+			</Topic>
+			<Topic Duid = "News2000-000452">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">CH</FormalName>
+				<Description xml:lang = "en">Switzerland</Description>
+			</Topic>
+			<Topic Duid = "News2000-000454">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">VA</FormalName>
+				<Description xml:lang = "en">Vatican City State</Description>
+			</Topic>
+			<Topic Duid = "News2000-000455">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">EEU</FormalName>
+				<Description xml:lang = "en">Eastern Europe</Description>
+			</Topic>
+			<Topic Duid = "News2000-000456">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">AL</FormalName>
+				<Description xml:lang = "en">Albania</Description>
+			</Topic>
+			<Topic Duid = "News2000-000457">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">AM</FormalName>
+				<Description xml:lang = "en">Armenia</Description>
+			</Topic>
+			<Topic Duid = "News2000-000458">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">AZ</FormalName>
+				<Description xml:lang = "en">Azerbaijan</Description>
+			</Topic>
+			<Topic Duid = "News2000-000459">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">BA</FormalName>
+				<Description xml:lang = "en">Bosnia and Herzegovina</Description>
+			</Topic>
+			<Topic Duid = "News2000-000460">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">BG</FormalName>
+				<Description xml:lang = "en">Bulgaria</Description>
+			</Topic>
+			<Topic Duid = "News2000-000461">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">BY</FormalName>
+				<Description xml:lang = "en">Belarus</Description>
+			</Topic>
+			<Topic Duid = "News2000-000462">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">CZ</FormalName>
+				<Description xml:lang = "en">Czech Republic</Description>
+			</Topic>
+			<Topic Duid = "News2000-000463">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">HR</FormalName>
+				<Description xml:lang = "en">Croatia</Description>
+			</Topic>
+			<Topic Duid = "News2000-000464">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">EE</FormalName>
+				<Description xml:lang = "en">Estonia</Description>
+			</Topic>
+			<Topic Duid = "News2000-000465">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "ISO3166-alpha2">GE</FormalName>
+				<FormalName Scheme = "N2000">GG</FormalName>
+				<Description xml:lang = "en">Georgia</Description>
+			</Topic>
+			<Topic Duid = "News2000-000466">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">HU</FormalName>
+				<Description xml:lang = "en">Hungary</Description>
+			</Topic>
+			<Topic Duid = "News2000-000467">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">LT</FormalName>
+				<Description xml:lang = "en">Lithuania</Description>
+			</Topic>
+			<Topic Duid = "News2000-000468">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">LV</FormalName>
+				<Description xml:lang = "en">Latvia</Description>
+			</Topic>
+			<Topic Duid = "News2000-000469">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "ISO3166-alpha2">MD</FormalName>
+				<FormalName Scheme = "N2000">MJ</FormalName>
+				<Description xml:lang = "en">Moldova</Description>
+			</Topic>
+			<Topic Duid = "News2000-000470">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">MK</FormalName>
+				<Description xml:lang = "en">Macedonia, The former Yugoslavia Republic</Description>
+			</Topic>
+			<Topic Duid = "News2000-000471">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">PL</FormalName>
+				<Description xml:lang = "en">Poland</Description>
+			</Topic>
+			<Topic Duid = "News2000-000472">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">RO</FormalName>
+				<Description xml:lang = "en">Romania</Description>
+			</Topic>
+			<Topic Duid = "News2000-000473">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">RU</FormalName>
+				<Description xml:lang = "en">Russian Federation</Description>
+			</Topic>
+			<Topic Duid = "News2000-000474">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">SK</FormalName>
+				<Description xml:lang = "en">Slovakia</Description>
+			</Topic>
+			<Topic Duid = "News2000-000475">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "ISO3166-alpha2">SI</FormalName>
+				<FormalName Scheme = "N2000">SQ</FormalName>
+				<Description xml:lang = "en">Slovenia</Description>
+			</Topic>
+			<Topic Duid = "News2000-000476">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">UA</FormalName>
+				<Description xml:lang = "en">Ukraine</Description>
+			</Topic>
+			<Topic Duid = "News2000-000477">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">YU</FormalName>
+				<Description xml:lang = "en">Yugoslavia</Description>
+			</Topic>
+			<Topic Duid = "News2000-000478">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">MB</FormalName>
+				<Description xml:lang = "en">Montenegro</Description>
+			</Topic>
+			<Topic Duid = "News2000-000479">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">NORD</FormalName>
+				<Description xml:lang = "en">Nordic Countries</Description>
+			</Topic>
+			<Topic Duid = "News2000-000377">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">CX</FormalName>
+				<Description xml:lang = "en">Christmas Islands</Description>
+			</Topic>
+			<Topic Duid = "News2000-000480">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">DK</FormalName>
+				<Description xml:lang = "en">Denmark</Description>
+			</Topic>
+			<Topic Duid = "News2000-000481">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">GL</FormalName>
+				<Description xml:lang = "en">Greenland</Description>
+			</Topic>
+			<Topic Duid = "News2000-000482">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">IS</FormalName>
+				<Description xml:lang = "en">Iceland</Description>
+			</Topic>
+			<Topic Duid = "News2000-000483">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">FI</FormalName>
+				<Description xml:lang = "en">Finland</Description>
+			</Topic>
+			<Topic Duid = "News2000-000484">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">NO</FormalName>
+				<Description xml:lang = "en">Norway</Description>
+			</Topic>
+			<Topic Duid = "News2000-000485">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">SE</FormalName>
+				<Description xml:lang = "en">Sweden</Description>
+			</Topic>
+			<Topic Duid = "News2000-000486">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">FO</FormalName>
+				<Description xml:lang = "en">Faeroe Islands</Description>
+			</Topic>
+			<Topic Duid = "News2000-000487">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">SJ</FormalName>
+				<Description xml:lang = "en">Svalbard and Jan Mayen</Description>
+			</Topic>
+			<Topic Duid = "News2000-000488">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">LATAM</FormalName>
+				<Description xml:lang = "en">South and Central America</Description>
+			</Topic>
+			<Topic Duid = "News2000-000489">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">AG</FormalName>
+				<Description xml:lang = "en">Antigua and Barbuda</Description>
+			</Topic>
+			<Topic Duid = "News2000-000490">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">AN</FormalName>
+				<Description xml:lang = "en">Netherlands Antilles</Description>
+			</Topic>
+			<Topic Duid = "News2000-000491">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">AR</FormalName>
+				<Description xml:lang = "en">Argentina</Description>
+			</Topic>
+			<Topic Duid = "News2000-000492">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">AW</FormalName>
+				<Description xml:lang = "en">Aruba</Description>
+			</Topic>
+			<Topic Duid = "News2000-000493">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">BB</FormalName>
+				<Description xml:lang = "en">Barbados</Description>
+			</Topic>
+			<Topic Duid = "News2000-000494">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">BM</FormalName>
+				<Description xml:lang = "en">Bermuda</Description>
+			</Topic>
+			<Topic Duid = "News2000-000495">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">BO</FormalName>
+				<Description xml:lang = "en">Bolivia</Description>
+			</Topic>
+			<Topic Duid = "News2000-000496">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">BR</FormalName>
+				<Description xml:lang = "en">Brazil</Description>
+			</Topic>
+			<Topic Duid = "News2000-000497">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">BS</FormalName>
+				<Description xml:lang = "en">Bahamas</Description>
+			</Topic>
+			<Topic Duid = "News2000-000498">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">BZ</FormalName>
+				<Description xml:lang = "en">Belize</Description>
+			</Topic>
+			<Topic Duid = "News2000-000499">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">CL</FormalName>
+				<Description xml:lang = "en">Chile</Description>
+			</Topic>
+			<Topic Duid = "News2000-000500">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">CO</FormalName>
+				<Description xml:lang = "en">Colombia</Description>
+			</Topic>
+			<Topic Duid = "News2000-000501">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">CR</FormalName>
+				<Description xml:lang = "en">Costa Rica</Description>
+			</Topic>
+			<Topic Duid = "News2000-000502">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">CU</FormalName>
+				<Description xml:lang = "en">Cuba</Description>
+			</Topic>
+			<Topic Duid = "News2000-000503">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">DM</FormalName>
+				<Description xml:lang = "en">Dominica</Description>
+			</Topic>
+			<Topic Duid = "News2000-000504">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">DO</FormalName>
+				<Description xml:lang = "en">Dominican Republic</Description>
+			</Topic>
+			<Topic Duid = "News2000-000505">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">EC</FormalName>
+				<Description xml:lang = "en">Ecuador</Description>
+			</Topic>
+			<Topic Duid = "News2000-000506">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">FK</FormalName>
+				<Description xml:lang = "en">Falkland Islands (Malvinas)</Description>
+			</Topic>
+			<Topic Duid = "News2000-000507">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">GD</FormalName>
+				<Description xml:lang = "en">Grenada</Description>
+			</Topic>
+			<Topic Duid = "News2000-000508">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">GF</FormalName>
+				<Description xml:lang = "en">French Guiana</Description>
+			</Topic>
+			<Topic Duid = "News2000-000509">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">GP</FormalName>
+				<Description xml:lang = "en">Guadeloupe</Description>
+			</Topic>
+			<Topic Duid = "News2000-000510">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">GT</FormalName>
+				<Description xml:lang = "en">Guatemala</Description>
+			</Topic>
+			<Topic Duid = "News2000-000511">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">GY</FormalName>
+				<Description xml:lang = "en">Guyana</Description>
+			</Topic>
+			<Topic Duid = "News2000-000512">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">HN</FormalName>
+				<Description xml:lang = "en">Honduras</Description>
+			</Topic>
+			<Topic Duid = "News2000-000513">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">HT</FormalName>
+				<Description xml:lang = "en">Haiti</Description>
+			</Topic>
+			<Topic Duid = "News2000-000514">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">JM</FormalName>
+				<Description xml:lang = "en">Jamaica</Description>
+			</Topic>
+			<Topic Duid = "News2000-000515">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">JT</FormalName>
+				<Description xml:lang = "en">Johnston Islands</Description>
+			</Topic>
+			<Topic Duid = "News2000-000516">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">KN</FormalName>
+				<Description xml:lang = "en">Saint Kitts-Nevis</Description>
+			</Topic>
+			<Topic Duid = "News2000-000517">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">KY</FormalName>
+				<Description xml:lang = "en">Cayman Islands</Description>
+			</Topic>
+			<Topic Duid = "News2000-000518">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">LC</FormalName>
+				<Description xml:lang = "en">Saint Lucia</Description>
+			</Topic>
+			<Topic Duid = "News2000-000519">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">MQ</FormalName>
+				<Description xml:lang = "en">Martinique</Description>
+			</Topic>
+			<Topic Duid = "News2000-000520">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">MS</FormalName>
+				<Description xml:lang = "en">Montserrat</Description>
+			</Topic>
+			<Topic Duid = "News2000-000521">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">MX</FormalName>
+				<Description xml:lang = "en">Mexico</Description>
+			</Topic>
+			<Topic Duid = "News2000-000522">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">NI</FormalName>
+				<Description xml:lang = "en">Nicaragua</Description>
+			</Topic>
+			<Topic Duid = "News2000-000523">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">PA</FormalName>
+				<Description xml:lang = "en">Panama</Description>
+			</Topic>
+			<Topic Duid = "News2000-000524">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">PE</FormalName>
+				<Description xml:lang = "en">Peru</Description>
+			</Topic>
+			<Topic Duid = "News2000-000525">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">PM</FormalName>
+				<Description xml:lang = "en">St Pierre and Miquelon</Description>
+			</Topic>
+			<Topic Duid = "News2000-000526">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">PR</FormalName>
+				<Description xml:lang = "en">Puerto Rico</Description>
+			</Topic>
+			<Topic Duid = "News2000-000527">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">PY</FormalName>
+				<Description xml:lang = "en">Paraguay</Description>
+			</Topic>
+			<Topic Duid = "News2000-000528">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">SR</FormalName>
+				<Description xml:lang = "en">Suriname</Description>
+			</Topic>
+			<Topic Duid = "News2000-000529">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">SV</FormalName>
+				<Description xml:lang = "en">El Salvador</Description>
+			</Topic>
+			<Topic Duid = "News2000-000530">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">TC</FormalName>
+				<Description xml:lang = "en">Turks and Caicos Islands</Description>
+			</Topic>
+			<Topic Duid = "News2000-000531">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">TT</FormalName>
+				<Description xml:lang = "en">Trinidad and Tobago</Description>
+			</Topic>
+			<Topic Duid = "News2000-000532">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">UY</FormalName>
+				<Description xml:lang = "en">Uruguay</Description>
+			</Topic>
+			<Topic Duid = "News2000-000533">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">VC</FormalName>
+				<Description xml:lang = "en">Saint Vincent and the Grenadines</Description>
+			</Topic>
+			<Topic Duid = "News2000-000534">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">VE</FormalName>
+				<Description xml:lang = "en">Venezuela</Description>
+			</Topic>
+			<Topic Duid = "News2000-000535">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">VG</FormalName>
+				<Description xml:lang = "en">British Virgin Islands</Description>
+			</Topic>
+			<Topic Duid = "News2000-000536">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">VI</FormalName>
+				<Description xml:lang = "en">Virgin Islands (US)</Description>
+			</Topic>
+			<Topic Duid = "News2000-000537">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">AI</FormalName>
+				<Description xml:lang = "en">Anguilla</Description>
+			</Topic>
+			<Topic Duid = "News2000-000538">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">GS</FormalName>
+				<Description xml:lang = "en">South Georgia/Sandwich Islands</Description>
+			</Topic>
+			<Topic Duid = "News2000-000539">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">MEAST</FormalName>
+				<Description xml:lang = "en">Middle East</Description>
+			</Topic>
+			<Topic Duid = "News2000-000540">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">BH</FormalName>
+				<Description xml:lang = "en">Bahrain</Description>
+			</Topic>
+			<Topic Duid = "News2000-000541">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">EG</FormalName>
+				<Description xml:lang = "en">Egypt</Description>
+			</Topic>
+			<Topic Duid = "News2000-000542">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">IL</FormalName>
+				<Description xml:lang = "en">Israel</Description>
+			</Topic>
+			<Topic Duid = "News2000-000543">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">IQ</FormalName>
+				<Description xml:lang = "en">Iraq</Description>
+			</Topic>
+			<Topic Duid = "News2000-000544">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">IR</FormalName>
+				<Description xml:lang = "en">Iran (Islamic Republic of)</Description>
+			</Topic>
+			<Topic Duid = "News2000-000545">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">JO</FormalName>
+				<Description xml:lang = "en">Jordan</Description>
+			</Topic>
+			<Topic Duid = "News2000-000546">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">KW</FormalName>
+				<Description xml:lang = "en">Kuwait</Description>
+			</Topic>
+			<Topic Duid = "News2000-000547">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">LB</FormalName>
+				<Description xml:lang = "en">Lebanon</Description>
+			</Topic>
+			<Topic Duid = "News2000-000548">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">OM</FormalName>
+				<Description xml:lang = "en">Oman</Description>
+			</Topic>
+			<Topic Duid = "News2000-000549">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">PS</FormalName>
+				<Description xml:lang = "en">Palestine</Description>
+			</Topic>
+			<Topic Duid = "News2000-000550">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">QA</FormalName>
+				<Description xml:lang = "en">Qatar</Description>
+			</Topic>
+			<Topic Duid = "News2000-000551">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">SA</FormalName>
+				<Description xml:lang = "en">Saudi Arabia</Description>
+			</Topic>
+			<Topic Duid = "News2000-000552">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">SY</FormalName>
+				<Description xml:lang = "en">Syria</Description>
+			</Topic>
+			<Topic Duid = "News2000-000554">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">YE</FormalName>
+				<Description xml:lang = "en">Yemen</Description>
+			</Topic>
+			<Topic Duid = "News2000-000453">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">TR</FormalName>
+				<Description xml:lang = "en">Turkey</Description>
+			</Topic>
+			<Topic Duid = "News2000-000555">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">CA</FormalName>
+				<Description xml:lang = "en">Canada</Description>
+			</Topic>
+			<Topic Duid = "News2000-000556">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">US</FormalName>
+				<Description xml:lang = "en">United States of America</Description>
+			</Topic>
+			<Topic Duid = "News2000-000557">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">AQ</FormalName>
+				<Description xml:lang = "en">Antarctica and nearby islands</Description>
+			</Topic>
+			<Topic Duid = "News2000-000558">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">BV</FormalName>
+				<Description xml:lang = "en">Bouvet Island</Description>
+			</Topic>
+			<Topic Duid = "News2000-000559">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">HM</FormalName>
+				<Description xml:lang = "en">Heard McDonald Islands</Description>
+			</Topic>
+			<Topic Duid = "News2000-000560">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">TF</FormalName>
+				<Description xml:lang = "en">French Southern Territories</Description>
+			</Topic>
+			<Topic Duid = "News2000-100096">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">BAK</FormalName>
+				<Description xml:lang = "en">Balkan states</Description>
+			</Topic>
+			<Topic Duid = "News2000-100097">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">CS</FormalName>
+				<Description xml:lang = "en">Serbia and Montenegro</Description>
+			</Topic>
+			<Topic Duid = "News2000-100028">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">GBE</FormalName>
+				<Description xml:lang = "en">England</Description>
+			</Topic>
+			<Topic Duid = "News2000-100029">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">GBNI</FormalName>
+				<Description xml:lang = "en">Northern Ireland</Description>
+			</Topic>
+			<Topic Duid = "News2000-100030">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">PG</FormalName>
+				<Description xml:lang = "en">Papua New Guinea</Description>
+			</Topic>
+			<Topic Duid = "News2000-100031">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">GBS</FormalName>
+				<Description xml:lang = "en">Scotland</Description>
+			</Topic>
+			<Topic Duid = "News2000-100032">
+				<TopicType FormalName = "Geography"/>
+				<FormalName Scheme = "N2000">GBW</FormalName>
+				<Description xml:lang = "en">Wales</Description>
+			</Topic>
+			<Topic Duid = "News2000-000564">
+				<TopicType FormalName = "GovernmentBody"/>
+				<FormalName Scheme = "N2000">BBK</FormalName>
+				<Description xml:lang = "en">Bundesbank</Description>
+			</Topic>
+			<Topic Duid = "News2000-000565">
+				<TopicType FormalName = "GovernmentBody"/>
+				<FormalName Scheme = "N2000">BOJ</FormalName>
+				<Description xml:lang = "en">Bank of Japan</Description>
+			</Topic>
+			<Topic Duid = "News2000-000566">
+				<TopicType FormalName = "GovernmentBody"/>
+				<FormalName Scheme = "N2000">SNB</FormalName>
+				<Description xml:lang = "en">Schweizerische Nationalbank</Description>
+			</Topic>
+			<Topic Duid = "News2000-000568">
+				<TopicType FormalName = "GovernmentBody"/>
+				<FormalName Scheme = "N2000">USDA</FormalName>
+				<Description xml:lang = "en">USDA</Description>
+			</Topic>
+			<Topic Duid = "News2000-000569">
+				<TopicType FormalName = "GovernmentBody"/>
+				<FormalName Scheme = "N2000">FED</FormalName>
+				<Description xml:lang = "en">Federal Reserve Board</Description>
+			</Topic>
+			<Topic Duid = "News2000-100126">
+				<TopicType FormalName = "GovernmentBody"/>
+				<FormalName Scheme = "N2000">BOE</FormalName>
+				<Description xml:lang = "en">Bank of England</Description>
+			</Topic>
+			<Topic Duid = "News2000-000098">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "IPTC Subject:News">iptc:04000000</FormalName>
+				<FormalName Scheme = "N2000">ISU</FormalName>
+				<Description xml:lang = "en">New issues of shares, bonds and other financial instruments</Description>
+			</Topic>
+			<Topic Duid = "News2000-000099">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "N2000">DRV</FormalName>
+				<FormalName Scheme = "IPTC Subject:News">iptc:04000000</FormalName>
+				<Description xml:lang = "en">Derivatives markets, including futures, options and swaps</Description>
+			</Topic>
+			<Topic Duid = "News2000-000100">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "N2000">FUND</FormalName>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:04006000</FormalName>
+				<Description xml:lang = "en">Fund management and asset allocation</Description>
+			</Topic>
+			<Topic Duid = "News2000-000102">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "N2000">INSI</FormalName>
+				<FormalName Scheme = "IPTC Subject:News">iptc:04000000</FormalName>
+				<Description xml:lang = "en">Technical analysis of price moves</Description>
+			</Topic>
+			<Topic Duid = "News2000-000103">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04009003</FormalName>
+				<FormalName Scheme = "N2000">STX</FormalName>
+				<Description xml:lang = "en">Equities</Description>
+			</Topic>
+			<Topic Duid = "News2000-000096">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04016019</FormalName>
+				<FormalName Scheme = "N2000">IPO</FormalName>
+				<Description xml:lang = "en">Initial Public Offerings</Description>
+			</Topic>
+			<Topic Duid = "News2000-000105">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "N2000">RCH</FormalName>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04016006</FormalName>
+				<Description xml:lang = "en">Broker research and recommendations</Description>
+			</Topic>
+			<Topic Duid = "News2000-000108">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04008006</FormalName>
+				<FormalName Scheme = "N2000">FRX</FormalName>
+				<Description xml:lang = "en">Foreign exchange</Description>
+			</Topic>
+			<Topic Duid = "News2000-000109">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04008006</FormalName>
+				<FormalName Scheme = "N2000">EUR</FormalName>
+				<Description xml:lang = "en">Euro</Description>
+			</Topic>
+			<Topic Duid = "News2000-000110">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "N2000">DBT</FormalName>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04008003</FormalName>
+				<Description xml:lang = "en">Debt</Description>
+			</Topic>
+			<Topic Duid = "News2000-000111">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04008003</FormalName>
+				<FormalName Scheme = "N2000">EUB</FormalName>
+				<Description xml:lang = "en">Eurobonds</Description>
+			</Topic>
+			<Topic Duid = "News2000-000112">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04008003</FormalName>
+				<FormalName Scheme = "N2000">USC</FormalName>
+				<Description xml:lang = "en">U.S. corporate debt (drop-use location to quality corporate debt category)</Description>
+			</Topic>
+			<Topic Duid = "News2000-000113">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "N2000">GVD</FormalName>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04008008</FormalName>
+				<Description xml:lang = "en">Government debt (national)</Description>
+			</Topic>
+			<Topic Duid = "News2000-000114">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04008003</FormalName>
+				<FormalName Scheme = "N2000">AGN</FormalName>
+				<Description xml:lang = "en">National government agency debt</Description>
+			</Topic>
+			<Topic Duid = "News2000-000115">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04008003</FormalName>
+				<FormalName Scheme = "N2000">MUNI</FormalName>
+				<Description xml:lang = "en">Municipal debt</Description>
+			</Topic>
+			<Topic Duid = "News2000-000127">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04008003</FormalName>
+				<FormalName Scheme = "N2000">AK1</FormalName>
+				<Description xml:lang = "en">Alaska - Municpal Bond Market News</Description>
+			</Topic>
+			<Topic Duid = "News2000-000128">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04008003</FormalName>
+				<FormalName Scheme = "N2000">AL1</FormalName>
+				<Description xml:lang = "en">Alabama - Municipal Bond Market News</Description>
+			</Topic>
+			<Topic Duid = "News2000-000129">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04008003</FormalName>
+				<FormalName Scheme = "N2000">AR1</FormalName>
+				<Description xml:lang = "en">Arkansas - Municipal Bond Market News</Description>
+			</Topic>
+			<Topic Duid = "News2000-000130">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04008003</FormalName>
+				<FormalName Scheme = "N2000">AZ1</FormalName>
+				<Description xml:lang = "en">Arizona - Municipal Bond Market News</Description>
+			</Topic>
+			<Topic Duid = "News2000-000131">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04008003</FormalName>
+				<FormalName Scheme = "N2000">CA1</FormalName>
+				<Description xml:lang = "en">California - Municipal Bond Market News</Description>
+			</Topic>
+			<Topic Duid = "News2000-000132">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04008003</FormalName>
+				<FormalName Scheme = "N2000">CO1</FormalName>
+				<Description xml:lang = "en">Colorado - Municipal Bond Market News</Description>
+			</Topic>
+			<Topic Duid = "News2000-000133">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04008003</FormalName>
+				<FormalName Scheme = "N2000">CT1</FormalName>
+				<Description xml:lang = "en">Connecticut - Municipal Bond Market News</Description>
+			</Topic>
+			<Topic Duid = "News2000-000134">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "N2000">DC1</FormalName>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04008003</FormalName>
+				<Description xml:lang = "en">District of Columbia - Municipal Bond Market News</Description>
+			</Topic>
+			<Topic Duid = "News2000-000135">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04008003</FormalName>
+				<FormalName Scheme = "N2000">DE1</FormalName>
+				<Description xml:lang = "en">Delaware - Municipal Bond Market News</Description>
+			</Topic>
+			<Topic Duid = "News2000-000136">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04008003</FormalName>
+				<FormalName Scheme = "N2000">FL1</FormalName>
+				<Description xml:lang = "en">Florida - Municipal Bond Market News</Description>
+			</Topic>
+			<Topic Duid = "News2000-000137">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04008003</FormalName>
+				<FormalName Scheme = "N2000">GA1</FormalName>
+				<Description xml:lang = "en">Georgia - Municipal Bond Market News</Description>
+			</Topic>
+			<Topic Duid = "News2000-000138">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "N2000">GU1</FormalName>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04008003</FormalName>
+				<Description xml:lang = "en">Guam - Municipal Bond Market News</Description>
+			</Topic>
+			<Topic Duid = "News2000-000139">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04008003</FormalName>
+				<FormalName Scheme = "N2000">HI1</FormalName>
+				<Description xml:lang = "en">Hawaii - Municipal Bond Market News</Description>
+			</Topic>
+			<Topic Duid = "News2000-000140">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04008003</FormalName>
+				<FormalName Scheme = "N2000">IA1</FormalName>
+				<Description xml:lang = "en">Iowa - Municipal Bond Market News</Description>
+			</Topic>
+			<Topic Duid = "News2000-000141">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04008003</FormalName>
+				<FormalName Scheme = "N2000">ID1</FormalName>
+				<Description xml:lang = "en">Idaho - Municipal Bond Market News</Description>
+			</Topic>
+			<Topic Duid = "News2000-000142">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04008003</FormalName>
+				<FormalName Scheme = "N2000">IL1</FormalName>
+				<Description xml:lang = "en">Illinois - Municipal Bond Market News</Description>
+			</Topic>
+			<Topic Duid = "News2000-000143">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "N2000">IN1</FormalName>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04008003</FormalName>
+				<Description xml:lang = "en">Indiana - Municipal Bond Market News</Description>
+			</Topic>
+			<Topic Duid = "News2000-000144">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04008003</FormalName>
+				<FormalName Scheme = "N2000">KS1</FormalName>
+				<Description xml:lang = "en">Kansas - Municipal Bond Market News</Description>
+			</Topic>
+			<Topic Duid = "News2000-000145">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04008003</FormalName>
+				<FormalName Scheme = "N2000">KY1</FormalName>
+				<Description xml:lang = "en">Kentucky - Municipal Bond Market News</Description>
+			</Topic>
+			<Topic Duid = "News2000-000146">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04008003</FormalName>
+				<FormalName Scheme = "N2000">LA1</FormalName>
+				<Description xml:lang = "en">Lousiana - Municipal Bond Market News</Description>
+			</Topic>
+			<Topic Duid = "News2000-000147">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04008003</FormalName>
+				<FormalName Scheme = "N2000">MA1</FormalName>
+				<Description xml:lang = "en">Massachusetts - Municipal Bond Market News</Description>
+			</Topic>
+			<Topic Duid = "News2000-000148">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04008003</FormalName>
+				<FormalName Scheme = "N2000">MD1</FormalName>
+				<Description xml:lang = "en">Maryland - Municipal Bond Market News</Description>
+			</Topic>
+			<Topic Duid = "News2000-000149">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04008003</FormalName>
+				<FormalName Scheme = "N2000">ME1</FormalName>
+				<Description xml:lang = "en">Maine - Municipal Bond Market News</Description>
+			</Topic>
+			<Topic Duid = "News2000-000150">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "N2000">MI1</FormalName>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04008003</FormalName>
+				<Description xml:lang = "en">Michigan - Municipal Bond Market News</Description>
+			</Topic>
+			<Topic Duid = "News2000-000151">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04008003</FormalName>
+				<FormalName Scheme = "N2000">MN1</FormalName>
+				<Description xml:lang = "en">Minesota - Municipal Bond Market News</Description>
+			</Topic>
+			<Topic Duid = "News2000-000152">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04008003</FormalName>
+				<FormalName Scheme = "N2000">MS1</FormalName>
+				<Description xml:lang = "en">Missisippi - Municipal Bond Market News</Description>
+			</Topic>
+			<Topic Duid = "News2000-000153">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04008003</FormalName>
+				<FormalName Scheme = "N2000">MO1</FormalName>
+				<Description xml:lang = "en">Missouri - Municipal Bond Market News</Description>
+			</Topic>
+			<Topic Duid = "News2000-000154">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04008003</FormalName>
+				<FormalName Scheme = "N2000">MT1</FormalName>
+				<Description xml:lang = "en">Montana - Municipal Bond Market News</Description>
+			</Topic>
+			<Topic Duid = "News2000-000155">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04008003</FormalName>
+				<FormalName Scheme = "N2000">NC1</FormalName>
+				<Description xml:lang = "en">North Carolina - Municipal Bond Market News</Description>
+			</Topic>
+			<Topic Duid = "News2000-000156">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04008003</FormalName>
+				<FormalName Scheme = "N2000">NE1</FormalName>
+				<Description xml:lang = "en">Nebraska - Municipal Bond Market News</Description>
+			</Topic>
+			<Topic Duid = "News2000-000157">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04008003</FormalName>
+				<FormalName Scheme = "N2000">ND1</FormalName>
+				<Description xml:lang = "en">North Dakota - Municipal Bond Market News</Description>
+			</Topic>
+			<Topic Duid = "News2000-000158">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04008003</FormalName>
+				<FormalName Scheme = "N2000">NH1</FormalName>
+				<Description xml:lang = "en">New Hampshire - Municipal Bond Market News</Description>
+			</Topic>
+			<Topic Duid = "News2000-000159">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04008003</FormalName>
+				<FormalName Scheme = "N2000">NJ1</FormalName>
+				<Description xml:lang = "en">New Jersey - Municipal Bond Market News</Description>
+			</Topic>
+			<Topic Duid = "News2000-000160">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04008003</FormalName>
+				<FormalName Scheme = "N2000">NM1</FormalName>
+				<Description xml:lang = "en">New Mexico - Municipal Bond Market News</Description>
+			</Topic>
+			<Topic Duid = "News2000-000161">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04008003</FormalName>
+				<FormalName Scheme = "N2000">NV1</FormalName>
+				<Description xml:lang = "en">Nevada - Municipal Bond Market News</Description>
+			</Topic>
+			<Topic Duid = "News2000-000162">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04008003</FormalName>
+				<FormalName Scheme = "N2000">NY1</FormalName>
+				<Description xml:lang = "en">New York - Municipal Bond Market News</Description>
+			</Topic>
+			<Topic Duid = "News2000-000163">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04008003</FormalName>
+				<FormalName Scheme = "N2000">OH1</FormalName>
+				<Description xml:lang = "en">Ohio - Municipal Bond Market News</Description>
+			</Topic>
+			<Topic Duid = "News2000-000164">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04008003</FormalName>
+				<FormalName Scheme = "N2000">OK1</FormalName>
+				<Description xml:lang = "en">Oklahoma - Municipal Bond Market News</Description>
+			</Topic>
+			<Topic Duid = "News2000-000165">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04008003</FormalName>
+				<FormalName Scheme = "N2000">OR1</FormalName>
+				<Description xml:lang = "en">Oregon - Municipal Bond Market News</Description>
+			</Topic>
+			<Topic Duid = "News2000-000166">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04008003</FormalName>
+				<FormalName Scheme = "N2000">PA1</FormalName>
+				<Description xml:lang = "en">Pennsylvania - Municipal Bond Market News</Description>
+			</Topic>
+			<Topic Duid = "News2000-000167">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04008003</FormalName>
+				<FormalName Scheme = "N2000">PR1</FormalName>
+				<Description xml:lang = "en">Puerto Rico - Municipal Bond Market News</Description>
+			</Topic>
+			<Topic Duid = "News2000-000168">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04008003</FormalName>
+				<FormalName Scheme = "N2000">RI1</FormalName>
+				<Description xml:lang = "en">Rhode Island - Municipal Bond Market News</Description>
+			</Topic>
+			<Topic Duid = "News2000-000169">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "N2000">SC1</FormalName>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04008003</FormalName>
+				<Description xml:lang = "en">South Carolina - Municipal Bond Market News</Description>
+			</Topic>
+			<Topic Duid = "News2000-000170">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04008003</FormalName>
+				<FormalName Scheme = "N2000">SD1</FormalName>
+				<Description xml:lang = "en">South Dakota - Municipal Bond Market News</Description>
+			</Topic>
+			<Topic Duid = "News2000-000171">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04008003</FormalName>
+				<FormalName Scheme = "N2000">TN1</FormalName>
+				<Description xml:lang = "en">Tennessee - Municipal Bond Market News</Description>
+			</Topic>
+			<Topic Duid = "News2000-000172">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04008003</FormalName>
+				<FormalName Scheme = "N2000">TX1</FormalName>
+				<Description xml:lang = "en">Texas - Municipal Bond Market News</Description>
+			</Topic>
+			<Topic Duid = "News2000-000173">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "N2000">UT1</FormalName>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04008003</FormalName>
+				<Description xml:lang = "en">Utah - Municipal Bond Market News</Description>
+			</Topic>
+			<Topic Duid = "News2000-000174">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04008003</FormalName>
+				<FormalName Scheme = "N2000">VA1</FormalName>
+				<Description xml:lang = "en">Virginia - Municipal Bond Market News</Description>
+			</Topic>
+			<Topic Duid = "News2000-000175">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04008003</FormalName>
+				<FormalName Scheme = "N2000">VI1</FormalName>
+				<Description xml:lang = "en">Virgin Islands - Municipal Bond Market News</Description>
+			</Topic>
+			<Topic Duid = "News2000-000176">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04008003</FormalName>
+				<FormalName Scheme = "N2000">VT1</FormalName>
+				<Description xml:lang = "en">Vermont - Municipal Bond Market News</Description>
+			</Topic>
+			<Topic Duid = "News2000-000177">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "N2000">WA1</FormalName>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04008003</FormalName>
+				<Description xml:lang = "en">Washington - Municipal Bond Market News</Description>
+			</Topic>
+			<Topic Duid = "News2000-000178">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04008003</FormalName>
+				<FormalName Scheme = "N2000">WI1</FormalName>
+				<Description xml:lang = "en">Wisconsin - Municipal Bond Market News</Description>
+			</Topic>
+			<Topic Duid = "News2000-000179">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04008003</FormalName>
+				<FormalName Scheme = "N2000">WV1</FormalName>
+				<Description xml:lang = "en">West Virginia - Municipal Bond Market News</Description>
+			</Topic>
+			<Topic Duid = "News2000-000180">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04008003</FormalName>
+				<FormalName Scheme = "N2000">WY1</FormalName>
+				<Description xml:lang = "en">Wyoming - Municipal Bond Market News</Description>
+			</Topic>
+			<Topic Duid = "News2000-000181">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "N2000">MMT</FormalName>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04008012</FormalName>
+				<Description xml:lang = "en">Money markets</Description>
+			</Topic>
+			<Topic Duid = "News2000-000182">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "N2000">LOA</FormalName>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04008012</FormalName>
+				<Description xml:lang = "en">Loans</Description>
+			</Topic>
+			<Topic Duid = "News2000-000183">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "N2000">EQB</FormalName>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04008003</FormalName>
+				<Description xml:lang = "en">Equity-linked bonds</Description>
+			</Topic>
+			<Topic Duid = "News2000-000184">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04008003</FormalName>
+				<FormalName Scheme = "N2000">MTG</FormalName>
+				<Description xml:lang = "en">Mortgage-backed securities</Description>
+			</Topic>
+			<Topic Duid = "News2000-000185">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04008003</FormalName>
+				<FormalName Scheme = "N2000">TNC</FormalName>
+				<Description xml:lang = "en">Terms and conditions - bond issues</Description>
+			</Topic>
+			<Topic Duid = "News2000-000186">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04016036</FormalName>
+				<FormalName Scheme = "N2000">AAA</FormalName>
+				<Description xml:lang = "en">Debt ratings news</Description>
+			</Topic>
+			<Topic Duid = "News2000-000311">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "N2000">REGS</FormalName>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04016027</FormalName>
+				<Description xml:lang = "en">Regulatory Issues</Description>
+			</Topic>
+			<Topic Duid = "News2000-100098">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "N2000">REG</FormalName>
+				<Description xml:lang = "en">Disclosure to Regulators (UK)</Description>
+			</Topic>
+			<Topic Duid = "News2000-100091">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "N2000">EXCA</FormalName>
+				<Description xml:lang = "en">Exchange activities</Description>
+			</Topic>
+			<Topic Duid = "News2000-100093">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "N2000">HEDGE</FormalName>
+				<Description xml:lang = "en">Hedge Funds</Description>
+			</Topic>
+			 <Topic Duid = "News2000-100120">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "N2000">CONV</FormalName>
+				<Description xml:lang = "en">Convertible Bonds</Description>
+			</Topic>
+			<Topic Duid = "News2000-100121">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "N2000">STIR</FormalName>
+				<Description xml:lang = "en">Short-term interest rates</Description>
+			</Topic>
+			<Topic Duid = "News2000-100102">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "N2000">CDM</FormalName>
+				<Description xml:lang = "en">Credit Market News</Description>
+			</Topic>
+			<Topic Duid = "News2000-100103">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "N2000">CDV</FormalName>
+				<Description xml:lang = "en">Credit Default Swaps</Description>
+			</Topic>
+			<Topic Duid = "News2000-100108">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "N2000">HYD</FormalName>
+				<Description xml:lang = "en">High-yield debt</Description>
+			</Topic>
+			<Topic Duid = "News2000-100109">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "N2000">IGD</FormalName>
+				<Description xml:lang = "en">Investment grade debt</Description>
+			</Topic>
+			<Topic Duid = "News2000-100114">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "N2000">PLCY</FormalName>
+				<Description xml:lang = "en">Info from/about fiscal/monetary policy makers</Description>
+			</Topic>
+			<Topic Duid = "News2000-100115">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "N2000">PMI</FormalName>
+				<Description xml:lang = "en">Purchasing Managers Indices</Description>
+			</Topic>
+			<Topic Duid = "News2000-100118">
+				<TopicType FormalName = "Markets"/>
+				<FormalName Scheme = "N2000">ABS</FormalName>
+				<Description xml:lang = "en">Asset-backed debt</Description>
+			</Topic>
+			<Topic Duid = "News2000-000003">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "N2000">POL</FormalName>
+				<FormalName Scheme = "IPTC Subject:News">iptc:11000000</FormalName>
+				<Description xml:lang = "en">Domestic Politics</Description>
+			</Topic>
+			<Topic Duid = "News2000-000004">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:11003000</FormalName>
+				<FormalName Scheme = "N2000">VOTE</FormalName>
+				<Description xml:lang = "en">Elections</Description>
+			</Topic>
+			<Topic Duid = "News2000-000005">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "N2000">LAW</FormalName>
+				<FormalName Scheme = "IPTC Subject:News">iptc:02000000</FormalName>
+				<Description xml:lang = "en">Legislation</Description>
+			</Topic>
+			<Topic Duid = "News2000-000006">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "N2000">CRIM</FormalName>
+				<FormalName Scheme = "IPTC Subject:News">iptc:02000000</FormalName>
+				<Description xml:lang = "en">Crime; Law Enforcement</Description>
+			</Topic>
+			<Topic Duid = "News2000-000007">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:11002000</FormalName>
+				<FormalName Scheme = "N2000">DIP</FormalName>
+				<Description xml:lang = "en">Diplomacy; International Relations</Description>
+			</Topic>
+			<Topic Duid = "News2000-000008">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "N2000">VIO</FormalName>
+				<FormalName Scheme = "IPTC Subject:News">iptc:16000000</FormalName>
+				<Description xml:lang = "en">War and Civil War</Description>
+			</Topic>
+			<Topic Duid = "News2000-000009">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "N2000">TRD</FormalName>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04008011</FormalName>
+				<Description xml:lang = "en">International Trade</Description>
+			</Topic>
+			<Topic Duid = "News2000-000010">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "N2000">AID</FormalName>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04008007</FormalName>
+				<Description xml:lang = "en">Private/Government Aid</Description>
+			</Topic>
+			<Topic Duid = "News2000-000011">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "N2000">MCE</FormalName>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:04008000</FormalName>
+				<Description xml:lang = "en">Macro-Economics</Description>
+			</Topic>
+			<Topic Duid = "News2000-000012">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "IPTC Subject Codes - Subject Detail">iptc:04008004</FormalName>
+				<FormalName Scheme = "N2000">ECI</FormalName>
+				<Description xml:lang = "en">Economic Indicators</Description>
+			</Topic>
+			<Topic Duid = "News2000-000013">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04008001</FormalName>
+				<FormalName Scheme = "N2000">CEN</FormalName>
+				<Description xml:lang = "en">Central Banks</Description>
+			</Topic>
+			<Topic Duid = "News2000-000014">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "N2000">INT</FormalName>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:04008009</FormalName>
+				<Description xml:lang = "en">Interest Rates</Description>
+			</Topic>
+			<Topic Duid = "News2000-000015">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:11013000</FormalName>
+				<FormalName Scheme = "N2000">TAX</FormalName>
+				<Description xml:lang = "en">Tax</Description>
+			</Topic>
+			<Topic Duid = "News2000-000188">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "IPTC Subject:News">iptc:01000000</FormalName>
+				<FormalName Scheme = "N2000">ENT</FormalName>
+				<Description xml:lang = "en">Arts, culture, entertainment</Description>
+			</Topic>
+			<Topic Duid = "News2000-000190">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "IPTC Subject:News">iptc:05000000</FormalName>
+				<FormalName Scheme = "N2000">EDU</FormalName>
+				<Description xml:lang = "en">Education</Description>
+			</Topic>
+			<Topic Duid = "News2000-000191">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "IPTC Subject:News">iptc:12000000</FormalName>
+				<FormalName Scheme = "N2000">REL</FormalName>
+				<Description xml:lang = "en">Religion and belief (extend definition)</Description>
+			</Topic>
+			<Topic Duid = "News2000-000192">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "N2000">ODD</FormalName>
+				<FormalName Scheme = "IPTC Subject:News">iptc:08000000</FormalName>
+				<Description xml:lang = "en">Human interest</Description>
+			</Topic>
+			<Topic Duid = "News2000-000193">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "IPTC Subject:News">iptc:10000000</FormalName>
+				<FormalName Scheme = "N2000">LIF</FormalName>
+				<Description xml:lang = "en">Living and lifestyle</Description>
+			</Topic>
+			<Topic Duid = "News2000-000195">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "IPTC Subject:News">iptc:07000000</FormalName>
+				<FormalName Scheme = "N2000">HEA</FormalName>
+				<Description xml:lang = "en">Health and medicine</Description>
+			</Topic>
+			<Topic Duid = "News2000-000196">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "IPTC Subject:News">iptc:13000000</FormalName>
+				<FormalName Scheme = "N2000">SCI</FormalName>
+				<Description xml:lang = "en">Science; technology</Description>
+			</Topic>
+			<Topic Duid = "News2000-000233">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "N2000">ENV</FormalName>
+				<FormalName Scheme = "IPTC Subject:News">iptc:06000000</FormalName>
+				<Description xml:lang = "en">Environment</Description>
+			</Topic>
+			<Topic Duid = "News2000-000234">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "N2000">WEA</FormalName>
+				<FormalName Scheme = "IPTC Subject:News">iptc:17000000</FormalName>
+				<Description xml:lang = "en">Weather</Description>
+			</Topic>
+			<Topic Duid = "News2000-000235">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "N2000">DIS</FormalName>
+				<FormalName Scheme = "IPTC Subject:News">iptc:03000000</FormalName>
+				<Description xml:lang = "en">Disasters</Description>
+			</Topic>
+			<Topic Duid = "News2000-000237">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "N2000">SPOR</FormalName>
+				<FormalName Scheme = "IPTC Subject:News">iptc:15000000</FormalName>
+				<Description xml:lang = "en">Non-English language Sports (drop - qualify by non-English language code)</Description>
+			</Topic>
+			<Topic Duid = "News2000-000239">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "N2000">ALPS</FormalName>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:15002000</FormalName>
+				<Description xml:lang = "en">Alpine skiing</Description>
+			</Topic>
+			<Topic Duid = "News2000-000240">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "N2000">AMER</FormalName>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:15003000</FormalName>
+				<Description xml:lang = "en">American Football</Description>
+			</Topic>
+			<Topic Duid = "News2000-000241">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "N2000">NFL</FormalName>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:15003001</FormalName>
+				<Description xml:lang = "en">(US) National Football League (NFL) (North American)</Description>
+			</Topic>
+			<Topic Duid = "News2000-000242">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:15004000</FormalName>
+				<FormalName Scheme = "N2000">ARCH</FormalName>
+				<Description xml:lang = "en">Archery</Description>
+			</Topic>
+			<Topic Duid = "News2000-000243">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:15005000</FormalName>
+				<FormalName Scheme = "N2000">ATHL</FormalName>
+				<Description xml:lang = "en">Athletics, Track and Field</Description>
+			</Topic>
+			<Topic Duid = "News2000-000244">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:15000000</FormalName>
+				<FormalName Scheme = "N2000">AUSR</FormalName>
+				<Description xml:lang = "en">Australian Rules football</Description>
+			</Topic>
+			<Topic Duid = "News2000-000245">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:15006000</FormalName>
+				<FormalName Scheme = "N2000">BADM</FormalName>
+				<Description xml:lang = "en">Badminton</Description>
+			</Topic>
+			<Topic Duid = "News2000-000246">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "N2000">BASE</FormalName>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:15007000</FormalName>
+				<Description xml:lang = "en">Baseball</Description>
+			</Topic>
+			<Topic Duid = "News2000-000247">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:15008000</FormalName>
+				<FormalName Scheme = "N2000">BASK</FormalName>
+				<Description xml:lang = "en">Basketball</Description>
+			</Topic>
+			<Topic Duid = "News2000-000248">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:15008001</FormalName>
+				<FormalName Scheme = "N2000">NBA</FormalName>
+				<Description xml:lang = "en">National Basketball Association (North American Professional)</Description>
+			</Topic>
+			<Topic Duid = "News2000-000249">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "N2000">BIAT</FormalName>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:15009000</FormalName>
+				<Description xml:lang = "en">Biathlon</Description>
+			</Topic>
+			<Topic Duid = "News2000-000250">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:15010000</FormalName>
+				<FormalName Scheme = "N2000">BILL</FormalName>
+				<Description xml:lang = "en">Billiards events</Description>
+			</Topic>
+			<Topic Duid = "News2000-000251">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "N2000">BOAR</FormalName>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:15050000</FormalName>
+				<Description xml:lang = "en">Boardsailing events</Description>
+			</Topic>
+			<Topic Duid = "News2000-000252">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:15011000</FormalName>
+				<FormalName Scheme = "N2000">BOBS</FormalName>
+				<Description xml:lang = "en">Bobsleigh</Description>
+			</Topic>
+			<Topic Duid = "News2000-000253">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "N2000">BOWL</FormalName>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:15013000</FormalName>
+				<Description xml:lang = "en">Bowls and Petanque</Description>
+			</Topic>
+			<Topic Duid = "News2000-000254">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "N2000">BOXI</FormalName>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:15014000</FormalName>
+				<Description xml:lang = "en">Boxing</Description>
+			</Topic>
+			<Topic Duid = "News2000-000255">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "N2000">CANO</FormalName>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:15015000</FormalName>
+				<Description xml:lang = "en">Canoeing and Kayaking</Description>
+			</Topic>
+			<Topic Duid = "News2000-000256">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "N2000">CHESS</FormalName>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:10001000</FormalName>
+				<Description xml:lang = "en">Chess events</Description>
+			</Topic>
+			<Topic Duid = "News2000-000257">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:15017000</FormalName>
+				<FormalName Scheme = "N2000">CRIC</FormalName>
+				<Description xml:lang = "en">Cricket</Description>
+			</Topic>
+			<Topic Duid = "News2000-000258">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "N2000">CURL</FormalName>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:15018000</FormalName>
+				<Description xml:lang = "en">Curling</Description>
+			</Topic>
+			<Topic Duid = "News2000-000259">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:15019000</FormalName>
+				<FormalName Scheme = "N2000">CYCL</FormalName>
+				<Description xml:lang = "en">Cycling</Description>
+			</Topic>
+			<Topic Duid = "News2000-000260">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:15021000</FormalName>
+				<FormalName Scheme = "N2000">DIVE</FormalName>
+				<Description xml:lang = "en">Diving</Description>
+			</Topic>
+			<Topic Duid = "News2000-000261">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "N2000">DOP</FormalName>
+				<FormalName Scheme = "IPTC Subject Codes - Subject Qualifier">iptc:15000027</FormalName>
+				<Description xml:lang = "en">Doping</Description>
+			</Topic>
+			<Topic Duid = "News2000-000262">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:15022000</FormalName>
+				<FormalName Scheme = "N2000">EQUE</FormalName>
+				<Description xml:lang = "en">Equestrian</Description>
+			</Topic>
+			<Topic Duid = "News2000-000263">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:15023000</FormalName>
+				<FormalName Scheme = "N2000">FENC</FormalName>
+				<Description xml:lang = "en">Fencing</Description>
+			</Topic>
+			<Topic Duid = "News2000-000264">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "N2000">FIGS</FormalName>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:15025000</FormalName>
+				<Description xml:lang = "en">Figure Skating</Description>
+			</Topic>
+			<Topic Duid = "News2000-000265">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:15026000</FormalName>
+				<FormalName Scheme = "N2000">FREE</FormalName>
+				<Description xml:lang = "en">Freestyle Skiing</Description>
+			</Topic>
+			<Topic Duid = "News2000-000266">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:15027000</FormalName>
+				<FormalName Scheme = "N2000">GOLF</FormalName>
+				<Description xml:lang = "en">Golf</Description>
+			</Topic>
+			<Topic Duid = "News2000-000267">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "N2000">GYMN</FormalName>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:15028000</FormalName>
+				<Description xml:lang = "en">Gymnastics</Description>
+			</Topic>
+			<Topic Duid = "News2000-000268">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "N2000">HAND</FormalName>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:15029000</FormalName>
+				<Description xml:lang = "en">Handball events</Description>
+			</Topic>
+			<Topic Duid = "News2000-000269">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:15024000</FormalName>
+				<FormalName Scheme = "N2000">HOCK</FormalName>
+				<Description xml:lang = "en">Field Hockey</Description>
+			</Topic>
+			<Topic Duid = "News2000-000270">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:15030000</FormalName>
+				<FormalName Scheme = "N2000">HORS</FormalName>
+				<Description xml:lang = "en">Horse Racing, Harness Racing</Description>
+			</Topic>
+			<Topic Duid = "News2000-000271">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:15031000</FormalName>
+				<FormalName Scheme = "N2000">ICEH</FormalName>
+				<Description xml:lang = "en">Ice Hockey</Description>
+			</Topic>
+			<Topic Duid = "News2000-000272">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:15031001</FormalName>
+				<FormalName Scheme = "N2000">NHL</FormalName>
+				<Description xml:lang = "en">National Hockey League (North American)</Description>
+			</Topic>
+			<Topic Duid = "News2000-000273">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "N2000">JUDO</FormalName>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:15033000</FormalName>
+				<Description xml:lang = "en">Judo</Description>
+			</Topic>
+			<Topic Duid = "News2000-000274">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "N2000">KARA</FormalName>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:15034000</FormalName>
+				<Description xml:lang = "en">Karate</Description>
+			</Topic>
+			<Topic Duid = "News2000-000275">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "N2000">LUGE</FormalName>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:15036000</FormalName>
+				<Description xml:lang = "en">Luge</Description>
+			</Topic>
+			<Topic Duid = "News2000-000276">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "N2000">MOCY</FormalName>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:15041000</FormalName>
+				<Description xml:lang = "en">Motorcycling</Description>
+			</Topic>
+			<Topic Duid = "News2000-000277">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "N2000">MOCR</FormalName>
+				<FormalName Scheme = "IPTC Subject Detail:News">iptc:15041005</FormalName>
+				<Description xml:lang = "en">Moto-cross</Description>
+			</Topic>
+			<Topic Duid = "News2000-000278">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "N2000">MODE</FormalName>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:15038000</FormalName>
+				<Description xml:lang = "en">Modern Pentathlon</Description>
+			</Topic>
+			<Topic Duid = "News2000-000279">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:15039000</FormalName>
+				<FormalName Scheme = "N2000">MORA</FormalName>
+				<Description xml:lang = "en">Motor Racing</Description>
+			</Topic>
+			<Topic Duid = "News2000-000280">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:15042000</FormalName>
+				<FormalName Scheme = "N2000">NETB</FormalName>
+				<Description xml:lang = "en">Netball</Description>
+			</Topic>
+			<Topic Duid = "News2000-000281">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "N2000">NORS</FormalName>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:15043000</FormalName>
+				<Description xml:lang = "en">Nordic Skiing</Description>
+			</Topic>
+			<Topic Duid = "News2000-000282">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "N2000">OLY</FormalName>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:15073000</FormalName>
+				<Description xml:lang = "en">Olympics events</Description>
+			</Topic>
+			<Topic Duid = "News2000-000283">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:15044000</FormalName>
+				<FormalName Scheme = "N2000">ORIE</FormalName>
+				<Description xml:lang = "en">Orienteering</Description>
+			</Topic>
+			<Topic Duid = "News2000-000284">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "N2000">RALL</FormalName>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:15040000</FormalName>
+				<Description xml:lang = "en">Motor Rallying</Description>
+			</Topic>
+			<Topic Duid = "News2000-000285">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "N2000">RSLT</FormalName>
+				<FormalName Scheme = "IPTC Subject:News">iptc:15000000</FormalName>
+				<Description xml:lang = "en">Sports results in tabular format</Description>
+			</Topic>
+			<Topic Duid = "News2000-000286">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "N2000">ROWI</FormalName>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:15047000</FormalName>
+				<Description xml:lang = "en">Rowing</Description>
+			</Topic>
+			<Topic Duid = "News2000-000287">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:15048000</FormalName>
+				<FormalName Scheme = "N2000">RUGL</FormalName>
+				<Description xml:lang = "en">Rugby League</Description>
+			</Topic>
+			<Topic Duid = "News2000-000288">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:15049000</FormalName>
+				<FormalName Scheme = "N2000">RUGU</FormalName>
+				<Description xml:lang = "en">Rugby Union</Description>
+			</Topic>
+			<Topic Duid = "News2000-000289">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "N2000">SHOO</FormalName>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:15051000</FormalName>
+				<Description xml:lang = "en">Shooting</Description>
+			</Topic>
+			<Topic Duid = "News2000-000290">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "N2000">SKAT</FormalName>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:15056000</FormalName>
+				<Description xml:lang = "en">Speed Skating</Description>
+			</Topic>
+			<Topic Duid = "News2000-000291">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:15052000</FormalName>
+				<FormalName Scheme = "N2000">SKIJ</FormalName>
+				<Description xml:lang = "en">Ski Jumping</Description>
+			</Topic>
+			<Topic Duid = "News2000-000292">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "N2000">SNO</FormalName>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:15053000</FormalName>
+				<Description xml:lang = "en">Snow Boarding</Description>
+			</Topic>
+			<Topic Duid = "News2000-000293">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:15010000</FormalName>
+				<FormalName Scheme = "N2000">SNOO</FormalName>
+				<Description xml:lang = "en">Snooker events</Description>
+			</Topic>
+			<Topic Duid = "News2000-000294">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:15054000</FormalName>
+				<FormalName Scheme = "N2000">SOCC</FormalName>
+				<Description xml:lang = "en">Soccer</Description>
+			</Topic>
+			<Topic Duid = "News2000-000295">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "N2000">SOFT</FormalName>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:15055000</FormalName>
+				<Description xml:lang = "en">Softball</Description>
+			</Topic>
+			<Topic Duid = "News2000-000296">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:15057000</FormalName>
+				<FormalName Scheme = "N2000">SPEE</FormalName>
+				<Description xml:lang = "en">Speedway</Description>
+			</Topic>
+			<Topic Duid = "News2000-000297">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:15059000</FormalName>
+				<FormalName Scheme = "N2000">SQUA</FormalName>
+				<Description xml:lang = "en">Squash</Description>
+			</Topic>
+			<Topic Duid = "News2000-000298">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "N2000">SUMO</FormalName>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:15060000</FormalName>
+				<Description xml:lang = "en">Sumo Wrestling</Description>
+			</Topic>
+			<Topic Duid = "News2000-000299">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:15062000</FormalName>
+				<FormalName Scheme = "N2000">SWIM</FormalName>
+				<Description xml:lang = "en">Swimming</Description>
+			</Topic>
+			<Topic Duid = "News2000-000300">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:15063000</FormalName>
+				<FormalName Scheme = "N2000">TABT</FormalName>
+				<Description xml:lang = "en">Table Tennis</Description>
+			</Topic>
+			<Topic Duid = "News2000-000301">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:15064000</FormalName>
+				<FormalName Scheme = "N2000">TAEK</FormalName>
+				<Description xml:lang = "en">Tae Kwondo</Description>
+			</Topic>
+			<Topic Duid = "News2000-000302">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "N2000">TENN</FormalName>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:15065000</FormalName>
+				<Description xml:lang = "en">Tennis</Description>
+			</Topic>
+			<Topic Duid = "News2000-000303">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:15012000</FormalName>
+				<FormalName Scheme = "N2000">TENP</FormalName>
+				<Description xml:lang = "en">Bowling</Description>
+			</Topic>
+			<Topic Duid = "News2000-000304">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "N2000">TRIA</FormalName>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:15066000</FormalName>
+				<Description xml:lang = "en">Triathlon</Description>
+			</Topic>
+			<Topic Duid = "News2000-000305">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "N2000">VOLL</FormalName>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:15067000</FormalName>
+				<Description xml:lang = "en">Volleyball</Description>
+			</Topic>
+			<Topic Duid = "News2000-000306">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "N2000">WATP</FormalName>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:15068000</FormalName>
+				<Description xml:lang = "en">Water Polo</Description>
+			</Topic>
+			<Topic Duid = "News2000-000307">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:15069000</FormalName>
+				<FormalName Scheme = "N2000">WATS</FormalName>
+				<Description xml:lang = "en">Water Skiing</Description>
+			</Topic>
+			<Topic Duid = "News2000-000308">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "N2000">WEIG</FormalName>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:15070000</FormalName>
+				<Description xml:lang = "en">Weightlifting</Description>
+			</Topic>
+			<Topic Duid = "News2000-000309">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "N2000">WRES</FormalName>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:15072000</FormalName>
+				<Description xml:lang = "en">Wrestling</Description>
+			</Topic>
+			<Topic Duid = "News2000-000310">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "N2000">YACH</FormalName>
+				<FormalName Scheme = "IPTC Subject Matter:News">iptc:15050000</FormalName>
+				<Description xml:lang = "en">Yachting</Description>
+			</Topic>
+			<Topic Duid = "News2000-100105">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "N2000">DEF</FormalName>
+				<Description xml:lang = "en">Defence</Description>
+			</Topic>
+			<Topic Duid = "News2000-100106">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "N2000">ESOC</FormalName>
+				<Description xml:lang = "en">European Soccer Championships</Description>
+			</Topic>
+			<Topic Duid = "News2000-100107">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "N2000">FILM</FormalName>
+				<Description xml:lang = "en">Film/movies</Description>
+			</Topic>
+			<Topic Duid = "News2000-000567">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "N2000">WASH</FormalName>
+				<Description xml:lang = "en">Washington / US Government News</Description>
+			</Topic>
+			<Topic Duid = "News2000-100101">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "N2000">BOMB</FormalName>
+				<Description xml:lang = "en">Bombings</Description>
+			</Topic>
+			<Topic Duid = "News2000-100110">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "N2000">IMM</FormalName>
+				<Description xml:lang = "en">Immigration/asylum</Description>
+			</Topic>
+			<Topic Duid = "News2000-100111">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "N2000">JUDIC</FormalName>
+				<Description xml:lang = "en">Judicial processes/court cases/court decisions</Description>
+			</Topic>
+			<Topic Duid = "News2000-100113">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "N2000">MUSIC</FormalName>
+				<Description xml:lang = "en">Music/musical artists</Description>
+			</Topic>
+			<Topic Duid = "News2000-100116">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "N2000">SECUR</FormalName>
+				<Description xml:lang = "en">National and international security</Description>
+			</Topic>
+			<Topic Duid = "News2000-100117">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "N2000">WCUP</FormalName>
+				<Description xml:lang = "en">International Championships</Description>
+			</Topic>
+			<Topic Duid = "News2000-100133">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "N2000">CDTY</FormalName>
+				<Description xml:lang = "en">Commodities News</Description>
+			</Topic>
+			<Topic Duid = "News2000-100134">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "N2000">ECON</FormalName>
+				<Description xml:lang = "en">Economic News</Description>
+			</Topic>
+			<Topic Duid = "News2000-100135">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "N2000">EQTY</FormalName>
+				<Description xml:lang = "en">Equities News</Description>
+			</Topic>
+			<Topic Duid = "News2000-100136">
+				<TopicType FormalName = "NewsSubject"/>
+				<FormalName Scheme = "N2000">MNEY</FormalName>
+				<Description xml:lang = "en">Money News</Description>
+			</Topic>
+			<Topic Duid = "News2000-000562">
+				<TopicType FormalName = "Organization"/>
+				<FormalName Scheme = "N2000">EU</FormalName>
+				<Description xml:lang = "en">European Union</Description>
+			</Topic>
+			<Topic Duid = "News2000-000563">
+				<TopicType FormalName = "Organization"/>
+				<FormalName Scheme = "N2000">ECB</FormalName>
+				<Description xml:lang = "en">European Central Bank</Description>
+			</Topic>
+			<Topic Duid = "News2000-000573">
+				<TopicType FormalName = "Organization"/>
+				<FormalName Scheme = "N2000">EMU</FormalName>
+				<Description xml:lang = "en">EMU/ European Monetary Union</Description>
+			</Topic>
+			<Topic Duid = "News2000-000574">
+				<TopicType FormalName = "Organization"/>
+				<FormalName Scheme = "N2000">G7</FormalName>
+				<Description xml:lang = "en">G7 / Group of Seven</Description>
+			</Topic>
+			<Topic Duid = "News2000-000575">
+				<TopicType FormalName = "Organization"/>
+				<FormalName Scheme = "N2000">IMF</FormalName>
+				<Description xml:lang = "en">IMF/ International Monetary Fund</Description>
+			</Topic>
+			<Topic Duid = "News2000-000577">
+				<TopicType FormalName = "Organization"/>
+				<FormalName Scheme = "N2000">OPEC</FormalName>
+				<Description xml:lang = "en">Organization of Petroleum Exporting Countries</Description>
+			</Topic>
+		</TopicSet>
+	</NewsItem>
+</NewsML>
