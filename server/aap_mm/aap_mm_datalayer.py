@@ -63,8 +63,6 @@ class AAPMMDatalayer(DataLayer):
             self.__set_auth_cookie(self._app)
 
     def init_app(self, app):
-        app.config.setdefault('AAP_MM_SEARCH_URL', 'https://one-api.aap.com.au/api/v3')
-        app.config.setdefault('AAP_MM_CDN_URL', 'http://one-cdn.aap.com.au/Preview.mp4')
         self._app = app
         self._headers = None
         self._login_tries = 0
