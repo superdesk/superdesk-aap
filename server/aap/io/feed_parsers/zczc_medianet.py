@@ -14,6 +14,7 @@ from aap.errors import AAPParserError
 import superdesk
 from superdesk.io.iptc import subject_codes
 from superdesk.etree import parse_html, to_string
+import textwrap
 
 
 class ZCZCMedianetParser(ZCZCFeedParser):
@@ -70,6 +71,13 @@ class ZCZCMedianetParser(ZCZCFeedParser):
         body_html_elem = parse_html(item.get('body_html', '<pre> </pre>'))
         ptag = body_html_elem.find('.//pre')
         if ptag is not None:
+            body = ''
+            lines = ptag.text.split('\n')
+            for line in lines:
+                if len(line) > 75:
+                    line = textwrap.fill(line, 75)
+                body += '{}\n'.format(line)
+            ptag.text = body
             if InvestorRelease:
                 ptag.text = '{} '.format('Investor Relations news release distributed by AAP Medianet. \r\n\r\n\r\n') \
                             + ptag.text
