@@ -7,5 +7,5 @@ titlecase==0.8.2
 geopy==1.11.0
 slackclient==1.0.9
 
-git+git://github.com/superdesk/superdesk-core.git@805fc94#egg=Superdesk-Core
-git+git://github.com/superdesk/superdesk-planning.git@7a398ee#egg=superdesk-planning
+git+git://github.com/superdesk/superdesk-core.git@06504f6#egg=Superdesk-Core
+git+git://github.com/superdesk/superdesk-planning.git@6b2d539#egg=superdesk-planning
