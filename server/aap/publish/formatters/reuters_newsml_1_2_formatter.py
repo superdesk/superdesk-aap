@@ -21,10 +21,11 @@ from flask import current_app as app
 from apps.prepopulate.app_initialize import get_filepath
 from superdesk import etree as sd_etree
 from copy import deepcopy
+from datetime import date
 
 
 class ReutersNewsML12Formatter(NewsML12Formatter):
-    XML_ROOT = '<?xml version="1.0"?><!DOCTYPE NewsML SYSTEM "NewsML_xhtml.dtd">'
+    XML_ROOT = '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE NewsML SYSTEM "NewsML-xhtml.dtd">'
 
     def format(self, article, subscriber, codes=None):
         """
@@ -102,12 +103,7 @@ class ReutersNewsML12Formatter(NewsML12Formatter):
                                     attrib={XML_LANG: formatted_article.get('language', 'en'),
                                             'Essential': 'no', 'EquivalentsList': 'no',
                                             'Duid': 'NC00001'})
-        SubElement(news_component, 'Role', attrib={'FormalName': 'Main'})
-        admin_metadata = SubElement(news_component, 'AdministrativeMetadata')
-        admin_metadata_provider = SubElement(admin_metadata, 'Provider')
-        SubElement(admin_metadata_provider, 'Party', attrib={'FormalName': app.config['ORGANIZATION_NAME']})
-        SubElement(SubElement(news_component, 'DescriptiveMetadata'), 'Language',
-                   attrib={'Language': formatted_article.get('language', 'en')})
+
         topic_set = SubElement(news_component, 'TopicSet', attrib={'FormalName': 'MediumImportance'})
         topic_index = 1
         topic = SubElement(topic_set, 'Topic', attrib={'Duid': 'T{num:04d}'.format(num=topic_index)})
@@ -119,6 +115,15 @@ class ReutersNewsML12Formatter(NewsML12Formatter):
         SubElement(topic, 'FormalName', attrib={'Scheme': 'N2000'}).text = 'AU'
         topic_index = self._get_topics(formatted_article, topic_set, topic_index)
 
+        SubElement(news_component, 'Role', attrib={'FormalName': 'Main'})
+
+        admin_metadata = SubElement(news_component, 'AdministrativeMetadata')
+        admin_metadata_provider = SubElement(admin_metadata, 'Provider')
+        SubElement(admin_metadata_provider, 'Party', attrib={'FormalName': app.config['ORGANIZATION_NAME']})
+
+        SubElement(SubElement(news_component, 'DescriptiveMetadata'), 'Language',
+                   attrib={'FormalName': formatted_article.get('language', 'en')})
+
         for company in formatted_article.get('company_codes', []):
             topic_index += 1
             topic = SubElement(topic_set, 'Topic', attrib={'Duid': 'T{num:04d}'.format(num=topic_index)})
@@ -128,10 +133,14 @@ class ReutersNewsML12Formatter(NewsML12Formatter):
         main_news_component = SubElement(news_component, "NewsComponent",
                                          attrib={XML_LANG: formatted_article.get('language', 'en'), 'Essential': 'no',
                                                  'EquivalentsList': 'no', 'Duid': 'NC00002'})
-        admin_metadata_provider = SubElement(main_news_component, 'Provider')
-        SubElement(admin_metadata_provider, 'Party', attrib={'FormalName': app.config['ORGANIZATION_NAME']})
+
         SubElement(main_news_component, 'Role', attrib={'FormalName': 'MainText'})
         self._format_news_lines(formatted_article, main_news_component)
+
+        admin_metadata = SubElement(main_news_component, 'AdministrativeMetadata')
+        admin_metadata_provider = SubElement(admin_metadata, 'Provider')
+        SubElement(admin_metadata_provider, 'Party', attrib={'FormalName': app.config['ORGANIZATION_NAME']})
+
         self._format_descriptive_metadata(formatted_article, main_news_component, topic_index)
         self._format_body(formatted_article, main_news_component)
 
@@ -144,16 +153,33 @@ class ReutersNewsML12Formatter(NewsML12Formatter):
         :param topic_index:
         :return:
         """
+        # Some AAP IPTC codes are spcificaly mapped to N2000 codes
+        aap_map = superdesk.get_resource_service('vocabularies').find_one(req=None, _id='reuters_iptc_n2000_map')
         path = get_filepath('topicset-reuters-3rdParty_news2000.xml')
         tree = etree.parse(str(path))
         for subject in formatted_article.get('subject', []):
-            topic = tree.xpath('./NewsItem/TopicSet/Topic/FormalName[text()="iptc:' + subject.get('qcode', '') + '"]')
-            if len(topic) == 1:
-                thing = str(topic[0].xpath('../TopicType/@FormalName')[0])
-                other_thing = topic[0].xpath('../FormalName[@Scheme="N2000"]')[0].text
+            if aap_map:
+                aap_mapped = [x for x in aap_map.get('items', []) if x.get('qcode', '') == subject.get('qcode', '')]
+                if len(aap_mapped) == 1:
+                    n2000_code = aap_mapped[0].get('name')
+                    topic = tree.xpath(
+                        './NewsItem/TopicSet/Topic/FormalName[text()="' + n2000_code + '"]')
+                    if topic and len(topic) == 1:
+                        topic_type = str(topic[0].xpath('../TopicType/@FormalName')[0])
+
+                        topic_index = topic_index + 1
+                        topic = SubElement(topic_set, 'Topic', attrib={'Duid': 'T{num:04d}'.format(num=topic_index)})
+                        SubElement(topic, 'TopicType', attrib={'FormalName': topic_type, 'Scheme': 'RTT'})
+                        SubElement(topic, 'FormalName', attrib={'Scheme': 'N2000'}).text = n2000_code
+                    break
+
+            topics = tree.xpath('./NewsItem/TopicSet/Topic/FormalName[text()="iptc:' + subject.get('qcode', '') + '"]')
+            if len(topics) == 1:
+                topic_type = str(topics[0].xpath('../TopicType/@FormalName')[0])
+                other_thing = topics[0].xpath('../FormalName[@Scheme="N2000"]')[0].text
                 topic_index = topic_index + 1
                 topic = SubElement(topic_set, 'Topic', attrib={'Duid': 'T{num:04d}'.format(num=topic_index)})
-                SubElement(topic, 'TopicType', attrib={'FormalName': thing, 'Scheme': 'RTT'})
+                SubElement(topic, 'TopicType', attrib={'FormalName': topic_type, 'Scheme': 'RTT'})
                 SubElement(topic, 'FormalName', attrib={'Scheme': 'N2000'}).text = other_thing
         return topic_index
 
@@ -165,24 +191,21 @@ class ReutersNewsML12Formatter(NewsML12Formatter):
         :param Element main_news_component:
         """
         descriptive_metadata = SubElement(main_news_component, "DescriptiveMetadata")
-        if formatted_article.get('source', '') == 'AAP':
-            SubElement(descriptive_metadata, 'OfInterestTo', attrib={'Scheme': "ProducrCode", "FormalName": 'AUP'})
-            SubElement(descriptive_metadata, 'OfInterestTo', attrib={'Scheme': "ProducrCode", "FormalName": 'AAP'})
-        elif formatted_article.get('source', '') == 'NZN':
-            SubElement(descriptive_metadata, 'OfInterestTo', attrib={'Scheme': "ProducrCode", "FormalName": 'NZP'})
+        SubElement(descriptive_metadata, 'OfInterestTo', attrib={'Scheme': "ProductCode", "FormalName": 'AUP'})
+        SubElement(descriptive_metadata, 'OfInterestTo', attrib={'Scheme': "ProductCode", "FormalName": 'AAP'})
         category = next((iter((formatted_article.get('anpa_category') or []))), None)
         if category:
             if category.get('qcode').upper() == 'F':
-                SubElement(descriptive_metadata, 'OfInterestTo', attrib={'Scheme': "ProducrCode", "FormalName": 'AAPF'})
+                SubElement(descriptive_metadata, 'OfInterestTo', attrib={'Scheme': "ProductCode", "FormalName": 'AAPF'})
             elif category.get('qcode').upper() in {'R', 'S', 'T'}:
-                SubElement(descriptive_metadata, 'OfInterestTo', attrib={'Scheme': "ProducrCode", "FormalName": 'AAPS'})
+                SubElement(descriptive_metadata, 'OfInterestTo', attrib={'Scheme': "ProductCode", "FormalName": 'AAPS'})
             elif category.get('qcode').upper() == 'F':
-                SubElement(descriptive_metadata, 'OfInterestTo', attrib={'Scheme': "ProducrCode", "FormalName": 'AAPF'})
+                SubElement(descriptive_metadata, 'OfInterestTo', attrib={'Scheme': "ProductCode", "FormalName": 'AAPF'})
             else:
-                SubElement(descriptive_metadata, 'OfInterestTo', attrib={'Scheme': "ProducrCode", "FormalName": 'AAPG'})
+                SubElement(descriptive_metadata, 'OfInterestTo', attrib={'Scheme': "ProductCode", "FormalName": 'AAPG'})
         for i in range(1, topic_index + 1):
             SubElement(descriptive_metadata, 'TopicOccurrence', attrib={"Topic": '#T{num:04d}'.format(num=i),
-                                                                        "Impotance": "Medium"})
+                                                                        "Importance": "Medium"})
 
     def _format_body(self, formatted_article, main_news_component):
         """
@@ -195,10 +218,12 @@ class ReutersNewsML12Formatter(NewsML12Formatter):
         SubElement(content_item, 'MediaType', {'FormalName': 'Text'})
         SubElement(content_item, 'Format', {'FormalName': 'XHTML'})
         data_content = SubElement(content_item, 'DataContent')
-        html = SubElement(data_content, 'html', attrib={'xmlns': 'http://www.w3.org/1999/xhtml'})
+        html = SubElement(data_content, 'html', attrib={'xmlns': 'http://www.w3.org/1999/xhtml', 'lang': 'en',
+                                                        XML_LANG: formatted_article.get('language', 'en')})
         head = SubElement(html, 'head')
-        title = SubElement(head, 'title')
-        title.text = formatted_article.get('headline', '')
+        SubElement(head, 'title')
+        # Title has been romoved to match the existing feed
+        # title.text = formatted_article.get('headline', '')
         body = SubElement(html, 'body')
 
         if formatted_article.get(FORMAT, FORMATS.HTML) == FORMATS.PRESERVED:
@@ -245,9 +270,9 @@ class ReutersNewsML12Formatter(NewsML12Formatter):
             SubElement(news_lines, 'ByLine').text = formatted_article.get('byline') or ''
         if formatted_article.get('dateline', {}).get('text', ''):
             SubElement(news_lines, 'DateLine').text = formatted_article.get('dateline', {}).get('text', '')
-        rights = superdesk.get_resource_service('vocabularies').get_rightsinfo(formatted_article)
-        SubElement(news_lines, 'CreditLine').text = rights.get('copyrightholder')
-        SubElement(news_lines, 'CopyrightLine').text = rights.get('copyrightnotice', '')
+        SubElement(news_lines, 'CreditLine').text = 'Australian Associated Press'
+        SubElement(news_lines, 'CopyrightLine').text = 'Copyright {}, AAP. All rights reserved.'.format(
+            date.today().year)
 
     def can_format(self, format_type, article):
         return format_type == 'reuters_newsml' and article[ITEM_TYPE] == CONTENT_TYPE.TEXT

@@ -337,6 +337,154 @@
         ]
     },
     {
+        "_id" : "reuters_iptc_n2000_map",
+        "helper_text" : "Maps AAP's usage of some IPTC codes to Reuters N2000",
+        "display_name" : "Reuters IPTC to N2000 Map",
+        "type" : "manageable",
+        "items" : [
+            {
+                "qcode" : "15073000",
+                "name" : null,
+                "is_active" : true
+            },
+            {
+                "qcode" : "02000000",
+                "name" : "CRIM",
+                "is_active" : true
+            },
+            {
+                "qcode" : "04016005",
+                "name" : "MRG",
+                "is_active" : true
+            },
+            {
+                "qcode" : "04016007",
+                "name" : "BKRT",
+                "is_active" : true
+            },
+            {
+                "qcode" : "04006000",
+                "name" : "FIN",
+                "is_active" : true
+            },
+            {
+                "qcode" : "04010010",
+                "name" : "TBCS",
+                "is_active" : true
+            },
+            {
+                "qcode" : "04002007",
+                "name" : "PLAS",
+                "is_active" : true
+            },
+            {
+                "qcode" : "04002001",
+                "name" : "BIOT",
+                "is_active" : true
+            },
+            {
+                "qcode" : "04003001",
+                "name" : "HDWR",
+                "is_active" : true
+            },
+            {
+                "qcode" : "04003005",
+                "name" : "SFWR",
+                "is_active" : true
+            },
+            {
+                "qcode" : "04005011",
+                "name" : "NGS",
+                "is_active" : true
+            },
+            {
+                "qcode" : "04016019",
+                "name" : "ISU",
+                "is_active" : true
+            },
+            {
+                "qcode" : "04008029",
+                "name" : "DRV",
+                "is_active" : true
+            },
+            {
+                "qcode" : "04008028",
+                "name" : "FUND",
+                "is_active" : true
+            },
+            {
+                "qcode" : "04009003",
+                "name" : "STX",
+                "is_active" : true
+            },
+            {
+                "qcode" : "04008021",
+                "name" : "LOA",
+                "is_active" : true
+            },
+            {
+                "qcode" : "04008022",
+                "name" : "MTG",
+                "is_active" : true
+            },
+            {
+                "qcode" : "16005002",
+                "name" : "BOMB",
+                "is_active" : true
+            },
+            {
+                "qcode" : "11001000",
+                "name" : "DEF",
+                "is_active" : true
+            },
+            {
+                "qcode" : "01005000",
+                "name" : "FILM",
+                "is_active" : true
+            },
+            {
+                "qcode" : "14003002",
+                "name" : "IMM",
+                "is_active" : true
+            },
+            {
+                "qcode" : "02002000",
+                "name" : "JUDIC",
+                "is_active" : true
+            },
+            {
+                "qcode" : "02006000",
+                "name" : "LAW",
+                "is_active" : true
+            },
+            {
+                "qcode" : "01011000",
+                "name" : "MUSIC",
+                "is_active" : true
+            },
+            {
+                "qcode" : "11001002",
+                "name" : "SECUR",
+                "is_active" : true
+            },
+            {
+                "qcode" : "04017000",
+                "name" : "ECON",
+                "is_active" : true
+            },
+            {
+                "qcode" : "04009000",
+                "name" : "EQTY",
+                "is_active" : true
+            },
+            {
+                "qcode" : "15084000",
+                "name" : "AUSR",
+                "is_active" : true
+            }
+        ]
+    },
+    {
         "_id": "company_codes",
         "display_name": "Financial Company Codes",
         "type": "manageable",
