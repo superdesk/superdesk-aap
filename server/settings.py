@@ -223,3 +223,6 @@ CONTENTAPI_ENABLED = json.loads(env('CONTENTAPI_ENABLED', 'False').lower())
 
 # Make sure legal archive is enabled
 LEGAL_ARCHIVE = True
+
+# The URL for the provision of an external feedback or suggestion site
+FEEDBACK_URL = env('FEEDBACK_URL', None)
