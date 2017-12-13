@@ -232,3 +232,6 @@ LEGAL_ARCHIVE = True
 
 # The Bot User OAuth Token for access to Slack
 SLACK_BOT_TOKEN = env('SLACK_BOT_TOKEN', '')
+
+# The URL for the provision of an external feedback or suggestion site
+FEEDBACK_URL = env('FEEDBACK_URL', None)
