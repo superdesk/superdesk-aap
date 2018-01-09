@@ -44,7 +44,6 @@ class LocatorMapper(FieldMapper):
         '15067001': 'BVO',
         '15017000': 'CRIK',
         '15019000': 'CYCLE',
-        '10001002': 'CHESS',  # chess is not a sport according to IPTC
         '15100000': 'DAR',
         '15021000': 'DIVE',
         '15022000': 'EQN',
@@ -54,6 +53,8 @@ class LocatorMapper(FieldMapper):
         '15028000': 'GYM',
         '15029000': 'HBL',
         '15024000': 'HOCK',
+        '15076000': 'HOCK',  # Bandy
+        '15087000': 'HOCK',  # hornuss
         '15031000': 'ICE',
         '15066000': 'TRI',  # and IRON
         '15033000': 'JUDO',
@@ -74,7 +75,16 @@ class LocatorMapper(FieldMapper):
         '15049000': 'RU',
         '15050000': 'SAIL',
         '15051000': 'SHOOT',
-        '15002000': 'SKI',
+        '15002000': 'SKI',  # alpine skiing
+        '15011000': 'SKI',  # bobsleigh
+        '15026000': 'SKI',  # Freestyle Skiing
+        '15052000': 'SKI',  # ski jumping
+        '15053000': 'SKI',  # snow boarding
+        '15043000': 'SKI',  # nordic skiing
+        '15090000': 'SKI',  # grass ski
+        '15091000': 'SKI',  # snowbiking
+        '15083000': 'SKI',  # skeleton
+        '15036000': 'SKI',  # luge
         '15010000': 'SNOOK',
         '15000000': 'SPO',
         '15054000': 'SOC',
@@ -90,8 +100,13 @@ class LocatorMapper(FieldMapper):
         '15067000': 'VOL',
         '15070000': 'WGHT',
         '15068000': 'WPOL',
-        '15072000': 'WRES',
-        '15069000': 'WSKI'
+        '15072000': 'WRES',  # wrestling
+        '15060000': 'WRES',  # sumo wrestling
+        '15034000': 'WRES',  # karate
+        '15069000': 'WSKI',
+        '15089000': 'SPO',  # inline skating
+        '15025000': 'SPO',  # figure Skating
+        '15056000': 'SPO'  # speed skating
     }
 
     sport_categories = {'S', 'T', 'R'}

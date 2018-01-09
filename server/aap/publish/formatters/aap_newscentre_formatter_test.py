@@ -136,7 +136,7 @@ class AapNewscentreFormatterTest(TestCase):
             if doc['category'] == 'S':
                 self.assertEqual(doc['subject_reference'], '15011002')
                 self.assertEqual(doc['subject_detail'], 'four-man sled')
-                self.assertEqual(doc['headline'], 'VIC:This is a test headline')
+                self.assertEqual(doc['headline'], 'SKI:This is a test headline')
             if doc['category'] == 'F':
                 self.assertEqual(doc['subject_reference'], '04001005')
                 self.assertEqual(doc['subject_detail'], 'viniculture')
