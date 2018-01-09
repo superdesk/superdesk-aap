@@ -177,7 +177,7 @@
         "items": [
             {"is_active": true, "name": "All", "qcode": "all",
                 "formats": [{"name": "NINJS", "qcode": "ninjs"}, {"name": "AAP NewsML 1.2", "qcode": "newsml12"}, {"name": "NewsML G2", "qcode": "newsmlg2"}
-                , {"name" : "REUTERS NITF",  "qcode" : "reuters_newsml"}]},
+                , {"name" : "REUTERS NITF",  "qcode" : "reuters_newsml"}, {"name" : "NEWSROOM NINJS",  "qcode" : "newsroom ninjs"}]},
             {"is_active": true, "name": "Digital/Internet", "qcode": "digital",
                 "formats": [{"name": "NINJS", "qcode": "ninjs"}, {"name": "AAP NewsML 1.2", "qcode": "newsml12"}, {"name": "NewsML G2", "qcode": "newsmlg2"},
                             {"name": "AAP Bulletin Builder", "qcode": "AAP BULLETIN BUILDER"}, {"name" : "REUTERS NITF",  "qcode" : "reuters_newsml"}]},
@@ -187,7 +187,7 @@
                             {"name": "AAP SMS", "qcode": "AAP SMS"}, {"name": "AAP NEWSCENTRE", "qcode": "AAP NEWSCENTRE"},
                             {"name": "NZN NEWSCENTRE", "qcode":"NZN NEWSCENTRE"}, {"name":"NZN IPNEWS", "qcode": "NZN IPNEWS"},
                             {"name": "NZN ANPA", "qcode": "NZN ANPA"}, {"name": "Email", "qcode": "Email"}, {"name": "AAP NITF", "qcode": "aap_nitf"},
-                            {"name" : "REUTERS NITF",  "qcode" : "reuters_newsml"}]}
+                            {"name" : "REUTERS NITF",  "qcode" : "reuters_newsml"}, {"name" : "NEWSROOM NINJS",  "qcode" : "newsroom ninjs"}]}
         ]
     },
     {
