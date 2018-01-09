@@ -19,6 +19,18 @@ class AAPNINJSFormatterTest(TestCase):
         self.formatter = AAPNINJSFormatter()
         init_app(self.app)
         self.maxDiff = None
+        self.app.data.insert('vocabularies', [
+            {
+                "_id": "locators",
+                "display_name": "Locators",
+                "type": "unmanageable",
+                "unique_field": "qcode",
+                "items": [
+                    {"is_active": True, "name": "NSW", "qcode": "NSW", "state": "New South Wales",
+                     "country": "Australia", "world_region": "Oceania", "group": "Australia"},
+                ],
+            }
+        ])
 
     def test_picture_formatter(self):
         article = {
@@ -349,6 +361,6 @@ class AAPNINJSFormatterTest(TestCase):
                                          "priority": 6, "ednote": "", "mimetype": "image/jpeg",
                                          "slugline": "RACING WINX ROSEHILL TRACKWORK",
                                          "firstcreated": "2017-08-30T19:58:33+0000", "guid": "20170831001315774144"}},
-                    "profile": "58cf62e01d41c8208dc20375", "place": [{"name": "NSW", "code": "NSW"}],
+                    "profile": "58cf62e01d41c8208dc20375", "place": [{"name": "New South Wales", "code": "NSW"}],
                     "pubstatus": "usable"}
         self.assertEqual(expected, json.loads(doc))
