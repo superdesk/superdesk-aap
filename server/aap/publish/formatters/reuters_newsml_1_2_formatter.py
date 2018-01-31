@@ -21,6 +21,7 @@ from flask import current_app as app
 from apps.prepopulate.app_initialize import get_filepath
 from superdesk import etree as sd_etree
 from copy import deepcopy
+from superdesk.utc import utcnow
 from datetime import date
 
 
@@ -41,6 +42,8 @@ class ReutersNewsML12Formatter(NewsML12Formatter):
         try:
             formatted_article = deepcopy(article)
             pub_seq_num = superdesk.get_resource_service('subscribers').generate_sequence_number(subscriber)
+            self.now = utcnow()
+            self.string_now = self.now.strftime('%Y%m%dT%H%M%S+0000')
 
             newsml = etree.Element("NewsML", {'Version': '1.2'})
             SubElement(newsml, "Catalog", {
