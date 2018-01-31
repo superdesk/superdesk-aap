@@ -12,13 +12,13 @@ import os
 from datetime import datetime
 
 from superdesk.tests import TestCase
-from superdesk.utc import utc
-
+from superdesk.utc import utc, utcnow
 from aap.io.feed_parsers.asianet import AsiaNetFeedParser
 
 
 class AsiaNetFeedParserTestCase(TestCase):
     filename = 'asianet_{}.tst'
+    year = utcnow().year
 
     headers = [
         {
@@ -101,7 +101,7 @@ class AsiaNetFeedParserTestCase(TestCase):
             'anpa_take_key': 'PR67266',
             'original_source': 'AsiaNet',
             'dateline': {
-                'date': datetime(2017, 2, 1, 0, 0, tzinfo=utc),
+                'date': datetime(year, 2, 1, 0, 0, tzinfo=utc),
                 'source': 'PRNewswire-AsiaNet',
                 'text': 'LONDON, Feb. 1',
                 'located': {'dateline': 'city', 'country': 'Canada', 'tz': 'America/Toronto', 'city_code': 'London',
