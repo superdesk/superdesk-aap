@@ -9,4 +9,4 @@ slackclient==1.0.9
 pyasn1==0.3.7
 
 git+git://github.com/superdesk/superdesk-core.git@11d5b97#egg=Superdesk-Core
-git+git://github.com/superdesk/superdesk-planning.git@480ee346#egg=superdesk-planning
+git+git://github.com/superdesk/superdesk-planning.git@c9e196f#egg=superdesk-planning
