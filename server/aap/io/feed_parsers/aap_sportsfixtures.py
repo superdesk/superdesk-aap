@@ -127,7 +127,7 @@ class AAPSportsFixturesParser(XMLFeedParser):
         :return:
         """
         item = dict()
-        item[ITEM_TYPE] = CONTENT_TYPE.TEXT
+        item[ITEM_TYPE] = CONTENT_TYPE.EVENT
         item[GUID_FIELD] = 'urn:aapsportsfixtures:{}:{}:{}'.format(sport_id, comp_id, match_id)
         item['anpa_category'] = [{'qcode': 't'}] if comp_id.startswith('dom') else [{'qcode': 's'}]
         item['subject'] = [{'qcode': self.sport_map.get(sport_id, {}).get('iptc', ''),
