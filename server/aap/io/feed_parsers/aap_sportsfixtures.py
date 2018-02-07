@@ -138,6 +138,9 @@ class AAPSportsFixturesParser(XMLFeedParser):
         item['versioncreated'] = utcnow()
         item['state'] = CONTENT_STATE.INGESTED
         item['pubstatus'] = None
+        calendars = superdesk.get_resource_service('vocabularies').find_one(req=None, _id='event_calendars')
+        item['calendars'] = [c for c in calendars.get('items', []) if c.get('qcode').lower() == 'sport']
+
         return item
 
     def _parse_fixtures(self, xml, items):
@@ -151,6 +154,7 @@ class AAPSportsFixturesParser(XMLFeedParser):
         xml = fixture.get('fixture_xml')
         start_date = xml.find('.//Fixture_List/Competition/Competition_Details').attrib.get('Start_Date', '')
         end_date = xml.find('.//Fixture_List/Competition/Competition_Details').attrib.get('End_Date', '')
+        comp_type = xml.find('.//Fixture_List/Competition/Competition_Details').attrib.get('Comp_Type', '')
         # A fixture list that the competition details provide the start and end date
         if start_date != '' and end_date != '':
             start = datetime.strptime('{} 00:00'.format(start_date), '%Y-%m-%d %H:%M')
@@ -167,7 +171,6 @@ class AAPSportsFixturesParser(XMLFeedParser):
                         'start': local_to_utc(config.DEFAULT_TIMEZONE, start),
                         'end': local_to_utc(config.DEFAULT_TIMEZONE, end),
                         'tz': config.DEFAULT_TIMEZONE,
-                        'recurring_rule': {}
                     }
                     items.append(item)
         else:
@@ -181,6 +184,9 @@ class AAPSportsFixturesParser(XMLFeedParser):
                     continue
                 if datetime.now() < when:
                     match_id = match.find('.//Match_Details').attrib.get('Match_ID', '')
+                    # Some match id's are not yet available
+                    if match_id[-1] == '-':
+                        continue
                     match_no = match.find('.//Match_Details').attrib.get('Match_No', '')
                     teamA_name = match.findall('.//Teams/Team_Details')[0].attrib.get('Team_Name', '')
                     teamB_name = match.findall('.//Teams/Team_Details')[1].attrib.get('Team_Name', '')
@@ -200,8 +206,14 @@ class AAPSportsFixturesParser(XMLFeedParser):
 
                         # kludge for cricket
                         if fixture.get('sport_id') == '3':
-                            if 'test' in fixture.get('comp_name', '').lower():
+                            if 'test' in comp_type.lower():
                                 delta = timedelta(days=5)
+                            elif 'shef' in comp_type.lower():
+                                delta = timedelta(days=4)
+                            elif 't20' in comp_type.lower():
+                                delta = timedelta(hours=4)
+                            elif 'odi' in comp_type.lower() or 'odd' in comp_type.lower():
+                                delta = timedelta(hours=8)
                             else:
                                 delta = timedelta(hours=8)
                         else:
@@ -210,7 +222,6 @@ class AAPSportsFixturesParser(XMLFeedParser):
                             'start': local_to_utc(config.DEFAULT_TIMEZONE, when),
                             'end': local_to_utc(config.DEFAULT_TIMEZONE, when) + delta,
                             'tz': config.DEFAULT_TIMEZONE,
-                            'recurring_rule': {}
                         }
                         # add location
                         self._set_location(item, '{}, {}'.format(venue_name, venue_location))
@@ -286,7 +297,6 @@ class AAPSportsFixturesParser(XMLFeedParser):
                             'start': local_to_utc(config.DEFAULT_TIMEZONE, when),
                             'end': local_to_utc(config.DEFAULT_TIMEZONE, when) + timedelta(hours=2),
                             'tz': config.DEFAULT_TIMEZONE,
-                            'recurring_rule': {}
                         }
                         # add location
                         self._set_location(item, '{}, {}'.format(
