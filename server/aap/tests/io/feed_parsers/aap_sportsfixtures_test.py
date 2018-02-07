@@ -20,7 +20,9 @@ class SportsAPITestCase(TestCase):
         "is_active": True,
         "qcode": "eocstat:eos5",
         "name": "Planned, occurs certainly"
-    }]}]
+    }]}, {'_id': 'event_calendars', 'items': [{"name": "Sport",
+                                               "qcode": "sport",
+                                               "is_active": True}]}]
 
     location = [{
         "_id": "593604461d41c8ad06c1d489",
@@ -100,6 +102,7 @@ class SportsAPITestCase(TestCase):
                        'sport_name': 'Golf', 'comp_name': 'D+D Real Czech Masters', 'comp_id': 'int-26669'}
             items = AAPSportsFixturesParser().parse(fixture, None)
             self.assertTrue(len(items) == 1)
+            self.assertEqual(items[0].get('calendars')[0].get('qcode'), 'sport')
 
     def test_fixture_list_with_no_dates(self):
         filename = 'aap_cricket.xml'
