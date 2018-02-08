@@ -216,9 +216,9 @@ CONTENT_EXPIRY_MINUTES = int(env('CONTENT_EXPIRY_MINUTES', 3 * 24 * 60))
 AAP_MM_SEARCH_MEDIA_TYPES = ['image']
 
 # The URL endpoint for the images API
-AAP_MM_SEARCH_URL = env('AAP_MM_SEARCH_URL', 'https://one-api.aap.com.au/api/v3')
+AAP_MM_SEARCH_URL = env('AAP_MM_SEARCH_URL', 'https://photos-api.aap.com.au/api/v3')
 # Partial URL for the video preview
-AAP_MM_CDN_URL = env('AAP_MM_CDN_URL', 'http://one-cdn.aap.com.au/Preview.mp4')
+AAP_MM_CDN_URL = env('AAP_MM_CDN_URL', 'https://photos-cdn.aap.com.au/Preview.mp4')
 
 # copies the metadata from parent for associated item.
 COPY_METADATA_FROM_PARENT = env('COPY_METADATA_FROM_PARENT', True)

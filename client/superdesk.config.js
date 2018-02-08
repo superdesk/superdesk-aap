@@ -58,7 +58,6 @@ module.exports = function() {
             previewFormats: 1,
             noTakes: 1,
             searchShortcut: 1,
-            planning: 1,
             slackNotifications: 1
         },
 
@@ -74,7 +73,7 @@ module.exports = function() {
             useDefaultTimezone: 1, ingest_provider: 1, raw_search: 1,
             featuremedia: 1, marked_desks: 1
         },
-        
+
         infoRemovedFields: {
             keywords: true
         },
