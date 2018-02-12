@@ -115,7 +115,11 @@ class NewsBitesFeedParser(FileFeedParser):
         :return:
         """
         # 06 June 2016 14:00:00
-        local_dt = datetime.datetime.strptime(string, '%d %B %Y %H:%M:%S')
+        try:
+            local_dt = datetime.datetime.strptime(string, '%d %B %Y %H:%M:%S')
+        except ValueError:
+            local_dt = datetime.datetime.strptime(string, '%d %b %Y %H:%M:%S')
+
         local_tz = pytz.timezone('Australia/Sydney')
         aus_dt = local_tz.localize(local_dt, is_dst=None)
         return aus_dt.astimezone(pytz.utc)
