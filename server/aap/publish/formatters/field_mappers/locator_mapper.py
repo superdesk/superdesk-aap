@@ -118,7 +118,9 @@ class LocatorMapper(FieldMapper):
         :param str category: category of the article
         :return: if found then the locator as string else None
         """
-        if category in self.sport_categories:
+        # if the category is one of sports categories or
+        # if X category and contains sports topic then sports locators.
+        if category in self.sport_categories or self._is_special_sport_event(article, category):
             mapped_value = self._map_locator_code(article, category, self.iptc_sports_locators)
         else:
             mapped_value = self._map_locator_code(article, category, self.iptc_locators)
@@ -141,7 +143,7 @@ class LocatorMapper(FieldMapper):
         subjects = article.get('subject') or []
 
         # for sports category
-        if category in self.sport_categories:
+        if category in self.sport_categories or self._is_special_sport_event(article, category):
             subject = set_subject({'qcode': category}, article) or ''
             feature = locators.get('{}000'.format(subject[:5])) or locators.get(subject)
             if feature:
@@ -165,6 +167,11 @@ class LocatorMapper(FieldMapper):
                     return feature
 
         return None
+
+    def _is_special_sport_event(self, article, category):
+        """# if X category and contains sports topic then it is special sports event."""
+        return category == 'X' and \
+            [s for s in article.get('subject') if (s.get('qcode') or '').startswith('15')]
 
     def get_formatted_headline(self, article, category):
         """

@@ -63,8 +63,21 @@ class SelectorcodeMapperTest(TestCase):
             'country': 'China'
         }]
     }
+
+    article8 = {
+        'subject': [{'qcode': '10006000'}],
+        'place': [{
+            'name': 'CHINA',
+            'state': '',
+            'world_region': 'China',
+            'group': 'Rest of the World',
+            'qcode': 'CHN',
+            'country': 'China'
+        }]
+    }
     category1 = 'I'
     category2 = 'D'
+    categoryX = 'X'
     locator_map = LocatorMapper()
     vocab = [{'_id': 'categories', 'items': [
         {"is_active": True, "name": "Overseas Sport", "qcode": "S", "subject": "15000000"},
@@ -153,3 +166,9 @@ class SelectorcodeMapperTest(TestCase):
 
         self.assertEqual(self.locator_map.get_formatted_headline(article, 'A'),
                          'This is test headline')
+
+    def test_locator_for_categoryX_sport_topic(self):
+        self.assertEqual(self.locator_map.map(self.article7, 'X'), 'SKI')
+
+    def test_locator_for_categoryX_no_sport_topic(self):
+        self.assertEqual(self.locator_map.map(self.article8, 'X'), 'CHN')
