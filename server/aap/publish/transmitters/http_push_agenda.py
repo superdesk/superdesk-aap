@@ -36,6 +36,7 @@ class HTTPAgendaPush(HTTPPushService):
         # pop the ExternalIdentifier as the Superdesk planning id is to long for the Agenda database
         formatted_item = json.loads(data)
         id = formatted_item.pop('ExternalIdentifier')
+        type = formatted_item.pop('Type')
         agenda_entry = json.dumps(formatted_item)
 
         resource_url = self._get_assets_url(destination)
@@ -47,16 +48,16 @@ class HTTPAgendaPush(HTTPPushService):
             # The id from agenda is returned as part of the location header when the Event is created in Agenda
             location = response.headers.get('Location', None)
             if location:
-                self._save_agenda_id(id, location)
+                self._save_agenda_id(id, location, type)
             response.raise_for_status()
         except Exception as ex:
             logger.exception(ex)
             message = 'Error pushing item %s: %s' % (response.status_code, response.text)
             self._raise_publish_error(response.status_code, Exception(message), destination)
 
-    def _save_agenda_id(self, id, location):
+    def _save_agenda_id(self, id, location, type):
         agendaId = location.split('/')[-1]
-        service = get_resource_service('events')
+        service = get_resource_service('events') if type == 'event' else get_resource_service('planning')
         original = service.find_one(req=None, _id=id)
         if original:
             service.system_update(id, {'unique_id': agendaId}, original)
