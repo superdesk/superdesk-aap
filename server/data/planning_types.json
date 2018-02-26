@@ -3,6 +3,9 @@
         "_id": "events",
         "name": "events",
         "editor": {
+            "place": {
+                "enabled": true
+            },
             "anpa_category": {
                 "enabled": true
             },
@@ -42,6 +45,10 @@
             }
         },
         "schema" : {
+            "place": {
+                "type": "list",
+                "required": false
+            },
             "anpa_category": {
                 "type": "list",
                 "required": false
@@ -172,6 +179,91 @@
             },
             "keyword": {
                 "enabled":true
+            }
+        }
+    },
+    {
+        "_id": "planning",
+        "name": "planning",
+        "schema": {
+            "agendas": {
+                "required": false,
+                "type": "list"
+            },
+            "place": {
+                "required": false,
+                "type": "list"
+            },
+            "anpa_category": {
+                "required": false,
+                "type": "list"
+            },
+            "description_text": {
+                "required": false,
+                "type": "string"
+            },
+            "ednote": {
+                "required": false,
+                "type": "string"
+            },
+            "flags": {
+                "required": false,
+                "type": "dict"
+            },
+            "headline": {
+                "required": false,
+                "type": "string"
+            },
+            "internal_note": {
+                "required": false,
+                "type": "string"
+            },
+            "slugline": {
+                "required": false,
+                "type": "string"
+            },
+            "subject": {
+                "required": false,
+                "type": "list"
+            },
+            "urgency": {
+                "required": false,
+                "type": "number"
+            }
+        },
+        "editor": {
+            "agendas": {
+                "enabled": true
+            },
+            "place": {
+                "enabled": true
+            },
+            "anpa_category": {
+                "enabled": true
+            },
+            "description_text": {
+                "enabled": true
+            },
+            "ednote": {
+                "enabled": true
+            },
+            "flags": {
+                "enabled": true
+            },
+            "headline": {
+                "enabled": true
+            },
+            "internal_note": {
+                "enabled": true
+            },
+            "slugline": {
+                "enabled": true
+            },
+            "subject": {
+                "enabled": true
+            },
+            "urgency": {
+                "enabled": true
             }
         }
     }
