@@ -13,7 +13,6 @@ import superdesk
 from superdesk.publish.formatters import Formatter
 from superdesk.utils import json_serialize_datetime_objectId
 from superdesk.utc import utc_to_local
-from superdesk.errors import SuperdeskError
 
 
 class AgendaPlanningFormatter(Formatter):
@@ -53,27 +52,38 @@ class AgendaPlanningFormatter(Formatter):
     coverage_status_map = {'ncostat:int': 1, 'ncostat:notdec': 2, 'ncostat:notint': 3, 'ncostat:onreq': 2}
 
     def can_format(self, format_type, article):
-        return format_type == 'agenda_planning' and article.get('type') == 'event'
+        """
+        Can format events or planning items that have associated coverages
+        :param format_type:
+        :param article:
+        :return:
+        """
+        can_format_event = format_type == 'agenda_planning' and article.get('type') == 'event'
+        can_format_planning = False
+        if article.get('type') == 'planning':
+            # The planning item must have a coverage in order to be published to agenda or have been published before
+            # the dates are derived from the coverage as the planning item does not have dates
+            if not article.get('unique_id') and (not article.get('coverages') or len(article.get('coverages')) == 0):
+                can_format_planning = False
+            else:
+                can_format_planning = True
 
-    def format(self, item, subscriber, codes=None):
-        pub_seq_num = superdesk.get_resource_service('subscribers').generate_sequence_number(subscriber)
+        return can_format_event or can_format_planning
 
-        agenda_event = dict()
-        # If the item has a unique_id it is assumed to be the Agenda ID and the item has been published to Agenda
-        if item.get('unique_id'):
-            agenda_event['ID'] = item.get('unique_id')
-            agenda_event['IsNew'] = False
-        else:
-            agenda_event['IsNew'] = True
-        agenda_event['ExternalIdentifier'] = item.get('_id')
+    def _set_dates(self, agenda_event, tz, start, end):
+        """
+        Translate the date formats to those used by Agenda
+        :param agenda_event:
+        :param tz:
+        :param start:
+        :param end:
+        :return:
+        """
+        datefromlocal = utc_to_local(tz, start)
+        datetolocal = utc_to_local(tz, end)
 
-        agenda_event['Title'] = item.get('name')
-        agenda_event['Description'] = '<p>' + item.get('definition_short', '') + '</p>'
-        agenda_event['DescriptionFormat'] = 'html'
-        agenda_event['SpecialInstructions'] = item.get('internal_note')
-
-        datefromlocal = utc_to_local(item.get('dates').get('tz'), item.get('dates').get('start'))
-        datetolocal = utc_to_local(item.get('dates').get('tz'), item.get('dates').get('end'))
+        if datefromlocal is None:
+            return
 
         agenda_event['DateFrom'] = datefromlocal.strftime('%Y-%m-%d')
         # If the to date is different to the from date
@@ -95,12 +105,51 @@ class AgendaPlanningFormatter(Formatter):
         offset_str = datetolocal.strftime('%z')
         agenda_event['TimeToZone'] = offset_str[0:3] + ':' + offset_str[3:5]
 
+    def _set_default_location(self, agenda_event):
+        """
+        Set default values for the loaction related fields
+        :param agenda_event:
+        :return:
+        """
+        agenda_event['Region'] = {'ID': 3}
+        agenda_event['Country'] = {'ID': 16}
+        agenda_event['City'] = {'ID': 106}
+
+    def _format_event(self, item):
+        """
+        Format the passed event item for Agenda
+        :param item:
+        :return:
+        """
+        agenda_event = dict()
+        # If the item has a unique_id it is assumed to be the Agenda ID and the item has been published to Agenda
+        if item.get('unique_id'):
+            agenda_event['ID'] = item.get('unique_id')
+            agenda_event['IsNew'] = False
+        else:
+            agenda_event['IsNew'] = True
+        agenda_event['ExternalIdentifier'] = item.get('_id')
+        agenda_event['Type'] = item.get('type')
+
+        agenda_event['Title'] = item.get('name')
+        agenda_event['Description'] = '<p>' + item.get('definition_short', '').replace('\n', '<br>') + '</p>'
+        if item.get('definition_long', '') != '':
+            agenda_event['Description'] = agenda_event['Description'] + '<p>' + item.get('definition_long', '').replace(
+                '\n', '<br>') + '</p>'
+        agenda_event['DescriptionFormat'] = 'html'
+        agenda_event['SpecialInstructions'] = item.get('internal_note')
+
+        self._set_dates(agenda_event, item.get('dates').get('tz'), item.get('dates').get('start'),
+                        item.get('dates').get('end'))
+
+        self._set_default_location(agenda_event)
+
         if len(item.get('location', [])) > 0:
             location_service = superdesk.get_resource_service('locations')
             location = location_service.find_one(req=None, guid=item.get('location')[0]['qcode'])
             if location:
                 # if the country is not Australia the region is World
-                if location.get('address', {}).get('country') and location.get('address', {}).get('country')\
+                if location.get('address', {}).get('country') and location.get('address', {}).get('country') \
                         != 'Australia':
                     agenda_event['Region'] = {'ID': 11}
                     country_id = self._get_country_id(location.get('address', {}).get('country').lower())
@@ -121,14 +170,16 @@ class AgendaPlanningFormatter(Formatter):
                     agenda_event['Region'] = {'ID': region}
                     agenda_event['City'] = {'ID': self._get_city_id(location)}
                 agenda_event['Address'] = {'DisplayString': item.get('location')[0].get('name', '')}
-        else:
-            raise SuperdeskError('Unable to determine location for event when publishing it to Agenda')
 
         agenda_category = []
-        for c in item['calendars']:
-            if self.category_map.get(c.get('qcode')):
-                agenda_category.append({'ID': self.category_map.get(c.get('qcode')), 'IsSelected': True})
-        agenda_event['Categories'] = agenda_category
+        if item.get('calendars') and len(item.get('calendars')) > 0:
+            for c in item['calendars']:
+                if self.category_map.get(c.get('qcode').lower()):
+                    agenda_category.append({'ID': self.category_map.get(c.get('qcode').lower()), 'IsSelected': True})
+            agenda_event['Categories'] = agenda_category if len(agenda_category) > 0 else [
+                {'ID': 4, 'IsSelected': True}]
+        else:
+            agenda_event['Categories'] = [{'ID': 4, 'IsSelected': True}]
 
         agenda_topics = []
         for s in item.get('subject', []):
@@ -148,23 +199,129 @@ class AgendaPlanningFormatter(Formatter):
         agenda_event['Agencies'] = [{'ID': 1, 'IsSelected': True}]
         agenda_event['Visibility'] = {'ID': 1}
         agenda_event['EntrySchedule'] = {'ID': None}
-        if item.get('pubstatus') == 'cancelled' or item.get('occur_status', {}).get('qcode', '') == 'eocstat:eos6':
-            agenda_event['WorkflowState'] = {'ID': 7}
-        else:
-            agenda_event['WorkflowState'] = {'ID': 2}
+        self._workflow_state(item, agenda_event)
 
         # track down any associated planning and coverage
         coverages = []
         plannings = superdesk.get_resource_service('events').get_plannings_for_event(item)
         for planning in plannings:
-            for coverage in planning.get('coverages', []):
-                coverage_type = coverage.get('planning', {}).get('g2_content_type', 'text')
-                agenda_role = self.coverage_type_map.get(coverage_type)
-                coverage_status = self.coverage_status_map.get(coverage.get('news_coverage_status').get('qcode'))
-                agenda_coverage = {'Role': {'ID': agenda_role}, 'CoverageStatus': {'ID': coverage_status}}
-                coverages.append(agenda_coverage)
+            # Only include the coverages if the planning item is published
+            if planning.get('pubstatus') == 'usable':
+                for coverage in planning.get('coverages', []):
+                    coverage_type = coverage.get('planning', {}).get('g2_content_type', 'text')
+                    agenda_role = self.coverage_type_map.get(coverage_type)
+                    coverage_status = self.coverage_status_map.get(coverage.get('news_coverage_status').get('qcode'))
+                    agenda_coverage = {'Role': {'ID': agenda_role}, 'CoverageStatus': {'ID': coverage_status}}
+                    coverages.append(agenda_coverage)
+        agenda_event['Coverages'] = coverages
+        return agenda_event
+
+    def _format_planning(self, item):
+        """
+        Format the passed palnning item for Agenda
+        :param item:
+        :return:
+        """
+        agenda_event = dict()
+        # If the item has a unique_id it is assumed to be the Agenda ID and the item has been published to Agenda
+        if item.get('unique_id'):
+            agenda_event['ID'] = item.get('unique_id')
+            agenda_event['IsNew'] = False
+        else:
+            agenda_event['IsNew'] = True
+        agenda_event['ExternalIdentifier'] = item.get('_id')
+        agenda_event['Type'] = item.get('type')
+
+        agenda_event['Title'] = item.get('slugline')
+        agenda_event['Description'] = '<p>' + item.get('description_text', '') + '</p>'
+        agenda_event['DescriptionFormat'] = 'html'
+        agenda_event['SpecialInstructions'] = item.get('internal_note')
+
+        start_date = None
+        end_date = None
+        coverages = []
+        for coverage in item.get('coverages', []):
+            coverage_type = coverage.get('planning', {}).get('g2_content_type', 'text')
+            if start_date is None:
+                start_date = coverage.get('planning', {}).get('scheduled')
+            else:
+                if coverage.get('planning', {}).get('scheduled') < start_date:
+                    start_date = coverage.get('planning', {}).get('scheduled')
+            if end_date is None:
+                end_date = coverage.get('planning', {}).get('scheduled')
+            else:
+                if coverage.get('planning', {}).get('scheduled') > end_date:
+                    end_date = coverage.get('planning', {}).get('scheduled')
+            agenda_role = self.coverage_type_map.get(coverage_type)
+            coverage_status = self.coverage_status_map.get(coverage.get('news_coverage_status').get('qcode'))
+            agenda_coverage = {'Role': {'ID': agenda_role}, 'CoverageStatus': {'ID': coverage_status}}
+            coverages.append(agenda_coverage)
         if len(coverages) > 0:
             agenda_event['Coverages'] = coverages
+        else:
+            # If not coverage we fall back the to bogus planning date
+            start_date = item.get('_planning_date')
+            end_date = item.get('_planning_date')
+
+        self._set_dates(agenda_event, 'Australia/Sydney', start_date, end_date)
+
+        # Hard coded for planning items as there are no values available
+        self._set_default_location(agenda_event)
+
+        # Always AAP
+        agenda_event['Agencies'] = [{'ID': 1, 'IsSelected': True}]
+        # Visibility controls if the entry is visible externally on Agenda
+        # maybe should use the not for publication flag.
+        agenda_event['Visibility'] = {'ID': 1}
+        agenda_event['EntrySchedule'] = {'ID': None}
+        agenda_event['Categories'] = [{'ID': 4, 'IsSelected': True}]
+        self._workflow_state(item, agenda_event)
+
+        return agenda_event
+
+    def _workflow_state(self, item, agenda_event):
+        """
+        Map the status of the event/planning item to the agenda values
+        :param agenda_event:
+        :return:
+        """
+
+        # Allowed values in Agenda are :-
+        # 1 ForApproval
+        # 2 Published
+        # 3 Spiked
+        # 4 Draft
+        # 5 Postponed
+        # 6 Rescheduled
+        # 7 Cancelled
+
+        if item.get('pubstatus') == 'cancelled' or item.get('occur_status', {}).get('qcode', '') == 'eocstat:eos6':
+            agenda_event['WorkflowState'] = {'ID': 7}
+        elif item.get('pubstatus') == 'rescheduled':
+            agenda_event['WorkflowState'] = {'ID': 6}
+        elif item.get('pubstatus') == 'postponed':
+            agenda_event['WorkflowState'] = {'ID': 5}
+        else:
+            agenda_event['WorkflowState'] = {'ID': 2}
+
+    def format(self, item, subscriber, codes=None):
+        """
+        Given an item that is either an event or planning item, format the reasponse for Agenda
+        :param item:
+        :param subscriber:
+        :param codes:
+        :return:
+        """
+        pub_seq_num = superdesk.get_resource_service('subscribers').generate_sequence_number(subscriber)
+        if item.get('type', '') == 'planning':
+            # If the planning item is associated with an event then we publish the event
+            if item.get('event_item'):
+                event = superdesk.get_resource_service('events').find_one(req=None, _id=item.get('event_item'))
+                agenda_event = self._format_event(event)
+            else:
+                agenda_event = self._format_planning(item)
+        else:
+            agenda_event = self._format_event(item)
 
         return [(pub_seq_num, json.dumps(agenda_event, default=json_serialize_datetime_objectId))]
 
