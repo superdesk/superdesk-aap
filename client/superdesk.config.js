@@ -81,6 +81,7 @@ module.exports = function() {
         defaultTimezone: 'Australia/Sydney',
         shortDateFormat: 'DD/MM',
         ArchivedDateFormat: 'D/MM/YYYY',
+        ArchivedDateOnCalendarYear: 1,
 
         list: {
             'priority': [
