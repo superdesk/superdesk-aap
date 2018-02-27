@@ -42,6 +42,9 @@
 
             "subject": {
                 "enabled": true
+            },
+            "dates": {
+                "enabled": true
             }
         },
         "schema" : {
@@ -118,6 +121,11 @@
                 "mandatory_in_list": {
                     "scheme": {}
                 }
+            },
+            "dates": {
+                "type": "dict",
+                "required": true,
+                "defaultDurationOnChange": 0
             }
         }
     },
