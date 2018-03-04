@@ -10,10 +10,8 @@
 
 import os
 from datetime import datetime
-
 from superdesk.tests import TestCase
 from superdesk.utc import utc, utcnow
-
 from aap.io.feed_parsers.asianet import AsiaNetFeedParser
 
 
