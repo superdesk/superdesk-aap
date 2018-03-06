@@ -23,6 +23,7 @@ from superdesk import etree as sd_etree
 from copy import deepcopy
 from superdesk.utc import utcnow
 from datetime import date
+from html import escape
 
 
 class ReutersNewsML12Formatter(NewsML12Formatter):
@@ -225,7 +226,7 @@ class ReutersNewsML12Formatter(NewsML12Formatter):
                                                         XML_LANG: formatted_article.get('language', 'en')})
         head = SubElement(html, 'head')
         SubElement(head, 'title')
-        # Title has been romoved to match the existing feed
+        # Title has been removed to match the existing feed
         # title.text = formatted_article.get('headline', '')
         body = SubElement(html, 'body')
 
@@ -253,7 +254,7 @@ class ReutersNewsML12Formatter(NewsML12Formatter):
             list_paragraph = body_html.split('__##br##__')
             for p in list_paragraph:
                 if p and p.strip():
-                    body.append(etree.fromstring('<p>' + p + '</p>'))
+                    body.append(etree.fromstring('<p>' + escape(p) + '</p>'))
 
             if SIGN_OFF in formatted_article:
                 body.append(etree.fromstring(
