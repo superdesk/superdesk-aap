@@ -326,7 +326,14 @@ class AAPSportsFixturesParser(XMLFeedParser):
         location = locations_service.find_one(req=None, unique_name=location_string)
         if location:
             item['location'] = [{
-                'name': location.get('name', location_string),
+                'name': location.get('name', location.get('name', '')),
+                'address': {
+                    'line': location.get('address', {}).get('line', []),
+                    'area': location.get('address', {}).get('area', ''),
+                    'locality': location.get('address', {}).get('locality', ''),
+                    'postal_code': location.get('address', {}).get('postal_code', ''),
+                    'country': location.get('address', {}).get('country', ''),
+                },
                 'qcode': location.get('guid')
             }]
             return
@@ -358,27 +365,39 @@ class AAPSportsFixturesParser(XMLFeedParser):
                 if len(stadiums) == 0:
                     self._set_location_not_found(item, location_string)
                     return
+
         stadium = stadiums[0]
 
         location = dict()
         location['unique_name'] = location_string
-        location['name'] = stadium.raw.get('display_name', location_string)
+        location['original_source'] = 'AAP Sports Results'
         location['position'] = {'longitude': stadium.point.longitude, 'latitude': stadium.point.latitude,
                                 'altitude': stadium.point.altitude}
         localities = [l for l in self.localityHierarchy if stadium.raw.get('address', {}).get(l)]
         areas = [a for a in self.areaHierarchy if stadium.raw.get('address', {}).get(a)]
+        line = stadium.raw.get('address', {}).get('house_number', '')
+        line = stadium.raw.get('address', {}).get('road', '') if line == '' else \
+            line + ' ' + stadium.raw.get('address', {}).get('road', '')
         location['address'] = {
             'locality': stadium.raw.get('address', {}).get(localities[0], '') if len(localities) > 0 else '',
             'area': stadium.raw.get('address', {}).get(areas[0], '') if len(areas) > 0 else '',
             'country': stadium.raw.get('address', {}).get('country', ''),
             'postal_code': stadium.raw.get('address', {}).get('postcode', ''),
-            'external': {'nominatim': stadium.raw}
+            'external': {'nominatim': stadium.raw},
+            'line': [line]
         }
-
+        location['name'] = stadiums[0].raw.get('address', {}).get(stadiums[0].raw.get('type', 'stadium'), '')
         ret = locations_service.post([location])
         location = locations_service.find_one(req=None, _id=ret[0])
         item['location'] = [{
-            'name': location.get('name', location_string),
+            'name': location.get('name', location.get('name')),
+            'address': {
+                'line': location.get('address', {}).get('line', []),
+                'area': location.get('address', {}).get('area', ''),
+                'locality': location.get('address', {}).get('locality', ''),
+                'postal_code': location.get('address', {}).get('postal_code', ''),
+                'country': location.get('address', {}).get('country', ''),
+            },
             'qcode': location.get('guid')
         }]
 
