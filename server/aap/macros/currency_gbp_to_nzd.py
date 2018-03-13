@@ -8,12 +8,8 @@
 # AUTHORS and LICENSE files distributed with this source code, or
 # at https://www.sourcefabric.org/superdesk/license
 
-import os
 from . import aap_currency_base as currency_base
-from decimal import Decimal
 from copy import deepcopy
-
-GBP_TO_NZD = Decimal('2.06')  # backup
 
 
 def get_rate():
@@ -21,15 +17,13 @@ def get_rate():
     try:
         return currency_base.get_rate('GBP', 'NZD')
     except:
-        return GBP_TO_NZD
+        raise LookupError('Failed to retrieve currency conversion rate')
 
 
 def gbp_to_nzd(item, **kwargs):
     """Convert NZD to GBP."""
 
-    rate = kwargs.get('rate') or get_rate()
-    if os.environ.get('BEHAVE_TESTING'):
-        rate = GBP_TO_NZD
+    rate = get_rate()
 
     symbol_first_regex = r'([£]|(GBP)|(STG))\s*\-?\s*\(?(((\d{1,}((\,\d{3})*|\d*))?' \
                          r'(\.\d{1,4})?)|((\d{1,}((\,\d{3})*|\d*))(\.\d{0,4})?))\)?' \
