@@ -8,12 +8,11 @@
 # AUTHORS and LICENSE files distributed with this source code, or
 # at https://www.sourcefabric.org/superdesk/license
 
-import unittest
+from .currency_test_base import CurrencyTestClass
 from .currency_cny_to_aud import yuan_to_aud
-from decimal import Decimal
 
 
-class CurrencyTestCase(unittest.TestCase):
+class CurrencyTestCase(CurrencyTestClass):
 
     def test_cny_to_aud(self):
         text = 'This is a ¥ 40 note. ' \
@@ -49,7 +48,7 @@ class CurrencyTestCase(unittest.TestCase):
                'This is a ¥ 4000 note. ' \
 
         item = {'body_html': text}
-        res, diff = yuan_to_aud(item, rate=Decimal(2))
+        res, diff = yuan_to_aud(item)
         self.assertEqual(diff['¥ 40'], '¥ 40 ($A80)')
         self.assertEqual(diff['¥41'], '¥41 ($A82)')
         self.assertEqual(diff['CN¥(42)'], 'CN¥(42) ($A84)')

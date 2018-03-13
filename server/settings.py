@@ -231,3 +231,6 @@ LEGAL_ARCHIVE = True
 
 # The URL for the provision of an external feedback or suggestion site
 FEEDBACK_URL = env('FEEDBACK_URL', None)
+
+# Currency API Key
+CURRENCY_API_KEY = env('CURRENCY_API_KEY', None)
