@@ -47,7 +47,7 @@ class AgendaPlanningFormatter(Formatter):
                   'western australia': 6,
                   'world': 11}
 
-    coverage_type_map = {'text': 1, 'photo': 2, 'video': 3, 'infographics': 5, 'live_video': 3}
+    coverage_type_map = {'text': 1, 'picture': 2, 'video': 3, 'graphic': 5, 'live_video': 3}
 
     coverage_status_map = {'ncostat:int': 1, 'ncostat:notdec': 2, 'ncostat:notint': 3, 'ncostat:onreq': 2}
 
