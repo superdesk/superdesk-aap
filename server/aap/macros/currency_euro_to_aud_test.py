@@ -8,12 +8,11 @@
 # AUTHORS and LICENSE files distributed with this source code, or
 # at https://www.sourcefabric.org/superdesk/license
 
-import unittest
+from .currency_test_base import CurrencyTestClass
 from .currency_euro_to_aud import euro_to_aud
-from decimal import Decimal
 
 
-class CurrencyTestCase(unittest.TestCase):
+class CurrencyTestCase(CurrencyTestClass):
 
     def test_gbp_to_aud(self):
         text = 'This is a € 40 note. ' \
@@ -42,9 +41,10 @@ class CurrencyTestCase(unittest.TestCase):
                'This is a  54,000 EUR note. ' \
                'This is a  54,000 € note. ' \
                'This is a € 4000 note. ' \
+               'Here is 52 million euros spend it wisely. ' \
 
         item = {'body_html': text}
-        res, diff = euro_to_aud(item, rate=Decimal(2))
+        res, diff = euro_to_aud(item)
         self.assertEqual(diff['€ 40'], '€ 40 ($A80)')
         self.assertEqual(diff['€41'], '€41 ($A82)')
         self.assertEqual(diff['€(42)'], '€(42) ($A84)')
@@ -67,3 +67,4 @@ class CurrencyTestCase(unittest.TestCase):
         self.assertEqual(diff['54,000 EUR'], '54,000 EUR ($A108,000)')
         self.assertEqual(diff['54,000 €'], '54,000 € ($A108,000)')
         self.assertEqual(diff['€ 4000'], '€ 4000 ($A8,000)')
+        self.assertEqual(diff['52 million euros'], '52 million euros ($A104 million)')
