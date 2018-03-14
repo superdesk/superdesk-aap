@@ -30,6 +30,8 @@ class AAPNINJSFormatter(NINJSFormatter):
 
     def __init__(self):
         self.format_type = 'aap ninjs'
+        self.can_preview = True
+        self.can_export = True
 
     def format(self, article, subscriber, codes=None):
         try:
