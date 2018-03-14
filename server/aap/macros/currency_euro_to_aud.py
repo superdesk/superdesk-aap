@@ -8,12 +8,8 @@
 # AUTHORS and LICENSE files distributed with this source code, or
 # at https://www.sourcefabric.org/superdesk/license
 
-import os
 from . import aap_currency_base as currency_base
-from decimal import Decimal
 from copy import deepcopy
-
-EURO_TO_AUD = Decimal('1.56')  # backup
 
 
 def get_rate():
@@ -21,15 +17,13 @@ def get_rate():
     try:
         return currency_base.get_rate('EUR', 'AUD')
     except:
-        return EURO_TO_AUD
+        raise LookupError('Failed to retrieve currency conversion rate')
 
 
 def euro_to_aud(item, **kwargs):
     """Convert AUD to GBP."""
 
     rate = kwargs.get('rate') or get_rate()
-    if os.environ.get('BEHAVE_TESTING'):
-        rate = EURO_TO_AUD
 
     symbol_first_regex = r'([€]|(EUR))\s*\-?\s*\(?(((\d{1,}((\,\d{3})*|\d*))?' \
                          r'(\.\d{1,4})?)|((\d{1,}((\,\d{3})*|\d*))(\.\d{0,4})?))\)?' \
@@ -37,7 +31,7 @@ def euro_to_aud(item, **kwargs):
 
     symbol_last_regex = r'\(?(((\d{1,}((\,\d{3})*|\d*))?(\.\d{1,4})?)|((\d{1,}((\,\d{3})*|\d*))(\.\d{0,4})?))\)?' \
                         + currency_base.SECONDARY_SUFFIX_REGEX \
-                        + '\s?([€]|([e|E]uro)|(EUR))'
+                        + '\s?([€]|([e|E]uro)s{0,1}|(EUR))'
 
     symbol_first_result = currency_base.do_conversion(deepcopy(item),
                                                       rate,

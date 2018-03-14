@@ -8,12 +8,11 @@
 # AUTHORS and LICENSE files distributed with this source code, or
 # at https://www.sourcefabric.org/superdesk/license
 
-import unittest
 from .currency_chf_to_aud import chf_to_aud
-from decimal import Decimal
+from .currency_test_base import CurrencyTestClass
 
 
-class CurrencyTestCase(unittest.TestCase):
+class CurrencyTestCase(CurrencyTestClass):
 
     def test_chf_to_aud(self):
         text = 'This is a Fr 40 note. ' \
@@ -38,7 +37,7 @@ class CurrencyTestCase(unittest.TestCase):
                'This is a Fr 4000 note. ' \
 
         item = {'body_html': text}
-        res, diff = chf_to_aud(item, rate=Decimal(2))
+        res, diff = chf_to_aud(item)
         self.assertEqual(diff['Fr 40'], 'Fr 40 ($A80)')
         self.assertEqual(diff['Fr41'], 'Fr41 ($A82)')
         self.assertEqual(diff['Fr(42)'], 'Fr(42) ($A84)')
