@@ -8,13 +8,11 @@
 # AUTHORS and LICENSE files distributed with this source code, or
 # at https://www.sourcefabric.org/superdesk/license
 
-import unittest
+from .currency_test_base import CurrencyTestClass
 from .currency_usd_to_aud import usd_to_aud
-from decimal import Decimal
 
 
-class CurrencyTestCase(unittest.TestCase):
-
+class CurrencyTestCase(CurrencyTestClass):
     def test_usd_to_aud(self):
         text = 'This is a $ 40 note. ' \
                'This is a $ 1000 note. ' \
@@ -53,7 +51,7 @@ class CurrencyTestCase(unittest.TestCase):
                'This is a $ 4000 note.' \
 
         item = {'body_html': text}
-        res, diff = usd_to_aud(item, rate=Decimal(2))
+        res, diff = usd_to_aud(item)
         self.assertEqual(diff['$ 40'], '$US 40 ($A80)')
         self.assertEqual(diff['$ 1000'], '$US 1000 ($A2,000)')
         self.assertEqual(diff['$41'], '$US41 ($A82)')
