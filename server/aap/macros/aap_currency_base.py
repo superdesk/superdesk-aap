@@ -10,13 +10,17 @@
 
 import requests
 import re
+import json
 from . import macro_replacement_fields
 from decimal import Decimal
 from superdesk.cache import cache
+from flask import current_app as app
 
-RATE_SERVICE = 'http://download.finance.yahoo.com/d/quotes.csv?s={}=X&f=nl1d1'
+
+RATE_SERVICE = 'http://data.fixer.io/api/latest?access_key={}&symbols={}'
 SUFFIX_REGEX = r'((\s*\-?\s*)((mln)|(bln)|([mM]illion)|([bB]illion)|[mb]))?\)?'
 SECONDARY_SUFFIX_REGEX = r'(\s*\-?\s*)((mln)|(bln)|([mM]illion)|([bB]illion)|[mb])?\)?'
+SYMBOLS = 'USD,AUD,CHF,NZD,CNY,GBP,EUR,JPY'
 
 
 def to_currency(value, places=2, curr='', sep=',', dp='.', pos='', neg='-', trailneg=''):
@@ -69,11 +73,27 @@ def to_currency(value, places=2, curr='', sep=',', dp='.', pos='', neg='-', trai
     return ''.join(reversed(result))
 
 
-@cache(ttl=21600)
+@cache(ttl=43200)
+def get_all_rates():
+    r = requests.get(RATE_SERVICE.format(app.config.get('CURRENCY_API_KEY', ''), SYMBOLS), timeout=5)
+    r.raise_for_status()
+    result = json.loads(r.text)
+    if result.get('success') is True:
+        return result
+    else:
+        raise LookupError('Failed to retrieve currency conversion rates')
+
+
 def get_rate(from_currency, to_currency):
     """Get the exchange rate."""
-    r = requests.get(RATE_SERVICE.format(from_currency + to_currency), timeout=5)
-    return Decimal(r.text.split(',')[1])
+    result = get_all_rates()
+    if result.get('success') is True:
+        from_value = result.get('rates').get(from_currency)
+        to_value = result.get('rates').get(to_currency)
+    else:
+        raise LookupError('Failed to retrieve currency conversion rate')
+
+    return Decimal(to_value / from_value)
 
 
 def update_suffix(value, suffix, precision=0):

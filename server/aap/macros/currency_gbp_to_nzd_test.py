@@ -8,14 +8,15 @@
 # AUTHORS and LICENSE files distributed with this source code, or
 # at https://www.sourcefabric.org/superdesk/license
 
-import unittest
+from .currency_test_base import CurrencyTestClass
 from .currency_gbp_to_nzd import gbp_to_nzd
-from decimal import Decimal
 
 
-class CurrencyTestCase(unittest.TestCase):
+class CurrencyTestCase(CurrencyTestClass):
 
     def test_gbp_to_nzd(self):
+        super().clearCache()
+        self.resp = {'success': True, 'rates': {"NZD": 2.0, "GBP": 1.0}}
         text = 'This is a £ 40 note. ' \
                'This is a £41 note. ' \
                'This is a £(42) note. ' \
@@ -52,7 +53,7 @@ class CurrencyTestCase(unittest.TestCase):
                'This is a £ 4000 note.' \
 
         item = {'body_html': text}
-        res, diff = gbp_to_nzd(item, rate=Decimal(2))
+        res, diff = gbp_to_nzd(item)
         self.assertEqual(diff['£ 40'], '£ 40 ($NZ80)')
         self.assertEqual(diff['£41'], '£41 ($NZ82)')
         self.assertEqual(diff['£(42)'], '£(42) ($NZ84)')
@@ -79,3 +80,4 @@ class CurrencyTestCase(unittest.TestCase):
         self.assertEqual(diff['(55,233.00) GBP'], '(55,233.00) GBP ($NZ110,466.00)')
         self.assertEqual(diff['52 mln pounds'], '52 mln pounds ($NZ104 mln)')
         self.assertEqual(diff['£ 4000'], '£ 4000 ($NZ8,000)')
+        super().clearCache()

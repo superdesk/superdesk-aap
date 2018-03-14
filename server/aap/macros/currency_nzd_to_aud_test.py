@@ -8,14 +8,14 @@
 # AUTHORS and LICENSE files distributed with this source code, or
 # at https://www.sourcefabric.org/superdesk/license
 
-import unittest
 from .currency_nzd_to_aud import nzd_to_aud
-from decimal import Decimal
+from .currency_test_base import CurrencyTestClass
 
 
-class CurrencyTestCase(unittest.TestCase):
+class CurrencyTestCase(CurrencyTestClass):
 
     def test_nzd_to_aud(self):
+        self.resp = {'success': True, 'rates': {"AUD": 2.0, "NZD": 1.0}}
         text = 'This is a NZ$ 40 note. ' \
                'This is a NZ$41 note. ' \
                'This is a NZ$(42) note. ' \
@@ -40,7 +40,9 @@ class CurrencyTestCase(unittest.TestCase):
                'This is a NZ$ 4000 note. ' \
 
         item = {'body_html': text}
-        res, diff = nzd_to_aud(item, rate=Decimal(2))
+        self.clearCache()
+        res, diff = nzd_to_aud(item)
+        self.clearCache()
         self.assertEqual(diff['NZ$ 40'], 'NZ$ 40 ($A80)')
         self.assertEqual(diff['NZ$41'], 'NZ$41 ($A82)')
         self.assertEqual(diff['NZ$(42)'], 'NZ$(42) ($A84)')
