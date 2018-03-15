@@ -93,8 +93,8 @@ class ReutersNewsML12Formatter(NewsML12Formatter):
             SubElement(news_management, 'Instruction', {'FormalName': 'Update'})
 
         SubElement(news_management, 'Property', {'FormalName': 'reuters.3rdPartyStyleGuideVersion', 'Value': '2.1'})
-        SubElement(news_management, 'Property',
-                   {'FormalName': 'USN', 'Value': 'AAP' + str(formatted_article.get('unique_id')) + 'a'})
+        SubElement(news_management, 'Property', {'FormalName': 'USN', 'Value': 'AAP' + str(
+            int(formatted_article.get('unique_id', 1)) % 100000) + 'a'})
 
     def _format_news_component(self, formatted_article, news_item):
         """
