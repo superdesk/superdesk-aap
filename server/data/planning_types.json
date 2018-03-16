@@ -1,7 +1,7 @@
 [
     {
-        "_id": "events",
-        "name": "events",
+        "_id": "event",
+        "name": "event",
         "editor": {
             "place": {
                 "enabled": true
