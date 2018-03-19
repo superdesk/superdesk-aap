@@ -47,6 +47,14 @@ class AgendaPlanningFormatter(Formatter):
                   'western australia': 6,
                   'world': 11}
 
+    # If a place has been specifed this map is used to set the region
+    place_region_map = {'ACT': 2, 'AFR': 11, 'ASIA': 11, 'CAN': 11, 'CHN': 11, 'CIS': 11, 'EUR': 11, 'FED': 1,
+                        'IRE': 11, 'JPN': 11, 'MID': 11, 'NSW': 3, 'NT': 7, 'NZ': 10, 'PAC': 11, 'QLD': 8,
+                        'SA': 5, 'SAM': 11, 'TAS': 9, 'UK': 11, 'US': 11, 'VIC': 4, 'WA': 6}
+
+    # If a place has been specified but no location then the city is set with this map
+    place_city_map = {'ACT': 59, 'NSW': 106, 'NT': 62, 'QLD': 50, 'SA': 41, 'TAS': 76, 'VIC': 87, 'WA': 95}
+
     coverage_type_map = {'text': 1, 'picture': 2, 'video': 3, 'graphic': 5, 'live_video': 3}
 
     coverage_status_map = {'ncostat:int': 1, 'ncostat:notdec': 2, 'ncostat:notint': 3, 'ncostat:onreq': 2}
@@ -107,7 +115,7 @@ class AgendaPlanningFormatter(Formatter):
 
     def _set_default_location(self, agenda_event):
         """
-        Set default values for the loaction related fields
+        Set default values for the loaction related fields in case we can't derived anything better
         :param agenda_event:
         :return:
         """
@@ -170,6 +178,13 @@ class AgendaPlanningFormatter(Formatter):
                     agenda_event['Region'] = {'ID': region}
                     agenda_event['City'] = {'ID': self._get_city_id(location)}
                 agenda_event['Address'] = {'DisplayString': item.get('location')[0].get('name', '')}
+
+        # if we can derive a region from the place that overrides the default or any derived from the location
+        if len(item.get('place', [])) > 0:
+            agenda_event['Region'] = {'ID': self.place_region_map.get(item.get('place')[0].get('qcode').upper(), 3)}
+            # if there is no location set the city based on the place
+            if len(item.get('location', [])) == 0:
+                agenda_event['City'] = {'ID': self.place_city_map.get(item.get('place')[0].get('qcode').upper(), 106)}
 
         agenda_category = []
         if item.get('calendars') and len(item.get('calendars')) > 0:
@@ -268,6 +283,11 @@ class AgendaPlanningFormatter(Formatter):
         # Hard coded for planning items as there are no values available
         self._set_default_location(agenda_event)
 
+        # if we can derive a region from the place that overrides the default or any derived from the location
+        if len(item.get('place', [])) > 0:
+            agenda_event['Region'] = {'ID': self.place_region_map.get(item.get('place')[0].get('qcode').upper(), 3)}
+            agenda_event['City'] = {'ID': self.place_city_map.get(item.get('place')[0].get('qcode').upper(), 106)}
+
         # Always AAP
         agenda_event['Agencies'] = [{'ID': 1, 'IsSelected': True}]
         # Visibility controls if the entry is visible externally on Agenda
@@ -328,9 +348,9 @@ class AgendaPlanningFormatter(Formatter):
     def _get_city_id(self, location, country=16):
         service = superdesk.get_resource_service('agenda_city_map')
         entry = service.find({'country_id': int(country), 'name': location.get('address', {}).get('locality', '')})
-        if not entry:
+        if not entry or entry.count() <= 0:
             entry = service.find({'country_id': int(country), 'name': location.get('address', {}).get('area', '')})
-        if not entry:
+        if not entry or entry.count() <= 0:
             entry = service.find({'country_id': int(country), 'name': location.get('address', {}).get('name', '')})
         if entry:
             return entry.next().get('agenda_id') if entry.count() > 0 else 106
@@ -339,13 +359,13 @@ class AgendaPlanningFormatter(Formatter):
     def _get_iptc_id(self, lookup_code):
         service = superdesk.get_resource_service('agenda_iptc_map')
         entry = service.find({'iptc_code': lookup_code})
-        if entry:
+        if entry and entry.count() > 0:
             return entry.next().get('agenda_id') if entry else None
         return None
 
     def _get_country_id(self, country):
         service = superdesk.get_resource_service('agenda_country_map')
         entry = service.find({'name': country})
-        if entry:
+        if entry and entry.count() > 0:
             return entry.next().get('agenda_id') if entry else None
-        return None
+        return 16
