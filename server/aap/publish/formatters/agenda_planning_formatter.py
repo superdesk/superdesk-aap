@@ -130,14 +130,6 @@ class AgendaPlanningFormatter(Formatter):
         :return:
         """
         agenda_event = dict()
-        # If the item has a unique_id it is assumed to be the Agenda ID and the item has been published to Agenda
-        if item.get('unique_id'):
-            agenda_event['ID'] = item.get('unique_id')
-            agenda_event['IsNew'] = False
-        else:
-            agenda_event['IsNew'] = True
-        agenda_event['ExternalIdentifier'] = item.get('_id')
-        agenda_event['Type'] = item.get('type')
 
         agenda_event['Title'] = item.get('name')
         agenda_event['Description'] = '<p>' + item.get('definition_short', '').replace('\n', '<br>') + '</p>'
@@ -238,14 +230,6 @@ class AgendaPlanningFormatter(Formatter):
         :return:
         """
         agenda_event = dict()
-        # If the item has a unique_id it is assumed to be the Agenda ID and the item has been published to Agenda
-        if item.get('unique_id'):
-            agenda_event['ID'] = item.get('unique_id')
-            agenda_event['IsNew'] = False
-        else:
-            agenda_event['IsNew'] = True
-        agenda_event['ExternalIdentifier'] = item.get('_id')
-        agenda_event['Type'] = item.get('type')
 
         agenda_event['Title'] = item.get('slugline')
         agenda_event['Description'] = '<p>' + item.get('description_text', '') + '</p>'
@@ -342,6 +326,18 @@ class AgendaPlanningFormatter(Formatter):
                 agenda_event = self._format_planning(item)
         else:
             agenda_event = self._format_event(item)
+
+        # If the item has a unique_id it is assumed to be the Agenda ID and the item has been published to Agenda
+        if item.get('unique_id'):
+            agenda_event['ID'] = item.get('unique_id')
+            agenda_event['IsNew'] = False
+        else:
+            agenda_event['IsNew'] = True
+        agenda_event['ExternalIdentifier'] = item.get('_id')
+        agenda_event['Type'] = item.get('type')
+
+        # Pass the id of the user that is publishing the item, so we can spoof the user in the update to agenda
+        agenda_event['PublishingUser'] = item.get('version_creator', item.get('original_creator'))
 
         return [(pub_seq_num, json.dumps(agenda_event, default=json_serialize_datetime_objectId))]
 
