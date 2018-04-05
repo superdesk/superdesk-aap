@@ -240,3 +240,6 @@ FEEDBACK_URL = env('FEEDBACK_URL', None)
 
 # Currency API Key
 CURRENCY_API_KEY = env('CURRENCY_API_KEY', None)
+
+# Validate auto published content using validators not profile
+AUTO_PUBLISH_CONTENT_PROFILE = False
