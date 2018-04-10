@@ -8,5 +8,5 @@ geopy==1.11.0
 slackclient==1.0.9
 pyasn1==0.3.7
 
-git+git://github.com/superdesk/superdesk-core.git@03a9955#egg=Superdesk-Core
-git+git://github.com/superdesk/superdesk-planning.git@962dc97#egg=superdesk-planning
+git+git://github.com/superdesk/superdesk-core.git@b98b298#egg=Superdesk-Core
+git+git://github.com/superdesk/superdesk-planning.git@c3bf674#egg=superdesk-planning
