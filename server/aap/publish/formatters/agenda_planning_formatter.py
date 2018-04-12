@@ -66,7 +66,7 @@ class AgendaPlanningFormatter(Formatter):
         :param article:
         :return:
         """
-        can_format_event = format_type == 'agenda_planning' and article.get('type') == 'event'
+        can_format_event = article.get('type') == 'event'
         can_format_planning = False
         if article.get('type') == 'planning':
             # The planning item must have a coverage in order to be published to agenda or have been published before
@@ -76,7 +76,7 @@ class AgendaPlanningFormatter(Formatter):
             else:
                 can_format_planning = True
 
-        return can_format_event or can_format_planning
+        return format_type == 'agenda_planning' and (can_format_event or can_format_planning)
 
     def _set_dates(self, agenda_event, tz, start, end):
         """
