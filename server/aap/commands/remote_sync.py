@@ -27,7 +27,8 @@ class RemoteSyncCommand(superdesk.Command):
     option_list = [
         superdesk.Option('--remote', '-rmt', dest='remote', required=True),
         superdesk.Option('--username', '-usr', dest='username', required=True),
-        superdesk.Option('--password', '-pwd', dest='password', required=True)
+        superdesk.Option('--password', '-pwd', dest='password', required=True),
+        superdesk.Option('--desk', '-desk', dest='desk', required=False)
     ]
 
     headers = {"Content-type": "application/json;charset=UTF-8", "Accept": "application/json"}
@@ -57,7 +58,7 @@ class RemoteSyncCommand(superdesk.Command):
         except Exception as ex:
             print('Login to remote superdesk API failed with exception: {}'.format(ex))
 
-    def _get_remote_published_items(self):
+    def _get_remote_published_items(self, desk):
         """
         Query the remote instance of superdesk for published items and process each of them
         :return:
@@ -68,13 +69,11 @@ class RemoteSyncCommand(superdesk.Command):
                 # The query excludes spiked items and returns only text items that are the last published version
                 query = {"query": {
                     "filtered": {
-                        "filter": {
-                            "and": [
-                                {"terms": {"type": ["text"]}},
-                                {"not": {"and": [{"term": {"_type": "published"}},
-                                                 {"term": {"last_published_version": False}}]}}]}}},
-                         "sort": [{"publish_sequence_no": "asc"}],
-                         "size": 100, "from": from_count}
+                        "filter": {"and": [{"term": {"last_published_version": True}}, {"term": {"type": "text"}}]}}},
+                    "sort": [{"publish_sequence_no": "asc"}], "size": 100, "from": from_count}
+                # If a desk has been passed we filter on that as well
+                if desk:
+                    query.get('query').get('filtered').get('filter').get('and').append({"term": {"task.desk": desk}})
                 params = {'repo': 'published', 'source': json.dumps(query)}
                 response = requests.get('{}/{}'.format(self.url, 'search'), auth=HTTPBasicAuth(self.token, None),
                                         params=params, verify=False)
@@ -138,6 +137,7 @@ class RemoteSyncCommand(superdesk.Command):
 
             if (item.get('state', '')) == 'killed':
                 print("Item has been killed, ignoring it")
+                return
 
             fields_to_remove = ('unique_name', 'unique_id', 'takes', '_etag', '_type', '_current_version', '_updated')
             for field in fields_to_remove:
@@ -149,17 +149,17 @@ class RemoteSyncCommand(superdesk.Command):
 
             local_item = service.find_one(req=None, _id=item.get('_id'))
             if local_item is None:
-                print("Item is not linked in packages {}".format(item.get('_id', '')))
+                print("Injecting item {}".format(item.get('_id', '')))
                 self._inject_item(item)
             else:
                 print("Already Imported")
         else:
-            print("Rubish item {}".format(item))
+            print("No Associated archive_item {}".format(item))
 
-    def run(self, remote, username, password):
+    def run(self, remote, username, password, desk=None):
         self.url = remote
         if self._login_to_remote(remote, username, password):
-            self._get_remote_published_items()
+            self._get_remote_published_items(desk)
 
 
 superdesk.command('app:remote_sync', RemoteSyncCommand())
