@@ -17,6 +17,7 @@ from .http_push_agenda import HTTPAgendaPush
 from planning import init_app as planning_init_app
 from superdesk import get_resource_service
 from superdesk.errors import PublishHTTPPushServerError
+import requests
 
 
 class AgendaTransmit(TestCase):
@@ -94,7 +95,7 @@ class AgendaFailUserSearchTransmit(TestCase):
 
     @urlmatch(scheme='http', netloc='bogus.aap.com.au', path='/api/user/search')
     def user_search(self, url, request):
-        raise Exception
+        raise requests.exceptions.HTTPError
 
     @urlmatch(scheme='http', netloc='bogus.aap.com.au', path='/api/entry/saveentry')
     def save_entry(self, url, request):

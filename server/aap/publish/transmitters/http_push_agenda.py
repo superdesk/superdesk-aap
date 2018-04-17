@@ -50,8 +50,8 @@ class HTTPAgendaPush(HTTPPushService):
                                          data=json.dumps({'email': user.get('email')}),
                                          headers=self._get_headers(destination, self.headers))
                 response.raise_for_status()
-            except:
-                logger.warn('Exception on search for agenda user email {}'.format(user.get('email')))
+            except requests.exceptions.HTTPError as ex:
+                logger.warn('Exception on search for agenda user email {}, Exception {}'.format(user.get('email'), ex))
                 return self._get_secret_token(destination)
 
             agenda_users = json.loads(response.text)
@@ -64,8 +64,8 @@ class HTTPAgendaPush(HTTPPushService):
                         response = requests.get(self._get_assets_url(destination) + '/account/generatekey')
                         response.raise_for_status()
                         ApiKey = json.loads(response.text).get('key')
-                    except:
-                        logger.warn('Failed to get a new API key from Agenda')
+                    except Exception as ex:
+                        logger.warn('Failed to get a new API key from Agenda, Exception {}'.format(ex))
                         return self._get_secret_token(destination)
                     if ApiKey:
                         try:
@@ -77,8 +77,10 @@ class HTTPAgendaPush(HTTPPushService):
                                 headers=self._get_headers(destination, self.headers))
                             response.raise_for_status()
                             return ApiKey
-                        except Exception:
-                            logger.warn('Failed to set API key in the Agenda user {}'.format(agenda_user.get('Email')))
+                        except requests.exceptions.HTTPError as ex:
+                            logger.warn(
+                                'Failed to set API key in the Agenda user {} Exception {}'.format(
+                                    agenda_user.get('Email'), ex))
                             return self._get_secret_token(destination)
                 else:
                     return ApiKey
@@ -94,6 +96,16 @@ class HTTPAgendaPush(HTTPPushService):
         id = formatted_item.pop('ExternalIdentifier')
         type = formatted_item.pop('Type')
         user_id = formatted_item.pop('PublishingUser')
+
+        # Find the original item, test if it has an agenda id to determine if it's been published to agenda before
+        service = get_resource_service('events') if type == 'event' else get_resource_service('planning')
+        original = service.find_one(req=None, _id=id)
+        if original:
+            if original.get('unique_id'):
+                formatted_item['ID'] = original.get('unique_id')
+                formatted_item['IsNew'] = False
+            else:
+                formatted_item['IsNew'] = True
 
         self.user_api_key = self._get_user_api_key(user_id, destination)
         agenda_entry = json.dumps(formatted_item)
@@ -119,6 +131,7 @@ class HTTPAgendaPush(HTTPPushService):
             logger.exception(ex)
             message = 'Error pushing item %s: %s' % (response.status_code, response.text)
             self._raise_publish_error(response.status_code, Exception(message), destination)
+        self.user_api_key = None
 
     def _save_agenda_id(self, id, location, type):
         agendaId = location.split('/')[-1]
