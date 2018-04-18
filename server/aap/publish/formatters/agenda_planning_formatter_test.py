@@ -267,6 +267,7 @@ class AgendaPlanningFormatterTest(TestCase):
         item = json.loads(doc[1])
         self.assertEqual(item.get('Title'), 'Superdesk Planning')
         self.assertEqual(len(item.get('Coverages')), 1)
+        self.assertEqual(item.get('Type'), 'event')
 
     def test_place(self):
         event = {
@@ -332,3 +333,60 @@ class AgendaPlanningFormatterTest(TestCase):
         self.assertEqual(item.get('Topics')[0].get('Topic').get('ID'), 1212)
         self.assertEqual(item.get('TimeFromZone'), '+11:00')
         self.assertEqual(item.get('Region').get('ID'), 3)
+
+    def test_planning_only(self):
+        planning = {
+            '_id': 'urn:newsml:localhost:2018-04-16T11:37:27.193250:ea06594b-e3e1-4064-9500-415968943356',
+            'anpa_category': [
+                {
+                    'qcode': 'a',
+                    'name': 'Australian General News'
+                }
+            ],
+            'urgency': 5,
+            'guid': 'urn:newsml:localhost:2018-04-16T11:37:27.193250:ea06594b-e3e1-4064-9500-415968943356',
+            '_planning_schedule': [
+                {
+                    'coverage_id': None,
+                    'scheduled': '2018-04-16T03:00:00.093Z'
+                }
+            ],
+            'type': 'planning',
+            'original_creator': '57bcfc5d1d41c82e8401dcc0',
+            'subject': [
+                {
+                    'parent': '10003000',
+                    'qcode': '10003001',
+                    'name': 'organic foods'
+                }
+            ],
+            'description_text': 'Monday Sushi day',
+            'flags': {
+                'marked_for_not_publication': False
+            },
+            'slugline': 'Lunch',
+            'internal_note': 'get some seaweed as well',
+            'coverages': [],
+            'state': 'scheduled',
+            'item_class': 'plinat:newscoverage',
+            'agendas': [
+                '59af943d1d41c8d43dddcf7b'
+            ],
+            'planning_date': '2018-04-16T03:00:00.093Z',
+            'place': [
+                {
+                    'country': 'Australia',
+                    'world_region': 'Oceania',
+                    'state': 'New South Wales',
+                    'qcode': 'NSW',
+                    'name': 'NSW',
+                    'group': 'Australia'
+                }
+            ],
+            'pubstatus': 'usable'
+        }
+        planning['planning_date'] = datetime.datetime(2018, 4, 16, 3, 0, 0, 0)
+
+        doc = self.formatter.format(planning, {'name': 'Test Subscriber'})[0]
+        item = json.loads(doc[1])
+        self.assertEqual(item.get('Title'), 'Lunch')

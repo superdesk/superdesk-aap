@@ -13,6 +13,7 @@ import superdesk
 from superdesk.publish.formatters import Formatter
 from superdesk.utils import json_serialize_datetime_objectId
 from superdesk.utc import utc_to_local
+from copy import deepcopy
 
 
 class AgendaPlanningFormatter(Formatter):
@@ -61,22 +62,13 @@ class AgendaPlanningFormatter(Formatter):
 
     def can_format(self, format_type, article):
         """
-        Can format events or planning items that have associated coverages
+        Can format events or planning items
         :param format_type:
         :param article:
         :return:
         """
-        can_format_event = article.get('type') == 'event'
-        can_format_planning = False
-        if article.get('type') == 'planning':
-            # The planning item must have a coverage in order to be published to agenda or have been published before
-            # the dates are derived from the coverage as the planning item does not have dates
-            if not article.get('unique_id') and (not article.get('coverages') or len(article.get('coverages')) == 0):
-                can_format_planning = False
-            else:
-                can_format_planning = True
-
-        return format_type == 'agenda_planning' and (can_format_event or can_format_planning)
+        can_format = article.get('type') == 'event' or article.get('type') == 'planning'
+        return format_type == 'agenda_planning' and can_format
 
     def _set_dates(self, agenda_event, tz, start, end):
         """
@@ -259,8 +251,8 @@ class AgendaPlanningFormatter(Formatter):
             agenda_event['Coverages'] = coverages
         else:
             # If not coverage we fall back the to bogus planning date
-            start_date = item.get('_planning_date')
-            end_date = item.get('_planning_date')
+            start_date = item.get('planning_date')
+            end_date = item.get('planning_date')
 
         self._set_dates(agenda_event, 'Australia/Sydney', start_date, end_date)
 
@@ -317,27 +309,28 @@ class AgendaPlanningFormatter(Formatter):
         :return:
         """
         pub_seq_num = superdesk.get_resource_service('subscribers').generate_sequence_number(subscriber)
-        if item.get('type', '') == 'planning':
-            # If the planning item is associated with an event then we publish the event
-            if item.get('event_item'):
-                event = superdesk.get_resource_service('events').find_one(req=None, _id=item.get('event_item'))
-                agenda_event = self._format_event(event)
-            else:
-                agenda_event = self._format_planning(item)
-        else:
-            agenda_event = self._format_event(item)
-
+        format_item = deepcopy(item)
         # If the item has a unique_id it is assumed to be the Agenda ID and the item has been published to Agenda
-        if item.get('unique_id'):
-            agenda_event['ID'] = item.get('unique_id')
-            agenda_event['IsNew'] = False
+        agenda_id = format_item.get('unique_id')
+        if format_item.get('type', '') == 'planning':
+            # If the planning item is associated with an event then we publish the event
+            if format_item.get('event_item'):
+                service = superdesk.get_resource_service('events')
+                format_item = service.find_one(req=None, _id=format_item.get('event_item'))
+                agenda_event = self._format_event(format_item)
+                # If the planning item has an agenda id but the event item does not we set the id into the event
+                if agenda_id and not format_item.get('unique_id'):
+                    service.system_update(format_item.get('event_item'), {'unique_id': agenda_id}, format_item)
+            else:
+                agenda_event = self._format_planning(format_item)
         else:
-            agenda_event['IsNew'] = True
-        agenda_event['ExternalIdentifier'] = item.get('_id')
-        agenda_event['Type'] = item.get('type')
+            agenda_event = self._format_event(format_item)
+
+        agenda_event['Type'] = format_item.get('type')
+        agenda_event['ExternalIdentifier'] = format_item.get('_id')
 
         # Pass the id of the user that is publishing the item, so we can spoof the user in the update to agenda
-        agenda_event['PublishingUser'] = item.get('version_creator', item.get('original_creator'))
+        agenda_event['PublishingUser'] = format_item.get('version_creator', format_item.get('original_creator'))
 
         return [(pub_seq_num, json.dumps(agenda_event, default=json_serialize_datetime_objectId))]
 
