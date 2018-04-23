@@ -9,19 +9,19 @@
 # at https://www.sourcefabric.org/superdesk/license
 import json
 import logging
-from datetime import timedelta
+from datetime import timedelta, datetime
 
 import superdesk
 from superdesk.utc import utcnow, get_date
 from eve.utils import ParsedRequest, config
 from superdesk.publish.transmitters.http_push import HTTPPushService
-from superdesk.publish.formatters.ninjs_newsroom_formatter import NewsroomNinjsFormatter
+from superdesk.publish.formatters import NINJSFormatter
 from superdesk.utils import json_serialize_datetime_objectId
 
 logger = logging.getLogger(__name__)
 
 
-class NewsroomExportFormatter(NewsroomNinjsFormatter):
+class NewsroomExportFormatter(NINJSFormatter):
     def __init__(self):
         self.format_type = 'Newsroom Export'
         self.can_export = False
@@ -32,7 +32,7 @@ class NewsroomExportFormatter(NewsroomNinjsFormatter):
             ninjs = self._transform_to_ninjs(article, subscriber)
             return json.dumps(ninjs, default=json_serialize_datetime_objectId)
         except:
-            logger.exception("Failed to format the item {}.".format(article.get(config.ID_FIELD)))
+            logger.exception('Failed to format the item {}.'.format(article.get(config.ID_FIELD)))
 
 
 class NewsroomHTTPPush(HTTPPushService):
@@ -74,8 +74,12 @@ class ExportToNewsroom(superdesk.Command):
             transmitter = NewsroomHTTPPush()
             for items in self._get_archived_data():
                 for item in items:
+                    logger.info('Format item:{} start time: {}'.format(item.get('item_id'), datetime.now()))
                     queue_item = self._format_item(item, url)
+                    logger.info('Format item:{} end time: {}'.format(item.get('item_id'), datetime.now()))
+                    logger.info('Transmit item:{} start time: {}'.format(item.get('item_id'), datetime.now()))
                     transmitter.transmit(queue_item)
+                    logger.info('Transmit item:{} end time: {}'.format(item.get('item_id'), datetime.now()))
         except:
             logger.exception('Failed to export data.')
 
@@ -91,16 +95,18 @@ class ExportToNewsroom(superdesk.Command):
             version_created = cursor[0]['versioncreated']
 
         for page in range(0, no_of_pages):
-            logger.info('Fetching archived and published items'
-                        'for page number: {}. queue_id: {}'. format((page + 1), version_created))
+            logger.info('Fetching archived and published items '
+                        'for page number: {} of {}. version_created: {}'. format((page + 1),
+                                                                                 no_of_pages,
+                                                                                 version_created))
             req = self._get_request(version_created, self.default_end_date if no_of_pages - 1 == page else None)
             service = superdesk.get_resource_service('search')
             cursor = service.get(req=req, lookup=None)
             items = list(cursor)
             if len(items) > 0:
                 version_created = items[len(items) - 1]['versioncreated']
-            logger.info('Fetched No. of Items: {} for page: {} '
-                        'For export to newsroom.'.format(len(items), (page + 1)))
+            logger.info('Fetched No. of Items: {} for page: {} of {} '
+                        'For export to newsroom.'.format(len(items), (page + 1), no_of_pages))
             yield items
 
     def _format_item(self, item, url):
@@ -121,12 +127,13 @@ class ExportToNewsroom(superdesk.Command):
         return queue_item
 
     def _get_request(self, start_date, end_date=None):
+        logger.info('Requesting data from start date: {} ------ end date: {}'.format(start_date, end_date))
         date_range = {
-            'gte': start_date.strftime('%Y-%m-%dT00:00:00%z')
+            'gte': start_date.strftime('%Y-%m-%dT%H:%M:%S%z')
         }
 
         if end_date:
-            date_range['lt'] = end_date.strftime('%Y-%m-%dT00:00:00%z')
+            date_range['lt'] = end_date.strftime('%Y-%m-%dT%H:%M:%S%z')
 
         query = {
             'query': {
@@ -134,7 +141,7 @@ class ExportToNewsroom(superdesk.Command):
                     'query': {
                         'bool': {
                             'must': [
-                                {'range': {'expiry': {'lt': self.default_end_date.strftime('%Y-%m-%dT00:00:00%z')}}},
+                                {'range': {'expiry': {'lt': self.default_end_date.strftime('%Y-%m-%dT%H:%M:%S%z')}}},
                                 {'range': {'versioncreated': date_range}},
                                 {'term': {'type': 'text'}}
                             ],
