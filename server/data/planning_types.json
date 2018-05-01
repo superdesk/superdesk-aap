@@ -264,6 +264,9 @@
             },
             "urgency": {
                 "enabled": true
+            },
+            "name" : {
+                "enabled" : false
             }
         }
     }
