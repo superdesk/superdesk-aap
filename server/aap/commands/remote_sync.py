@@ -12,12 +12,15 @@
 
 from eve.utils import config
 import superdesk
-from superdesk import get_resource_service
+from superdesk import get_resource_service, json_utils
 from superdesk.metadata.packages import LINKED_IN_PACKAGES
 from superdesk.metadata.item import ITEM_STATE, CONTENT_STATE
 import requests
 from requests.auth import HTTPBasicAuth
 import json
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class RemoteSyncCommand(superdesk.Command):
@@ -49,7 +52,7 @@ class RemoteSyncCommand(superdesk.Command):
             response = requests.post('{}/{}'.format(remote, 'auth_db'), json=post_data, verify=False,
                                      headers=self.headers)
             if int(response.status_code) // 100 == 2:
-                content = json.loads(response.content.decode('UTF-8'))
+                content = json_utils.loads(response.content.decode('UTF-8'))
                 self.token = content.get('token')
                 return True
             else:
@@ -57,6 +60,7 @@ class RemoteSyncCommand(superdesk.Command):
                 return False
         except Exception as ex:
             print('Login to remote superdesk API failed with exception: {}'.format(ex))
+            logger.exception('Login to remote superdesk API failed with exception.')
 
     def _get_remote_published_items(self, desk):
         """
@@ -77,7 +81,7 @@ class RemoteSyncCommand(superdesk.Command):
                 params = {'repo': 'published', 'source': json.dumps(query)}
                 response = requests.get('{}/{}'.format(self.url, 'search'), auth=HTTPBasicAuth(self.token, None),
                                         params=params, verify=False)
-                content = json.loads(response.content.decode('UTF-8'))
+                content = json_utils.loads(response.content.decode('UTF-8'))
                 if len(content['_items']) == 0:
                     break
                 for item in content['_items']:
@@ -85,9 +89,11 @@ class RemoteSyncCommand(superdesk.Command):
                         self._process_item(item['archive_item'])
                     except Exception as ex:
                         print('Exception processing {}'.format(ex))
+                        logger.exception('Exception processing.')
                 from_count += 100
         except Exception as ex:
-            print("Exception getting remote published items: {}", ex)
+            print('Exception getting remote published items: {}', ex)
+            logger.exception('Exception getting remote published items.')
 
     def _get_remote_package(self, id):
         """
