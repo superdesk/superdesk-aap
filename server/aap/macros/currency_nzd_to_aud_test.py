@@ -38,6 +38,7 @@ class CurrencyTestCase(CurrencyTestClass):
                'This is a  NZD (55,233.00) million note. ' \
                'This is a  NZD (55,233.00 billion) note. ' \
                'This is a NZ$ 4000 note. ' \
+               'This is a $NZ 500 note. ' \
 
         item = {'body_html': text}
         self.clearCache()
@@ -60,3 +61,4 @@ class CurrencyTestCase(CurrencyTestClass):
         self.assertEqual(diff['NZD (55,233.00) million'], 'NZD (55,233.00) million ($A110.47 billion)')
         self.assertEqual(diff['NZD (55,233.00 billion)'], 'NZD (55,233.00 billion) ($A110.47 trillion)')
         self.assertEqual(diff['NZ$ 4000'], 'NZ$ 4000 ($A8,000)')
+        self.assertEqual(diff['$NZ 500'], '$NZ 500 ($A1,000)')
