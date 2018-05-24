@@ -18,8 +18,8 @@ from flask import current_app as app
 
 
 RATE_SERVICE = 'http://data.fixer.io/api/latest?access_key={}&symbols={}'
-SUFFIX_REGEX = r'((\s*\-?\s*)((mln)|(bln)|([mM]illion)|([bB]illion)|[mb]))?\)?'
-SECONDARY_SUFFIX_REGEX = r'(\s*\-?\s*)((mln)|(bln)|([mM]illion)|([bB]illion)|[mb])?\)?'
+SUFFIX_REGEX = r'((\s*\-?\s*)((mln)|(bln)|(bn)|([mM]illion)|([bB]illion)|[mb]))?\)?'
+SECONDARY_SUFFIX_REGEX = r'(\s*\-?\s*)((mln)|(bln)|(bn)|([mM]illion)|([bB]illion)|[mb])?\)?'
 SYMBOLS = 'USD,AUD,CHF,NZD,CNY,GBP,EUR,JPY'
 
 
@@ -170,7 +170,7 @@ def do_conversion(item, rate, currency, search_param, match_index, value_index, 
         if match_item and value_item:
             if ')' in match_item and '(' not in match_item:
                 # clear any trailing parenthesis
-                match_item = re.sub('[)]', '', 'match_item')
+                match_item = re.sub('[)]', '', match_item)
 
             from_value = Decimal(re.sub(r'[^\d.]', '', value_item))
             precision = abs(from_value.as_tuple().exponent)
