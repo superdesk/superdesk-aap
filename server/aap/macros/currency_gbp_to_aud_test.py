@@ -49,8 +49,11 @@ class CurrencyTestCase(CurrencyTestClass):
                'This is a  (55,233.00) GBP note. ' \
                'This is a  52 mln pounds note. ' \
                'This is a £ 40000 note. ' \
+               'This is (GBP1.88 billion)'\
+               'This is £2.62bn'\
 
         item = {'body_html': text}
+        self.clearCache()
         res, diff = gbp_to_aud(item)
         self.assertEqual(diff['£ 40'], '£ 40 ($A80)')
         self.assertEqual(diff['£41'], '£41 ($A82)')
@@ -77,3 +80,5 @@ class CurrencyTestCase(CurrencyTestClass):
         self.assertEqual(diff['(55,233.00) GBP'], '(55,233.00) GBP ($A110,466.00)')
         self.assertEqual(diff['52 mln pounds'], '52 mln pounds ($A104 mln)')
         self.assertEqual(diff['£ 40000'], '£ 40000 ($A80,000)')
+        self.assertEqual(diff['GBP1.88 billion'], 'GBP1.88 billion ($A3.76 billion)')
+        self.assertEqual(diff['£2.62bn'], '£2.62bn ($A5.24 bn)')
