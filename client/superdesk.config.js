@@ -1,7 +1,7 @@
 module.exports = function() {
     return {
-        apps: ['superdesk-planning', 'aap.apps'],
-        importApps: ['superdesk-planning', 'aap'],
+        apps: ['superdesk-planning', 'superdesk.analytics', 'aap.apps'],
+        importApps: ['superdesk-planning', 'superdesk-analytics', 'aap'],
         defaultRoute: '/workspace',
         validatorMediaMetadata: {
             headline: {
@@ -58,7 +58,9 @@ module.exports = function() {
             previewFormats: 1,
             noTakes: 1,
             searchShortcut: 1,
-            slackNotifications: 1
+            slackNotifications: 1,
+            editor3: 1,
+            analytics: 1
         },
 
         view: {

@@ -144,7 +144,8 @@ INSTALLED_APPS.extend([
     'instrumentation',
     'planning',
     'aap.io.feeding_services',
-    'aap.agenda'
+    'aap.agenda',
+    'analytics'
 ])
 
 RENDITIONS = {
