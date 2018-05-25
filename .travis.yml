@@ -3,9 +3,7 @@ language: python
 sudo: required
 dist: trusty
 
-python:
-  - "3.4"
-  - "3.5"
+python: "3.5"
 
 services:
     - redis-server
@@ -57,7 +55,7 @@ script:
     - cd server && flake8 && cd ..
     - cd server && time behave ./features/ --format progress2 --logging-level ERROR && cd ..
     - cd server && time nosetests && cd ..
-    - cd client && grunt build && cd ..
+    - cd client && node --max_old_space_size=8192 `which grunt` build && cd ..
     - cd server && python manage.py users:create -u test -p test -e test@localhost --admin && cd ..
 
 after_script:

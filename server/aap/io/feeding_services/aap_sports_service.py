@@ -34,6 +34,32 @@ class AAPSportsHTTPFeedingService(HTTPFeedingService):
     """
     service = 'events'
 
+    fields = [
+        {
+            'id': 'login_url', 'type': 'text', 'label': 'Login Url',
+            'placeholder': 'Login Url', 'required': True,
+            'errors': {4006: 'Server not found.', 4000: 'Unexpected server response'}
+        },
+        {
+            'id': 'fixtures_url', 'type': 'text', 'label': 'Fixtures Url',
+            'placeholder': 'Fixtures Url', 'required': True
+        },
+        {
+            'id': 'username', 'type': 'text', 'label': 'Username',
+            'placeholder': 'Username', 'required': True
+        },
+        {
+            'id': 'password', 'type': 'password', 'label': 'Password',
+            'placeholder': 'Password', 'required': True,
+            'errors': {4007: 'Authentication error.'}
+        },
+        {
+            'id': 'sports', 'type': 'text', 'label': 'Sports',
+            'placeholder': 'Comma separate list of sports ids', 'required': True,
+            'default': '1,2,3,4,10'
+        },
+    ]
+
     def _update(self, provider, update):
         self.provider = provider
         parser = self.get_feed_parser(provider)
@@ -96,5 +122,4 @@ class AAPSportsHTTPFeedingService(HTTPFeedingService):
         return response.content
 
 
-register_feeding_service(AAPSportsHTTPFeedingService.NAME, AAPSportsHTTPFeedingService(),
-                         AAPSportsHTTPFeedingService.ERRORS)
+register_feeding_service(AAPSportsHTTPFeedingService)
