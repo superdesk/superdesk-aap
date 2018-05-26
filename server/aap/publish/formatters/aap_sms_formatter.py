@@ -50,7 +50,7 @@ class AAPSMSFormatter(Formatter):
 
     def can_format(self, format_type, article):
         if format_type != 'AAP SMS' or article[ITEM_TYPE] != CONTENT_TYPE.TEXT \
-                or article.get(ITEM_STATE, '') == CONTENT_STATE.KILLED \
+                or article.get(ITEM_STATE, '') in {CONTENT_STATE.KILLED, CONTENT_STATE.RECALLED} \
                 or not article.get('flags', {}).get('marked_for_sms', False):
             return False
         # need to check that a story with the same sms_message has not been published to SMS before
