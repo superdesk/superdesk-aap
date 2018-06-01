@@ -1,5 +1,10 @@
-Kill/Takedown Notice Kill/Takedown Notice
-**KILL/TAKEDOWN NOTICE**  **KILL/TAKEDOWN NOTICE**
+{% if operation == 'kill'%}
+{% set header_prefix = 'Kill/Takedown' %}
+{% else %}
+{% set header_prefix = 'Takedown' %}
+{% endif %}
+{{header_prefix}} Notice {{header_prefix}} Notice
+**{{header_prefix}} NOTICE**  **{{header_prefix}} NOTICE**
 
     {{body | striptags}}
 

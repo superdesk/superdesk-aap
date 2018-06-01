@@ -75,7 +75,12 @@ class FixItemsExpiry(superdesk.Command):
 
         query = {
             'expiry': {'$gte': date_to_str(now)},
-            ITEM_STATE: {'$in': [CONTENT_STATE.PUBLISHED, CONTENT_STATE.CORRECTED, CONTENT_STATE.KILLED]}
+            ITEM_STATE: {'$in': [
+                CONTENT_STATE.PUBLISHED,
+                CONTENT_STATE.CORRECTED,
+                CONTENT_STATE.KILLED,
+                CONTENT_STATE.RECALLED
+            ]}
         }
 
         req = ParsedRequest()
