@@ -15,6 +15,7 @@ from .currency_jpy_to_aud import yen_to_aud
 class CurrencyTestCase(CurrencyTestClass):
 
     def test_jpy_to_aud(self):
+        self.resp = {'success': True, 'rates': {"AUD": 2.0, "JPY": 1.0}}
         text = 'This is a ¥ 40 note. ' \
                'This is a ¥41 note. ' \
                'This is a ¥(42) note. ' \
@@ -40,7 +41,9 @@ class CurrencyTestCase(CurrencyTestClass):
                'This is a 40 Yen note. ' \
                'This is a  52 million yen note. ' \
                'This is a 55,233.00 JPY note' \
-               'This is a ¥ 4000 note. '
+               'This is a ¥ 4000 note. ' \
+               'This is a 500 Japanese yen note. ' \
+               'This is a 100,000 Japanese Yen note. '
 
         item = {'body_html': text}
         res, diff = yen_to_aud(item)
@@ -65,3 +68,5 @@ class CurrencyTestCase(CurrencyTestClass):
         self.assertEqual(diff['52 million yen'], '52 million yen ($A104 million)')
         self.assertEqual(diff['55,233.00 JPY'], '55,233.00 JPY ($A110,466.00)')
         self.assertEqual(diff['¥ 4000'], '¥ 4000 ($A8,000)')
+        self.assertEqual(diff['500 Japanese yen'], '500 Japanese yen ($A1,000)')
+        self.assertEqual(diff['100,000 Japanese Yen'], '100,000 Japanese Yen ($A200,000)')
