@@ -202,7 +202,12 @@ class LegalArchiveConsistencyCheckCommand(superdesk.Command):
         query = {
             '$and': [
                 {'_updated': {'$gte': date_to_str(start_date), '$lte': date_to_str(end_date)}},
-                {ITEM_STATE: {'$in': [CONTENT_STATE.CORRECTED, CONTENT_STATE.PUBLISHED, CONTENT_STATE.KILLED]}}
+                {ITEM_STATE: {'$in': [
+                    CONTENT_STATE.CORRECTED,
+                    CONTENT_STATE.PUBLISHED,
+                    CONTENT_STATE.KILLED,
+                    CONTENT_STATE.RECALLED
+                ]}}
             ]
         }
 
