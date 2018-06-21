@@ -75,7 +75,8 @@
             {"is_active": true, "name": "Market Close", "qcode": "Market Close"},
             {"is_active": true, "name": "Market Report", "qcode": "Market Report"},
             {"is_active": true, "name": "Review", "qcode": "Review"},
-            {"is_active": true, "name": "Preview", "qcode": "Preview"}
+            {"is_active": true, "name": "Preview", "qcode": "Preview"},
+            {"is_active": true, "name": "AM Service", "qcode": "AM Service"}
         ]
     },
     {
