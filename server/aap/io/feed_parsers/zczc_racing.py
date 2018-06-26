@@ -33,23 +33,35 @@ class ZCZCRacingParser(ZCZCFeedParser):
 
     def post_process_item(self, item, provider):
         try:
+            lines_to_remove = 1
             # Pagemasters sourced content is Greyhound or Trot related, maybe AFL otherwise financial
             # It is from the Racing system
             item[self.ITEM_ANPA_CATEGORY] = [{'qcode': 'h'}]
             item[self.ITEM_SUBJECT] = [{'qcode': '15030001', 'name': subject_codes['15030001']}]
             lines = item['body_html'].split('\n')
+            # If the content is to be routed/auto published
+            if lines[0].find('YY ') != -1 and lines[0].find(' RFG') != -1:
+                if (item.get('keywords')):
+                    item.get('keywords', []).append('RFG')
+                else:
+                    item['keywords'] = ['RFG']
+
             if lines[2] and lines[2].find(':SPORT -') != -1:
                 item[self.ITEM_HEADLINE] = lines[2][9:]
                 if lines[1] and lines[1].find(':POTTED :') != -1:
                     item[self.ITEM_SLUGLINE] = lines[1][9:]
+                lines_to_remove = 3
             elif lines[1] and lines[1].find('RACING : ') != -1:
                 item[self.ITEM_HEADLINE] = lines[1][8:]
                 item[self.ITEM_SLUGLINE] = lines[1][8:]
+                lines_to_remove = 2
             elif lines[1] and lines[1].find(':POTTED :') != -1:
                 item[self.ITEM_HEADLINE] = lines[1][9:]
                 item[self.ITEM_SLUGLINE] = lines[1][9:]
+                lines_to_remove = 2
             elif lines[1] and lines[1].find(':PREMIERSHIP') != -1:
                 self._scan_lines(item, lines)
+                lines_to_remove = 2
             elif lines[1] and lines[1].find(' WEIGHTS ') != -1:
                 self._scan_lines(item, lines)
             elif lines[0] and lines[0].find('YY ') != -1:
@@ -58,8 +70,11 @@ class ZCZCRacingParser(ZCZCFeedParser):
                 if lines[1].find(' Comment ') != -1:
                     item[self.ITEM_SLUGLINE] = lines[1][:(lines[1].find(' Comment ') + 8)]
                     item[self.ITEM_TAKE_KEY] = lines[1][(lines[1].find(' Comment ') + 9):]
+                    lines_to_remove = 2
             else:
                 self._scan_lines(item, lines)
+
+            item['body_html'] = '<pre>' + '\n'.join(lines[lines_to_remove:])
 
             # Truncate the slugline and headline to the lengths defined on the validators if required
             lookup = {'act': ITEM_PUBLISH, 'type': CONTENT_TYPE.TEXT}
