@@ -32,3 +32,36 @@ class AMServiceTestCase(unittest.TestCase):
         modified_item = am_service_content(deepcopy(item))
         self.assertEqual(modified_item['genre'][0], {'name': 'Article', 'qcode': 'Article'})
         self.assertEqual(item['genre'][0], {'name': 'Article', 'qcode': 'Article'})
+
+    def test_slugline_not_specified(self):
+        item = {'body_html': 'text', 'type': 'text', 'genre': [{'name': 'Article', 'qcode': 'Article'}]}
+        modified_item = am_service_content(deepcopy(item))
+        self.assertEqual(modified_item['genre'][0], {'name': 'AM Service', 'qcode': 'AM Service'})
+        self.assertEqual(item['genre'][0], {'name': 'Article', 'qcode': 'Article'})
+        self.assertIsNone(item.get('slugline'))
+
+    def test_slugline_specified(self):
+        item = {
+            'body_html': 'text',
+            'type': 'text',
+            'genre': [{'name': 'Article', 'qcode': 'Article'}],
+            'slugline': 'foo'
+        }
+        modified_item = am_service_content(deepcopy(item))
+        self.assertEqual(modified_item['genre'][0], {'name': 'AM Service', 'qcode': 'AM Service'})
+        self.assertEqual(item['genre'][0], {'name': 'Article', 'qcode': 'Article'})
+        self.assertEqual(modified_item.get('slugline'), 'AM foo')
+        self.assertEqual(item.get('slugline'), 'foo')
+
+    def test_slugline_starts_with_am(self):
+        item = {
+            'body_html': 'text',
+            'type': 'text',
+            'genre': [{'name': 'Article', 'qcode': 'Article'}],
+            'slugline': 'AM foo'
+        }
+        modified_item = am_service_content(deepcopy(item))
+        self.assertEqual(modified_item['genre'][0], {'name': 'AM Service', 'qcode': 'AM Service'})
+        self.assertEqual(item['genre'][0], {'name': 'Article', 'qcode': 'Article'})
+        self.assertEqual(modified_item.get('slugline'), 'AM foo')
+        self.assertEqual(item.get('slugline'), 'AM foo')

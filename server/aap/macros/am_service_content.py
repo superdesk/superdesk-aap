@@ -18,6 +18,8 @@ def am_service_content(item, **kwargs):
         # set the category as international news
         if item.get('type') == 'text':
             item['genre'] = [{'name': 'AM Service', 'qcode': 'AM Service'}]
+            if item.get('slugline') and item.get('slugline')[:3] != 'AM ':
+                item['slugline'] = 'AM {}'.format(item.get('slugline'))
         return item
     except:
         logger.warning('Exception caught in macro: am_service_content')
