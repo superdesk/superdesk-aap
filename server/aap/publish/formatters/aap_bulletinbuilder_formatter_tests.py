@@ -203,6 +203,7 @@ class AapBulletinBuilderFormatterTest(TestCase):
         test_article = json.loads(item.get('data'))
         self.assertEqual(test_article['headline'], 'This is a test headline')
         self.assertEqual(test_article['place'][0]['qcode'], 'CRIK')
+        self.assertIn('VIC', test_article['keywords'])
         article['anpa_category'] = [{'qcode': 'a'}]
         article['place'] = [{'qcode': 'VIC', 'name': 'VIC'}]
         seq, item = self._formatter.format(article, subscriber)[0]
@@ -211,6 +212,48 @@ class AapBulletinBuilderFormatterTest(TestCase):
         test_article = json.loads(item.get('data'))
         self.assertEqual(test_article['headline'], 'This is a test headline')
         self.assertEqual(test_article['place'][0]['qcode'], 'VIC')
+        self.assertNotIn('VIC', test_article.get('keywords') or [])
+
+    def test_locator_with_keywords(self):
+        article = {
+            'source': 'AAP',
+            'anpa_category': [{'qcode': 's'}],
+            'headline': 'This is a test headline',
+            'byline': 'joe',
+            'slugline': 'slugline',
+            'subject': [{'qcode': '15017000'}],
+            'anpa_take_key': 'take_key',
+            'unique_id': '1',
+            'type': 'text',
+            'body_html': 'The story body',
+            'word_count': '1',
+            'priority': '1',
+            'firstcreated': utcnow(),
+            'versioncreated': utcnow(),
+            'lock_user': ObjectId(),
+            'place': [{'qcode': 'VIC', 'name': 'VIC'}],
+            'keywords': ['test', 'Fed']
+        }
+
+        subscriber = self.app.data.find('subscribers', None, None)[0]
+        seq, item = self._formatter.format(article, subscriber)[0]
+        item = json.loads(item)
+        self.assertGreater(int(seq), 0)
+        test_article = json.loads(item.get('data'))
+        self.assertEqual(test_article['headline'], 'This is a test headline')
+        self.assertEqual(test_article['place'][0]['qcode'], 'CRIK')
+        self.assertIn('VIC', test_article['keywords'])
+        self.assertEqual(len(test_article['keywords']), 3)
+        article['anpa_category'] = [{'qcode': 'a'}]
+        article['place'] = [{'qcode': 'VIC', 'name': 'VIC'}]
+        seq, item = self._formatter.format(article, subscriber)[0]
+        item = json.loads(item)
+        self.assertGreater(int(seq), 0)
+        test_article = json.loads(item.get('data'))
+        self.assertEqual(test_article['headline'], 'This is a test headline')
+        self.assertEqual(test_article['place'][0]['qcode'], 'VIC')
+        self.assertNotIn('VIC', test_article['keywords'])
+        self.assertEqual(len(test_article['keywords']), 2)
 
     def test_body_footer(self):
         article = {
