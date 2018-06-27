@@ -86,6 +86,7 @@ class AAPBulletinBuilderFormatter(Formatter):
                                                   truncate=(not formatted_article.get('auto_publish'))))).strip()
 
             self.format_associated_item(formatted_article)
+            self.format_keywords(formatted_article, article)
 
             odbc_item = {
                 'id': formatted_article.get(config.ID_FIELD),
@@ -188,3 +189,17 @@ class AAPBulletinBuilderFormatter(Formatter):
             value['slugline'] = to_ascii(self.get_text_content(value.get('slugline'))).strip()
             value['alt_text'] = to_ascii(self.get_text_content(value.get('alt_text'))).strip()
             value['byline'] = to_ascii(self.get_text_content(value.get('byline'))).strip()
+
+    def format_keywords(self, item, original):
+        """Add the place keyword to the formatted article
+
+        :param dict item: formatted article
+        :param dict original: original article
+        """
+        keywords = item.get('keywords') or []
+        original_place = original.get('place')[0].get('qcode') if original.get('place') else None
+        updated_place = item.get('place')[0].get('qcode') if item.get('place') else None
+
+        if original_place and original_place != updated_place:
+            keywords.append(original_place)
+            item['keywords'] = list(set(keywords))
