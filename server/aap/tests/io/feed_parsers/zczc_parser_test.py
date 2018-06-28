@@ -79,7 +79,11 @@ class ZCZCTestCase(TestCase):
              {
                  "name": "Results (sport)",
                  "is_active": True,
-                 "qcode": "Results (sport)"}
+                 "qcode": "Results (sport)"},
+             {
+                 "name": "AM Service",
+                 "is_active": True,
+                 "qcode": "AM Service"}
          ]}]
 
     def setUp(self):
@@ -240,6 +244,22 @@ class ZCZCTestCase(TestCase):
         self.assertEqual(self.items.get('anpa_take_key'), '(BRISBANE)')
         self.assertEqual(self.items.get('subject')[0]['qcode'], '07000000')
         self.assertTrue(self.items.get('body_html').startswith('<p>Legionella bacteria has been found in a regional'))
+        self.assertTrue(self.items.get('genre')[0]['qcode'], 'Broadcast Script')
+
+    def test_bob_am_headlines(self):
+        filename = 'bob_am_headlines.tst'
+        dirname = os.path.dirname(os.path.realpath(__file__))
+        fixture = os.path.normpath(os.path.join(dirname, '../fixtures', filename))
+        self.provider['source'] = 'BOB'
+        self.items = ZCZCBOBParser().parse(fixture, self.provider)
+        self.assertEqual(self.items.get('slugline'), 'Legionella')
+        self.assertEqual(self.items.get('anpa_category')[0]['qcode'], 'A')
+        self.assertEqual(self.items.get('headline'), 'Legionella found in Qld hospital')
+        self.assertEqual(self.items.get('abstract'), 'Legionella found in Qld hospital')
+        self.assertEqual(self.items.get('anpa_take_key'), '(BRISBANE)')
+        self.assertEqual(self.items.get('subject')[0]['qcode'], '07000000')
+        self.assertTrue(self.items.get('body_html').startswith('<p>Legionella bacteria has been found in a regional'))
+        self.assertTrue(self.items.get('genre')[0]['qcode'], 'AM Service')
 
     def test_bob_empty_header_line(self):
         filename = '612fa1dc-c476-425d-8c80-d40bdc9cc1d5.tst'
