@@ -10,6 +10,7 @@
 from superdesk.io.registry import register_feed_parser
 from superdesk.io.feed_parsers import FileFeedParser
 from superdesk.io.registry import register_feeding_service_error
+from superdesk import get_resource_service
 from superdesk.errors import AlreadyExistsError
 from aap.errors import AAPParserError
 from superdesk.io.iptc import subject_codes
@@ -45,6 +46,7 @@ class ZCZCFeedParser(FileFeedParser):
     SERVICELEVEL = '&'  # &service level - Default A but for results should match category
     IPTC = '+'  # +IPTC Subject Reference Number as defined in the SubjectReference.ini file
     PLACE = '@'
+    GENRE = '~'
 
     # Possible values for format
     TEXT = 'X'
@@ -56,6 +58,7 @@ class ZCZCFeedParser(FileFeedParser):
     ITEM_SUBJECT = 'subject'
     ITEM_TAKE_KEY = 'anpa_take_key'
     ITEM_PLACE = 'place'
+    ITEM_GENRE = 'genre'
 
     header_map = {KEYWORD: ITEM_SLUGLINE, TAKEKEY: ITEM_TAKE_KEY,
                   HEADLINE: ITEM_HEADLINE, SERVICELEVEL: None}
@@ -103,6 +106,13 @@ class ZCZCFeedParser(FileFeedParser):
                             if line[1] == self.TABULAR:
                                 item[FORMAT] = FORMATS.PRESERVED
                                 continue
+                            continue
+                        if line[0] == self.GENRE:
+                            genre = line[1:-1]
+                            if genre:
+                                genre_map = get_resource_service('vocabularies').find_one(req=None, _id='genre')
+                                item['genre'] = [x for x in genre_map.get('items', []) if
+                                                 x['qcode'] == genre and x['is_active']]
                             continue
                         if line[0] == self.IPTC:
                             iptc_code = line[1:-1]
