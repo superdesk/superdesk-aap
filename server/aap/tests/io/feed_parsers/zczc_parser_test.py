@@ -168,7 +168,7 @@ class ZCZCTestCase(TestCase):
         fixture = os.path.normpath(os.path.join(dirname, '../fixtures', filename))
         self.provider['source'] = 'BRA'
         self.items = ZCZCRacingParser().parse(fixture, self.provider)
-        self.assertEqual(self.items.get('headline'), 'Wodonga Comment Saturday races 1-6')
+        self.assertEqual(self.items.get('headline'), 'Wodonga Gallop Comment Saturday races 1-6')
         self.assertEqual(self.items.get('slugline'), 'Wodonga Comment')
         self.assertEqual(self.items.get('anpa_take_key'), 'Saturday races 1-6')
         self.assertEqual(self.items.get('anpa_category')[0]['qcode'], 'h')
@@ -212,8 +212,8 @@ class ZCZCTestCase(TestCase):
         fixture = os.path.normpath(os.path.join(dirname, '../fixtures', filename))
         self.provider['source'] = 'BRA'
         self.items = ZCZCRacingParser().parse(fixture, self.provider)
-        self.assertEqual(self.items.get('headline'), 'Leading jockeys (Sydney)')
-        self.assertEqual(self.items.get('slugline'), 'Leading jockeys (Sydney)')
+        self.assertEqual(self.items.get('headline'), 'SPORTMANS')
+        self.assertEqual(self.items.get('slugline'), 'SPORTMANS')
         self.assertEqual(self.items.get('anpa_category')[0]['qcode'], 'h')
         self.assertEqual(self.items.get('subject')[0]['qcode'], '15030001')
 
