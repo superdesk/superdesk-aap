@@ -20,6 +20,9 @@ from apps.publish.content.common import ITEM_PUBLISH
 class ZCZCRacingParser(ZCZCFeedParser):
     NAME = 'Racing_zczc'
 
+    # These destination codes will be extracted from the line begining with YY and appended to the keywords
+    destinations = ('PEB', 'FFB', 'FORM​', 'RFG')
+
     def set_item_defaults(self, item, provider):
         super().set_item_defaults(item, provider)
         item[FORMAT] = FORMATS.PRESERVED
@@ -40,11 +43,13 @@ class ZCZCRacingParser(ZCZCFeedParser):
             item[self.ITEM_SUBJECT] = [{'qcode': '15030001', 'name': subject_codes['15030001']}]
             lines = item['body_html'].split('\n')
             # If the content is to be routed/auto published
-            if lines[0].find('YY ') != -1 and lines[0].find(' RFG') != -1:
-                if (item.get('keywords')):
-                    item.get('keywords', []).append('RFG')
-                else:
-                    item['keywords'] = ['RFG']
+            if lines[0].upper().find('YY ') != -1:
+                for dest in self.destinations:
+                    if lines[0].upper().find(' ' + dest.upper()) != -1:
+                        if (item.get('keywords')):
+                            item.get('keywords', []).append(dest)
+                        else:
+                            item['keywords'] = [dest]
 
             if lines[2] and lines[2].find(':SPORT -') != -1:
                 item[self.ITEM_HEADLINE] = lines[2][9:]
@@ -60,7 +65,13 @@ class ZCZCRacingParser(ZCZCFeedParser):
                 item[self.ITEM_SLUGLINE] = lines[1][9:]
                 lines_to_remove = 2
             elif lines[1] and lines[1].find(':PREMIERSHIP') != -1:
-                self._scan_lines(item, lines)
+                # If there is a string prefixed with : after :PREMIERSHIP that becomes the headline and slugline
+                if lines[1].find(' :'):
+                    item[self.ITEM_HEADLINE] = lines[1][lines[1].find(' :') + 2:]
+                    item[self.ITEM_SLUGLINE] = item[self.ITEM_HEADLINE]
+                else:  # Just stick the word PREMIERSHIP in the headline and slugline
+                    item[self.ITEM_HEADLINE] = 'PREMIERSHIP'
+                    item[self.ITEM_SLUGLINE] = item[self.ITEM_HEADLINE]
                 lines_to_remove = 2
             elif lines[1] and lines[1].find(' WEIGHTS ') != -1:
                 self._scan_lines(item, lines)
@@ -68,8 +79,11 @@ class ZCZCRacingParser(ZCZCFeedParser):
                 item[self.ITEM_HEADLINE] = lines[1]
                 item[self.ITEM_SLUGLINE] = lines[1]
                 if lines[1].find(' Comment ') != -1:
-                    item[self.ITEM_SLUGLINE] = lines[1][:(lines[1].find(' Comment ') + 8)]
-                    item[self.ITEM_TAKE_KEY] = lines[1][(lines[1].find(' Comment ') + 9):]
+                    # need to split the line on the word Comment
+                    item[self.ITEM_SLUGLINE] = lines[1][:lines[1].find('Comment')] + 'Comment'
+                    item[self.ITEM_TAKE_KEY] = lines[1][lines[1].find('Comment') + 8:]
+                    item[self.ITEM_HEADLINE] = lines[1][:lines[1].find('Comment')] + 'Gallop Comment ' + item[
+                        self.ITEM_TAKE_KEY]
                     lines_to_remove = 2
             else:
                 self._scan_lines(item, lines)
