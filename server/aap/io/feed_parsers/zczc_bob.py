@@ -36,10 +36,18 @@ class ZCZCBOBParser(ZCZCFeedParser):
 
     def post_process_item(self, item, provider):
         try:
+            is_broadcast_script = False
             item['body_html'] = '<p>{}</p>'.format(
                 re.sub('<p>   ', '<p>', item.get('body_html', '').replace('\n\n', '\n').replace('\n', '</p><p>')))
+            if not item.get('genre'):
+                genre_map = superdesk.get_resource_service('vocabularies').find_one(req=None, _id='genre')
+                item['genre'] = [x for x in genre_map.get('items', []) if
+                                 x['qcode'] == 'Broadcast Script' and x['is_active']]
+                item['sign_off'] = 'RTV'
+                is_broadcast_script = True
+
             if self.ITEM_PLACE in item:
-                if item[self.ITEM_PLACE]:
+                if item[self.ITEM_PLACE] and is_broadcast_script:
                     item['headline'] = '{}: {}'.format(item[self.ITEM_PLACE], item.get(self.ITEM_HEADLINE, ''))
                 locator_map = superdesk.get_resource_service('vocabularies').find_one(req=None, _id='locators')
                 place = [x for x in locator_map.get('items', []) if
@@ -48,13 +56,12 @@ class ZCZCBOBParser(ZCZCFeedParser):
                     item[self.ITEM_PLACE] = place
                 else:
                     item.pop(self.ITEM_PLACE)
-            genre_map = superdesk.get_resource_service('vocabularies').find_one(req=None, _id='genre')
-            item['genre'] = [x for x in genre_map.get('items', []) if
-                             x['qcode'] == 'Broadcast Script' and x['is_active']]
+
+            if item.get('genre') and item.get('genre')[0] and item.get('genre')[0].get('qcode') == 'AM Service':
+                item['abstract'] = item['headline']
 
             # Remove the attribution
             item['body_html'] = item.get('body_html', '').replace('<p>AAP RTV</p>', '')
-            item['sign_off'] = 'RTV'
         except Exception as ex:
             logger.exception(ex)
 
