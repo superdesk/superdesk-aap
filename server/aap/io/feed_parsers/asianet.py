@@ -60,6 +60,7 @@ class AsiaNetFeedParser(FileFeedParser):
             self._process_header(item, header)
             self._process_dateline(item, dateline_data)
 
+            item['anpa_category'] = [{'qcode': 'j'}]
             item['original_source'] = 'AsiaNet'
             item['word_count'] = get_text_word_count(data)
             item['body_html'] = '<pre>' + html.escape(data) + '</pre>'
