@@ -18,3 +18,4 @@ import aap.io.feed_parsers.zczc_racing  # NOQA
 import aap.io.feed_parsers.zczc_sportsresults  # NOQA
 import aap.io.feed_parsers.pdaresults  # NOQA
 import aap.io.feed_parsers.asianet  # NOQA
+import aap.io.feed_parsers.ReutersNewsMLTwoParser # NOQA
