@@ -14,7 +14,7 @@ from aap.errors import AAPParserError
 import superdesk
 from superdesk.io.iptc import subject_codes
 from superdesk.etree import parse_html, to_string
-import textwrap
+import html
 
 
 class ZCZCMedianetParser(ZCZCFeedParser):
@@ -39,7 +39,6 @@ class ZCZCMedianetParser(ZCZCFeedParser):
     def set_item_defaults(self, item, provider):
         super().set_item_defaults(item, provider)
         # Medianet
-        item[FORMAT] = FORMATS.PRESERVED
         item['original_source'] = 'Medianet'
         item['urgency'] = 5
         self.CATEGORY = '$'
@@ -61,6 +60,9 @@ class ZCZCMedianetParser(ZCZCFeedParser):
             item['slugline'] = 'Media Release'
             item['headline'] = 'Media Release: ' + item.get(self.ITEM_TAKE_KEY, '')
 
+        if item[FORMAT] == FORMATS.HTML:
+            item['body_html'] = '<pre>' + html.escape(item['body_html']) + '</pre>'
+
         # Truncate the take key if required
         if len(item.get(self.ITEM_TAKE_KEY, '')) > 24:
             item[self.ITEM_TAKE_KEY] = item.get(self.ITEM_TAKE_KEY, '')[0:24]
@@ -71,19 +73,24 @@ class ZCZCMedianetParser(ZCZCFeedParser):
         body_html_elem = parse_html(item.get('body_html', '<pre> </pre>'))
         ptag = body_html_elem.find('.//pre')
         if ptag is not None:
-            body = ''
-            lines = ptag.text.split('\n')
-            for line in lines:
-                if len(line) > 75:
-                    line = textwrap.fill(line, 75)
-                body += '{}\n'.format(line)
-            ptag.text = body
-            if InvestorRelease:
-                ptag.text = '{} '.format('Investor Relations news release distributed by AAP Medianet. \r\n\r\n\r\n') \
-                            + ptag.text
+            if item[FORMAT] == FORMATS.PRESERVED:
+                if InvestorRelease:
+                    ptag.text = '{} '.format(
+                        'Investor Relations news release distributed by AAP Medianet. \r\n\r\n\r\n') \
+                        + ptag.text
+                else:
+                    ptag.text = '{} '.format('Media release distributed by AAP Medianet. \r\n\r\n\r\n') + ptag.text
+                item['body_html'] = to_string(body_html_elem)
             else:
-                ptag.text = '{} '.format('Media release distributed by AAP Medianet. \r\n\r\n\r\n') + ptag.text
-            item['body_html'] = to_string(body_html_elem)
+                body = ''
+                if InvestorRelease:
+                    body = '<p>Investor Relations news release distributed by AAP Medianet.<br><br></p>'
+                else:
+                    body = '<p>Media release distributed by AAP Medianet.<br><br></p>'
+                pars = ptag.text.split('\n')
+                for p in pars:
+                    body = body + '<p>' + p + '</p>'
+                item['body_html'] = body
 
         locator_map = superdesk.get_resource_service('vocabularies').find_one(req=None, _id='locators')
         place_strs = item.pop('place').split(' ')
