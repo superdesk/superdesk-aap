@@ -143,6 +143,16 @@ class ZCZCTestCase(TestCase):
         self.items = ZCZCMedianetParser().parse(fixture, self.provider)
         self.assertEqual(self.items.get('headline'), 'IRW News Release: Master Builders Australia')
 
+    def test_tabular_format(self):
+        filename = 'ED_900942_2_1.tst'
+        dirname = os.path.dirname(os.path.realpath(__file__))
+        fixture = os.path.normpath(os.path.join(dirname, '../fixtures', filename))
+        self.provider['source'] = 'MNET'
+        self.items = ZCZCMedianetParser().parse(fixture, self.provider)
+        self.assertTrue(self.items.get('body_html').startswith('<pre>Media release distributed by AAP Medianet.'))
+        self.assertTrue(self.items.get('body_html').find('                    Dividend     Total Winners     '
+                                                         'Total Prizes Payable') != -1)
+
     def test_pagemasters_format(self):
         filename = 'Darwin GR - Greys - Sun 11 Oct, 2015.tst'
         dirname = os.path.dirname(os.path.realpath(__file__))
