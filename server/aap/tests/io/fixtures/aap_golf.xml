@@ -4,7 +4,7 @@
     <Competition>
       <Competition_Details Comp_ID="int-26669" Comp_Name="D+D Real Czech Masters" Comp_Code="int-26669" Season="2017" Start_Date="2099-08-31" End_Date="2099-09-03" Gender="Men" />
       <Comp_Fixtures>
-        <Event Event_ID="int-">
+        <Event Event_ID="int-1234567">
           <Venue Venue_ID="int-4009">
             <Name Full_Name="" Short_Name="" />
             <Location City="Prague" State="" Country="Czech Republic" />
