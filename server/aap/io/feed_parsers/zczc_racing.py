@@ -21,7 +21,7 @@ class ZCZCRacingParser(ZCZCFeedParser):
     NAME = 'Racing_zczc'
 
     # These destination codes will be extracted from the line begining with YY and appended to the keywords
-    destinations = ('PEB', 'FFB', 'FORM​', 'RFG')
+    destinations = ('PEB', 'FFB', 'FORM', 'RFG')
 
     def set_item_defaults(self, item, provider):
         super().set_item_defaults(item, provider)
