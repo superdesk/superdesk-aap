@@ -20,6 +20,8 @@ from geopy.geocoders import Nominatim
 import time
 from superdesk.io.iptc import subject_codes
 
+logger = logging.getLogger(__name__)
+
 
 class AAPSportsFixturesParser(XMLFeedParser):
     NAME = 'aapFixtures'
@@ -91,12 +93,12 @@ class AAPSportsFixturesParser(XMLFeedParser):
         if xml.attrib.get('Status_Code') == 'OK':
             if xml.find('.//Fixtures') is not None:
                 self._parse_fixtures(xml, items)
-                logging.info('locations not found {}'.format(self.not_found))
+                logger.info('locations not found {}'.format(self.not_found))
             elif xml.find('.//Fixture_List') is not None:
                 self._parse_fixture_list(fixture, items)
             return items
         else:
-            logging.warning('Failed to retrieve fixture {}'.format(fixture))
+            logger.warning('Failed to retrieve fixture {}'.format(fixture))
         return []
 
     def _can_ingest_item(self, item):
@@ -128,7 +130,7 @@ class AAPSportsFixturesParser(XMLFeedParser):
         """
         item = dict()
         item[ITEM_TYPE] = CONTENT_TYPE.EVENT
-        item[GUID_FIELD] = 'urn:aapsportsfixtures:{}:{}:{}'.format(sport_id, comp_id, match_id)
+        item[GUID_FIELD] = 'urn:aapsportsfixtures:{}:{}:{}:{}'.format(sport_id, comp_id, self.season, match_id)
         item['anpa_category'] = [{'qcode': 't'}] if comp_id.startswith('dom') else [{'qcode': 's'}]
         item['subject'] = [{'qcode': self.sport_map.get(sport_id, {}).get('iptc', ''),
                             'name': subject_codes.get(self.sport_map.get(sport_id, {}).get('iptc', ''), '')}]
@@ -152,80 +154,96 @@ class AAPSportsFixturesParser(XMLFeedParser):
 
     def _parse_fixture_list(self, fixture, items):
         xml = fixture.get('fixture_xml')
-        start_date = xml.find('.//Fixture_List/Competition/Competition_Details').attrib.get('Start_Date', '')
-        end_date = xml.find('.//Fixture_List/Competition/Competition_Details').attrib.get('End_Date', '')
-        comp_type = xml.find('.//Fixture_List/Competition/Competition_Details').attrib.get('Comp_Type', '')
+        competition_detail = xml.find('.//Fixture_List/Competition/Competition_Details')
+        start_date = competition_detail.attrib.get('Start_Date', '')
+        end_date = competition_detail.attrib.get('End_Date', '')
+        comp_type = competition_detail.attrib.get('Comp_Type', '')
         # A fixture list that the competition details provide the start and end date
         if start_date != '' and end_date != '':
-            start = datetime.strptime('{} 00:00'.format(start_date), '%Y-%m-%d %H:%M')
-            end = datetime.strptime('{} 23:59'.format(end_date), '%Y-%m-%d %H:%M')
-            if datetime.now() < end:
-                item = self._set_default_item(fixture.get('sport_id'), fixture.get('comp_id'), '-1')
-                if self._can_ingest_item(item):
-                    item['name'] = '{} {}'.format(self.sport_map.get(fixture.get('sport_id', {}), {}).get('prefix', ''),
-                                                  fixture.get('comp_name'))
-                    item['slugline'] = item['name']
-                    item['definition_short'] = xml.find('.//Fixture_List/Competition/Competition_Details').attrib.get(
-                        'Gender', '')
-                    item['dates'] = {
-                        'start': local_to_utc(config.DEFAULT_TIMEZONE, start),
-                        'end': local_to_utc(config.DEFAULT_TIMEZONE, end),
-                        'tz': config.DEFAULT_TIMEZONE,
-                    }
-                    items.append(item)
+            try:
+                self.season = competition_detail.attrib.get('Season', '')
+                start = datetime.strptime('{} 00:00'.format(start_date), '%Y-%m-%d %H:%M')
+                end = datetime.strptime('{} 23:59'.format(end_date), '%Y-%m-%d %H:%M')
+                event = xml.find('.//Fixture_List/Competition/Comp_Fixtures/Event')
+                match_id = None
+                if event and event.attrib.get('Event_ID'):
+                    match_id = event.attrib.get('Event_ID')
+                if datetime.now() < end and match_id and match_id[-1] != '-':
+                    item = self._set_default_item(fixture.get('sport_id'), fixture.get('comp_id'), match_id)
+                    if self._can_ingest_item(item):
+                        item['name'] = '{} {}'.format(
+                            self.sport_map.get(fixture.get('sport_id', {}), {}).get('prefix', ''),
+                            fixture.get('comp_name')
+                        )
+                        item['slugline'] = item['name']
+                        item['definition_short'] = competition_detail.attrib.get('Gender', '')
+                        item['dates'] = {
+                            'start': local_to_utc(config.DEFAULT_TIMEZONE, start),
+                            'end': local_to_utc(config.DEFAULT_TIMEZONE, end),
+                            'tz': config.DEFAULT_TIMEZONE,
+                        }
+                        items.append(item)
+            except Exception as ex:
+                logger.exception('Failed to parse event fixtures.')
         else:
             # A fixture list that we need to pull out each match to determine the match date etc.
             for match in xml.find('.//Fixture_List/Competition/Competition_Fixtures'):
                 start_date = match.find('.//Match_Details').attrib.get('Match_Date', '')
                 start_time = match.find('.//Match_Details').attrib.get('Match_Time', '')
+                self.season = match.find('.//Match_Details').attrib.get('Season', '')
                 try:
                     when = datetime.strptime('{} {}'.format(start_date, start_time), '%Y-%m-%d %H:%M:%S')
                 except Exception as ex:
                     continue
                 if datetime.now() < when:
-                    match_id = match.find('.//Match_Details').attrib.get('Match_ID', '')
-                    # Some match id's are not yet available
-                    if match_id[-1] == '-':
-                        continue
-                    match_no = match.find('.//Match_Details').attrib.get('Match_No', '')
-                    teamA_name = match.findall('.//Teams/Team_Details')[0].attrib.get('Team_Name', '')
-                    teamB_name = match.findall('.//Teams/Team_Details')[1].attrib.get('Team_Name', '')
-                    teamA_short = match.findall('.//Teams/Team_Details')[0].attrib.get('Team_Short', '')
-                    teamB_short = match.findall('.//Teams/Team_Details')[1].attrib.get('Team_Short', '')
-                    venue_name = match.find('.//Venue').attrib.get('Venue_Name', '')
-                    venue_location = match.find('.//Venue').attrib.get('Venue_Location', '')
-                    item = self._set_default_item(fixture.get('sport_id'), fixture.get('comp_id'), match_id)
-                    if self._can_ingest_item(item):
-                        item['slugline'] = '{} {}'.format(
-                            self.sport_map.get(fixture.get('sport_id', {}), {}).get('prefix', ''), teamA_short)
-                        item['name'] = '{} {} V {}'.format(
-                            self.sport_map.get(fixture.get('sport_id', {}), {}).get('prefix', ''), teamA_short,
-                            teamB_short)
-                        item['definition_short'] = '{} match {} {} V {}'.format(fixture.get('comp_name', ''), match_no,
-                                                                                teamA_name, teamB_name)
+                    try:
+                        match_id = match.find('.//Match_Details').attrib.get('Match_ID', '')
+                        # Some match id's are not yet available
+                        if match_id[-1] == '-':
+                            continue
+                        match_no = match.find('.//Match_Details').attrib.get('Match_No', '')
+                        teamA_name = match.findall('.//Teams/Team_Details')[0].attrib.get('Team_Name', '')
+                        teamB_name = match.findall('.//Teams/Team_Details')[1].attrib.get('Team_Name', '')
+                        teamA_short = match.findall('.//Teams/Team_Details')[0].attrib.get('Team_Short', '')
+                        teamB_short = match.findall('.//Teams/Team_Details')[1].attrib.get('Team_Short', '')
+                        venue_name = match.find('.//Venue').attrib.get('Venue_Name', '')
+                        venue_location = match.find('.//Venue').attrib.get('Venue_Location', '')
+                        item = self._set_default_item(fixture.get('sport_id'), fixture.get('comp_id'), match_id)
+                        if self._can_ingest_item(item):
+                            item['slugline'] = '{} {}'.format(
+                                self.sport_map.get(fixture.get('sport_id', {}), {}).get('prefix', ''), teamA_short)
+                            item['name'] = '{} {} V {}'.format(
+                                self.sport_map.get(fixture.get('sport_id', {}), {}).get('prefix', ''), teamA_short,
+                                teamB_short)
+                            item['definition_short'] = '{} match {} {} V {}'.format(fixture.get('comp_name', ''),
+                                                                                    match_no,
+                                                                                    teamA_name,
+                                                                                    teamB_name)
 
-                        # kludge for cricket
-                        if fixture.get('sport_id') == '3':
-                            if 'test' in comp_type.lower():
-                                delta = timedelta(days=5)
-                            elif 'shef' in comp_type.lower():
-                                delta = timedelta(days=4)
-                            elif 't20' in comp_type.lower():
-                                delta = timedelta(hours=4)
-                            elif 'odi' in comp_type.lower() or 'odd' in comp_type.lower():
-                                delta = timedelta(hours=8)
+                            # kludge for cricket
+                            if fixture.get('sport_id') == '3':
+                                if 'test' in comp_type.lower():
+                                    delta = timedelta(days=5)
+                                elif 'shef' in comp_type.lower():
+                                    delta = timedelta(days=4)
+                                elif 't20' in comp_type.lower():
+                                    delta = timedelta(hours=4)
+                                elif 'odi' in comp_type.lower() or 'odd' in comp_type.lower():
+                                    delta = timedelta(hours=8)
+                                else:
+                                    delta = timedelta(hours=8)
                             else:
-                                delta = timedelta(hours=8)
-                        else:
-                            delta = timedelta(hours=2)
-                        item['dates'] = {
-                            'start': local_to_utc(config.DEFAULT_TIMEZONE, when),
-                            'end': local_to_utc(config.DEFAULT_TIMEZONE, when) + delta,
-                            'tz': config.DEFAULT_TIMEZONE,
-                        }
-                        # add location
-                        self._set_location(item, '{}, {}'.format(venue_name, venue_location))
-                        items.append(item)
+                                delta = timedelta(hours=2)
+                            item['dates'] = {
+                                'start': local_to_utc(config.DEFAULT_TIMEZONE, when),
+                                'end': local_to_utc(config.DEFAULT_TIMEZONE, when) + delta,
+                                'tz': config.DEFAULT_TIMEZONE,
+                            }
+                            # add location
+                            self._set_location(item, '{}, {}'.format(venue_name, venue_location))
+                            items.append(item)
+                    except Exception as ex:
+                        logger.exception('Failed to parse competition fixtures.')
 
     def _clear_values(self):
         self.sport = ''
@@ -269,20 +287,25 @@ class AAPSportsFixturesParser(XMLFeedParser):
             self.round = round.attrib.get('Description')
             self._parse_matches(round, items)
 
+    def _isDomestic(self, match_id):
+        return match_id and match_id[:3] == 'dom'
+
     def _parse_matches(self, xml, items):
         for match in xml.findall('.//Matches/Match'):
             try:
                 date = match.attrib.get('Date')
                 time = match.attrib.get('Start_Time')
+                match_id = match.attrib.get('Match_ID')
                 try:
                     when = datetime.strptime('{} {}'.format(date, time), '%Y-%m-%d %H:%M')
                 except Exception as ex:
                     continue
+                if self._isDomestic(match_id):
+                    match_id = match.attrib.get('Fixture_ID')  # fixture id should be fine for domestic
                 if datetime.now() < when:
                     teamA = self.teams.get(match.attrib.get('TeamA_ID')).get('name')
                     teamB = self.teams.get(match.attrib.get('TeamB_ID')).get('name')
-                    item = self._set_default_item(self.fixture.get('sport_id'), self.fixture.get('comp_id'),
-                                                  match.attrib.get('Fixture_ID'))
+                    item = self._set_default_item(self.fixture.get('sport_id'), self.fixture.get('comp_id'), match_id)
                     if self._can_ingest_item(item):
                         item['slugline'] = '{} {}'.format(
                             self.sport_map.get(self.fixture.get('sport_id', {}), {}).get('prefix', ''),
@@ -291,7 +314,10 @@ class AAPSportsFixturesParser(XMLFeedParser):
                             self.sport_map.get(self.fixture.get('sport_id', {}), {}).get('prefix', ''),
                             self.teams.get(match.attrib.get('TeamA_ID')).get('short'),
                             self.teams.get(match.attrib.get('TeamB_ID')).get('short'))
-                        item['definition_short'] = '{}/{}/{} {} V {}'.format(self.sport, self.series, self.round, teamA,
+                        item['definition_short'] = '{}/{}/{} {} V {}'.format(self.sport,
+                                                                             self.series,
+                                                                             self.round,
+                                                                             teamA,
                                                                              teamB)
                         item['dates'] = {
                             'start': local_to_utc(config.DEFAULT_TIMEZONE, when),
@@ -304,7 +330,7 @@ class AAPSportsFixturesParser(XMLFeedParser):
                             self.venues.get(match.attrib.get('Venue_ID')).get('location')))
                         items.append(item)
             except Exception as ex:
-                logging.exception(ex)
+                logger.exception('Failed to parse series fixtures.')
 
     def _set_location_not_found(self, item, location_string):
         item['location'] = [{
@@ -345,7 +371,7 @@ class AAPSportsFixturesParser(XMLFeedParser):
                 geo_locations = self.geolocator.geocode(location_string, exactly_one=False, addressdetails=True,
                                                         language='en')
             except Exception as ex:
-                logging.exception(ex)
+                logger.exception(ex)
                 geo_locations = None
 
             time.sleep(2)
