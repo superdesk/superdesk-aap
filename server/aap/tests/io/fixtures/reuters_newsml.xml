@@ -1,0 +1,196 @@
+<newsMessage xmlns="http://iptc.org/std/nar/2006-10-01/" xmlns:rtr="http://www.reuters.com/ns/2003/08/content" xmlns:x="http://www.w3.org/1999/xhtml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <header>
+    <sent>2018-01-22T00:21:43.000Z</sent>
+    <sender>reuters.com</sender>
+    <transmitId>tag:reuters.com,2018:newsml_L2N1PH00M:1927777166</transmitId>
+    <priority>3</priority>
+    <destination>PSC</destination>
+    <destination>LBY</destination>
+    <destination>G</destination>
+    <destination>GNS</destination>
+    <destination>UCDPTEST</destination>
+    <destination>PGE</destination>
+    <destination>RWS</destination>
+    <destination>RAST</destination>
+    <destination>CSA</destination>
+    <destination>RWSA</destination>
+    <destination>RNP</destination>
+    <destination>REULB</destination>
+    <destination>AFA</destination>
+    <destination>RBN</destination>
+    <channel>TXT</channel>
+  </header>
+  <itemSet>
+    <newsItem conformance="power" guid="tag:reuters.com,2018:newsml_L2N1PH00M" standard="NewsML-G2" standardversion="2.10" version="1927777166" xml:lang="en">
+      <catalogRef href="http://www.iptc.org/std/catalog/catalog.IPTC-G2-Standards_3.xml"/>
+      <rightsInfo>
+        <copyrightHolder literal="Thomson Reuters"/>
+        <copyrightNotice xml:lang="en">(c) Copyright Thomson Reuters 2018. Click For Restrictions - http://about.reuters.com/fulllegal.asp</copyrightNotice>
+      </rightsInfo>
+      <itemMeta>
+        <itemClass qcode="icls:text" rtr:msgType="S"/>
+        <provider literal="reuters.com"/>
+        <versionCreated>2018-01-22T00:21:43.000Z</versionCreated>
+        <firstCreated>2018-01-22T00:21:43.000Z</firstCreated>
+        <pubStatus qcode="stat:usable"/>
+        <role qcode="itemRole:N"/>
+        <fileName>2018-01-22T002143Z_1927777166_L2N1PH00M_RTRMADT_0_POPE-LATAM-PIX-TV.XML</fileName>
+        <generator versioninfo="1.0.0.20">LYNX:addT:001</generator>
+        <profile versioninfo="00.00.01">SNI-Text</profile>
+        <service qcode="svc:RTR_TNS"/>
+        <memberOf creator="trRule:rule1" modified="2018-01-22T00:21:46.000Z" literal="Business">
+          <name>Business</name>
+        </memberOf>
+        <memberOf creator="trRule:rule11" modified="2018-01-22T00:21:46.000Z" literal="Politics">
+          <name>Politics</name>
+        </memberOf>
+        <memberOf creator="trRule:rule25" modified="2018-01-22T00:21:46.000Z" literal="World-Europe">
+          <name>Europe</name>
+        </memberOf>
+        <memberOf creator="trRule:rule26" modified="2018-01-22T00:21:46.000Z" literal="World-LatinAmerica">
+          <name>Latin America</name>
+        </memberOf>
+        <memberOf creator="trRule:rule28" modified="2018-01-22T00:21:46.000Z" literal="World-CentralAmerica">
+          <name>Central America</name>
+        </memberOf>
+        <signal qcode="edStat:N"/>
+        <signal qcode="prodId:TXT"/>
+        <signal qcode="pmt:text"/>
+        <rtr:versionedId guid="tag:reuters.com,2018:newsml_L2N1PH00M:1927777166"/>
+      </itemMeta>
+      <contentMeta>
+        <urgency>3</urgency>
+        <infoSource literal="Reuters" qcode="NS:RTRS" role="cRole:origProv"/>
+        <creator literal="Reuters"/>
+        <altId rtr:isOriginal="1" type="idType:USN">L2N1PH00M</altId>
+        <altId type="idType:OTR">L2N1PH00M</altId>
+        <language tag="en"/>
+        <subject qcode="MCC:OVR"/>
+        <subject qcode="MCCL:OVR"/>
+        <subject qcode="N2:ARG"/>
+        <subject qcode="N2:BRA"/>
+        <subject qcode="N2:BRIB"/>
+        <subject qcode="N2:CHRI"/>
+        <subject qcode="N2:CLJ"/>
+        <subject qcode="N2:COL"/>
+        <subject qcode="N2:CRIM"/>
+        <subject qcode="N2:DIP"/>
+        <subject qcode="N2:FRAUD1"/>
+        <subject qcode="N2:GEN"/>
+        <subject qcode="N2:ITA"/>
+        <subject qcode="N2:MEX"/>
+        <subject qcode="N2:PER"/>
+        <subject qcode="N2:PIA"/>
+        <subject qcode="N2:POL"/>
+        <subject qcode="N2:PXP"/>
+        <subject qcode="N2:REL"/>
+        <subject qcode="N2:SOCI"/>
+        <subject qcode="N2:TOPCMB"/>
+        <subject qcode="N2:TOPNWS"/>
+        <subject qcode="N2:VAT"/>
+        <subject qcode="a1312cat:i"/>
+        <subject qcode="subj:02000000"/>
+        <subject qcode="subj:02012001"/>
+        <subject qcode="subj:02012006"/>
+        <subject qcode="subj:10000000"/>
+        <subject qcode="subj:11000000"/>
+        <subject qcode="subj:11002000"/>
+        <subject qcode="subj:12000000"/>
+        <subject qcode="subj:12009000"/>
+        <subject qcode="N2:VA" type="cptType:5">
+          <name>Vatican City</name>
+          <facet qcode="geoProp:5"/>
+        </subject>
+        <subject qcode="N2:IT" type="cptType:5">
+          <name>Italy</name>
+          <facet qcode="geoProp:5"/>
+        </subject>
+        <subject qcode="N2:MX" type="cptType:5">
+          <name>Mexico</name>
+          <facet qcode="geoProp:5"/>
+        </subject>
+        <genre qcode="N2:MTPIX">
+          <name>Media type Pictures</name>
+        </genre>
+        <subject qcode="N2:CO" type="cptType:5">
+          <name>Colombia</name>
+          <facet qcode="geoProp:5"/>
+        </subject>
+        <subject qcode="N2:AMERS" type="cptType:5">
+          <name>Americas</name>
+          <facet qcode="geoProp:3"/>
+        </subject>
+        <subject qcode="N2:BR" type="cptType:5">
+          <name>Brazil</name>
+          <facet qcode="geoProp:5"/>
+        </subject>
+        <subject qcode="N2:CAMER" type="cptType:5">
+          <name>Central America</name>
+          <facet qcode="geoProp:3"/>
+        </subject>
+        <subject qcode="N2:AR" type="cptType:5">
+          <name>Argentina</name>
+          <facet qcode="geoProp:5"/>
+        </subject>
+        <subject qcode="N2:PE" type="cptType:5">
+          <name>Peru</name>
+          <facet qcode="geoProp:5"/>
+        </subject>
+        <subject qcode="N2:EUROP" type="cptType:5">
+          <name>Europe</name>
+          <facet qcode="geoProp:3"/>
+        </subject>
+        <subject qcode="N2:WEU" type="cptType:5">
+          <name>Western Europe</name>
+          <facet qcode="geoProp:3"/>
+        </subject>
+        <subject qcode="N2:NAMER" type="cptType:5">
+          <name>North America</name>
+          <facet qcode="geoProp:3"/>
+        </subject>
+        <subject qcode="N2:EMRG" type="cptType:5">
+          <name>Emerging Market Countries</name>
+          <facet qcode="geoProp:3"/>
+        </subject>
+        <genre qcode="N2:MTVID">
+          <name>Media type Video</name>
+        </genre>
+        <subject qcode="N2:LATAM" type="cptType:5">
+          <name>South America / Central America</name>
+          <facet qcode="geoProp:3"/>
+        </subject>
+        <subject qcode="N2:SAMER" type="cptType:5">
+          <name>South America</name>
+          <facet qcode="geoProp:3"/>
+        </subject>
+        <subject qcode="N2:EZC" type="cptType:5">
+          <name>Euro Zone</name>
+          <facet qcode="geoProp:3"/>
+        </subject>
+        <slugline separator="-">POPE-LATAM/ (PIX, TV)</slugline>
+        <headline>Pope Francis leaves Peru at end of Latin American trip</headline>
+        <creditline>Reuters</creditline>
+        <description role="descRole:caption">POPE-LATAM/ (PIX, TV):Pope Francis leaves Peru at end of Latin American trip</description>
+      </contentMeta>
+      <contentSet>
+        <inlineXML contenttype="application/xhtml+html" wordcount="66">
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <head>
+              <title/>
+            </head>
+            <body>
+              <p>LIMA, Jan 21 (Reuters) - Pope Francis departed Peru for Rome
+on Sunday, ending a trip to Latin America that also included
+neighboring Chile.</p>
+              <p>The visit was marked by tough talk on political corruption
+in Latin America and a backlash over what many see as his
+insufficient resolve to tackle sexual abuse in the Church.
+(Reporting by Caroline Stauffer and Philip Pullella; Editing by
+Paul Simao)</p>
+            </body>
+          </html>
+        </inlineXML>
+      </contentSet>
+    </newsItem>
+  </itemSet>
+</newsMessage>
