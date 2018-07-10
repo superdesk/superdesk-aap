@@ -143,6 +143,16 @@ class ZCZCTestCase(TestCase):
         self.items = ZCZCMedianetParser().parse(fixture, self.provider)
         self.assertEqual(self.items.get('headline'), 'IRW News Release: Master Builders Australia')
 
+    def test_tabular_format(self):
+        filename = 'ED_900942_2_1.tst'
+        dirname = os.path.dirname(os.path.realpath(__file__))
+        fixture = os.path.normpath(os.path.join(dirname, '../fixtures', filename))
+        self.provider['source'] = 'MNET'
+        self.items = ZCZCMedianetParser().parse(fixture, self.provider)
+        self.assertTrue(self.items.get('body_html').startswith('<pre>Media release distributed by AAP Medianet.'))
+        self.assertTrue(self.items.get('body_html').find('                    Dividend     Total Winners     '
+                                                         'Total Prizes Payable') != -1)
+
     def test_pagemasters_format(self):
         filename = 'Darwin GR - Greys - Sun 11 Oct, 2015.tst'
         dirname = os.path.dirname(os.path.realpath(__file__))
@@ -172,7 +182,7 @@ class ZCZCTestCase(TestCase):
         fixture = os.path.normpath(os.path.join(dirname, '../fixtures', filename))
         self.provider['source'] = 'BRA'
         self.items = ZCZCRacingParser().parse(fixture, self.provider)
-        self.assertEqual(self.items.get('headline'), 'Wodonga Comment Saturday races 1-6')
+        self.assertEqual(self.items.get('headline'), 'Wodonga Gallop Comment Saturday races 1-6')
         self.assertEqual(self.items.get('slugline'), 'Wodonga Comment')
         self.assertEqual(self.items.get('anpa_take_key'), 'Saturday races 1-6')
         self.assertEqual(self.items.get('anpa_category')[0]['qcode'], 'h')
@@ -188,6 +198,15 @@ class ZCZCTestCase(TestCase):
         self.assertEqual(self.items.get('slugline'), 'Eagle Farm MARKET DAY')
         self.assertEqual(self.items.get('anpa_category')[0]['qcode'], 'h')
         self.assertEqual(self.items.get('subject')[0]['qcode'], '15030001')
+
+    def test_racing_format_4(self):
+        filename = 'vinzce004_14.tst'
+        dirname = os.path.dirname(os.path.realpath(__file__))
+        fixture = os.path.normpath(os.path.join(dirname, '../fixtures', filename))
+        self.provider['source'] = 'BRA'
+        self.items = ZCZCRacingParser().parse(fixture, self.provider)
+        self.assertEqual(self.items.get('subject')[0]['qcode'], '15030001')
+        self.assertEqual(self.items.get('keywords')[0], 'RFG')
 
     def test_trot_tab_divs(self):
         filename = 'Wagga Trot VIC TAB DIVS 1-4 Friday.tst'
@@ -207,8 +226,8 @@ class ZCZCTestCase(TestCase):
         fixture = os.path.normpath(os.path.join(dirname, '../fixtures', filename))
         self.provider['source'] = 'BRA'
         self.items = ZCZCRacingParser().parse(fixture, self.provider)
-        self.assertEqual(self.items.get('headline'), 'Leading jockeys (Sydney)')
-        self.assertEqual(self.items.get('slugline'), 'Leading jockeys (Sydney)')
+        self.assertEqual(self.items.get('headline'), 'SPORTMANS')
+        self.assertEqual(self.items.get('slugline'), 'SPORTMANS')
         self.assertEqual(self.items.get('anpa_category')[0]['qcode'], 'h')
         self.assertEqual(self.items.get('subject')[0]['qcode'], '15030001')
 

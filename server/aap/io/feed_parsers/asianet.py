@@ -10,12 +10,9 @@
 
 import html
 import uuid
-from dateutil.parser import parse as date_parser
-from flask import current_app as app
-
 from superdesk.io.feed_parsers import FileFeedParser
 from superdesk.metadata.item import ITEM_TYPE, CONTENT_TYPE, FORMAT, FORMATS
-from superdesk.utc import utc, utcnow
+from superdesk.utc import utcnow
 from superdesk.io.registry import register_feed_parser, register_feeding_service_error
 from superdesk.errors import AlreadyExistsError
 from aap.errors import AAPParserError
@@ -55,11 +52,15 @@ class AsiaNetFeedParser(FileFeedParser):
             with open(file_path, 'r', encoding='windows-1252') as f:
                 data = f.read().replace('\r', '')
 
-            header, dateline_data, data = data.split('\n\n', 2)
+            header, dateline_data, body_data = data.split('\n\n', 2)
 
             self._process_header(item, header)
-            self._process_dateline(item, dateline_data)
 
+            start_of_body = 'MEDIA RELEASE '
+            source, data = data.split(start_of_body, 1)
+            data = start_of_body + data
+
+            item['anpa_category'] = [{'qcode': 'j'}]
             item['original_source'] = 'AsiaNet'
             item['word_count'] = get_text_word_count(data)
             item['body_html'] = '<pre>' + html.escape(data) + '</pre>'
@@ -68,70 +69,38 @@ class AsiaNetFeedParser(FileFeedParser):
         except Exception as e:
             raise AAPParserError.AsiaNetParserError(file_path, e)
 
+    def _truncate_headers(self, item):
+        # Truncate the anpa_take_key and headline to the lengths defined on the validators if required
+        max_anpa_take_key_len = 24
+        if 'anpa_take_key' in item:
+            if len(item['anpa_take_key']) > max_anpa_take_key_len:
+                item['anpa_take_key'] = item['anpa_take_key'][:max_anpa_take_key_len]
+
     def _process_header(self, item, header):
         """Process the header of the file, that contains the slugline, take key and headline
 
-        It is possible that the source line is spread across multiple lines, as well as the headline.
+        It is possible that the source line is spread across multiple lines.
         So iterate over them to make sure we get all the data. The only assumption is that media release is only
         1 line in the header
 
         :param dict item: The item where the data will be stored
         :param str header: The header of the file
         """
-        source = 'slugline'
+        source = 'anpa_take_key'
         for line in header.split('\n'):
             if line.lower().startswith('media release'):
-                source = 'anpa_take_key'
+                break
 
             if source not in item:
                 item[source] = line
             else:
                 item[source] += line
 
-            if source == 'anpa_take_key':
-                source = 'headline'
-
         # Clean up the header entries
-        item['slugline'] = item['slugline'][8:].replace('\n', '').strip()
-        item['anpa_take_key'] = item['anpa_take_key'][14:]
-        item['headline'] = item['headline'].replace('\n', '')
-
-    def _process_dateline(self, item, dateline):
-        """Process the dateline string to get the individual elements.
-
-        Examples:
-        AUSTIN, Texas, Feb. 1, 2017 /PRNewswire-AsiaNet/ --
-        LONDON, Feb. 1 /PRNewswire-AsiaNet / --
-        NEW YORK, LONDON and BEIJING, Feb. 2, 2017 /PRNewswire-AsiaNet/ --
-
-        :param dict item: The item where the data will be stored
-        :param str dateline: The string from the dateline int file
-        """
-        item.setdefault('dateline', {})
-        dateline, source = dateline.split('/', 1)
-
-        date = date_parser(dateline, fuzzy=True).replace(tzinfo=utc)
-        item['dateline']['date'] = date
-
-        item['dateline']['source'] = source[:-4].strip()
-        item['dateline']['text'] = dateline.strip()
-
-        # Attempt to set the city data to the dateline.location key
-        cities = app.locators.find_cities()
-        for city in dateline.replace(' and ', ',').split(','):
-            located = [c for c in cities if c['city'].lower() == city.strip().lower()]
-            if len(located) > 0:
-                item['dateline']['located'] = located[0]
-                break
-
-        if 'located' not in item['dateline']:
-            city = dateline.split(',')[0]
-            item['dateline']['located'] = {
-                'city_code': city,
-                'city': city,
-                'tz': 'UTC',
-                'dateline': 'city'
-            }
+        item['anpa_take_key'] = item['anpa_take_key'][8:].replace('\n', '').strip()
+        item['headline'] = 'Media Release: ' + item.get('anpa_take_key', '')
+        item['slugline'] = 'AAP Medianet'
+        self._truncate_headers(item)
 
 
 try:
