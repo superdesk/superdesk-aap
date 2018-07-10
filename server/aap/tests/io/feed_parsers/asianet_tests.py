@@ -9,9 +9,8 @@
 # at https://www.sourcefabric.org/superdesk/license
 
 import os
-from datetime import datetime
 from superdesk.tests import TestCase
-from superdesk.utc import utc, utcnow
+from superdesk.utc import utcnow
 from aap.io.feed_parsers.asianet import AsiaNetFeedParser
 
 
@@ -21,136 +20,58 @@ class AsiaNetFeedParserTestCase(TestCase):
 
     headers = [
         {
-            'slugline': 'Digital Turbine, Inc.',
-            'headline': 'Digital Turbine Partners with Axiata Digital On Carrier Billing Platform Integration',
-            'anpa_take_key': 'PR67276',
+            'headline': 'Media Release: Digital Turbine, Inc.',
+            'anpa_take_key': 'Digital Turbine, Inc.',
             'original_source': 'AsiaNet',
-            'dateline': {
-                'date': datetime(2017, 2, 1, 0, 0, tzinfo=utc),
-                'source': 'PRNewswire-AsiaNet',
-                'text': 'AUSTIN, Texas, Feb. 1, 2017',
-                'located': {
-                    'dateline': 'city', 'country': 'United States', 'tz': 'America/Chicago', 'city_code': 'Austin',
-                    'state': 'Texas', 'state_code': 'US.TX', 'city': 'Austin', 'alt_name': '', 'country_code': 'US'}
-            },
-            'first_line': '<pre>Digital Turbine, Inc. ( https://www.digitalturbine.com/ ) (Nasdaq: APPS), a'
+            'first_line': '<pre>MEDIA RELEASE PR67276\nDigital Turbine Partners with'
         },
         {
-            'slugline': 'Queen Elizabeth Prize',
-            'headline': 'Queen Elizabeth Prize for Engineering Awarded to the Creators of Digital Imaging Sensors',
-            'anpa_take_key': 'PR67254',
+            'headline': 'Media Release: Queen Elizabeth Prize',
+            'anpa_take_key': 'Queen Elizabeth Prize',
             'original_source': 'AsiaNet',
-            'dateline': {
-                'date': datetime(2017, 2, 1, 0, 0, tzinfo=utc),
-                'source': 'PRNewswire',
-                'text': 'LONDON, Feb. 1, 2017',
-                'located': {'dateline': 'city', 'country': 'Canada', 'tz': 'America/Toronto', 'city_code': 'London',
-                            'state': 'Ontario', 'state_code': 'CA.08', 'city': 'London', 'alt_name': '',
-                            'country_code': 'CA'}
-            },
-            'first_line': '<pre>    Four engineers responsible for the creation of digital imaging sensors were'
+            'first_line': '<pre>MEDIA RELEASE PR67254\nQueen Elizabeth Prize'
         },
         {
-            'slugline': 'Escola Aguia de Ouro',
-            'headline': 'Animal rights come to Brazil\'s Carnival for a show with no feathers',
-            'anpa_take_key': 'PR67255',
+            'headline': 'Media Release: Escola Aguia de Ouro',
+            'anpa_take_key': 'Escola Aguia de Ouro',
             'original_source': 'AsiaNet',
-            'dateline': {
-                'date': datetime(2017, 2, 1, 0, 0, tzinfo=utc),
-                'source': 'PRNewswire-AsiaNet',
-                'text': 'SAO PAULO, Feb. 1, 2017',
-                'located': {'dateline': 'city', 'country': 'Brazil', 'tz': 'America/Sao_Paulo',
-                            'city_code': 'Sao Paulo', 'state': 'São Paulo', 'state_code': 'BR.27',
-                            'city': 'Sao Paulo', 'alt_name': '', 'country_code': 'BR'}
-            },
-            'first_line': '<pre>    -- Aguia de Ouro samba school to present theme on raising awareness of'
+            'first_line': '<pre>MEDIA RELEASE PR67255\nAnimal rights come to Brazil'
         },
         {
-            'slugline': 'Essence',
-            'headline': 'Digital Agency Essence Builds on Enormous Growth in APAC; Promotes Jovy Gill to Managing '
-                        'Director of Australia',
-            'anpa_take_key': 'PR67257',
+            'headline': 'Media Release: Essence',
+            'anpa_take_key': 'Essence',
             'original_source': 'AsiaNet',
-            'dateline': {
-                'date': datetime(2017, 2, 2, 0, 0, tzinfo=utc),
-                'source': 'PRNewswire-AsiaNet',
-                'text': 'SINGAPORE, Feb. 2, 2017',
-                'located': {'dateline': 'city', 'country': 'Singapore', 'tz': 'Asia/Singapore',
-                            'city_code': 'Singapore', 'state': 'Singapore (general)', 'state_code': 'SG.00',
-                            'city': 'Singapore', 'alt_name': '', 'country_code': 'SG'}
-            },
-            'first_line': '<pre>- New Appointment Helps Essence Meet Increasing Demand for Data-Driven'
+            'first_line': '<pre>MEDIA RELEASE PR67257\nDigital Agency Essence Builds on Enormous Growth'
         },
         {
-            'slugline': 'OMRON Corporation',
-            'headline': 'OMRON Launches Promotional Website for AI-equipped Mobile Robot LD Series',
-            'anpa_take_key': 'PR67261',
+            'headline': 'Media Release: OMRON Corporation',
+            'anpa_take_key': 'OMRON Corporation',
             'original_source': 'AsiaNet',
-            'dateline': {
-                'date': datetime(2017, 2, 1, 0, 0, tzinfo=utc),
-                'source': 'Kyodo JBN-AsiaNet',
-                'text': 'KYOTO, Japan, Feb. 1, 2017',
-                'located': {'city_code': 'KYOTO', 'city': 'KYOTO', 'tz': 'UTC', 'dateline': 'city'}
-            },
-            'first_line': '<pre>OMRON Corporation announced on February 1 the launch of a promotional website'
+            'first_line': '<pre>MEDIA RELEASE PR67261\nOMRON Launches Promotional Website for AI-equipped'
         },
         {
-            'slugline': 'OnApp',
-            'headline': 'OnApp v5.3 Simplifies Add-on Services for Cloud Providers',
-            'anpa_take_key': 'PR67266',
+            'headline': 'Media Release: OnApp',
+            'anpa_take_key': 'OnApp',
             'original_source': 'AsiaNet',
-            'dateline': {
-                'date': datetime(year, 2, 1, 0, 0, tzinfo=utc),
-                'source': 'PRNewswire-AsiaNet',
-                'text': 'LONDON, Feb. 1',
-                'located': {'dateline': 'city', 'country': 'Canada', 'tz': 'America/Toronto', 'city_code': 'London',
-                            'state': 'Ontario', 'state_code': 'CA.08', 'city': 'London', 'alt_name': '',
-                            'country_code': 'CA'}
-            },
-            'first_line': '<pre>- Makes it easy for cloud service providers and enterprises to offer a catalog'
+            'first_line': '<pre>MEDIA RELEASE PR67266\nOnApp v5.3 Simplifies Add-on Services'
         },
         {
-            'slugline': 'Shinetech Software Inc.',
-            'headline': 'Shinetech Software, Inc. Reports 16% Growth in 2016',
-            'anpa_take_key': 'PR67271',
+            'headline': 'Media Release: Shinetech Software Inc.',
+            'anpa_take_key': 'Shinetech Software Inc.',
             'original_source': 'AsiaNet',
-            'dateline': {
-                'date': datetime(2017, 2, 2, 0, 0, tzinfo=utc),
-                'source': 'PRNewswire-AsiaNet',
-                'text': 'NEW YORK, LONDON and BEIJING, Feb. 2, 2017',
-                'located': {'dateline': 'city', 'country': 'Canada', 'tz': 'America/Toronto', 'city_code': 'London',
-                            'state': 'Ontario', 'state_code': 'CA.08', 'city': 'London', 'alt_name': '',
-                            'country_code': 'CA'}
-            },
-            'first_line': '<pre>    -- Company continues strong rate of global business expansion, adds new'
+            'first_line': '<pre>MEDIA RELEASE PR67271\nShinetech Software, Inc. Reports 16% Growth in 2016'
         },
         {
-            'slugline': 'Huntsman Family Investments',
-            'headline': 'Huntsman Family Investments to Acquire GTA TeleGuam',
-            'anpa_take_key': 'PR67275',
+            'headline': 'Media Release: Huntsman Family Investments',
+            'anpa_take_key': 'Huntsman Family Investme',
             'original_source': 'AsiaNet',
-            'dateline': {
-                'date': datetime(2017, 2, 1, 0, 0, tzinfo=utc),
-                'source': 'PRNewswire-AsiaNet',
-                'text': 'TAMUNING, Guam, Feb. 1, 2017',
-                'located': {'city_code': 'TAMUNING', 'city': 'TAMUNING', 'tz': 'UTC', 'dateline': 'city'}
-            },
-            'first_line': '<pre>Huntsman Family Investments and its affiliates (&quot;HFI&quot;) announced today that'
+            'first_line': '<pre>MEDIA RELEASE PR67275\nHuntsman Family Investments to Acquire GTA TeleGuam'
         },
         {
-            'slugline': 'Neovia Oncology Ltd',
-            'headline': 'Neovia Enrolls First Patient in Cancer Trial for Immunotherapy Enhancing Drug',
-            'anpa_take_key': 'PR67278',
+            'headline': 'Media Release: Neovia Oncology Ltd',
+            'anpa_take_key': 'Neovia Oncology Ltd',
             'original_source': 'AsiaNet',
-            'dateline': {
-                'date': datetime(2017, 2, 2, 0, 0, tzinfo=utc),
-                'source': 'PRNewswire-AsiaNet',
-                'text': 'BEIJING, Feb. 2, 2017',
-                'located': {'dateline': 'city', 'country': 'China', 'tz': 'Asia/Harbin', 'city_code': 'Beijing',
-                            'state': 'Beijing', 'state_code': 'CN.22', 'city': 'Beijing', 'alt_name': '',
-                            'country_code': 'CN'}
-            },
-            'first_line': '<pre>Neovia Oncology,  (Beijing, Taiwan, &amp; Seattle), has begun its first Phase 1'
+            'first_line': '<pre>MEDIA RELEASE PR67278\nNeovia Enrolls First Patient in Cancer Trial'
         }
     ]
 
@@ -163,8 +84,8 @@ class AsiaNetFeedParserTestCase(TestCase):
             self.assertTrue(AsiaNetFeedParser().can_parse(self._get_fixture(i)))
 
     def test_feed_parser(self):
-        test_keys = ['slugline', 'headline', 'anpa_take_key',
-                     'original_source', 'dateline']
+        test_keys = ['headline', 'anpa_take_key',
+                     'original_source']
         for i in range(1, 10):
             item = AsiaNetFeedParser().parse(self._get_fixture(i), self.provider)
             expected = self.headers[i - 1]
