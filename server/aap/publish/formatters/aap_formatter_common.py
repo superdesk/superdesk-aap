@@ -69,3 +69,31 @@ def get_service_level(category, article):
         return category.get('qcode', 'a').lower()
 
     return 'a'
+
+
+def get_first_anpa_category_code(article, default_value='a'):
+    """Get the first anpa categpoy code from the list
+    :param dict article: article to format
+    """
+    return (get_first_anpa_category(article) or {}).get('qcode') or default_value
+
+
+def get_first_anpa_category(article):
+    """Get the first anpa categpoy from the list
+    :param dict article: article to format
+    """
+    return article.get('anpa_category')[0] or {} if article.get('anpa_category') else {}
+
+
+def get_copyrights_info(article, copyrights):
+    """Get the copyrights
+
+    :param dict article:
+    :param list copyrights:
+    :return dict:
+    """
+    source = (article.get('source') or '').lower()
+    copyright_info = next((c for c in (copyrights or []) if source == (c.get('name') or '').lower()), {})
+    if not copyright_info:
+        return next((c for c in (copyrights or []) if c.get('name') == 'default'), {})
+    return copyright_info
