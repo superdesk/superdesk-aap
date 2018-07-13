@@ -237,3 +237,15 @@ CURRENCY_API_KEY = env('CURRENCY_API_KEY', None)
 
 # Validate auto published content using validators not profile
 AUTO_PUBLISH_CONTENT_PROFILE = False
+
+#: The number of minutes before Publish Queue is purged
+PUBLISH_QUEUE_EXPIRY_MINUTES = int(env('PUBLISH_QUEUE_EXPIRY_MINUTES', 3 * 24 * 60))
+
+#: The number of minutes since the last update of the Mongo auth object after which it will be deleted
+SESSION_EXPIRY_MINUTES = int(env('SESSION_EXPIRY_MINUTES', 240))
+
+#: The number of minutes before ingest items are purged
+INGEST_EXPIRY_MINUTES = int(env('INGEST_EXPIRY_MINUTES', 2 * 24 * 60))
+
+#: The number of minutes before audit content is purged
+AUDIT_EXPIRY_MINUTES = int(env('AUDIT_EXPIRY_MINUTES', 43200))
