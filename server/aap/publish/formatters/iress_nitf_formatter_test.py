@@ -95,6 +95,7 @@ class IRESSNITFFormatterTest(TestCase):
             '_id': 'urn:localhost.abc',
             'guid': 'urn:localhost.abc',
             'urgency': 2,
+            'word_count': 99,
             'unique_id': 11,
             'place': [{'qcode': 'FED'}],
             'sign_off': 'me',
@@ -110,10 +111,11 @@ class IRESSNITFFormatterTest(TestCase):
                          '   Bar FooZZZZYYYY\n   test bodyZZZZYYYY\n   test bodyZZZZYYYY\n   SUP meZZZZYYYY\n')
         self.assertEqual(nitf_xml.find('head/docdata/urgency').get('ed-urg'), '2')
         self.assertEqual(nitf_xml.find('head/meta[@name="anpa-sequence"]').get('content'),
-                         str(doc['published_seq_num']))
+                         str(doc['published_seq_num']).zfill(4))
         self.assertEqual(nitf_xml.find('head/meta[@name="anpa-keyword"]').get('content'), 'keyword')
         self.assertEqual(nitf_xml.find('head/meta[@name="anpa-takekey"]').get('content'), 'take-key')
         self.assertEqual(nitf_xml.find('head/meta[@name="anpa-category"]').get('content'), 'f')
+        self.assertEqual(nitf_xml.find('head/meta[@name="anpa-wordcount"]').get('content'), '0099')
         self.assertEqual(nitf_xml.find('body/body.head/hedline/hl1').text, 'FED:test headline')
         self.assertEqual(nitf_xml.find('head/docdata/doc.copyright').get('year'), '2018')
         self.assertEqual(nitf_xml.find('head/docdata/doc.copyright').get('holder'), 'Foo bar')
@@ -122,6 +124,7 @@ class IRESSNITFFormatterTest(TestCase):
                          article.get('versioncreated').strftime('%Y%m%dT%H%M%S'))
         self.assertEqual(nitf_xml.find('head/docdata/date.release').get('norm'),
                          article.get('versioncreated').strftime('%Y%m%dT%H%M%S'))
+        self.assertEqual(len(nitf_xml.findall('body/body.end')), 0)
 
     def test_company_codes(self):
         article = {
@@ -350,3 +353,83 @@ class IRESSNITFFormatterTest(TestCase):
         item = doc['formatted_item'].replace(self.line_ender, self.line_feed)
         nitf_xml = etree.fromstring(item)
         self.assertIsNone(nitf_xml.find('head/meta[@name="anpa-takekey"]'))
+
+    def testLocator(self):
+        article = {
+            '_id': '4853',
+            'slugline': 'Gangs',
+            'byline': '',
+            'anpa_category': [
+                {
+                    'name': 'Australian General News',
+                    'qcode': 'a'
+                }
+            ],
+            'versioncreated': datetime(2018, 6, 13, 11, 45, 19, 0),
+            'genre': [
+                {
+                    'name': 'Article (news)',
+                    'qcode': 'Article'
+                }
+            ],
+            'priority': 6,
+            'unique_id': 33423059,
+            'format': 'HTML',
+            'guid': '4853',
+            'headline': 'Drop gang campaign, bishop tells Vic Libs',
+            'source': 'TEST',
+            'subject': [
+                {
+                    'name': 'crime, law and justice',
+                    'qcode': '02000000'
+                }
+            ],
+            'flags': {
+                'marked_for_sms': False,
+                'marked_for_not_publication': False,
+                'marked_archived_only': False,
+                'marked_for_legal': False
+            },
+            'anpa_take_key': None,
+            'pubstatus': 'usable',
+            'schedule_settings': {
+                'time_zone': None,
+                'utc_embargo': None,
+                'utc_publish_schedule': None
+            },
+            'urgency': 5,
+            'word_count': 83,
+            'type': 'text',
+            'place': [
+                {
+                    'name': 'VIC',
+                    'qcode': 'VIC',
+                    'world_region': 'Oceania',
+                    'state': 'Victoria',
+                    'country': 'Australia',
+                    'group': 'Australia'
+                }
+            ],
+            'state': 'corrected',
+            'body_html': '<p>A Melbourne-based Anglican bishop is calling on the Liberal party</P',
+            '_current_version': 3,
+            'sign_off': 'MG',
+            'ednote': 'In the story \'Gangs\' sent at: 16/07/2018 15:26\r\n\r\nThis is a corrected repeat.',
+            'sms_message': ''
+        }
+
+        doc = self.formatter.format(article, {'name': 'Test Subscriber'})[0]
+        item = doc['formatted_item'].replace(self.line_ender, self.line_feed)
+        nitf_xml = etree.fromstring(item)
+        self.assertEqual(nitf_xml.find('head/title').text, 'VIC:Drop gang campaign, bishop tells Vic Libs')
+        self.assertEqual(nitf_xml.find('body/body.head/hedline/hl1').text,
+                         'VIC:Drop gang campaign, bishop tells Vic Libs')
+
+        article['anpa_category'] = [{'name': 'Domestic Sports', 'qcode': 't'}]
+        article['subject'] = [{'name': 'Cricket', 'qcode': '15017000'}]
+        doc = self.formatter.format(article, {'name': 'Test Subscriber'})[0]
+        item = doc['formatted_item'].replace(self.line_ender, self.line_feed)
+        nitf_xml = etree.fromstring(item)
+        self.assertEqual(nitf_xml.find('head/title').text, 'CRIK:Drop gang campaign, bishop tells Vic Libs')
+        self.assertEqual(nitf_xml.find('body/body.head/hedline/hl1').text,
+                         'CRIK:Drop gang campaign, bishop tells Vic Libs')
