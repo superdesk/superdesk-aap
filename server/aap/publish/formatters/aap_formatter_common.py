@@ -71,7 +71,7 @@ def get_service_level(category, article):
     return 'a'
 
 
-def get_first_anpa_category_code(article, default_value='a'):
+def get_first_anpa_category_code(article, default_value='A'):
     """Get the first anpa categpoy code from the list
     :param dict article: article to format
     """
