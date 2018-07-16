@@ -64,14 +64,12 @@ class ZCZCRacingParser(ZCZCFeedParser):
                 item[self.ITEM_HEADLINE] = lines[1][9:]
                 item[self.ITEM_SLUGLINE] = lines[1][9:]
                 lines_to_remove = 2
-            elif lines[1] and lines[1].find(':PREMIERSHIP') != -1:
-                # If there is a string prefixed with : after :PREMIERSHIP that becomes the headline and slugline
-                if lines[1].find(' :'):
-                    item[self.ITEM_HEADLINE] = lines[1][lines[1].find(' :') + 2:]
-                    item[self.ITEM_SLUGLINE] = item[self.ITEM_HEADLINE]
-                else:  # Just stick the word PREMIERSHIP in the headline and slugline
-                    item[self.ITEM_HEADLINE] = 'PREMIERSHIP'
-                    item[self.ITEM_SLUGLINE] = item[self.ITEM_HEADLINE]
+            elif lines[1] and lines[1].find(':Premierships') != -1:
+                item[self.ITEM_HEADLINE] = lines[1][1:]
+                item[self.ITEM_SLUGLINE] = item[self.ITEM_HEADLINE]
+                # the overflow of the slugline is dumped in the take key
+                item[self.ITEM_TAKE_KEY] = item.get(self.ITEM_SLUGLINE)[21:]
+                item[self.ITEM_SLUGLINE] = item[self.ITEM_SLUGLINE][:21]
                 lines_to_remove = 2
             elif lines[1] and lines[1].find(' WEIGHTS ') != -1:
                 self._scan_lines(item, lines)

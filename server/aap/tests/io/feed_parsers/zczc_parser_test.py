@@ -222,14 +222,15 @@ class ZCZCTestCase(TestCase):
         self.assertEqual(self.items.get('genre')[0]['name'], 'Results (sport)')
 
     def test_leading_jockeys(self):
-        filename = 'vinlpt_8390.tst'
+        filename = 'premierships.txt'
         dirname = os.path.dirname(os.path.realpath(__file__))
         fixture = os.path.normpath(os.path.join(dirname, '../fixtures', filename))
         self.provider['source'] = 'BRA'
         self.items = ZCZCRacingParser().parse(fixture, self.provider)
-        self.assertEqual(self.items.get('headline'), 'SPORTMANS')
-        self.assertEqual(self.items.get('slugline'), 'SPORTMANS')
         self.assertEqual(self.items.get('anpa_category')[0]['qcode'], 'r')
+        self.assertEqual(self.items.get('headline'), 'Premierships National gallop Trainer and Jockeys 2017-2018')
+        self.assertEqual(self.items.get('slugline'), 'Premierships National')
+        self.assertEqual(self.items.get('anpa_take_key'), ' gallop Trainer and Jockeys 2017-2018')
         self.assertEqual(self.items.get('subject')[0]['qcode'], '15030001')
 
     def test_weights(self):
