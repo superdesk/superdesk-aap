@@ -32,7 +32,7 @@ cache:
 
 before_install:
     - sudo apt-get purge elasticsearch -y
-    - sudo apt-get install -y elasticsearch=2.4.4
+    - sudo apt-get install -y elasticsearch=2.4.6
     - nvm install 6
     - nvm use 6
     - node --version
