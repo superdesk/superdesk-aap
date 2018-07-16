@@ -17,7 +17,7 @@ from superdesk.metadata.item import ITEM_TYPE, CONTENT_TYPE, FORMATS, FORMAT, BY
 from .aap_formatter_common import get_service_level, get_first_anpa_category, \
     get_first_anpa_category_code, get_copyrights_info
 from lxml import etree as etree
-from lxml.etree import SubElement
+from lxml.etree import SubElement, strip_elements
 from superdesk.text_utils import get_text
 from .field_mappers.locator_mapper import LocatorMapper
 from .field_mappers.slugline_mapper import SluglineMapper
@@ -33,6 +33,7 @@ class IRESSNITFFormatter(NITFFormatter):
         try:
             pub_seq_num = superdesk.get_resource_service('subscribers').generate_sequence_number(subscriber)
             nitf = self.get_nitf(article, subscriber, pub_seq_num)
+            strip_elements(nitf, 'body.end')
             nitf_string = etree.tostring(nitf, encoding='utf-8').decode()
             headers = ['<?xml version=\"1.0\" encoding=\"UTF-8\"?>',
                        '<!-- <!DOCTYPE nitf SYSTEM \"./nitf-3-3.dtd\"> -->']
@@ -54,7 +55,7 @@ class IRESSNITFFormatter(NITFFormatter):
         category = get_first_anpa_category(article)
         category_code = get_first_anpa_category_code(article)
 
-        SubElement(head, 'meta', {'name': 'anpa-sequence', 'content': str(pub_seq_num)})
+        SubElement(head, 'meta', {'name': 'anpa-sequence', 'content': str(pub_seq_num).zfill(4)})
         SubElement(head, 'meta', {'name': 'anpa-category', 'content': category_code})
 
         SubElement(head, 'meta',
@@ -69,7 +70,7 @@ class IRESSNITFFormatter(NITFFormatter):
         })
 
         if article.get('word_count'):
-            SubElement(head, 'meta', {'name': 'anpa-wordcount', 'content': str(article.get('word_count'))})
+            SubElement(head, 'meta', {'name': 'anpa-wordcount', 'content': str(article.get('word_count')).zfill(4)})
 
         SubElement(head, 'meta', {'name': 'anpa-keyword', 'content': SluglineMapper().map(article, category_code)})
         if article.get('anpa_take_key'):
@@ -79,7 +80,7 @@ class IRESSNITFFormatter(NITFFormatter):
 
     def _format_title(self, article, head):
         title = SubElement(head, 'title')
-        title.text = LocatorMapper().get_formatted_headline(article, get_first_anpa_category_code(article))
+        title.text = LocatorMapper().get_formatted_headline(article, get_first_anpa_category_code(article).upper())
 
     def _format_meta_priority(self, article, head):
         pass
@@ -154,7 +155,7 @@ class IRESSNITFFormatter(NITFFormatter):
     def _format_body_head(self, article, body_head):
         hedline = SubElement(body_head, 'hedline')
         hl1 = SubElement(hedline, 'hl1')
-        hl1.text = LocatorMapper().get_formatted_headline(article, get_first_anpa_category_code(article))
+        hl1.text = LocatorMapper().get_formatted_headline(article, get_first_anpa_category_code(article).upper())
 
     def _format_docdata(self, article, docdata):
         self._format_docdata_doc_id(article, docdata)
