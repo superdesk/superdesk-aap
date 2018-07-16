@@ -39,7 +39,7 @@ class ZCZCRacingParser(ZCZCFeedParser):
             lines_to_remove = 1
             # Pagemasters sourced content is Greyhound or Trot related, maybe AFL otherwise financial
             # It is from the Racing system
-            item[self.ITEM_ANPA_CATEGORY] = [{'qcode': 'h'}]
+            item[self.ITEM_ANPA_CATEGORY] = [{'qcode': 'r'}]
             item[self.ITEM_SUBJECT] = [{'qcode': '15030001', 'name': subject_codes['15030001']}]
             lines = item['body_html'].split('\n')
             # If the content is to be routed/auto published
@@ -103,6 +103,14 @@ class ZCZCRacingParser(ZCZCFeedParser):
                 if self.ITEM_HEADLINE in item:
                     item[self.ITEM_HEADLINE] = item[self.ITEM_HEADLINE][:max_headline_len] \
                         if len(item[self.ITEM_HEADLINE]) > max_headline_len else item[self.ITEM_HEADLINE]
+
+            # if the concatenation of the slugline and take key contain the phrase 'Brief Form' change the category to
+            # h
+            if (item.get(self.ITEM_SLUGLINE, '') + item.get(self.ITEM_TAKE_KEY, '')).lower().find('brief form') >= 0:
+                item[self.ITEM_ANPA_CATEGORY] = [{'qcode': 'h'}]
+            # Another exception
+            if 'NZ/AUST FIELDS' in item.get('body_html', ''):
+                item[self.ITEM_ANPA_CATEGORY] = [{'qcode': 'h'}]
 
             return item
 
