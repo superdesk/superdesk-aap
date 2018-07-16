@@ -9,7 +9,7 @@
 # at https://www.sourcefabric.org/superdesk/license
 import re
 import superdesk
-from superdesk.etree import parse_html, to_string
+from superdesk.etree import parse_html, to_string, get_text
 from superdesk.publish.formatters.nitf_formatter import NITFFormatter
 from superdesk.errors import FormatterError
 from superdesk.utc import utcnow
@@ -18,7 +18,6 @@ from .aap_formatter_common import get_service_level, get_first_anpa_category, \
     get_first_anpa_category_code, get_copyrights_info
 from lxml import etree as etree
 from lxml.etree import SubElement
-from superdesk.text_utils import get_text
 from .field_mappers.locator_mapper import LocatorMapper
 from .field_mappers.slugline_mapper import SluglineMapper
 
