@@ -187,6 +187,9 @@ class ZCZCTestCase(TestCase):
         self.assertEqual(self.items.get('anpa_take_key'), 'Saturday races 1-6')
         self.assertEqual(self.items.get('anpa_category')[0]['qcode'], 'r')
         self.assertEqual(self.items.get('subject')[0]['qcode'], '15030001')
+        self.assertEqual(self.items.get('format'), 'HTML')
+        self.assertTrue(
+            self.items.get('body_html').startswith('<p>   Race One - Telstra Business Centre Mdn 1400m</p>'))
 
     def test_racing_format_3(self):
         filename = 'vicomb004_8511.tst'
