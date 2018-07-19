@@ -1,5 +1,5 @@
 ZCZC FMG000
-YY TDCom
+HH TDCom
 Wodonga Comment Saturday races 1-6
    Race One - Telstra Business Centre Mdn 1400m
 	   APITO (G Tobias) 5m By Strategic - Tin Pan (16:0-0-0): Overraced early stages. Eased near 1000m. Eased near 400m 11-1/4 len 7th of 12 (4) $21.00 53.5 Supreme Renegade 1400m Coleraine 3yo+ Mdn Soft(6) Aug 13. 3-1/4 len 5th of 12 (6) $21.00 53.5 Battle Lines 1400m Wodonga 3yo+ Mdn Soft(6) Aug 29. Prefers being on the speed. Place chance best.
