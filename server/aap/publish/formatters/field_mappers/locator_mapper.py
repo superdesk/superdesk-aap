@@ -187,6 +187,10 @@ class LocatorMapper(FieldMapper):
         if article.get('auto_publish', False):
             return headline
 
+        # Do not prepend the Locator to anything from the racing system
+        if article.get('source', '') == 'BRA':
+            return headline
+
         headline_prefix = LocatorMapper().map(article, category)
         if headline_prefix:
             headline = '{}:{}'.format(headline_prefix, headline)
