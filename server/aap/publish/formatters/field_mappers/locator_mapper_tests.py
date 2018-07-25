@@ -172,3 +172,28 @@ class SelectorcodeMapperTest(TestCase):
 
     def test_locator_for_categoryX_no_sport_topic(self):
         self.assertEqual(self.locator_map.map(self.article8, 'X'), 'CHN')
+
+    def test_headline_prefix_not_for_racing(self):
+        article = {
+            '_id': 'urn:newsml:localhost:2018-07-19T15:25:10.511062:feabfc1d-7686-4d39-bc88-b91fc2bd5b1e',
+            'source': 'BRA',
+            'headline': 'Townsville gallops selections Saturday',
+            'anpa_category': [
+                {
+                    'qcode': 'r',
+                    'name': 'Racing (Turf)'
+                }
+            ],
+            'type': 'text',
+            'subject': [
+
+                {
+                    'qcode': '15030000',
+                    'name': 'horse racing, harness racing'
+                }
+            ],
+            'body_html': '<pre>Townsville gallops selections Saturday</pre>'
+        }
+
+        self.assertEqual(self.locator_map.get_formatted_headline(article, 'R'),
+                         'Townsville gallops selections Saturday')
