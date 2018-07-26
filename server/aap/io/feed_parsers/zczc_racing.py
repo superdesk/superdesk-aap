@@ -15,12 +15,13 @@ from superdesk.io.iptc import subject_codes
 from superdesk.logging import logger
 import superdesk
 from apps.publish.content.common import ITEM_PUBLISH
+from aap.macros.racing_reformat import racing_reformat_macro
 
 
 class ZCZCRacingParser(ZCZCFeedParser):
     NAME = 'Racing_zczc'
 
-    # These destination codes will be extracted from the line begining with YY and appended to the keywords
+    # These destination codes will be extracted from the line begining with YY or HH and appended to the keywords
     destinations = ('PEB', 'FFB', 'FORM', 'RFG')
 
     def set_item_defaults(self, item, provider):
@@ -43,7 +44,7 @@ class ZCZCRacingParser(ZCZCFeedParser):
             item[self.ITEM_SUBJECT] = [{'qcode': '15030001', 'name': subject_codes['15030001']}]
             lines = item['body_html'].split('\n')
             # If the content is to be routed/auto published
-            if lines[0].upper().find('YY ') != -1:
+            if lines[0].upper().find('YY ') != -1 or lines[0].upper().find('HH ') != -1:
                 for dest in self.destinations:
                     if lines[0].upper().find(' ' + dest.upper()) != -1:
                         if (item.get('keywords')):
@@ -73,7 +74,7 @@ class ZCZCRacingParser(ZCZCFeedParser):
                 lines_to_remove = 2
             elif lines[1] and lines[1].find(' WEIGHTS ') != -1:
                 self._scan_lines(item, lines)
-            elif lines[0] and lines[0].find('YY ') != -1:
+            elif lines[0] and lines[0].find('YY ') != -1 or lines[0].find('HH ') != -1:
                 item[self.ITEM_HEADLINE] = lines[1]
                 item[self.ITEM_SLUGLINE] = lines[1]
                 if lines[1].find(' Comment ') != -1:
@@ -109,6 +110,11 @@ class ZCZCRacingParser(ZCZCFeedParser):
             # Another exception
             if 'NZ/AUST FIELDS' in item.get('body_html', ''):
                 item[self.ITEM_ANPA_CATEGORY] = [{'qcode': 'h'}]
+
+            # if the item has been marked as convert to HTML then we need to use the racing reformat macro
+            # to convert it.
+            if lines[0] and lines[0].find('HH ') != -1:
+                racing_reformat_macro(item)
 
             return item
 
