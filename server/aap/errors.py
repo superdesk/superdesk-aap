@@ -8,7 +8,7 @@
 # AUTHORS and LICENSE files distributed with this source code, or
 # at https://www.sourcefabric.org/superdesk/license
 
-from superdesk.errors import ParserError
+from superdesk.errors import ParserError, SuperdeskPublishError
 
 
 class AAPParserError(ParserError):
@@ -33,3 +33,18 @@ class AAPParserError(ParserError):
     @classmethod
     def AsiaNetParserError(cls, exception=None, provider=None):
         return ParserError(1103, exception, provider)
+
+
+class PublishSocketError(SuperdeskPublishError):
+    _codes = {
+        15101: "Socket publish connection error",
+        15102: "Socket publish send error"
+    }
+
+    @classmethod
+    def socketConnectionError(cls, exception=None, destination=None):
+        return PublishSocketError(15101, exception, destination)
+
+    @classmethod
+    def socketSendError(cls, exception=None, destination=None):
+        return PublishSocketError(15102, exception, destination)

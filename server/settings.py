@@ -115,6 +115,7 @@ INSTALLED_APPS.extend([
     'apps.publish',
     'apps.publish.enqueue',
     'apps.publish.formatters',
+    'aap.publish.transmitters',
     'apps.content_filters',
     'apps.content_types',
     'apps.dictionaries',
