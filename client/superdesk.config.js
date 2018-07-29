@@ -1,5 +1,7 @@
 module.exports = function() {
     return {
+        apps: ['aap.apps'],
+        importApps: ['aap'],
         defaultRoute: '/workspace',
         validatorMediaMetadata: {
             headline: {
