@@ -72,6 +72,12 @@ class AsiaNetFeedParserTestCase(TestCase):
             'anpa_take_key': 'Neovia Oncology Ltd',
             'original_source': 'AsiaNet',
             'first_line': '<pre>MEDIA RELEASE PR67278\nNeovia Enrolls First Patient in Cancer Trial'
+        },
+        {
+            'headline': 'Media Release: IndiGrid',
+            'anpa_take_key': 'IndiGrid',
+            'original_source': 'AsiaNet',
+            'first_line': '<pre>MEDIA RELEASE PR74541\nIndiGrid Delivers Another Strong Quarter'
         }
     ]
 
@@ -80,13 +86,13 @@ class AsiaNetFeedParserTestCase(TestCase):
         self.maxDiff = None
 
     def test_can_parse(self):
-        for i in range(1, 10):
+        for i in range(1, 11):
             self.assertTrue(AsiaNetFeedParser().can_parse(self._get_fixture(i)))
 
     def test_feed_parser(self):
         test_keys = ['headline', 'anpa_take_key',
                      'original_source']
-        for i in range(1, 10):
+        for i in range(1, 11):
             item = AsiaNetFeedParser().parse(self._get_fixture(i), self.provider)
             expected = self.headers[i - 1]
 

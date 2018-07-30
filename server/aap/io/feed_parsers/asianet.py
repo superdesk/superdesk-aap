@@ -17,6 +17,7 @@ from superdesk.io.registry import register_feed_parser, register_feeding_service
 from superdesk.errors import AlreadyExistsError
 from aap.errors import AAPParserError
 from superdesk.etree import get_text_word_count
+from aap.publish.formatters.unicodetoascii import to_ascii
 
 
 class AsiaNetFeedParser(FileFeedParser):
@@ -63,7 +64,7 @@ class AsiaNetFeedParser(FileFeedParser):
             item['anpa_category'] = [{'qcode': 'j'}]
             item['original_source'] = 'AsiaNet'
             item['word_count'] = get_text_word_count(data)
-            item['body_html'] = '<pre>' + html.escape(data) + '</pre>'
+            item['body_html'] = '<pre>' + to_ascii(html.escape(data)) + '</pre>'
 
             return item
         except Exception as e:
