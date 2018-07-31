@@ -25,28 +25,6 @@ class ZCZCTestCase(TestCase):
     validators = [
         {
             'schema': {
-                'headline': {
-                    'required': True,
-                    'maxlength': 64,
-                    'empty': False,
-                    'nullable': False,
-                    'type': "string"
-                },
-                'slugline': {
-                    'required': True,
-                    'maxlength': 24,
-                    'empty': False,
-                    'nullable': False,
-                    'type': "string"
-                }
-
-            },
-            'type': 'text',
-            'act': 'publish',
-            '_id': 'publish_text'
-        },
-        {
-            'schema': {
                 'slugline': {
                     'required': True,
                     'maxlength': 30,
@@ -172,7 +150,7 @@ class ZCZCTestCase(TestCase):
         self.provider['source'] = 'BRA'
         self.items = ZCZCRacingParser().parse(fixture, self.provider)
         self.assertEqual(self.items.get('headline'), ' Racing.Com Park FIELDS Thursday')
-        self.assertEqual(self.items.get('slugline'), ' Racing.Com Park FIELDS ')
+        self.assertEqual(self.items.get('slugline'), ' Racing.Com Park FIELDS Thursday')
         self.assertEqual(self.items.get('anpa_category')[0]['qcode'], 'r')
         self.assertEqual(self.items.get('subject')[0]['qcode'], '15030001')
 
@@ -243,7 +221,7 @@ class ZCZCTestCase(TestCase):
         self.provider['source'] = 'BRA'
         self.items = ZCZCRacingParser().parse(fixture, self.provider)
         self.assertEqual(self.items.get('headline'), 'STRADBROKE HANDICAP 1400M .=!')
-        self.assertEqual(self.items.get('slugline'), 'STRADBROKE HANDICAP 1400')
+        self.assertEqual(self.items.get('slugline'), 'STRADBROKE HANDICAP 1400M .=!')
         self.assertEqual(self.items.get('anpa_category')[0]['qcode'], 'r')
         self.assertEqual(self.items.get('subject')[0]['qcode'], '15030001')
 
