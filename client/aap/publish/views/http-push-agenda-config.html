@@ -1,0 +1,8 @@
+<div class="field">
+    <label for="assets_url" translate>Save Entries API URL</label>
+    <input type="text" id="assets_url" placeholder="{{ :: 'Assets URL'|translate }}" ng-model="destination.config.assets_url" ng-change="$parent.setConfig(destination)">
+</div>
+<div class="field">
+    <label for="secret_token" translate>Secret Token</label>
+    <input type="text" id="secret_token" placeholder="{{ :: 'Secret Token'|translate }}" ng-model="destination.config.secret_token" ng-change="$parent.setConfig(destination)">
+</div>
