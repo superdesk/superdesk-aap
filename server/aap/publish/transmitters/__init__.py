@@ -8,5 +8,4 @@
 # AUTHORS and LICENSE files distributed with this source code, or
 # at https://www.sourcefabric.org/superdesk/license
 
-import aap.io.iptc_extension  # noqa
-from .feeding_services.aap_sports_service import AAPSportsHTTPFeedingService  # noqa
+import aap.publish.transmitters.http_push_agenda  # NOQA

@@ -35,5 +35,4 @@ function bootstrapGenApps() {
 }
 
 genApps.options.bootstrap = bootstrapGenApps;
-
 module.exports = require('superdesk-core/Gruntfile');

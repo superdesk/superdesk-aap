@@ -1,0 +1,273 @@
+[
+    {
+        "_id": "event",
+        "name": "event",
+        "editor": {
+            "place": {
+                "enabled": true
+            },
+            "anpa_category": {
+                "enabled": true
+            },
+            "calendars": {
+                "enabled": true
+            },
+            "definition_long": {
+                "enabled": false
+            },
+            "definition_short": {
+                "enabled": true
+            },
+            "files": {
+                "enabled": true
+            },
+            "internal_note": {
+                "enabled": true
+            },
+            "links": {
+                "enabled": true
+            },
+            "location": {
+                "enabled": true
+            },
+            "name": {
+                "enabled": true
+            },
+            "occur_status": {
+                "enabled": true
+            },
+            "slugline": {
+                "enabled": true
+            },
+
+            "subject": {
+                "enabled": true
+            }
+        },
+        "schema" : {
+            "place": {
+                "type": "list",
+                "required": false
+            },
+            "anpa_category": {
+                "type": "list",
+                "required": false
+            },
+            "calendars": {
+                "type": "list",
+                "required": false
+            },
+            "definition_long": {
+                "type": "string",
+                "required": false
+            },
+            "definition_short" : {
+                "type": "string",
+                "required": false
+            },
+            "files": {
+                "type": "list",
+                "required": false
+            },
+            "internal_note": {
+                "type": "string",
+                "required": false
+            },
+            "links": {
+                "type": "list",
+                "required": false
+            },
+            "location": {
+                "type": "string",
+                "required": false
+            },
+            "name": {
+                "type": "string",
+                "required": true
+            },
+            "occur_status": {
+                "type": "list",
+                "required": false
+            },
+            "slugline": {
+                "type": "string",
+                "required": false
+            },
+            "subject": {
+                "schema": {
+                    "schema": {
+                        "name": {},
+                        "service": {
+                            "nullable": true
+                        },
+                        "scheme": {
+                            "nullable": true,
+                            "allowed": [],
+                            "type": "string",
+                            "required": true
+                        },
+                        "parent": {
+                            "nullable": true
+                        },
+                        "qcode": {}
+                    },
+                    "type": "dict"
+                },
+                "type": "list",
+                "required": false,
+                "mandatory_in_list": {
+                    "scheme": {}
+                }
+            }
+        }
+    },
+    {
+        "_id": "coverage",
+        "name": "coverage",
+        "schema": {
+            "g2_content_type": {
+                "required": false,
+                "type": "list"
+            },
+            "internal_note": {
+                "required": false,
+                "type": "string"
+            },
+            "slugline": {
+                "required": false,
+                "type": "string"
+            },
+            "genre": {
+                "required": false,
+                "type": "list"
+            },
+            "ednote": {
+                "required": false,
+                "type": "string"
+            },
+            "headline": {
+                "required": false,
+                "type": "string"
+            },
+            "scheduled": {
+                "required": true,
+                "type": "datetime"
+            },
+            "keyword": {
+                "required": false,
+                "type": "list"
+            }
+        },
+        "editor": {
+            "scheduled": {
+                "enabled": true
+            },
+            "g2_content_type": {
+                "enabled":true
+            },
+            "internal_note": {
+                "enabled":true
+            },
+            "slugline": {
+                "enabled":true
+            },
+            "ednote": {
+                "enabled":true
+            },
+            "genre": {
+                "enabled":true
+            },
+            "keyword": {
+                "enabled":true
+            }
+        }
+    },
+    {
+        "_id": "planning",
+        "name": "planning",
+        "schema": {
+            "agendas": {
+                "required": false,
+                "type": "list"
+            },
+            "place": {
+                "required": false,
+                "type": "list"
+            },
+            "anpa_category": {
+                "required": false,
+                "type": "list"
+            },
+            "description_text": {
+                "required": false,
+                "type": "string"
+            },
+            "ednote": {
+                "required": false,
+                "type": "string"
+            },
+            "flags": {
+                "required": false,
+                "type": "dict"
+            },
+            "headline": {
+                "required": false,
+                "type": "string"
+            },
+            "internal_note": {
+                "required": false,
+                "type": "string"
+            },
+            "slugline": {
+                "required": false,
+                "type": "string"
+            },
+            "subject": {
+                "required": false,
+                "type": "list"
+            },
+            "urgency": {
+                "required": false,
+                "type": "number"
+            }
+        },
+        "editor": {
+            "agendas": {
+                "enabled": true
+            },
+            "place": {
+                "enabled": true
+            },
+            "anpa_category": {
+                "enabled": true
+            },
+            "description_text": {
+                "enabled": true
+            },
+            "ednote": {
+                "enabled": true
+            },
+            "flags": {
+                "enabled": true
+            },
+            "headline": {
+                "enabled": true
+            },
+            "internal_note": {
+                "enabled": true
+            },
+            "slugline": {
+                "enabled": true
+            },
+            "subject": {
+                "enabled": true
+            },
+            "urgency": {
+                "enabled": true
+            },
+            "name" : {
+                "enabled" : false
+            }
+        }
+    }
+]

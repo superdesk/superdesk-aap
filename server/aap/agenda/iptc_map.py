@@ -8,5 +8,20 @@
 # AUTHORS and LICENSE files distributed with this source code, or
 # at https://www.sourcefabric.org/superdesk/license
 
-import aap.io.iptc_extension  # noqa
-from .feeding_services.aap_sports_service import AAPSportsHTTPFeedingService  # noqa
+import logging
+
+from superdesk.resource import Resource
+
+
+logger = logging.getLogger(__name__)
+
+
+class IPTCMapResource(Resource):
+    schema = {
+        'iptc_code': {
+            'type': 'string'
+        },
+        'agenda_id': {
+            'type': 'integer', 'nullable': False
+        }
+    }
