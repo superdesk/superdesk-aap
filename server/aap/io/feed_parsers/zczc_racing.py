@@ -6,15 +6,13 @@
 # at https://www.sourcefabric.org/superdesk/license*.
 
 from .zczc import ZCZCFeedParser
-from superdesk.metadata.item import CONTENT_TYPE, FORMAT, FORMATS
+from superdesk.metadata.item import FORMAT, FORMATS
 from superdesk.io.registry import register_feeding_service_error
 from superdesk.errors import AlreadyExistsError
 from superdesk.io.registry import register_feed_parser
 from aap.errors import AAPParserError
 from superdesk.io.iptc import subject_codes
 from superdesk.logging import logger
-import superdesk
-from apps.publish.content.common import ITEM_PUBLISH
 from aap.macros.racing_reformat import racing_reformat_macro
 
 
@@ -88,20 +86,6 @@ class ZCZCRacingParser(ZCZCFeedParser):
                 self._scan_lines(item, lines)
 
             item['body_html'] = '<pre>' + '\n'.join(lines[lines_to_remove:])
-
-            # Truncate the slugline and headline to the lengths defined on the validators if required
-            lookup = {'act': ITEM_PUBLISH, 'type': CONTENT_TYPE.TEXT}
-            validators = superdesk.get_resource_service('validators').get(req=None, lookup=lookup)
-            if validators.count():
-                max_slugline_len = validators[0]['schema']['slugline']['maxlength']
-                max_headline_len = validators[0]['schema']['headline']['maxlength']
-                if self.ITEM_SLUGLINE in item and len(item[self.ITEM_SLUGLINE]) > max_slugline_len:
-                    # the overflow of the slugline is dumped in the take key
-                    item[self.ITEM_TAKE_KEY] = item.get(self.ITEM_SLUGLINE)[max_slugline_len:]
-                    item[self.ITEM_SLUGLINE] = item[self.ITEM_SLUGLINE][:max_slugline_len]
-                if self.ITEM_HEADLINE in item:
-                    item[self.ITEM_HEADLINE] = item[self.ITEM_HEADLINE][:max_headline_len] \
-                        if len(item[self.ITEM_HEADLINE]) > max_headline_len else item[self.ITEM_HEADLINE]
 
             # if the concatenation of the slugline and take key contain the phrase 'Brief Form' change the category to
             # h
