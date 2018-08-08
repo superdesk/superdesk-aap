@@ -113,6 +113,7 @@ INSTALLED_APPS.extend([
     'apps.highlights',
     'apps.products',
     'apps.publish',
+    'aap.publish.transmitters',
     'apps.publish.enqueue',
     'apps.publish.formatters',
     'apps.content_filters',

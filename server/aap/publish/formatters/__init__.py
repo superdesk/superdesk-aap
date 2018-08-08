@@ -21,3 +21,4 @@ import aap.publish.formatters.nzn_anpa_formatter  # NOQA
 import aap.publish.formatters.aap_ninjs_formatter  # NOQA
 import aap.publish.formatters.reuters_newsml_1_2_formatter  # NOQA
 import aap.publish.formatters.iress_nitf_formatter  # NOQA
+import aap.publish.formatters.ticker_formatter  # NOQA

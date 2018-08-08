@@ -20,3 +20,4 @@ import aap.io.feed_parsers.pdaresults  # NOQA
 import aap.io.feed_parsers.asianet  # NOQA
 import aap.io.feed_parsers.ReutersNewsMLTwoParser  # NOQA
 import aap.io.feed_parsers.bom  # NOQA
+import aap.io.feed_parsers.ticker_parser  # NOQA
