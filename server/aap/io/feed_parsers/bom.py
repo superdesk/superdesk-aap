@@ -27,6 +27,7 @@ class BOMParser(FileFeedParser):
     """
     This parser is to process the Australian Government Bureau of Meteorology
     """
+
     NAME = 'bom_file'
     label = 'Australian Government Bureau of Meteorology Warnings'
 
@@ -91,7 +92,7 @@ class BOMParser(FileFeedParser):
         item['slugline'] = 'Weather ' + self._get_decsription(lines, provider)
 
     def _get_time(self, lines):
-        """ Scan each line looking for the time and then the date
+        """Scan each line looking for the time and then the date
 
         :param lines:
         :return:
