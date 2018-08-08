@@ -6,4 +6,4 @@ newrelic>=2.66,<2.67
 titlecase==0.8.2
 pyasn1==0.3.7
 
-git+git://github.com/superdesk/superdesk-core.git@d5e1bf4#egg=Superdesk-Core
+git+git://github.com/superdesk/superdesk-core.git@9d120d1ff#egg=Superdesk-Core
