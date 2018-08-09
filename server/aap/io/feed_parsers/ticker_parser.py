@@ -7,8 +7,7 @@
 # For the full copyright and license information, please see the
 # AUTHORS and LICENSE files distributed with this source code, or
 # at https://www.sourcefabric.org/superdesk/license*.
-from superdesk.io.registry import register_feed_parser, register_feeding_service_parser
-from superdesk.io.feeding_services.file_service import FileFeedingService
+from superdesk.io.registry import register_feed_parser
 from .text_file import TextFileParser
 from superdesk.errors import AlreadyExistsError
 import time
@@ -36,4 +35,3 @@ try:
     register_feed_parser(TickerFileParser.NAME, TickerFileParser())
 except AlreadyExistsError as ex:
     pass
-register_feeding_service_parser(FileFeedingService.NAME, TickerFileParser.NAME)
