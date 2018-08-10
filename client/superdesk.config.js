@@ -124,6 +124,7 @@ module.exports = function() {
                 'slugline',
                 'highlights',
                 'associations',
+                'queueError',
                 'takekey',
                 'state',
                 'update',
