@@ -3,26 +3,6 @@ module.exports = function() {
         apps: ['aap.apps'],
         importApps: ['aap'],
         defaultRoute: '/workspace',
-        validatorMediaMetadata: {
-            headline: {
-                required: true,
-                maxlength: 42
-            },
-            alt_text: {
-                required: true,
-                maxlength: 70
-            },
-            description_text: {
-                required: true,
-                maxlength: 100
-            },
-            archive_description: {
-                required: false
-            },
-            byline: {
-                required: false
-            }
-        },
         workspace: {
             ingest: 1,
             content: 1,
@@ -71,7 +51,7 @@ module.exports = function() {
             useDefaultTimezone: 1, ingest_provider: 1, raw_search: 1,
             featuremedia: 1, marked_desks: 1
         },
-        
+
         infoRemovedFields: {
             keywords: true
         },
