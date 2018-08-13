@@ -277,3 +277,24 @@ INGEST_EXPIRY_MINUTES = int(env('INGEST_EXPIRY_MINUTES', 2 * 24 * 60))
 
 #: The number of minutes before audit content is purged
 AUDIT_EXPIRY_MINUTES = int(env('AUDIT_EXPIRY_MINUTES', 43200))
+
+VALIDATOR_MEDIA_METADATA = {
+    "headline": {
+        "required": True,
+        "maxlength": 42
+    },
+    "alt_text": {
+        "required": True,
+        "maxlength": 70
+    },
+    "description_text": {
+        "required": True,
+        "maxlength": 100
+    },
+    "archive_description": {
+        "required": False,
+    },
+    "byline": {
+        "required": False,
+    },
+}

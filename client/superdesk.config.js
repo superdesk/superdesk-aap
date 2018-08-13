@@ -3,26 +3,6 @@ module.exports = function() {
         apps: ['superdesk-planning', 'superdesk.analytics', 'aap.apps'],
         importApps: ['superdesk-planning', 'superdesk-analytics', 'aap'],
         defaultRoute: '/workspace',
-        validatorMediaMetadata: {
-            headline: {
-                required: true,
-                maxlength: 42
-            },
-            alt_text: {
-                required: true,
-                maxlength: 70
-            },
-            description_text: {
-                required: true,
-                maxlength: 100
-            },
-            archive_description: {
-                required: false
-            },
-            byline: {
-                required: false
-            }
-        },
         workspace: {
             ingest: 1,
             content: 1,
