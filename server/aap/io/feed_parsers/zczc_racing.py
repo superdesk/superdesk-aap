@@ -19,9 +19,6 @@ from aap.macros.racing_reformat import racing_reformat_macro
 class ZCZCRacingParser(ZCZCFeedParser):
     NAME = 'Racing_zczc'
 
-    # These destination codes will be extracted from the line begining with YY or HH and appended to the keywords
-    destinations = ('PEB', 'FFB', 'FORM', 'RFG')
-
     def set_item_defaults(self, item, provider):
         super().set_item_defaults(item, provider)
         item[FORMAT] = FORMATS.PRESERVED
@@ -43,8 +40,8 @@ class ZCZCRacingParser(ZCZCFeedParser):
             lines = item['body_html'].split('\n')
             # If the content is to be routed/auto published
             if lines[0].upper().find('YY ') != -1 or lines[0].upper().find('HH ') != -1:
-                for dest in self.destinations:
-                    if lines[0].upper().find(' ' + dest.upper()) != -1:
+                destinations = lines[0].split(' ')
+                for dest in destinations[1:]:
                         if (item.get('keywords')):
                             item.get('keywords', []).append(dest)
                         else:
