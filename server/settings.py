@@ -271,3 +271,6 @@ VALIDATOR_MEDIA_METADATA = {
         "required": False,
     },
 }
+
+# max multi day event duration in days
+MAX_MULTI_DAY_EVENT_DURATION = int(env('MAX_MULTI_DAY_EVENT_DURATION', 7))
