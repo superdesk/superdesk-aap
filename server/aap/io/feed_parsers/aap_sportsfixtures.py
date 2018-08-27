@@ -130,7 +130,8 @@ class AAPSportsFixturesParser(XMLFeedParser):
         """
         item = dict()
         item[ITEM_TYPE] = CONTENT_TYPE.EVENT
-        item[GUID_FIELD] = 'urn:aapsportsfixtures:{}:{}:{}:{}'.format(sport_id, comp_id, self.season, match_id)
+        item[GUID_FIELD] = 'urn:aapsportsfixtures:{}:{}:{}:{}'.format(sport_id, comp_id,
+                                                                      self.season, match_id).replace('/', '-')
         item['anpa_category'] = [{'qcode': 't'}] if comp_id.startswith('dom') else [{'qcode': 's'}]
         item['subject'] = [{'qcode': self.sport_map.get(sport_id, {}).get('iptc', ''),
                             'name': subject_codes.get(self.sport_map.get(sport_id, {}).get('iptc', ''), '')}]
@@ -166,7 +167,7 @@ class AAPSportsFixturesParser(XMLFeedParser):
                 end = datetime.strptime('{} 23:59'.format(end_date), '%Y-%m-%d %H:%M')
                 event = xml.find('.//Fixture_List/Competition/Comp_Fixtures/Event')
                 match_id = None
-                if event and event.attrib.get('Event_ID'):
+                if event is not None and event.attrib.get('Event_ID') is not None:
                     match_id = event.attrib.get('Event_ID')
                 if datetime.now() < end and match_id and match_id[-1] != '-':
                     item = self._set_default_item(fixture.get('sport_id'), fixture.get('comp_id'), match_id)
