@@ -87,9 +87,9 @@ class ZCZCMedianetParser(ZCZCFeedParser):
                     body = '<p>Investor Relations news release distributed by AAP Medianet.<br><br></p>'
                 else:
                     body = '<p>Media release distributed by AAP Medianet.<br><br></p>'
-                pars = ptag.text.split('\n')
+                pars = ptag.text.split('\n\n')
                 for p in pars:
-                    body = body + '<p>' + p + '</p>'
+                    body = body + '<p>' + p.replace('\n', '<br>') + '</p>'
                 item['body_html'] = body
 
         locator_map = superdesk.get_resource_service('vocabularies').find_one(req=None, _id='locators')
