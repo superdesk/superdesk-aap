@@ -129,7 +129,8 @@ class AgendaPlanningFormatter(Formatter):
             agenda_event['Description'] = agenda_event['Description'] + '<p>' + item.get('definition_long', '').replace(
                 '\n', '<br>') + '</p>'
         agenda_event['DescriptionFormat'] = 'html'
-        agenda_event['SpecialInstructions'] = item.get('internal_note')
+        agenda_event['SpecialInstructions'] = item.get('internal_note') if len(item.get('internal_note', '')) <= 1000\
+            else item.get('internal_note')[:1000]
 
         self._set_dates(agenda_event, item.get('dates').get('tz'), item.get('dates').get('start'),
                         item.get('dates').get('end'))
@@ -226,7 +227,8 @@ class AgendaPlanningFormatter(Formatter):
         agenda_event['Title'] = item.get('slugline')
         agenda_event['Description'] = '<p>' + item.get('description_text', '') + '</p>'
         agenda_event['DescriptionFormat'] = 'html'
-        agenda_event['SpecialInstructions'] = item.get('internal_note')
+        agenda_event['SpecialInstructions'] = item.get('internal_note') if len(item.get('internal_note', '')) <= 1000\
+            else item.get('internal_note')[:1000]
 
         start_date = None
         end_date = None
