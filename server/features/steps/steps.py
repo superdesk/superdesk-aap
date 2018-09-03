@@ -9,3 +9,4 @@
 # at https://www.sourcefabric.org/superdesk/license
 
 from superdesk.tests.steps import *  # noqa
+from analytics.tests.steps import *  # noqa
