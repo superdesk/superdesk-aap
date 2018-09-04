@@ -326,6 +326,20 @@ class AgendaPlanningFormatter(Formatter):
             else:
                 agenda_event = self._format_planning(format_item)
         else:
+            # not published to agenda before
+            if not agenda_id:
+                # Check if the event has a published child planning item, the id of that is promoted to the event
+                service = superdesk.get_resource_service('events')
+                plannings = service.get_plannings_for_event(format_item)
+                for planning in plannings:
+                    if planning.get('unique_id'):
+                        agenda_id = planning.get('unique_id')
+                        break
+                if agenda_id:
+                    # Set the agenda id, this will get picked up at transmit time and will update the existing agenda
+                    # item.
+                    service.system_update(format_item.get('_id'), {'unique_id': agenda_id}, format_item)
+
             agenda_event = self._format_event(format_item)
 
         agenda_event['Type'] = format_item.get('type')
