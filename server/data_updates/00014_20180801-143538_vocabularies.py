@@ -669,6 +669,23 @@ class DataUpdate(DataUpdate):
                     upd = True
             if upd:
                 get_resource_service(self.resource).put(v.get(config.ID_FIELD), v)
+        upd = False
+        v = get_resource_service(self.resource).find_one(req=None, _id='type')
+        if v:
+            event = [ev for ev in v.get('items') if ev.get('qcode') == 'event']
+            if not len(event):
+                v['items'].append({'name': 'Event', 'qcode': 'event', 'is_active': True})
+                upd = True
+            planning = [pl for pl in v.get('items') if pl.get('qcode') == 'planning']
+            if not len(planning):
+                v['items'].append({'name': 'Planning', 'qcode': 'planning', 'is_active': True})
+                upd = True
+            featured = [pf for pf in v.get('items') if pf.get('qcode') == 'planning_featured']
+            if not len(featured):
+                v['items'].append({'name': 'Featured Stories', 'qcode': 'planning_featured', 'is_active': True})
+                upd = True
+            if upd:
+                get_resource_service(self.resource).put(v.get(config.ID_FIELD), v)
 
     def backwards(self, mongodb_collection, mongodb_database):
         raise NotImplementedError()
