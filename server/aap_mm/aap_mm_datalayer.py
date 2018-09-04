@@ -23,7 +23,7 @@ import pytz
 from superdesk.errors import SuperdeskApiError
 from superdesk.io.iptc import subject_codes
 from superdesk.media.media_operations import process_file_from_stream, decode_metadata
-from superdesk.media.renditions import generate_renditions, delete_file_on_error
+from superdesk.media.renditions import generate_renditions, delete_file_on_error, get_renditions_spec
 from superdesk.metadata.item import ITEM_TYPE, CONTENT_TYPE
 from superdesk.utc import utcnow
 
@@ -331,7 +331,7 @@ class AAPMMDatalayer(DataLayer):
             doc['versioncreated'] = utcnow()
             inserted = [file_id]
             file_type = content_type.split('/')[0]
-            rendition_spec = self._app.config['RENDITIONS']['picture']
+            rendition_spec = get_renditions_spec(no_custom_crops=True)
 
             renditions = generate_renditions(out, file_id, inserted, file_type,
                                              content_type, rendition_spec,
