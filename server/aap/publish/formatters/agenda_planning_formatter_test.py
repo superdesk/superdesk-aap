@@ -448,3 +448,102 @@ class AgendaPlanningFormatterTest(TestCase):
         doc = self.formatter.format(planning, {'name': 'Test Subscriber'})[0]
         item = json.loads(doc[1])
         self.assertEqual(len(item.get('SpecialInstructions')), 1000)
+
+    def test_planning_with_event_event_first(self):
+        planning = {
+            "_id": "urn:newsml:localhost:2018-02-19T13:46:51.861773:edf0e41f-524e-4f14-b416-6183e25fd067",
+            "slugline": "SHOW AND TELL",
+            "headline": "Superdesk - Show & Tell",
+            "type": "planning",
+            "coverages": [
+                {
+                    "news_coverage_status": {
+                        "name": "coverage intended",
+                        "qcode": "ncostat:int",
+                        "label": "Planned"
+                    },
+                    "original_creator": "57bcfc5d1d41c82e8401dcc0",
+                    "planning": {
+                        "scheduled": "REPLACE",
+                        "g2_content_type": "text"
+                    },
+                    "coverage_id": "urn:newsml:localhost:2018-02-19T13:47:"
+                                   "43.338910:41af3708-33f1-46f6-9f05-626907e83fa0"
+                }
+            ],
+            "description_text": "Superdesk - Show & Tell",
+            "flags": {
+                "marked_for_not_publication": False
+            },
+            "item_class": "plinat:newscoverage",
+            "guid": "urn:newsml:localhost:2018-02-19T13:46:51.861773:edf0e41f-524e-4f14-b416-6183e25fd067",
+            "state": "draft",
+            "pubstatus": "usable",
+            "event_item": "urn:newsml:localhost:2018-02-16T12:56:39.270372:02da2a3e-d5bc-4ab4-9fef-3fd78a0935fd",
+            "internal_note": "A planning item",
+            'unique_id': "1234"
+        }
+        planning['coverages'][0]['planning']['scheduled'] = datetime.datetime(2018, 1, 23, 13, 0, 0, 0)
+
+        event = {
+            "_id": "urn:newsml:localhost:2018-02-16T12:56:39.270372:02da2a3e-d5bc-4ab4-9fef-3fd78a0935fd",
+            "state": "scheduled",
+            "source": "Events",
+            "ingest_provider": "5a7b968d1d41c846dadaa3ce",
+            "ingest_provider_sequence": "1240",
+            "family_id": "urn:newsml:localhost:2018-02-16T12:56:39.248135:bbe61f6b-92dd-4101-b653-89d8ceb767b8",
+            "type": "event",
+            "format": "preserved",
+            "occur_status": {
+                "name": "Planned, occurs certainly",
+                "qcode": "eocstat:eos5",
+                "label": "Confirmed"
+            },
+            "location": [
+                {
+                    "geo": "",
+                    "name": "Rhodes 5.5 IT Conference (CB)",
+                    "qcode": ""
+                }
+            ],
+            "_etag": "faec457578cf076c7aed71647ab67699af651fed",
+            "recurrence_id": "urn:newsml:localhost:2018-02-16T12:56:39.252448:eb55544c-685b-4204-b784-6a53731cd1c6",
+            "definition_short": "Superdesk Planning",
+            "dates": {
+                "recurring_rule": {
+                    "byday": "MO",
+                    "frequency": "WEEKLY",
+                    "interval": 2
+                },
+                "tz": "Australia/Sydney",
+            },
+            "name": "Superdesk Planning",
+            "organizer": [
+                {
+                    "name": "mailto:mdhamanwala@aap.com.au",
+                    "qcode": ""
+                }
+            ],
+            "definition_long": "long string",
+            "guid": "urn:newsml:localhost:2018-02-16T12:56:39.270372:02da2a3e-d5bc-4ab4-9fef-3fd78a0935fd",
+            "calendars": [
+                {
+                    "qcode": "entertainment",
+                    "name": "Entertainment"
+                }
+            ],
+            "slugline": "superdesk planning",
+            "pubstatus": "usable"
+        }
+        event['dates']['start'] = datetime.datetime(2018, 1, 23, 13, 0, 0, 0)
+        event['dates']['end'] = datetime.datetime(2018, 1, 24, 12, 59, 0, 0)
+        self.app.data.insert('events', [event])
+        self.app.data.insert('planning', [planning])
+
+        doc = self.formatter.format(event, {'name': 'Test Subscriber'})[0]
+        item = json.loads(doc[1])
+        events = self.app.data.find('events', None, None)
+        self.assertEqual(events[0]['unique_id'], '1234')
+        self.assertEqual(item.get('Title'), 'Superdesk Planning')
+        self.assertEqual(len(item.get('Coverages')), 1)
+        self.assertEqual(item.get('Type'), 'event')
