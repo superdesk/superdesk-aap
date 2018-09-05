@@ -69,12 +69,20 @@ class HTTPAgendaPush(HTTPPushService):
                         return self._get_secret_token(destination)
                     if ApiKey:
                         try:
-                            requests.post(self._get_assets_url(destination) + '/user/edit', data=json.dumps(
-                                {'ID': agenda_user_id, 'ApiKey': ApiKey,
-                                 'FirstName': agenda_user.get('FirstName'),
-                                 'LastName': agenda_user.get('LastName'),
-                                 'Email': agenda_user.get('Email')}),
-                                headers=self._get_headers(destination, self.headers))
+                            # Retrieve the UserEditModel
+                            response = requests.get(self._get_assets_url(destination) + '/user/' + str(agenda_user_id),
+                                                    headers=self._get_headers(destination, self.headers))
+                            response.raise_for_status()
+                            edit_user = json.loads(response.text)
+                            edit_user['ApiKey'] = ApiKey
+                            # it seems that you need to populate the SelectedSecurityGroupIDs, if not users lose all
+                            # permissions
+                            for group in edit_user.get('SecurityGroups', []):
+                                if group.get('Selected', False):
+                                    edit_user['SelectedSecurityGroupIDs'].append(group.get('ID'))
+                            response = requests.post(self._get_assets_url(destination) + '/user/edit',
+                                                     data=json.dumps(edit_user),
+                                                     headers=self._get_headers(destination, self.headers))
                             response.raise_for_status()
                             return ApiKey
                         except requests.exceptions.HTTPError as ex:

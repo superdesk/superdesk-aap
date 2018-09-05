@@ -26,7 +26,7 @@ class AgendaTransmit(TestCase):
         self.setupRemoteSyncMock(self)
 
     def setupRemoteSyncMock(self, context):
-        context.mock = HTTMock(*[self.user_search, self.get_key, self.user_edit, self.save_entry])
+        context.mock = HTTMock(*[self.user_search, self.get_key, self.user_edit, self.save_entry, self.user_edit_one])
         context.mock.__enter__()
 
     @urlmatch(scheme='http', netloc='bogus.aap.com.au', path='/api/user/search')
@@ -48,6 +48,13 @@ class AgendaTransmit(TestCase):
     @urlmatch(scheme='http', netloc='bogus.aap.com.au', path='/api/user/edit')
     def user_edit(self, url, request):
         return {'status_code': 200}
+
+    @urlmatch(scheme='http', netloc='bogus.aap.com.au', path='/api/user/1')
+    def user_edit_one(self, url, request):
+        resp = {}
+        resp_bytes = json.dumps(resp).encode('UTF-8')
+        return {'status_code': 200,
+                'content': resp_bytes}
 
     @urlmatch(scheme='http', netloc='bogus.aap.com.au', path='/api/entry/saveentry')
     def save_entry(self, url, request):
@@ -194,7 +201,7 @@ class AgendaFailToSaveEntryTransmit(TestCase):
         self.setupRemoteSyncMock(self)
 
     def setupRemoteSyncMock(self, context):
-        context.mock = HTTMock(*[self.user_search, self.get_key, self.user_edit, self.save_entry])
+        context.mock = HTTMock(*[self.user_search, self.get_key, self.user_edit, self.save_entry, self.user_edit_one])
         context.mock.__enter__()
 
     @urlmatch(scheme='http', netloc='bogus.aap.com.au', path='/api/user/search')
@@ -220,6 +227,13 @@ class AgendaFailToSaveEntryTransmit(TestCase):
     @urlmatch(scheme='http', netloc='bogus.aap.com.au', path='/api/entry/saveentry')
     def save_entry(self, url, request):
         return {'status_code': 500}
+
+    @urlmatch(scheme='http', netloc='bogus.aap.com.au', path='/api/user/1')
+    def user_edit_one(self, url, request):
+        resp = {}
+        resp_bytes = json.dumps(resp).encode('UTF-8')
+        return {'status_code': 200,
+                'content': resp_bytes}
 
     def test_send_event(self):
         user = [{'_id': 1, 'email': 'mock@mail.com.au', 'byline': 'A Mock Up', 'sign_off': 'TA'}]
