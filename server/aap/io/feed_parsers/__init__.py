@@ -19,3 +19,4 @@ import aap.io.feed_parsers.zczc_sportsresults  # NOQA
 import aap.io.feed_parsers.pdaresults  # NOQA
 import aap.io.feed_parsers.asianet  # NOQA
 import aap.io.feed_parsers.aap_sportsfixtures  # NOQA
+import aap.io.feed_parsers.abs_calendar_csv  # NOQA
