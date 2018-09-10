@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Response Status_Code="OK" Status_Message="" Status_Session="e715a149-79e1-4cf4-a32c-1c38475f0f17">
+  <Fixture_List>
+    <Competition>
+      <Competition_Details ID="dom-436" Comp_Name="" Comp_Code="dom-" Season="" Comp_Type="ODI" />
+      <Competition_Fixtures>
+        <Match ID="3439">
+          <Match_Details Match_ID="dom-84496" Season="2017" Match_Round="1" Match_No="1" Match_Date="2099-06-01" Match_Time="19:30:00" Pool="A" Match_EndDate="2099-06-01" />
+          <Teams>
+            <Team_Details Team_ID="dom-60002" Team_Name="England" Team_Short="ENG" />
+            <Team_Details Team_ID="dom-60003" Team_Name="Bangladesh" Team_Short="BAN" />
+          </Teams>
+          <Venue Venue_ID="dom-33" Venue_Name="Adelaide Oval" Venue_Location="Adelaide" />
+        </Match>
+        <Match ID="3440">
+          <Match_Details Match_ID="dom-84497" Season="2017" Match_Round="1" Match_No="2" Match_Date="2099-06-02" Match_Time="19:30:00" Pool="A" Match_EndDate="2099-06-02" />
+          <Teams>
+            <Team_Details Team_ID="dom-60010" Team_Name="New Zealand" Team_Short="NZL" />
+            <Team_Details Team_ID="dom-60001" Team_Name="Australia" Team_Short="AUS" />
+          </Teams>
+          <Venue Venue_ID="dom-37" Venue_Name="Adelaide Oval" Venue_Location="Adelaide" />
+        </Match>
+      </Competition_Fixtures>
+    </Competition>
+  </Fixture_List>
+</Response>

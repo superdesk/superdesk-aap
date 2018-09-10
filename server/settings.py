@@ -12,7 +12,10 @@
 
 import os
 import json
-
+from superdesk.default_settings import celery_queue, \
+    CELERY_TASK_ROUTES as CTR, \
+    CELERY_BEAT_SCHEDULE as CBS
+from celery.schedules import crontab
 
 try:
     from urllib.parse import urlparse
@@ -137,12 +140,18 @@ INSTALLED_APPS.extend([
     'aap.data_consistency',
     'aap.macros',
     'aap.publish.formatters',
+    'aap.publish.transmitters',
     'aap_mm',
     'aap.io.feed_parsers',
     'aap.data_consistency',
     'aap.io.iptc_extension',
     'instrumentation',
-    'aap.reports'
+    'planning',
+    'aap.io.feeding_services',
+    'aap.agenda',
+    'analytics',
+    'aap.reports',
+    'aap.mission_report'
 ])
 
 RENDITIONS = {
@@ -230,6 +239,9 @@ CONTENTAPI_ENABLED = json.loads(env('CONTENTAPI_ENABLED', 'False').lower())
 # Make sure legal archive is enabled
 LEGAL_ARCHIVE = True
 
+# The Bot User OAuth Token for access to Slack
+SLACK_BOT_TOKEN = env('SLACK_BOT_TOKEN', '')
+
 # The URL for the provision of an external feedback or suggestion site
 FEEDBACK_URL = env('FEEDBACK_URL', None)
 
@@ -238,6 +250,22 @@ CURRENCY_API_KEY = env('CURRENCY_API_KEY', None)
 
 # Validate auto published content using validators not profile
 AUTO_PUBLISH_CONTENT_PROFILE = False
+
+
+CELERY_TASK_ROUTES = CTR
+CELERY_TASK_ROUTES['planning.flag_expired'] = {
+    'queue': celery_queue('expiry'),
+    'routing_key': 'expiry.planning'
+}
+
+CELERY_BEAT_SCHEDULE = CBS
+CELERY_BEAT_SCHEDULE['planning:expiry'] = {
+    'task': 'planning.flag_expired',
+    'schedule': crontab(minute='0')  # Runs once every hour
+}
+
+# Expire items 3 days after their scheduled date
+PLANNING_EXPIRY_MINUTES = int(env('PLANNING_EXPIRY_MINUTES', 4320))
 
 #: The number of minutes before Publish Queue is purged
 PUBLISH_QUEUE_EXPIRY_MINUTES = int(env('PUBLISH_QUEUE_EXPIRY_MINUTES', 3 * 24 * 60))
@@ -271,3 +299,6 @@ VALIDATOR_MEDIA_METADATA = {
         "required": False,
     },
 }
+
+# max multi day event duration in days
+MAX_MULTI_DAY_EVENT_DURATION = int(env('MAX_MULTI_DAY_EVENT_DURATION', 7))

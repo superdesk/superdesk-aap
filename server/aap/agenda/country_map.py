@@ -8,5 +8,20 @@
 # AUTHORS and LICENSE files distributed with this source code, or
 # at https://www.sourcefabric.org/superdesk/license
 
-from superdesk.tests.steps import *  # noqa
-from analytics.tests.steps import *  # noqa
+import logging
+
+from superdesk.resource import Resource
+
+
+logger = logging.getLogger(__name__)
+
+
+class CountryMapResource(Resource):
+    schema = {
+        'name': {
+            'type': 'string'
+        },
+        'agenda_id': {
+            'type': 'integer', 'nullable': False
+        }
+    }

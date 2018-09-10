@@ -5,5 +5,10 @@ unidecode==0.04.21
 newrelic>=2.66,<2.67
 titlecase==0.8.2
 pyasn1==0.3.7
+geopy==1.11.0
+slackclient==1.0.9
+pyasn1==0.3.7
 
-git+git://github.com/superdesk/superdesk-core.git@f63fe95#egg=Superdesk-Core
+git+git://github.com/superdesk/superdesk-core.git@e65c51a53#egg=Superdesk-Core
+git+git://github.com/superdesk/superdesk-planning.git@5cff4575f35#egg=superdesk-planning
+git+git://github.com/superdesk/superdesk-analytics.git@34d79bee5#egg=superdesk-analytics

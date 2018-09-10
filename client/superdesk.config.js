@@ -1,12 +1,18 @@
 module.exports = function() {
     return {
-        apps: ['aap.apps'],
-        importApps: ['aap'],
+        apps: ['superdesk-planning', 'superdesk.analytics', 'aap.apps'],
+        importApps: ['superdesk-planning', 'superdesk-analytics', 'aap'],
         defaultRoute: '/workspace',
         workspace: {
             ingest: 1,
             content: 1,
-            tasks: 0
+            tasks: 0,
+            planning: 1,
+            assignments: 1
+        },
+
+        profile: {
+            jid: false
         },
 
         item_profile: {
@@ -31,7 +37,10 @@ module.exports = function() {
             preview: 1,
             previewFormats: 1,
             noTakes: 1,
-            searchShortcut: 1
+            searchShortcut: 1,
+            slackNotifications: 1,
+            editor3: 1,
+            analytics: 1
         },
 
         activity: {
@@ -59,6 +68,7 @@ module.exports = function() {
         defaultTimezone: 'Australia/Sydney',
         shortDateFormat: 'DD/MM',
         ArchivedDateFormat: 'D/MM/YYYY',
+        ArchivedDateOnCalendarYear: 1,
 
         list: {
             'priority': [
@@ -73,6 +83,7 @@ module.exports = function() {
                 'queueError',
                 'headline',
                 'markedDesks',
+                'assignment',
                 'versioncreated'
             ],
             'secondLine': [
@@ -102,6 +113,7 @@ module.exports = function() {
                 'updated',
                 'headline',
                 'markedDesks',
+                'assignment',
                 'wordcount',
                 'provider',
                 'versioncreator',

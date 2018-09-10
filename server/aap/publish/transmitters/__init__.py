@@ -8,5 +8,4 @@
 # AUTHORS and LICENSE files distributed with this source code, or
 # at https://www.sourcefabric.org/superdesk/license
 
-from superdesk.tests.steps import *  # noqa
-from analytics.tests.steps import *  # noqa
+import aap.publish.transmitters.http_push_agenda  # NOQA

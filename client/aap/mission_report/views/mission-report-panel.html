@@ -1,0 +1,57 @@
+<div class="side-panel side-panel--transparent side-panel--shadow-left">
+    <div class="side-panel__header side-panel__header--border-b">
+        <div class="side-panel__tools">
+            <a class="icn-btn" data-flow="left" ng-click="toggleSidePanel()">
+                <i class="icon-close-small"></i>
+            </a>
+        </div>
+        <ul class="nav-tabs">
+            <li class="nav-tabs__tab"
+                ng-class="{'nav-tabs__tab--active': currentPanel === 'advanced'}"
+            >
+                <button class="nav-tabs__link"
+                        ng-click="changePanel('advanced')"
+                        translate
+                >Advanced</button>
+            </li>
+            <li class="nav-tabs__tab"
+                ng-class="{'nav-tabs__tab--active': currentPanel === 'saved'}"
+            >
+                <button class="nav-tabs__link"
+                        ng-click="changePanel('saved')"
+                        translate
+                >Saved</button>
+            </li>
+        </ul>
+    </div>
+
+    <div sd-saved-report-list
+         ng-if="currentPanel === 'saved'"
+         data-report-type="mission_report"
+         data-select-report="selectReport"
+         data-current-report="currentTemplate"
+         data-on-report-deleted="onReportDeleted"
+         data-create-new-schedule="createNewSchedule"
+         data-view-schedules="viewSchedules"
+         class="side-panel__content"
+    ></div>
+
+    <div class="side-panel__content" ng-if="currentPanel === 'advanced'">
+        <div class="side-panel__content-block">
+            <form name="missionReportForm">
+                <div ng-include="'mission-report-parameters.html'"></div>
+            </form>
+        </div>
+    </div>
+
+    <div sd-save-generate-report
+         ng-if="currentPanel === 'advanced'"
+         data-clear-filters="clearFilters"
+         data-generate-report="generate"
+         data-current-params="currentParams"
+         data-current-template="currentTemplate"
+         data-is-dirty="isDirty"
+         data-on-report-saved="onReportSaved"
+         data-view-schedule="viewSchedule"
+    ></div>
+</div>
