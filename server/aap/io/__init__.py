@@ -9,3 +9,4 @@
 # at https://www.sourcefabric.org/superdesk/license
 
 import aap.io.iptc_extension  # noqa
+from .feeding_services.aap_sports_service import AAPSportsHTTPFeedingService  # noqa
