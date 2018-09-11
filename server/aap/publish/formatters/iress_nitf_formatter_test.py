@@ -8,17 +8,18 @@
 # AUTHORS and LICENSE files distributed with this source code, or
 # at https://www.sourcefabric.org/superdesk/license
 
+import pytz
 from unittest import mock
 from datetime import datetime
 import xml.etree.ElementTree as etree
 from superdesk.publish import init_app
 from superdesk.publish.formatters import Formatter
-from superdesk.tests import TestCase
+from unittests import AAPTestCase
 from .iress_nitf_formatter import IRESSNITFFormatter
 
 
 @mock.patch('superdesk.publish.subscribers.SubscribersService.generate_sequence_number', lambda self, subscriber: 1)
-class IRESSNITFFormatterTest(TestCase):
+class IRESSNITFFormatterTest(AAPTestCase):
     line_ender = b'\x19\x0D\x0A'.decode()
     line_feed = 'ZZZZYYYY\n'
     line_prefix = '   '
@@ -99,7 +100,7 @@ class IRESSNITFFormatterTest(TestCase):
             'unique_id': 11,
             'place': [{'qcode': 'FED'}],
             'sign_off': 'me',
-            'versioncreated': datetime(2018, 6, 13, 11, 45, 19, 0),
+            'versioncreated': datetime(2018, 6, 13, 11, 45, 19, 0, tzinfo=pytz.UTC),
             'byline': 'Bar Foo'
         }
 
@@ -120,10 +121,8 @@ class IRESSNITFFormatterTest(TestCase):
         self.assertEqual(nitf_xml.find('head/docdata/doc.copyright').get('year'), '2018')
         self.assertEqual(nitf_xml.find('head/docdata/doc.copyright').get('holder'), 'Foo bar')
         self.assertEqual(nitf_xml.find('head/docdata/doc-id').get('id-string'), 'AAP.20180613.11')
-        self.assertEqual(nitf_xml.find('head/docdata/date.issue').get('norm'),
-                         article.get('versioncreated').strftime('%Y%m%dT%H%M%S'))
-        self.assertEqual(nitf_xml.find('head/docdata/date.release').get('norm'),
-                         article.get('versioncreated').strftime('%Y%m%dT%H%M%S'))
+        self.assertEqual(nitf_xml.find('head/docdata/date.issue').get('norm'), '20180613T214519')
+        self.assertEqual(nitf_xml.find('head/docdata/date.release').get('norm'), '20180613T214519')
         self.assertEqual(len(nitf_xml.findall('body/body.end')), 0)
 
     def test_company_codes(self):
@@ -147,7 +146,7 @@ class IRESSNITFFormatterTest(TestCase):
             'state': 'published',
             'urgency': 2,
             'pubstatus': 'usable',
-            'versioncreated': datetime(2018, 6, 13, 11, 45, 19, 0),
+            'versioncreated': datetime(2018, 6, 13, 11, 45, 19, 0, tzinfo=pytz.UTC),
             'dateline': {
                 'source': 'AAP',
                 'text': 'Los Angeles, Aug 11 AAP -',
@@ -192,7 +191,7 @@ class IRESSNITFFormatterTest(TestCase):
             'anpa_take_key': 'take_key',
             'unique_id': 1,
             'type': 'text',
-            'versioncreated': datetime(2018, 6, 13, 11, 45, 19, 0),
+            'versioncreated': datetime(2018, 6, 13, 11, 45, 19, 0, tzinfo=pytz.UTC),
             'body_html': '<div>Kathmandu Holdings has lodged a claim in the New Zealand High'
                          'Court for the recovery of costs associated with last years takeover bid from Briscoe'
                          'Group.</div><div>Kathmandu Holdings has lodged a claim in the New Zealand High Court for '
@@ -224,7 +223,7 @@ class IRESSNITFFormatterTest(TestCase):
             'subject': [{'qcode': '02011001'}],
             'anpa_take_key': 'take_key',
             'unique_id': 1,
-            'versioncreated': datetime(2018, 6, 13, 11, 45, 19, 0),
+            'versioncreated': datetime(2018, 6, 13, 11, 45, 19, 0, tzinfo=pytz.UTC),
             'type': 'text',
             'body_html': '<p><span style=\"background-color: transparent;\">The Australian dollar has tumbled'
                          ' after&nbsp;</span>Standard &amp; Poor\'s warned the country\'s triple-A credit rating '
@@ -274,7 +273,7 @@ class IRESSNITFFormatterTest(TestCase):
             'anpa_take_key': 'take_key',
             'unique_id': 1,
             'type': 'text',
-            'versioncreated': datetime(2018, 6, 13, 11, 45, 19, 0),
+            'versioncreated': datetime(2018, 6, 13, 11, 45, 19, 0, tzinfo=pytz.UTC),
             'body_html': '<p><span style=\"background-color: transparent;\">\"</span>'
                          '<span style=\"background-color: transparent;\">However</span></p>'
                          '<p>\"<span style=\"background-color: transparent;\">The proposed</p>',
@@ -298,7 +297,7 @@ class IRESSNITFFormatterTest(TestCase):
             'anpa_take_key': 'take_key',
             'unique_id': 1,
             'type': 'text',
-            'versioncreated': datetime(2018, 6, 13, 11, 45, 19, 0),
+            'versioncreated': datetime(2018, 6, 13, 11, 45, 19, 0, tzinfo=pytz.UTC),
             'body_html': '<p>a b  c   d&nbsp;e&nbsp;&nbsp;f\xA0g</p>',
             'word_count': '1',
             'priority': 1
@@ -318,7 +317,7 @@ class IRESSNITFFormatterTest(TestCase):
             'subject': [{'qcode': '02011001'}],
             'anpa_take_key': 'take_key',
             'unique_id': 1,
-            'versioncreated': datetime(2018, 6, 13, 11, 45, 19, 0),
+            'versioncreated': datetime(2018, 6, 13, 11, 45, 19, 0, tzinfo=pytz.UTC),
             'type': 'text',
             'body_html': '<p><span style=\"background-color: transparent;\">\u0018\u0012\f \u000b\u0012\b</span>'
                          '<span style=\"background-color: transparent;\">\u0005\f\u0006\b \u0006\f\u0019&nbsp;</span>'
@@ -338,7 +337,7 @@ class IRESSNITFFormatterTest(TestCase):
             'anpa_category': [{'qcode': 'a'}],
             'headline': 'This is a test headline',
             'byline': None,
-            'versioncreated': datetime(2018, 6, 13, 11, 45, 19, 0),
+            'versioncreated': datetime(2018, 6, 13, 11, 45, 19, 0, tzinfo=pytz.UTC),
             'slugline': 'slugline',
             'subject': [{'qcode': '02011001'}],
             'anpa_take_key': None,
@@ -365,7 +364,7 @@ class IRESSNITFFormatterTest(TestCase):
                     'qcode': 'a'
                 }
             ],
-            'versioncreated': datetime(2018, 6, 13, 11, 45, 19, 0),
+            'versioncreated': datetime(2018, 6, 13, 11, 45, 19, 0, tzinfo=pytz.UTC),
             'genre': [
                 {
                     'name': 'Article (news)',

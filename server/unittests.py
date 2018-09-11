@@ -22,6 +22,7 @@ class AAPTestCase(TestCase):
         config = {
             'INSTALLED_APPS': INSTALLED_APPS,
             'ELASTICSEARCH_FORCE_REFRESH': True,
+            'DEFAULT_TIMEZONE': 'Australia/Sydney'
         }
 
         setup(self, config=config, app_factory=get_app)
