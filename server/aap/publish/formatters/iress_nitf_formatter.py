@@ -12,12 +12,13 @@ import superdesk
 from superdesk.etree import parse_html, to_string
 from superdesk.publish.formatters.nitf_formatter import NITFFormatter
 from superdesk.errors import FormatterError
-from superdesk.utc import utcnow
+from superdesk.utc import utcnow, utc_to_local
 from superdesk.metadata.item import ITEM_TYPE, CONTENT_TYPE, FORMATS, FORMAT, BYLINE
 from .aap_formatter_common import get_service_level, get_first_anpa_category, \
     get_first_anpa_category_code, get_copyrights_info
 from lxml import etree as etree
 from lxml.etree import SubElement, strip_elements
+from eve.utils import config
 from superdesk.text_utils import get_text
 from .field_mappers.locator_mapper import LocatorMapper
 from .field_mappers.slugline_mapper import SluglineMapper
@@ -219,7 +220,7 @@ class IRESSNITFFormatter(NITFFormatter):
         SubElement(docdata, tag, {'norm': self._get_date(article, field).strftime('%Y%m%dT%H%M%S')})
 
     def _get_date(self, article, field):
-        return article.get(field) or utcnow()
+        return utc_to_local(config.DEFAULT_TIMEZONE or 'UTC', article.get(field) or utcnow())
 
     def _format_date_expire(self, article, head):
         pass
