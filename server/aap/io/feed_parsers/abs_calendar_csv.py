@@ -57,6 +57,7 @@ class ABSCalendarCSVParser(FileFeedParser):
         item['versioncreated'] = utcnow()
         item['state'] = CONTENT_STATE.INGESTED
         item['pubstatus'] = None
+        item['slugline'] = 'Statistics Release'
         calendars = superdesk.get_resource_service('vocabularies').find_one(req=None, _id='event_calendars')
         item['calendars'] = [c for c in calendars.get('items', []) if c.get('qcode').lower() == 'abs statistics']
 
