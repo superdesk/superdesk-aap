@@ -49,7 +49,6 @@ angular.module('aap.apps.mission-report', ['superdesk.analytics'])
             id: 'mission_report',
             label: gettext('Mission'),
             sidePanelTemplate: 'mission-report-panel.html',
-            controller: ctrl.MissionReportController,
             priority: 500,
             privileges: {mission_report: 1},
             allowScheduling: true,
