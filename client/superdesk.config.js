@@ -40,7 +40,10 @@ module.exports = function() {
             searchShortcut: 1,
             slackNotifications: 1,
             editor3: 1,
-            analytics: 1
+            analytics: 1,
+            editorAttachments: false,
+            editorInlineComments: false,
+            editorSuggestions: false,
         },
 
         activity: {
