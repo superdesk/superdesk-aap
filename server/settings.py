@@ -12,7 +12,7 @@
 
 import os
 import json
-from superdesk.default_settings import celery_queue, \
+from superdesk.default_settings import celery_queue, strtobool, \
     CELERY_TASK_ROUTES as CTR, \
     CELERY_BEAT_SCHEDULE as CBS
 from celery.schedules import crontab
@@ -302,3 +302,10 @@ VALIDATOR_MEDIA_METADATA = {
 
 # max multi day event duration in days
 MAX_MULTI_DAY_EVENT_DURATION = int(env('MAX_MULTI_DAY_EVENT_DURATION', 7))
+
+# Highcharts Export Server - default settings
+ANALYTICS_ENABLE_SCHEDULED_REPORTS = strtobool(
+    env('ANALYTICS_ENABLE_SCHEDULED_REPORTS', 'true')
+)
+HIGHCHARTS_SERVER_HOST = env('HIGHCHARTS_SERVER_HOST', 'localhost')
+HIGHCHARTS_SERVER_PORT = env('HIGHCHARTS_SERVER_PORT', '6060')
