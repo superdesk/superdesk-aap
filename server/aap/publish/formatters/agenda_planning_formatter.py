@@ -214,6 +214,30 @@ class AgendaPlanningFormatter(Formatter):
                     agenda_coverage = {'Role': {'ID': agenda_role}, 'CoverageStatus': {'ID': coverage_status}}
                     coverages.append(agenda_coverage)
         agenda_event['Coverages'] = coverages
+
+        if len(item.get('event_contact_info', [])):
+            contact = superdesk.get_resource_service('contacts').find_one(req=None,
+                                                                          _id=item.get('event_contact_info')[0])
+            if contact and contact.get('is_active') and contact.get('public'):
+                name = '{} {} {}'.format(contact.get('honorific', ''), contact.get('first_name', ''),
+                                         contact.get('last_name', ''))
+                if contact.get('job_title', '') != '':
+                    name += ' {}'.format(contact.get('job_title'))
+                if contact.get('organisation', '') != '':
+                    name += ' ({})'.format(contact.get('organisation'))
+                if len(contact.get('contact_email', [])):
+                    for email in contact.get('contact_email'):
+                        name += ' {}'.format(email)
+                if len(contact.get('contact_phone', [])):
+                    for phone in contact.get('contact_phone'):
+                        if phone.get('public', True):
+                            name += ' Tel: {}'.format(phone.get('number'))
+                if len(contact.get('mobile', [])):
+                    for phone in contact.get('mobile'):
+                        if phone.get('public', True):
+                            name += ' Mob: {}'.format(phone.get('number'))
+
+                agenda_event['Contact'] = {'DisplayString': name}
         return agenda_event
 
     def _format_planning(self, item):

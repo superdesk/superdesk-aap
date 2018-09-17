@@ -98,6 +98,16 @@ class HTTPAgendaPush(HTTPPushService):
         logger.warn('Failed to get the superdesk user')
         return self._get_secret_token(destination)
 
+    def _get_entry_from_agenda(self, destination, id):
+        try:
+            response = requests.get(self._get_assets_url(destination) + '/entry/' + str(id) + '?duplicateEntry=1',
+                                    headers=self._get_headers(destination, self.headers))
+            response.raise_for_status()
+        except Exception as ex:
+            logger.warn('Failed to get existing entry from, Exception {}'.format(ex))
+            return None
+        return json.loads(response.text)
+
     def _push_item(self, destination, data):
         # pop the ExternalIdentifier as the Superdesk planning id is to long for the Agenda database
         formatted_item = json.loads(data)
@@ -105,6 +115,7 @@ class HTTPAgendaPush(HTTPPushService):
         type = formatted_item.pop('Type')
         user_id = formatted_item.pop('PublishingUser')
 
+        self.user_api_key = self._get_user_api_key(user_id, destination)
         # Find the original item, test if it has an agenda id to determine if it's been published to agenda before
         service = get_resource_service('events') if type == 'event' else get_resource_service('planning')
         original = service.find_one(req=None, _id=id)
@@ -112,10 +123,13 @@ class HTTPAgendaPush(HTTPPushService):
             if original.get('unique_id'):
                 formatted_item['ID'] = original.get('unique_id')
                 formatted_item['IsNew'] = False
+                # Get the item from agenda and copy the tags over
+                agenda_item = self._get_entry_from_agenda(destination, original.get('unique_id'))
+                if agenda_item:
+                    formatted_item['Tags'] = agenda_item.get('Tags')
             else:
                 formatted_item['IsNew'] = True
 
-        self.user_api_key = self._get_user_api_key(user_id, destination)
         agenda_entry = json.dumps(formatted_item)
 
         resource_url = self._get_assets_url(destination) + '/entry/saveentry?pScheduledEntryChangePolicy=1'

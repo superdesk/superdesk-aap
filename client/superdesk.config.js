@@ -50,6 +50,7 @@ module.exports = function() {
             'edit.item.popup': 0,
             'view.item.popup': 0
         },
+        confirm_spike: false,
 
         view: {
             timeformat: 'HH:mm',
