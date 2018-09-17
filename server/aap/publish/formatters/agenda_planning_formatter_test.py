@@ -44,6 +44,34 @@ class AgendaPlanningFormatterTest(TestCase):
         "iptc_code": "15073005",
     }]
 
+    contacts = [{
+        "_id": 1,
+        "is_active": True,
+        "first_name": "John",
+        "honorific": "Mr",
+        "public": True,
+        "contact_email": [
+            "jdoe@a.com.au"
+        ],
+        "organisation": "AAP",
+        "last_name": "Doe",
+        "contact_phone": [
+            {
+                "public": True,
+                "number": "02 5555 5555",
+                "usage": "Business"
+            }
+        ],
+        "mobile": [
+            {
+                "number": "1234567890",
+                "public": True,
+                "usage": "Business"
+            }
+        ],
+        "job_title": "Spokesperson"
+    }]
+
     def setUp(self):
         self.formatter = AgendaPlanningFormatter()
         self.base_formatter = Formatter()
@@ -52,6 +80,7 @@ class AgendaPlanningFormatterTest(TestCase):
         self.app.data.insert('locations', self.locations)
         self.app.data.insert('agenda_city_map', self.city_map)
         self.app.data.insert('agenda_iptc_map', self.iptc_map)
+        self.app.data.insert('contacts', self.contacts)
 
     def test_local(self):
         event = {
@@ -98,7 +127,8 @@ class AgendaPlanningFormatterTest(TestCase):
                     "qcode": "15073005",
                     "parent": "15073000"
                 }
-            ]
+            ],
+            "event_contact_info": [1]
         }
         event['dates']['start'] = datetime.datetime(2018, 1, 23, 13, 0, 0, 0)
         event['dates']['end'] = datetime.datetime(2018, 1, 24, 12, 59, 0, 0)
@@ -107,6 +137,8 @@ class AgendaPlanningFormatterTest(TestCase):
         self.assertEqual(item.get('City').get('ID'), 106)
         self.assertEqual(item.get('Topics')[0].get('Topic').get('ID'), 1212)
         self.assertEqual(item.get('TimeFromZone'), '+11:00')
+        self.assertEqual(item.get('Contact').get('DisplayString'), 'Mr John Doe Spokesperson (AAP) '
+                                                                   'jdoe@a.com.au Tel: 02 5555 5555 Mob: 1234567890')
 
     def test_planning(self):
         planning = {
