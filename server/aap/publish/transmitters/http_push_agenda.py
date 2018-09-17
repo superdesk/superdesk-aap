@@ -100,7 +100,7 @@ class HTTPAgendaPush(HTTPPushService):
 
     def _get_entry_from_agenda(self, destination, id):
         try:
-            response = requests.get(self._get_assets_url(destination) + '/entry/' + id + '?duplicateEntry=1',
+            response = requests.get(self._get_assets_url(destination) + '/entry/' + str(id) + '?duplicateEntry=1',
                                     headers=self._get_headers(destination, self.headers))
             response.raise_for_status()
         except Exception as ex:
