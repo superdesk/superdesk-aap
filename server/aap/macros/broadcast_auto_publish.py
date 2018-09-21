@@ -9,10 +9,11 @@
 # at https://www.sourcefabric.org/superdesk/license
 
 
-from superdesk.metadata.item import ITEM_STATE, CONTENT_STATE, ITEM_TYPE, CONTENT_TYPE
+from superdesk.metadata.item import ITEM_STATE, CONTENT_STATE, ITEM_TYPE, CONTENT_TYPE, FORMAT, FORMATS
 from superdesk.macros import internal_destination_auto_publish
 from superdesk.text_utils import get_text_word_count
 from aap.publish.formatters.aap_bulletinbuilder_formatter import AAPBulletinBuilderFormatter
+from superdesk import config
 
 
 def broadcast_auto_publish(item, **kwargs):
@@ -22,16 +23,17 @@ def broadcast_auto_publish(item, **kwargs):
     :param kwargs:
     :return:
     """
-    if item.get(ITEM_TYPE) != CONTENT_TYPE.TEXT:
+    if item.get(ITEM_TYPE) != CONTENT_TYPE.TEXT or item.get(FORMAT) != FORMATS.HTML:
         return
 
+    max_word_count = config.MIN_BROADCAST_TEXT_WORD_COUNT
     item['genre'] = [{'name': 'Broadcast Script', 'qcode': 'Broadcast Script'}]
     if item[ITEM_STATE] not in {CONTENT_STATE.KILLED, CONTENT_STATE.RECALLED} and \
             not (item.get('flags') or {}).get('marked_for_legal'):
         formatter = AAPBulletinBuilderFormatter()
         body_text = formatter.get_text_content(formatter.append_body_footer(item))
         word_count = get_text_word_count(body_text)
-        if word_count > 1000 and \
+        if word_count > max_word_count and \
                 not (item.get('flags') or {}).get('marked_for_legal'):
             lines = body_text.splitlines()
             new_body_html = []
@@ -42,9 +44,10 @@ def broadcast_auto_publish(item, **kwargs):
 
                 new_body_html.append('<p>{}</p>'.format(para))
                 word_count = get_text_word_count(''.join(new_body_html))
-                if word_count > 1000:
+                if word_count > max_word_count:
                     if len(new_body_html):
-                        item['body_html'] = '<p></p>'.join(new_body_html)
+                        item['body_html'] = ''.join(new_body_html)
+                        item['word_count'] = word_count
                     break
 
     internal_destination_auto_publish(item, **kwargs)
