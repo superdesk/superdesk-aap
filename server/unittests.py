@@ -8,7 +8,7 @@
 # AUTHORS and LICENSE files distributed with this source code, or
 # at https://www.sourcefabric.org/superdesk/license
 
-from settings import INSTALLED_APPS
+from settings import INSTALLED_APPS, MIN_BROADCAST_TEXT_WORD_COUNT
 from app import get_app
 from superdesk.tests import TestCase, setup
 
@@ -22,7 +22,8 @@ class AAPTestCase(TestCase):
         config = {
             'INSTALLED_APPS': INSTALLED_APPS,
             'ELASTICSEARCH_FORCE_REFRESH': True,
-            'DEFAULT_TIMEZONE': 'Australia/Sydney'
+            'DEFAULT_TIMEZONE': 'Australia/Sydney',
+            'MIN_BROADCAST_TEXT_WORD_COUNT': MIN_BROADCAST_TEXT_WORD_COUNT
         }
 
         setup(self, config=config, app_factory=get_app)

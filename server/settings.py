@@ -151,7 +151,8 @@ INSTALLED_APPS.extend([
     'aap.agenda',
     'analytics',
     'aap.reports',
-    'aap.mission_report'
+    'aap.mission_report',
+    'aap.fuel'
 ])
 
 RENDITIONS = {
@@ -309,3 +310,5 @@ ANALYTICS_ENABLE_SCHEDULED_REPORTS = strtobool(
 )
 HIGHCHARTS_SERVER_HOST = env('HIGHCHARTS_SERVER_HOST', 'localhost')
 HIGHCHARTS_SERVER_PORT = env('HIGHCHARTS_SERVER_PORT', '6060')
+
+MIN_BROADCAST_TEXT_WORD_COUNT = int(env('MIN_BROADCAST_TEXT_WORD_COUNT', 120))
