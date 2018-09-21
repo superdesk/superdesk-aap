@@ -12,12 +12,13 @@
 from superdesk.tests.environment import before_feature, before_step, after_scenario, before_all  # noqa
 from superdesk.tests.environment import setup_before_scenario
 from app import get_app
-from settings import INSTALLED_APPS
+from settings import INSTALLED_APPS, MACROS_MODULE
 
 
 def before_scenario(context, scenario):
     config = {
         'INSTALLED_APPS': INSTALLED_APPS,
         'ELASTICSEARCH_FORCE_REFRESH': True,
+        'MACROS_MODULE': MACROS_MODULE
     }
     setup_before_scenario(context, scenario, config, app_factory=get_app)
