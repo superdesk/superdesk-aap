@@ -23,6 +23,21 @@ logger = logging.getLogger(__name__)
 MARKETS = ["Perth", "Sydney", "Melbourne", "Brisbane", "Adelaide"]
 
 
+def get_areas():
+    """
+    Read the GeoJson file that outlines a list of named polygons describing the areas we can extract the prices from
+    :return:
+    """
+    areas = []
+    path = get_filepath('fuel_geojson.json')
+    try:
+        with path.open('r') as f:
+            areas = json.load(f)
+    except Exception as ex:
+        logger.error('Exception loading fuel_geojson.json : {}'.format(ex))
+    return areas
+
+
 def fuel_story(item, **kwargs):
     def _get_today():
         """
@@ -30,20 +45,6 @@ def fuel_story(item, **kwargs):
         :return:
         """
         return datetime.now().isoformat()[:10]
-
-    def _get_areas():
-        """
-        Read the GeoJson file that outlines a list of named polygons describing the areas we can extrac the prices from
-        :return:
-        """
-        areas = []
-        path = get_filepath('fuel_geojson.json')
-        try:
-            with path.open('r') as f:
-                areas = json.load(f)
-        except Exception as ex:
-            logger.error('Exception loading fuel_geojson.json : {}'.format(ex))
-        return areas
 
     # groupin clause for the requests
     group = {
@@ -56,7 +57,7 @@ def fuel_story(item, **kwargs):
             }
     }
 
-    area = _get_areas()
+    area = get_areas()
     fuel_map = dict()
 
     for market in MARKETS:
