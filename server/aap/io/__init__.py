@@ -11,3 +11,4 @@
 import aap.io.iptc_extension  # noqa
 from .feeding_services.aap_sports_service import AAPSportsHTTPFeedingService  # noqa
 from .feeding_services.intelematics_fuel_service import IntelematicsFuelHTTPFeedingService  # noqa
+from .feeding_services.intelematics_incidents_service import IntelematicsIncidentHTTPFeedingService  # noqa
