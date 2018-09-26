@@ -147,7 +147,7 @@ class AgendaPlanningFormatter(Formatter):
                     agenda_event['Region'] = {'ID': 11}
                     country_id = self._get_country_id(location.get('address', {}).get('country').lower())
                     agenda_event['Country'] = {'ID': country_id}
-                    agenda_event['City'] = {'ID': self._get_city_id(location, country_id)}
+                    self._set_city(agenda_event, location, country_id)
                 else:
                     # country is Australia
                     agenda_event['Country'] = {'ID': 16}
@@ -161,7 +161,7 @@ class AgendaPlanningFormatter(Formatter):
                     if not region:
                         region = 3
                     agenda_event['Region'] = {'ID': region}
-                    agenda_event['City'] = {'ID': self._get_city_id(location)}
+                    self._set_city(agenda_event, location)
                 agenda_event['Address'] = {'DisplayString': item.get('location')[0].get('name', '')}
 
         # if we can derive a region from the place that overrides the default or any derived from the location
@@ -382,8 +382,23 @@ class AgendaPlanningFormatter(Formatter):
         if not entry or entry.count() <= 0:
             entry = service.find({'country_id': int(country), 'name': location.get('address', {}).get('name', '')})
         if entry:
-            return entry.next().get('agenda_id') if entry.count() > 0 else 106
-        return 106
+            return entry.next().get('agenda_id') if entry.count() > 0 else None
+        return None
+
+    def _set_city(self, agenda_event, location, country=16):
+        """If no city id could be determined from the city map then pass what should be the City as a string
+
+        :param agenda_event:
+        :param location:
+        :param country:
+        :return:
+        """
+        city_id = self._get_city_id(location, country)
+        if city_id is None:
+            agenda_event['City'] = {'DisplayString': location.get('address').get('area') or
+                                    location.get('address').get('locality')}
+        else:
+            agenda_event['City'] = {'ID': city_id}
 
     def _get_iptc_id(self, lookup_code):
         service = superdesk.get_resource_service('agenda_iptc_map')

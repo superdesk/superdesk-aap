@@ -361,7 +361,7 @@ class AgendaPlanningFormatterTest(TestCase):
         event['dates']['end'] = datetime.datetime(2018, 1, 24, 12, 59, 0, 0)
         doc = self.formatter.format(event, {'name': 'Test Subscriber'})[0]
         item = json.loads(doc[1])
-        self.assertEqual(item.get('City').get('ID'), 106)
+        self.assertEqual(item.get('City').get('DisplayString'), 'City of London')
         self.assertEqual(item.get('Topics')[0].get('Topic').get('ID'), 1212)
         self.assertEqual(item.get('TimeFromZone'), '+11:00')
         self.assertEqual(item.get('Region').get('ID'), 3)
