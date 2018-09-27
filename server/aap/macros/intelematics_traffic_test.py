@@ -9,7 +9,7 @@
 # at https://www.sourcefabric.org/superdesk/license
 
 from superdesk.tests import TestCase
-from .traffic import traffic_story
+from .intelematics_traffic import traffic_story
 from aap.traffic_incidents import init_app
 from superdesk.utc import utcnow
 from datetime import timedelta
@@ -117,17 +117,18 @@ class TrafficTestCase(TestCase):
         self.incident[1]['start_date'] = utcnow() - timedelta(hours=10)
         self.incident[1]['end_date'] = utcnow() + timedelta(hours=100)
         self.app.data.insert('traffic_incidents', self.incident)
+        self.app.data.insert('archive', [{'_id': 1}])
         self.app.config['INIT_DATA_PATH'] = os.path.abspath(
             os.path.join(os.path.abspath(os.path.dirname(__file__)), '../../data'))
 
     def test_roadworks(self):
-        item = traffic_story({'place': [{'qcode': 'NSW'}], 'body_html': 'road works go here {{roadworks}}'})
+        item = traffic_story({'_id': 1, 'place': [{'qcode': 'NSW'}], 'body_html': 'road works go here {{roadworks}}'})
         self.assertEqual(item.get('body_html'),
                          'road works go here <p><b>North</b></p><p>Roadworks on Military Road Westbound in '
                          'Neutral Bay between Young Street and Wycombe Road.</p>')
 
     def test_incidents(self):
-        item = traffic_story({'place': [{'qcode': 'NSW'}], 'body_html': 'incidents go here {{incidents}}'})
+        item = traffic_story({'_id': 1, 'place': [{'qcode': 'NSW'}], 'body_html': 'incidents go here {{incidents}}'})
         self.assertEqual(item.get('body_html'),
                          'incidents go here <p><b>West</b></p><p>Broken down truck on Silverwater Road '
                          'Southbound in Silverwater (sydney) between Western Motorway and Carnarvon Street.</p>')

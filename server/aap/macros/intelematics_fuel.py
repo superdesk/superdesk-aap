@@ -14,7 +14,8 @@ from datetime import datetime
 from flask import current_app as app
 from apps.prepopulate.app_initialize import get_filepath
 import json
-
+from superdesk import get_resource_service
+from superdesk.utils import config
 
 logger = logging.getLogger(__name__)
 
@@ -98,6 +99,15 @@ def fuel_story(item, **kwargs):
             fuel_map[area_name.lower() + '_max_' + i.get('_id').lower().replace('-', '')] = '%.1f' % i.get('max')
 
     item['body_html'] = render_template_string(item.get('body_html', ''), **fuel_map)
+
+    update = {'source': 'Intelematics'}
+    ingest_provider = get_resource_service('ingest_providers').find_one(req=None, source='Intelematics')
+    if ingest_provider:
+        update['ingest_provider'] = ingest_provider.get(config.ID_FIELD)
+    update['body_html'] = item['body_html']
+    get_resource_service('archive').system_update(item[config.ID_FIELD], update, item)
+    item['source'] = 'Intelematics'
+
     return item
 
 
