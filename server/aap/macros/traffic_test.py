@@ -129,5 +129,5 @@ class TrafficTestCase(TestCase):
     def test_incidents(self):
         item = traffic_story({'place': [{'qcode': 'NSW'}], 'body_html': 'incidents go here {{incidents}}'})
         self.assertEqual(item.get('body_html'),
-                         'incidents go here <p><b>West</b></p><p>Broken down lorr(y/ies) on Silverwater Road '
+                         'incidents go here <p><b>West</b></p><p>Broken down truck on Silverwater Road '
                          'Southbound in Silverwater (sydney) between Western Motorway and Carnarvon Street.</p>')
