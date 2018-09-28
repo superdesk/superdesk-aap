@@ -67,7 +67,9 @@ def traffic_story(item, **kwargs):
         if incidents.count():
             incidents_html += '<p><b>{}</b></p>'.format(area['properties']['area'])
             for i in incidents:
-                incidents_html += '<p>{}</p>'.format(i.get('incident_description'))
+                message = i.get('incident_description').replace('lorr(y/ies)', 'truck')
+                message = message.replace('Accident(s)', 'Accident')
+                incidents_html += '<p>{}</p>'.format(message)
 
         roadworks_query = deepcopy(base_query)
         # Append a clause that restrict to roadworks only
