@@ -73,7 +73,7 @@ class IntelematicsIncidentHTTPFeedingService(HTTPFeedingService):
                 'city': props.get('city'),
                 'state': props.get('state'),
                 'from_street_name': props.get('fromStreetName'),
-                'from_crossStreet_ame': props.get('fromCrossStreetName'),
+                'from_cross_street_name': props.get('fromCrossStreetName'),
                 'to_street_name': props.get('toStreetName'),
                 'to_cross_street_name': props.get('toCrossStreetName'),
                 'geometry': feature.get('geometry')
