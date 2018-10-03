@@ -16,7 +16,8 @@ from flask import render_template_string
 from datetime import timedelta
 from superdesk.utc import utcnow
 from copy import deepcopy
-from .fuel import get_areas
+from .intelematics_fuel import get_areas
+from superdesk.utils import config
 
 logger = logging.getLogger(__name__)
 
@@ -89,6 +90,13 @@ def traffic_story(item, **kwargs):
     incidents_map['roadworks'] = 'No roadworks at this time.' if roadworks_html == '' else roadworks_html
 
     item['body_html'] = render_template_string(item.get('body_html', ''), **incidents_map)
+    update = {'source': 'Intelematics'}
+    ingest_provider = get_resource_service('ingest_providers').find_one(req=None, source='Intelematics')
+    if ingest_provider:
+        update['ingest_provider'] = ingest_provider.get(config.ID_FIELD)
+    update['body_html'] = item['body_html']
+    get_resource_service('archive').system_update(item[config.ID_FIELD], update, item)
+    item['source'] = 'Intelematics'
 
     return item
 
