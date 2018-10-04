@@ -319,10 +319,12 @@ class AgendaPlanningFormatter(Formatter):
 
         if item.get('pubstatus') == 'cancelled' or item.get('occur_status', {}).get('qcode', '') == 'eocstat:eos6':
             agenda_event['WorkflowState'] = {'ID': 7}
-        elif item.get('pubstatus') == 'rescheduled':
+        elif item.get('state') == 'rescheduled':
             agenda_event['WorkflowState'] = {'ID': 6}
-        elif item.get('pubstatus') == 'postponed':
+        elif item.get('state') == 'postponed':
             agenda_event['WorkflowState'] = {'ID': 5}
+        elif item.get('state') == 'spiked':
+            agenda_event['WorkflowState'] = {'ID': 3}
         else:
             agenda_event['WorkflowState'] = {'ID': 2}
 
