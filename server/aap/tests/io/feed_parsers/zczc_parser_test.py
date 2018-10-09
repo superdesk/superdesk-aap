@@ -61,7 +61,11 @@ class ZCZCTestCase(TestCase):
              {
                  "name": "AM Service",
                  "is_active": True,
-                 "qcode": "AM Service"}
+                 "qcode": "AM Service"},
+             {
+                 "name": "Racing Data",
+                 "is_active": True,
+                 "qcode": "Racing Data"}
          ]}]
 
     def setUp(self):
@@ -141,7 +145,7 @@ class ZCZCTestCase(TestCase):
         self.assertEqual(self.items.get('slugline'), 'Darwin Grey')
         self.assertEqual(self.items.get('anpa_category')[0]['qcode'], 'r')
         self.assertEqual(self.items.get('subject')[0]['qcode'], '15082000')
-        self.assertEqual(self.items.get('genre')[0]['name'], 'Results (sport)')
+        self.assertEqual(self.items.get('genre')[0]['name'], 'Racing Data')
 
     def test_racing_format(self):
         filename = 'viflda004_7257.tst'

@@ -23,6 +23,11 @@ class ZCZCPMFParser(ZCZCFeedParser):
 
     NAME = 'PMF_zczc'
 
+    lotteries_qcode = 'Lotteries'
+    racing_qcode = 'Racing Data'
+    finance_qcode = 'Finance Data'
+    sport_results_qcode = 'Results (sport)'
+
     def set_item_defaults(self, item, provider):
         super().set_item_defaults(item, provider)
         item[FORMAT] = FORMATS.PRESERVED
@@ -33,10 +38,10 @@ class ZCZCPMFParser(ZCZCFeedParser):
         self.header_map = {self.KEYWORD: self.ITEM_SLUGLINE, self.TAKEKEY: self.ITEM_TAKE_KEY,
                            self.HEADLINE: self.ITEM_HEADLINE}
 
-    def _set_results_genre(self, item):
+    def _set_results_genre(self, item, genre_qcode=sport_results_qcode):
         genre_map = superdesk.get_resource_service('vocabularies').find_one(req=None, _id='genre')
         item['genre'] = [x for x in genre_map.get('items', []) if
-                         x['qcode'] == 'Results (sport)' and x['is_active']]
+                         x['qcode'] == genre_qcode and x['is_active']]
 
     def post_process_item(self, item, provider):
         try:
@@ -60,6 +65,7 @@ class ZCZCPMFParser(ZCZCFeedParser):
                         item[self.ITEM_HEADLINE] = item.get(self.ITEM_SLUGLINE) + ' ' + item.get(self.ITEM_TAKE_KEY,
                                                                                                  '')
                         item[self.ITEM_SUBJECT] = [{'qcode': '15030003', 'name': subject_codes['15030003']}]
+                    self._set_results_genre(item, self.racing_qcode)
                 else:
                     # Dividends
                     if item.get(self.ITEM_HEADLINE, '').find('TAB DIVS') != -1:
@@ -73,8 +79,9 @@ class ZCZCPMFParser(ZCZCFeedParser):
                             item[self.ITEM_SUBJECT] = [{'qcode': '15030003', 'name': subject_codes['15030003']}]
                         if item.get(self.ITEM_SLUGLINE, '').find('Gallop') != -1:
                             item[self.ITEM_SUBJECT] = [{'qcode': '15030001', 'name': subject_codes['15030001']}]
+                        self._set_results_genre(item, self.sport_results_qcode)
+
                 item[self.ITEM_ANPA_CATEGORY] = [{'qcode': 'r'}]
-                self._set_results_genre(item)
             elif item.get(self.ITEM_SLUGLINE, '').find(' Betting') != -1:
                 try:
                     raceday = datetime.strptime(item.get(self.ITEM_HEADLINE, ''), '%d/%m/%Y')
@@ -85,13 +92,15 @@ class ZCZCPMFParser(ZCZCFeedParser):
                 item[self.ITEM_HEADLINE] = '{} {}'.format(item[self.ITEM_SLUGLINE], item[self.ITEM_TAKE_KEY])
                 item[self.ITEM_SUBJECT] = [{'qcode': '15030001', 'name': subject_codes['15030001']}]
                 item[self.ITEM_ANPA_CATEGORY] = [{'qcode': 'r'}]
+                self._set_results_genre(item, self.racing_qcode)
             elif item.get(self.ITEM_SLUGLINE, '').find('AFL') != -1:
                 item[self.ITEM_ANPA_CATEGORY] = [{'qcode': 't'}]
                 item[self.ITEM_SUBJECT] = [{'qcode': '15084000', 'name': subject_codes['15084000']}]
-                self._set_results_genre(item)
+                self._set_results_genre(item, self.sport_results_qcode)
             else:
                 item[self.ITEM_ANPA_CATEGORY] = [{'qcode': 'f'}]
                 item[self.ITEM_SUBJECT] = [{'qcode': '04000000', 'name': subject_codes['04000000']}]
+                self._set_results_genre(item, self.finance_qcode)
 
             # truncate the slugline to the length defined in the validation schema
             lookup = {'act': 'auto_publish', 'type': CONTENT_TYPE.TEXT}
