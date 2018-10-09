@@ -14,6 +14,7 @@ from aap.errors import AAPParserError
 from superdesk.io.iptc import subject_codes
 from superdesk.logging import logger
 from aap.macros.racing_reformat import racing_reformat_macro
+from superdesk import get_resource_service
 
 
 class ZCZCRacingParser(ZCZCFeedParser):
@@ -97,6 +98,10 @@ class ZCZCRacingParser(ZCZCFeedParser):
             if lines[0] and lines[0].find('HH ') != -1:
                 racing_reformat_macro(item)
 
+            genre_map = get_resource_service('vocabularies').find_one(req=None, _id='genre')
+            if genre_map:
+                item['genre'] = [x for x in genre_map.get('items', []) if
+                                 x['qcode'] == 'Racing Data' and x['is_active']]
             return item
 
         except Exception as ex:
