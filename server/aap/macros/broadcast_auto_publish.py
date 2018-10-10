@@ -10,7 +10,7 @@
 
 
 from superdesk.metadata.item import ITEM_STATE, CONTENT_STATE, ITEM_TYPE, CONTENT_TYPE, FORMAT, FORMATS
-from superdesk.macros import internal_destination_auto_publish
+from superdesk.macros.internal_destination_auto_publish import internal_destination_auto_publish
 from superdesk.text_utils import get_text_word_count
 from aap.publish.formatters.aap_bulletinbuilder_formatter import AAPBulletinBuilderFormatter
 from superdesk import config
