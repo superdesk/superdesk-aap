@@ -12,10 +12,7 @@
 
 import os
 import json
-from superdesk.default_settings import celery_queue, strtobool, \
-    CELERY_TASK_ROUTES as CTR, \
-    CELERY_BEAT_SCHEDULE as CBS
-from celery.schedules import crontab
+from superdesk.default_settings import strtobool
 
 try:
     from urllib.parse import urlparse
@@ -252,19 +249,6 @@ CURRENCY_API_KEY = env('CURRENCY_API_KEY', None)
 
 # Validate auto published content using validators not profile
 AUTO_PUBLISH_CONTENT_PROFILE = False
-
-
-CELERY_TASK_ROUTES = CTR
-CELERY_TASK_ROUTES['planning.flag_expired'] = {
-    'queue': celery_queue('expiry'),
-    'routing_key': 'expiry.planning'
-}
-
-CELERY_BEAT_SCHEDULE = CBS
-CELERY_BEAT_SCHEDULE['planning:expiry'] = {
-    'task': 'planning.flag_expired',
-    'schedule': crontab(minute='0')  # Runs once every hour
-}
 
 # Expire items 3 days after their scheduled date
 PLANNING_EXPIRY_MINUTES = int(env('PLANNING_EXPIRY_MINUTES', 4320))
