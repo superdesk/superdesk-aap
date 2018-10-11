@@ -169,14 +169,13 @@ class AAPSportsFixturesParser(XMLFeedParser):
                 match_id = None
                 if event is not None and event.attrib.get('Event_ID') is not None:
                     match_id = event.attrib.get('Event_ID')
-                if datetime.now() < end and match_id and match_id[-1] != '-':
+                if datetime.now() < end and match_id:
                     item = self._set_default_item(fixture.get('sport_id'), fixture.get('comp_id'), match_id)
                     if self._can_ingest_item(item):
-                        item['name'] = '{} {}'.format(
-                            self.sport_map.get(fixture.get('sport_id', {}), {}).get('prefix', ''),
+                        item['name'] = '{} - {}'.format(
+                            self.sport_map.get(fixture.get('sport_id', {}), {}).get('name', ''),
                             fixture.get('comp_name')
                         )
-                        item['slugline'] = item['name']
                         item['definition_short'] = competition_detail.attrib.get('Gender', '')
                         item['dates'] = {
                             'start': local_to_utc(config.DEFAULT_TIMEZONE, start),
@@ -205,18 +204,14 @@ class AAPSportsFixturesParser(XMLFeedParser):
                         match_no = match.find('.//Match_Details').attrib.get('Match_No', '')
                         teamA_name = match.findall('.//Teams/Team_Details')[0].attrib.get('Team_Name', '')
                         teamB_name = match.findall('.//Teams/Team_Details')[1].attrib.get('Team_Name', '')
-                        teamA_short = match.findall('.//Teams/Team_Details')[0].attrib.get('Team_Short', '')
-                        teamB_short = match.findall('.//Teams/Team_Details')[1].attrib.get('Team_Short', '')
                         venue_name = match.find('.//Venue').attrib.get('Venue_Name', '')
                         venue_location = match.find('.//Venue').attrib.get('Venue_Location', '')
                         item = self._set_default_item(fixture.get('sport_id'), fixture.get('comp_id'), match_id)
                         if self._can_ingest_item(item):
-                            item['slugline'] = '{} {}'.format(
-                                self.sport_map.get(fixture.get('sport_id', {}), {}).get('prefix', ''), teamA_short)
-                            item['name'] = '{} {} V {}'.format(
-                                self.sport_map.get(fixture.get('sport_id', {}), {}).get('prefix', ''), teamA_short,
-                                teamB_short)
-                            item['definition_short'] = '{} match {} {} V {}'.format(fixture.get('comp_name', ''),
+                            item['name'] = '{} - {} v {}'.format(
+                                self.sport_map.get(fixture.get('sport_id', {}), {}).get('name', ''), teamA_name,
+                                teamB_name)
+                            item['definition_short'] = '{} match {} {} v {}'.format(fixture.get('comp_name', ''),
                                                                                     match_no,
                                                                                     teamA_name,
                                                                                     teamB_name)
@@ -308,14 +303,9 @@ class AAPSportsFixturesParser(XMLFeedParser):
                     teamB = self.teams.get(match.attrib.get('TeamB_ID')).get('name')
                     item = self._set_default_item(self.fixture.get('sport_id'), self.fixture.get('comp_id'), match_id)
                     if self._can_ingest_item(item):
-                        item['slugline'] = '{} {}'.format(
-                            self.sport_map.get(self.fixture.get('sport_id', {}), {}).get('prefix', ''),
-                            self.teams.get(match.attrib.get('TeamA_ID')).get('short'))
-                        item['name'] = '{} {} V {}'.format(
-                            self.sport_map.get(self.fixture.get('sport_id', {}), {}).get('prefix', ''),
-                            self.teams.get(match.attrib.get('TeamA_ID')).get('short'),
-                            self.teams.get(match.attrib.get('TeamB_ID')).get('short'))
-                        item['definition_short'] = '{}/{}/{} {} V {}'.format(self.sport,
+                        item['name'] = '{} - {} v {}'.format(
+                            self.sport_map.get(self.fixture.get('sport_id', {}), {}).get('name', ''), teamA, teamB)
+                        item['definition_short'] = '{}/{}/{} {} v {}'.format(self.sport,
                                                                              self.series,
                                                                              self.round,
                                                                              teamA,
