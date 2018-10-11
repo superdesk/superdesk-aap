@@ -43,7 +43,10 @@
         ]
       },
       "properties": {
-        "name": "sydney_east"
+        "name": "sydney_east",
+        "market": "Sydney",
+        "area": "Eastern suburbs",
+        "state": "NSW"
       }
     },
     {
@@ -108,7 +111,10 @@
         ]
       },
       "properties": {
-        "name": "sydney_north"
+        "name": "sydney_north",
+        "market": "Sydney",
+        "area": "North",
+        "state": "NSW"
       }
     },
     {
@@ -157,7 +163,10 @@
         ]
       },
       "properties": {
-        "name": "sydney_inner_west"
+        "name": "sydney_inner_west",
+        "market": "Sydney",
+        "area": "Inner West",
+        "state": "NSW"
       }
     },
     {
@@ -206,7 +215,10 @@
         ]
       },
       "properties": {
-        "name": "sydney_north_west"
+        "name": "sydney_north_west",
+        "market": "Sydney",
+        "area": "North West",
+        "state": "NSW"
       }
     },
     {
@@ -255,7 +267,10 @@
         ]
       },
       "properties": {
-        "name": "sydney_west"
+        "name": "sydney_west",
+        "market": "Sydney",
+        "area": "West",
+        "state": "NSW"
       }
     },
     {
@@ -292,7 +307,10 @@
         ]
       },
       "properties": {
-        "name": "sydney_south"
+        "name": "sydney_south",
+        "market": "Sydney",
+        "area": "South",
+        "state": "NSW"
       }
     },
     {
@@ -325,7 +343,10 @@
         ]
       },
       "properties": {
-        "name": "melbourne_inner"
+        "name": "melbourne_inner",
+        "market": "Melbourne",
+        "area": "Inner City",
+        "state": "VIC"
       }
     },
     {
@@ -358,7 +379,10 @@
         ]
       },
       "properties": {
-        "name": "melbourne_south"
+        "name": "melbourne_south",
+        "market": "Melbourne",
+        "area": "South",
+        "state": "VIC"
       }
     },
     {
@@ -395,7 +419,10 @@
         ]
       },
       "properties": {
-        "name": "melbourne_north"
+        "name": "melbourne_north",
+        "market": "Melbourne",
+        "area": "North",
+        "state": "VIC"
       }
     },
     {
@@ -432,7 +459,10 @@
         ]
       },
       "properties": {
-        "name": "melbourne_west"
+        "name": "melbourne_west",
+        "market": "Melbourne",
+        "area": "West",
+        "state": "VIC"
       }
     },
     {
@@ -465,13 +495,19 @@
         ]
       },
       "properties": {
-        "name": "melbourne_east"
+        "name": "melbourne_east",
+        "market": "Melbourne",
+        "area": "East",
+        "state": "VIC"
       }
     },
     {
       "type": "Feature",
       "properties": {
-        "name": "brisbane_north"
+        "name": "brisbane_north",
+        "market": "Brisbane",
+        "area": "North",
+        "state": "QLD"
       },
       "geometry": {
         "type": "Polygon",
@@ -504,7 +540,10 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "brisbane_south"
+        "name": "brisbane_south",
+        "market": "Brisbane",
+        "area": "South",
+        "state": "QLD"
       },
       "geometry": {
         "type": "Polygon",
@@ -537,7 +576,10 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "adelaide_north"
+        "name": "adelaide_north",
+        "market": "Adelaide",
+        "area": "North",
+        "state": "SA"
       },
       "geometry": {
         "type": "Polygon",
@@ -570,7 +612,10 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "adelaide_south"
+        "name": "adelaide_south",
+        "market": "Adelaide",
+        "area": "South",
+        "state": "SA"
       },
       "geometry": {
         "type": "Polygon",
@@ -603,7 +648,10 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "perth_north"
+        "name": "perth_north",
+        "market": "Perth",
+        "area": "North",
+        "state": "WA"
       },
       "geometry": {
         "type": "Polygon",
@@ -636,7 +684,10 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "perth_south"
+        "name": "perth_south",
+        "market": "Perth",
+        "area": "South",
+        "state": "WA"
       },
       "geometry": {
         "type": "Polygon",

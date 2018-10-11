@@ -14,13 +14,29 @@ from datetime import datetime
 from flask import current_app as app
 from apps.prepopulate.app_initialize import get_filepath
 import json
-
+from superdesk import get_resource_service
+from superdesk.utils import config
 
 logger = logging.getLogger(__name__)
 
 
 # These are the markets (cities) that we expect that data is available for
 MARKETS = ["Perth", "Sydney", "Melbourne", "Brisbane", "Adelaide"]
+
+
+def get_areas():
+    """
+    Read the GeoJson file that outlines a list of named polygons describing the areas we can extract the prices from
+    :return:
+    """
+    areas = []
+    path = get_filepath('fuel_geojson.json')
+    try:
+        with path.open('r') as f:
+            areas = json.load(f)
+    except Exception as ex:
+        logger.error('Exception loading fuel_geojson.json : {}'.format(ex))
+    return areas
 
 
 def fuel_story(item, **kwargs):
@@ -30,20 +46,6 @@ def fuel_story(item, **kwargs):
         :return:
         """
         return datetime.now().isoformat()[:10]
-
-    def _get_areas():
-        """
-        Read the GeoJson file that outlines a list of named polygons describing the areas we can extrac the prices from
-        :return:
-        """
-        areas = []
-        path = get_filepath('fuel_geojson.json')
-        try:
-            with path.open('r') as f:
-                areas = json.load(f)
-        except Exception as ex:
-            logger.error('Exception loading fuel_geojson.json : {}'.format(ex))
-        return areas
 
     # groupin clause for the requests
     group = {
@@ -56,7 +58,7 @@ def fuel_story(item, **kwargs):
             }
     }
 
-    area = _get_areas()
+    area = get_areas()
     fuel_map = dict()
 
     for market in MARKETS:
@@ -97,6 +99,15 @@ def fuel_story(item, **kwargs):
             fuel_map[area_name.lower() + '_max_' + i.get('_id').lower().replace('-', '')] = '%.1f' % i.get('max')
 
     item['body_html'] = render_template_string(item.get('body_html', ''), **fuel_map)
+
+    update = {'source': 'Intelematics'}
+    ingest_provider = get_resource_service('ingest_providers').find_one(req=None, source='Intelematics')
+    if ingest_provider:
+        update['ingest_provider'] = ingest_provider.get(config.ID_FIELD)
+    update['body_html'] = item['body_html']
+    get_resource_service('archive').system_update(item[config.ID_FIELD], update, item)
+    item['source'] = 'Intelematics'
+
     return item
 
 
