@@ -64,12 +64,25 @@ def _get_forecast(url):
 
 def forecast_story(item, **kwargs):
     def add_value(period, dict, name, base):
+
+        direction_map = {'N': 'North', 'NNE': 'North-Northeast', 'NE': 'Northeast', 'ENE': 'East-Northeast',
+                         'E': 'East', 'ESE': 'East-Southeast', 'SE': 'Southeast', 'SSE': 'South-Southeast',
+                         'S': 'South', 'SSW': 'South-Southwest', 'SW': 'Southwest', 'WSW': 'West-Southwest',
+                         'W': 'West', 'WNW': 'West-Northwest', 'NW': 'Northwest', 'NNW': 'North-Northwest'}
+
         try:
             node = period.find('sd:{}'.format(name), namespaces=NS)
+            value = node.text
+            if 'temperature' in name:
+                value = value.replace('.0', '')
+            if 'precis' in name:
+                value = value.replace('.', '')
+            if 'wind-dir' == name:
+                value = direction_map.get(value)
             if node is not None:
-                dict['{}{}'.format(base, name).replace('-', '_')] = node.text
+                dict['{}{}'.format(base, name).replace('-', '_')] = value
         except Exception as ex:
-            pass
+            dict['{}{}'.format(base, name).replace('-', '_')] = 'N/A'
 
     # The place is used to determine the state the the requests will be limited to
     if 'place' in item and len(item.get('place')):
