@@ -162,7 +162,15 @@ class AgendaPlanningFormatter(Formatter):
                         region = 3
                     agenda_event['Region'] = {'ID': region}
                     self._set_city(agenda_event, location)
-                agenda_event['Address'] = {'DisplayString': item.get('location')[0].get('name', '')}
+
+                address = [location.get('name', ''),
+                           next(iter(location.get('address', {}).get('line', ['']) or []), ''),
+                           location.get('address', {}).get('area', ''),
+                           location.get('address', {}).get('locality', ''),
+                           location.get('address', {}).get('postal_code', ''),
+                           location.get('address', {}).get('country', '')]
+
+                agenda_event['Address'] = {'DisplayString': ', '.join(str(x) for x in address if x != '')}
 
         # if we can derive a region from the place that overrides the default or any derived from the location
         if len(item.get('place', [])) > 0:
