@@ -2,25 +2,23 @@
 #
 # This file is part of Superdesk.
 #
-# Copyright 2013, 2014 Sourcefabric z.u. and contributors.
+# Copyright 2016 Sourcefabric z.u. and contributors.
 #
 # For the full copyright and license information, please see the
 # AUTHORS and LICENSE files distributed with this source code, or
 # at https://www.sourcefabric.org/superdesk/license
 
-import logging
-from .activity_report import ActivityReportResource
-from superdesk import get_backend
-from superdesk.services import BaseService
-
-logger = logging.getLogger(__name__)
+import superdesk
+from .mission_report import MissionReportResource, MissionReportService
 
 
 def init_app(app):
-    endpoint_name = 'activity_report'
-    service = BaseService(endpoint_name, backend=get_backend())
-    ActivityReportResource(endpoint_name, app=app, service=service)
+    endpoint_name = 'mission_report'
+    service = MissionReportService(endpoint_name, backend=superdesk.get_backend())
+    MissionReportResource(endpoint_name, app=app, service=service)
 
-
-# must be imported for registration
-from .activity_report import GenerateActivityCountReport # NOQA
+    superdesk.privilege(
+        name='mission_report',
+        label='Mission Report View',
+        description='User can view mission reports.'
+    )

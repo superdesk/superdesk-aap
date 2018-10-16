@@ -16,6 +16,8 @@ from apps.prepopulate.app_initialize import get_filepath
 import json
 from superdesk import get_resource_service
 from superdesk.utils import config
+from eve.utils import ParsedRequest
+from superdesk.metadata.item import ITEM_STATE, CONTENT_STATE
 
 logger = logging.getLogger(__name__)
 
@@ -74,29 +76,61 @@ def fuel_story(item, **kwargs):
             fuel_map[market.lower() + '_avg_' + i.get('_id').lower().replace('-', '')] = '%.1f' % i.get('avg')
             fuel_map[market.lower() + '_min_' + i.get('_id').lower().replace('-', '')] = '%.1f' % i.get('min')
             fuel_map[market.lower() + '_max_' + i.get('_id').lower().replace('-', '')] = '%.1f' % i.get('max')
+            req = ParsedRequest()
+            req.max_results = 3
+            cheapest = get_resource_service('fuel').get_from_mongo(req=req, lookup={'market': market,
+                                                                                    'sample_date': _get_today(),
+                                                                                    'fuel_type': i.get('_id'),
+                                                                                    'price': i.get('min')})
+            cheap_tag = market.lower() + '_cheap_' + i.get('_id').lower().replace('-', '')
+            cheap_list = None
+            for cheap in cheapest:
+                if cheap_list:
+                    if not cheap.get('address', {}).get('suburb', '') in cheap_list:
+                        cheap_list = cheap_list + ', ' + cheap.get('address', {}).get('suburb', '')
+                else:
+                    cheap_list = cheap.get('address', {}).get('suburb', '')
+            fuel_map[cheap_tag] = cheap_list
 
-    for feature in area.get('features'):
-        area_name = feature['properties']['name']
-        logger.info('Available area {}'.format(area_name))
-        coords = feature.get('geometry').get('coordinates')
-        pipeline = [{
-            "$match": {
-                "sample_date": _get_today(),
-                "location": {
-                    "$geoWithin": {
-                        "$geometry": {
-                            "type": "Polygon",
-                            "coordinates": coords
+    if len(area):
+        for feature in area.get('features', []):
+            area_name = feature['properties']['name']
+            logger.info('Available area {}'.format(area_name))
+            coords = feature.get('geometry').get('coordinates')
+            pipeline = [{
+                "$match": {
+                    "sample_date": _get_today(),
+                    "location": {
+                        "$geoWithin": {
+                            "$geometry": {
+                                "type": "Polygon",
+                                "coordinates": coords
+                            }
                         }
                     }
                 }
-            }
-        }, group]
-        fuel_types = list(app.data.mongo.aggregate('fuel', pipeline, {}))
-        for i in fuel_types:
-            fuel_map[area_name.lower() + '_avg_' + i.get('_id').lower().replace('-', '')] = '%.1f' % i.get('avg')
-            fuel_map[area_name.lower() + '_min_' + i.get('_id').lower().replace('-', '')] = '%.1f' % i.get('min')
-            fuel_map[area_name.lower() + '_max_' + i.get('_id').lower().replace('-', '')] = '%.1f' % i.get('max')
+            }, group]
+            fuel_types = list(app.data.mongo.aggregate('fuel', pipeline, {}))
+            for i in fuel_types:
+                fuel_map[area_name.lower() + '_avg_' + i.get('_id').lower().replace('-', '')] = '%.1f' % i.get('avg')
+                fuel_map[area_name.lower() + '_min_' + i.get('_id').lower().replace('-', '')] = '%.1f' % i.get('min')
+                fuel_map[area_name.lower() + '_max_' + i.get('_id').lower().replace('-', '')] = '%.1f' % i.get('max')
+
+                req = ParsedRequest()
+                req.max_results = 3
+                lookup = pipeline[0].get('$match')
+                lookup['fuel_type'] = i.get('_id')
+                lookup['price'] = i.get('min')
+                cheapest = get_resource_service('fuel').get_from_mongo(req=req, lookup=lookup)
+                cheap_tag = area_name.lower() + '_cheap_' + i.get('_id').lower().replace('-', '')
+                cheap_list = None
+                for cheap in cheapest:
+                    if cheap_list:
+                        if not cheap.get('address', {}).get('suburb', '') in cheap_list:
+                            cheap_list = cheap_list + ', ' + cheap.get('address', {}).get('suburb', '')
+                    else:
+                        cheap_list = cheap.get('address', {}).get('suburb', '')
+                fuel_map[cheap_tag] = cheap_list
 
     item['body_html'] = render_template_string(item.get('body_html', ''), **fuel_map)
 
@@ -107,6 +141,13 @@ def fuel_story(item, **kwargs):
     update['body_html'] = item['body_html']
     get_resource_service('archive').system_update(item[config.ID_FIELD], update, item)
     item['source'] = 'Intelematics'
+
+    # If the macro is being executed by a scheduled template then publish the item as well
+    if 'desk' in kwargs and 'stage' in kwargs:
+        get_resource_service('archive_publish').patch(id=item[config.ID_FIELD],
+                                                      updates={ITEM_STATE: CONTENT_STATE.PUBLISHED,
+                                                      'auto_publish': True})
+        return get_resource_service('archive').find_one(req=None, _id=item[config.ID_FIELD])
 
     return item
 
