@@ -148,7 +148,6 @@ INSTALLED_APPS.extend([
     'aap.agenda',
     'analytics',
     'aap.reports',
-    'aap.mission_report',
     'aap.fuel',
     'aap.traffic_incidents'
 ])
