@@ -22,13 +22,14 @@ from aap.agenda import init_app as init_agenda
 @mock.patch('superdesk.publish.subscribers.SubscribersService.generate_sequence_number', lambda self, subscriber: 1)
 class AgendaPlanningFormatterTest(TestCase):
     locations = [
-        dict(name="Sydney", unique_name="Sydney, New South Wales, Australia", address={
+        dict(name="Bombardier", unique_name="Sydney, New South Wales, Australia", address={
+            "locality": "Victoria",
             "country": "Australia",
             "line": [
-                ""
+                "35-45 Frankston-Dandenong Road"
             ],
-            "locality": "Sydney"
-        }, guid="urn:newsml:localhost:2018-01-17T12:40:44.359182:a66130db-19c1-49e3-9d4d-5c12f97a4ed9"),
+            "area": "Dandenong"},
+            guid="urn:newsml:localhost:2018-01-17T12:40:44.359182:a66130db-19c1-49e3-9d4d-5c12f97a4ed9"),
         dict(guid="urn:newsml:localhost:2018-03-16T13:43:30.478955:d04fcfb9-469e-4494-99b2-a6cfba4ce6dc",
              name="City of London", address={"country": "United Kingdom", "line": [""], "locality": "City of London"},
              unique_name="City of London")]
@@ -36,7 +37,7 @@ class AgendaPlanningFormatterTest(TestCase):
     city_map = [{
         "country_id": 16,
         "agenda_id": 106,
-        "name": "Sydney",
+        "name": "Dandenong",
     }]
 
     iptc_map = [{
@@ -105,18 +106,8 @@ class AgendaPlanningFormatterTest(TestCase):
             },
             "location": [
                 {
-                    "qcode": "urn:newsml:localhost:2018-01-17T12:40:44.359182:a66130db-19c1-49e3-9d4d-5c12f97a4ed9",
-                    "address": {
-                        "country": "Australia",
-                        "title": None,
-                        "line": [
-                            ""
-                        ],
-                        "locality": "Sydney"
-                    },
-                    "name": "Sydney"
-                }
-            ],
+                    "qcode": "urn:newsml:localhost:2018-01-17T12:40:44.359182:a66130db-19c1-49e3-9d4d-5c12f97a4ed9"
+                }],
             "slugline": "ABS DEWLLINGS",
             "type": "event",
             "definition_long": "long definition",
@@ -139,6 +130,8 @@ class AgendaPlanningFormatterTest(TestCase):
         self.assertEqual(item.get('TimeFromZone'), '+11:00')
         self.assertEqual(item.get('Contact').get('DisplayString'), 'Mr John Doe Spokesperson (AAP) '
                                                                    'jdoe@a.com.au Tel: 02 5555 5555 Mob: 1234567890')
+        self.assertEqual(item.get('Address').get('DisplayString'), 'Bombardier, 35-45 Frankston-Dandenong Road, '
+                                                                   'Dandenong, Victoria, Australia')
 
     def test_planning(self):
         planning = {
