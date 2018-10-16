@@ -17,7 +17,7 @@ from lxml import etree
 from flask import render_template_string
 from superdesk.utils import config
 from superdesk import get_resource_service
-
+from superdesk.metadata.item import ITEM_STATE, CONTENT_STATE
 
 logger = logging.getLogger(__name__)
 
@@ -145,6 +145,13 @@ def forecast_story(item, **kwargs):
     update['body_html'] = item['body_html']
     get_resource_service('archive').system_update(item[config.ID_FIELD], update, item)
     item['source'] = 'Intelematics'
+
+    # If the macro is being executed by a scheduled template then publish the item as well
+    if 'desk' in kwargs and 'stage' in kwargs:
+        get_resource_service('archive_publish').patch(id=item[config.ID_FIELD],
+                                                      updates={ITEM_STATE: CONTENT_STATE.PUBLISHED,
+                                                      'auto_publish': True})
+        return get_resource_service('archive').find_one(req=None, _id=item[config.ID_FIELD])
 
     return item
 
