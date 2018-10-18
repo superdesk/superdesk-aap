@@ -204,5 +204,9 @@ export function MissionReportController(
         });
     };
 
+    $scope.getReportParams = () => (
+        $q.when(_.cloneDeep($scope.currentParams))
+    );
+
     this.init();
 }
