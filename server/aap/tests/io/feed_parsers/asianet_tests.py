@@ -23,61 +23,61 @@ class AsiaNetFeedParserTestCase(TestCase):
             'headline': 'Media Release: Digital Turbine, Inc.',
             'anpa_take_key': 'Digital Turbine, Inc.',
             'original_source': 'AsiaNet',
-            'first_line': '<pre>MEDIA RELEASE PR67276\nDigital Turbine Partners with'
+            'first_line': '<p>MEDIA RELEASE PR67276 Digital Turbine Partners with'
         },
         {
             'headline': 'Media Release: Queen Elizabeth Prize',
             'anpa_take_key': 'Queen Elizabeth Prize',
             'original_source': 'AsiaNet',
-            'first_line': '<pre>MEDIA RELEASE PR67254\nQueen Elizabeth Prize'
+            'first_line': '<p>MEDIA RELEASE PR67254 Queen Elizabeth Prize'
         },
         {
             'headline': 'Media Release: Escola Aguia de Ouro',
             'anpa_take_key': 'Escola Aguia de Ouro',
             'original_source': 'AsiaNet',
-            'first_line': '<pre>MEDIA RELEASE PR67255\nAnimal rights come to Brazil'
+            'first_line': '<p>MEDIA RELEASE PR67255 Animal rights come to Brazil'
         },
         {
             'headline': 'Media Release: Essence',
             'anpa_take_key': 'Essence',
             'original_source': 'AsiaNet',
-            'first_line': '<pre>MEDIA RELEASE PR67257\nDigital Agency Essence Builds on Enormous Growth'
+            'first_line': '<p>MEDIA RELEASE PR67257 Digital Agency Essence Builds on Enormous Growth'
         },
         {
             'headline': 'Media Release: OMRON Corporation',
             'anpa_take_key': 'OMRON Corporation',
             'original_source': 'AsiaNet',
-            'first_line': '<pre>MEDIA RELEASE PR67261\nOMRON Launches Promotional Website for AI-equipped'
+            'first_line': '<p>MEDIA RELEASE PR67261 OMRON Launches Promotional Website for AI-equipped'
         },
         {
             'headline': 'Media Release: OnApp',
             'anpa_take_key': 'OnApp',
             'original_source': 'AsiaNet',
-            'first_line': '<pre>MEDIA RELEASE PR67266\nOnApp v5.3 Simplifies Add-on Services'
+            'first_line': '<p>MEDIA RELEASE PR67266 OnApp v5.3 Simplifies Add-on Services'
         },
         {
             'headline': 'Media Release: Shinetech Software Inc.',
             'anpa_take_key': 'Shinetech Software Inc.',
             'original_source': 'AsiaNet',
-            'first_line': '<pre>MEDIA RELEASE PR67271\nShinetech Software, Inc. Reports 16% Growth in 2016'
+            'first_line': '<p>MEDIA RELEASE PR67271 Shinetech Software, Inc. Reports 16% Growth in 2016'
         },
         {
             'headline': 'Media Release: Huntsman Family Investments',
             'anpa_take_key': 'Huntsman Family Investme',
             'original_source': 'AsiaNet',
-            'first_line': '<pre>MEDIA RELEASE PR67275\nHuntsman Family Investments to Acquire GTA TeleGuam'
+            'first_line': '<p>MEDIA RELEASE PR67275 Huntsman Family Investments to Acquire GTA TeleGuam'
         },
         {
             'headline': 'Media Release: Neovia Oncology Ltd',
             'anpa_take_key': 'Neovia Oncology Ltd',
             'original_source': 'AsiaNet',
-            'first_line': '<pre>MEDIA RELEASE PR67278\nNeovia Enrolls First Patient in Cancer Trial'
+            'first_line': '<p>MEDIA RELEASE PR67278 Neovia Enrolls First Patient in Cancer Trial'
         },
         {
             'headline': 'Media Release: IndiGrid',
             'anpa_take_key': 'IndiGrid',
             'original_source': 'AsiaNet',
-            'first_line': '<pre>MEDIA RELEASE PR74541\nIndiGrid Delivers Another Strong Quarter'
+            'first_line': '<p>MEDIA RELEASE PR74541 IndiGrid Delivers Another Strong Quarter'
         }
     ]
 
