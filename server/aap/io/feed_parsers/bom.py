@@ -156,5 +156,5 @@ class BOMParser(FileFeedParser):
 
 try:
     register_feed_parser(BOMParser.NAME, BOMParser())
-except AlreadyExistsError as ex:
+except AlreadyExistsError:
     pass

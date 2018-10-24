@@ -106,7 +106,7 @@ class AsiaNetFeedParser(FileFeedParser):
 
 try:
     register_feed_parser(AsiaNetFeedParser.NAME, AsiaNetFeedParser())
-except AlreadyExistsError as ex:
+except AlreadyExistsError:
     pass
 
 register_feeding_service_error('file', AAPParserError.AsiaNetParserError().get_error_description())

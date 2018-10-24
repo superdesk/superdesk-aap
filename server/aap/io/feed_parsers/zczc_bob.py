@@ -70,6 +70,6 @@ class ZCZCBOBParser(ZCZCFeedParser):
 
 try:
     register_feed_parser(ZCZCBOBParser.NAME, ZCZCBOBParser())
-except AlreadyExistsError as ex:
+except AlreadyExistsError:
     pass
 register_feeding_service_error('file', AAPParserError.ZCZCParserError().get_error_description())

@@ -33,5 +33,5 @@ class TickerFileParser(TextFileParser):
 
 try:
     register_feed_parser(TickerFileParser.NAME, TickerFileParser())
-except AlreadyExistsError as ex:
+except AlreadyExistsError:
     pass
