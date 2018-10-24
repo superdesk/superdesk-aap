@@ -5,7 +5,7 @@ services:
     environment:
     - TZ=Australia/Sydney
     - TERM=xterm
-    image: mongo:2.6
+    image: mongo:3.4
     networks:
     - frontend
     ports:
@@ -13,7 +13,7 @@ services:
     volumes:
     - /home/superdesk/data/mongodb:/data/db
     - /home/superdesk/data-archive/:/backups
-  
+
   logstash:
     command: logstash -f /usr/share/logstash/logstash.conf
     environment:
@@ -24,7 +24,7 @@ services:
     - frontend
     volumes:
     - /home/superdesk/deploy/docker/logstash:/usr/share/logstash
-  
+
   kibana:
     image: docker_kibana
     environment:
@@ -34,7 +34,7 @@ services:
     - frontend
     ports:
     - 5601:5601
-  
+
   elastic:
     command: elasticsearch
     environment:
@@ -50,7 +50,7 @@ services:
     volumes:
     - /home/superdesk/data/elastic:/usr/share/elasticsearch/data
     - /home/superdesk/data-archive/:/backups
-  
+
   superdesk:
     image: docker_superdesk
     environment:
@@ -100,24 +100,24 @@ services:
     - /home/superdesk/deploy/results/client/unit:/opt/superdesk/client/unit-test-results
     - /var/input/:/var/input/
     - /var/ingest/:/var/ingest/
-  
+
   rabbitmq:
     environment:
     - TZ=Australia/Sydney
     - TERM=xterm
     hostname: HOSTNAME
-    image: rabbitmq-plus:3-management
+    image: rabbitmq-plus:3.7-management
     networks:
     - frontend
     ports:
     - 15672:15672
     volumes:
     - /home/superdesk/data/rabbitmq:/var/lib/rabbitmq
-  
+
 networks:
   frontend:
 
 volumes:
   db-data:
-  
-  
+
+
