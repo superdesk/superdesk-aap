@@ -37,6 +37,6 @@ class ZCZCSportsResultsParser(ZCZCFeedParser):
 
 try:
     register_feed_parser(ZCZCSportsResultsParser.NAME, ZCZCSportsResultsParser())
-except AlreadyExistsError as ex:
+except AlreadyExistsError:
     pass
 register_feeding_service_error('file', AAPParserError.ZCZCParserError().get_error_description())

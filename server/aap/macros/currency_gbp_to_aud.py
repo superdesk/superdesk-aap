@@ -33,7 +33,7 @@ def gbp_to_aud(item, **kwargs):
     # matches Value-Suffix-Symbol pattern i.e. 52 mln GBP
     symbol_last_regex = r'\(?(((\d{1,}((\,\d{3})*|\d*))?(\.\d{1,4})?)((\d{1,}((\,\d{3})*|\d*))(\.\d{0,4})?))' \
                         + currency_base.SECONDARY_SUFFIX_REGEX \
-                        + '\s?([£]|(GBP)|(STG)|([p|P]ounds?))'
+                        + r'\s?([£]|(GBP)|(STG)|([p|P]ounds?))'
 
     symbol_first_result = currency_base.do_conversion(deepcopy(item),
                                                       rate,

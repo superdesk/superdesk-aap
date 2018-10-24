@@ -68,7 +68,7 @@ def ap_weather_format(item, **kwargs):
         # scan all the lines in the file for potential collimated lines and calculate the length
         # of the column
         for line in lines:
-            row = re.split('[;\<]+', line)
+            row = re.split(r'[;\<]+', line)
             # only consider it if there are more than two rows
             if len(row) > 2:
                 index = 0
@@ -88,7 +88,7 @@ def ap_weather_format(item, **kwargs):
                     index += 1
 
         for line in lines:
-            row = re.split('[;\<]+', line)
+            row = re.split(r'[;\<]+', line)
             if len(row) > 2:
                 index = 0
                 for col in row:
