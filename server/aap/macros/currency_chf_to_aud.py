@@ -31,7 +31,7 @@ def chf_to_aud(item, **kwargs):
 
     symbol_last_regex = r'\(?(((\d{1,}((\,\d{3})*|\d*))?(\.\d{1,4})?)((\d{1,}((\,\d{3})*|\d*))(\.\d{0,4})?))' \
                         + currency_base.SECONDARY_SUFFIX_REGEX \
-                        + '\s?((CHF)|([f|F]ranks?)|(Fr))'
+                        + r'\s?((CHF)|([f|F]ranks?)|(Fr))'
 
     symbol_first_result = currency_base.do_conversion(deepcopy(item),
                                                       rate,

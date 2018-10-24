@@ -110,6 +110,6 @@ class ZCZCRacingParser(ZCZCFeedParser):
 
 try:
     register_feed_parser(ZCZCRacingParser.NAME, ZCZCRacingParser())
-except AlreadyExistsError as ex:
+except AlreadyExistsError:
     pass
 register_feeding_service_error('file', AAPParserError.ZCZCParserError().get_error_description())
