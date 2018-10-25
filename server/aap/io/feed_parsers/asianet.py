@@ -16,7 +16,7 @@ from superdesk.utc import utcnow
 from superdesk.io.registry import register_feed_parser, register_feeding_service_error
 from superdesk.errors import AlreadyExistsError
 from aap.errors import AAPParserError
-from superdesk.text_utils import get_text_word_count
+from superdesk.text_utils import get_word_count
 from aap.publish.formatters.unicodetoascii import to_ascii
 
 
@@ -47,7 +47,7 @@ class AsiaNetFeedParser(FileFeedParser):
                 'pubstatus': 'usable',
                 'versioncreated': utcnow(),
                 ITEM_TYPE: CONTENT_TYPE.TEXT,
-                FORMAT: FORMATS.PRESERVED,
+                FORMAT: FORMATS.HTML,
             }
 
             with open(file_path, 'r', encoding='windows-1252') as f:
@@ -63,8 +63,9 @@ class AsiaNetFeedParser(FileFeedParser):
 
             item['anpa_category'] = [{'qcode': 'j'}]
             item['original_source'] = 'AsiaNet'
-            item['word_count'] = get_text_word_count(data)
-            item['body_html'] = '<pre>' + to_ascii(html.escape(data)) + '</pre>'
+            body_html = to_ascii(html.escape(data)).replace('\n\n', '</p><p>').replace('\n', ' ')
+            item['body_html'] = '<p>' + body_html + '</p>'
+            item['word_count'] = get_word_count(item['body_html'])
 
             return item
         except Exception as e:
