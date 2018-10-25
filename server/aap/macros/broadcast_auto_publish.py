@@ -26,13 +26,13 @@ def broadcast_auto_publish(item, **kwargs):
     if item.get(ITEM_TYPE) != CONTENT_TYPE.TEXT or item.get(FORMAT) != FORMATS.HTML:
         return
 
+    formatter = AAPBulletinBuilderFormatter()
+    body_text = formatter.get_text_content(formatter.append_body_footer(item))
+    word_count = get_text_word_count(body_text)
     max_word_count = config.MIN_BROADCAST_TEXT_WORD_COUNT
     item['genre'] = [{'name': 'Broadcast Script', 'qcode': 'Broadcast Script'}]
     if item[ITEM_STATE] not in {CONTENT_STATE.KILLED, CONTENT_STATE.RECALLED} and \
             not (item.get('flags') or {}).get('marked_for_legal'):
-        formatter = AAPBulletinBuilderFormatter()
-        body_text = formatter.get_text_content(formatter.append_body_footer(item))
-        word_count = get_text_word_count(body_text)
         if word_count > max_word_count and \
                 not (item.get('flags') or {}).get('marked_for_legal'):
             lines = body_text.splitlines()
@@ -49,6 +49,15 @@ def broadcast_auto_publish(item, **kwargs):
                         item['body_html'] = ''.join(new_body_html)
                         item['word_count'] = word_count
                     break
+    elif item[ITEM_STATE] in {CONTENT_STATE.KILLED, CONTENT_STATE.RECALLED}:
+        lines = body_text.splitlines()
+        lines = ['<p>{}</p>'.format(line.strip()) for line in lines if line.strip()]
+        # remove the first line/paragraph of kill message
+        lines = lines[1:]
+        item['body_html'] = ''.join(lines)
+        fields_to_remove = ['embargo', 'dateline', 'slugline', 'genre']
+        for field in fields_to_remove:
+            item.pop(field, None)
 
     internal_destination_auto_publish(item, **kwargs)
 

@@ -28,11 +28,17 @@ class BroadcastAutoPublishTestCase(AAPTestCase):
         'genre': [{'qcode': 'foo', 'name': 'bar'}]
     }
 
-    def get_item(self):
+    def get_item(self, state=None):
         item = deepcopy(self.article)
         body_lines = []
-        for count in range(1, 125):
-            body_lines.append('<p>line-#{}#</p>'.format(count))
+        if state not in {'killed', 'recalled'}:
+            for count in range(1, 125):
+                body_lines.append('<p>line-#{}#</p>'.format(count))
+        else:
+            body_lines.append('<p>This is intro line</p>')
+            body_lines.append('<p>pursuant to your information foo bar</p>')
+            body_lines.append('<p>line after that</p>')
+
         item['body_html'] = ''.join(body_lines)
         return item
 
@@ -56,22 +62,38 @@ class BroadcastAutoPublishTestCase(AAPTestCase):
 
     @patch('aap.macros.broadcast_auto_publish.internal_destination_auto_publish')
     def test_broadcast_copy_state_killed(self, internal_dest):
-        item = self.get_item()
+        item = self.get_item(state='killed')
         item['state'] = 'killed'
-
+        item['slugline'] = 'recalled'
+        item['embargo'] = 'foo'
+        item['dateline'] = 'bar'
         broadcast_auto_publish(item)
-        self.assertIn('line-#124#', item['body_html'])
-        self.assertEqual([{'name': 'Broadcast Script', 'qcode': 'Broadcast Script'}], item['genre'])
+        self.assertNotIn('genre', item)
+        self.assertNotIn('slugline', item)
+        self.assertNotIn('embargo', item)
+        self.assertNotIn('dateline', item)
+        self.assertNotIn('This is intro line', item.get('body_html'))
+        self.assertIn('pursuant to your information foo bar', item.get('body_html'))
+        self.assertIn('line after that', item.get('body_html'))
+        broadcast_auto_publish(item)
+        self.assertNotIn('genre', item)
         internal_dest.assert_called_with(item)
 
     @patch('aap.macros.broadcast_auto_publish.internal_destination_auto_publish')
     def test_broadcast_copy_state_recalled(self, internal_dest):
-        item = self.get_item()
-        item['state'] = 'killed'
-
+        item = self.get_item(state='recalled')
+        item['state'] = 'recalled'
+        item['slugline'] = 'recalled'
+        item['embargo'] = 'foo'
+        item['dateline'] = 'bar'
         broadcast_auto_publish(item)
-        self.assertIn('line-#124#', item['body_html'])
-        self.assertEqual([{'name': 'Broadcast Script', 'qcode': 'Broadcast Script'}], item['genre'])
+        self.assertNotIn('genre', item)
+        self.assertNotIn('slugline', item)
+        self.assertNotIn('embargo', item)
+        self.assertNotIn('dateline', item)
+        self.assertNotIn('This is intro line', item.get('body_html'))
+        self.assertIn('pursuant to your information foo bar', item.get('body_html'))
+        self.assertIn('line after that', item.get('body_html'))
         internal_dest.assert_called_with(item)
 
     @patch('aap.macros.broadcast_auto_publish.internal_destination_auto_publish')
