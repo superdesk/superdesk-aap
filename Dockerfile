@@ -1,5 +1,5 @@
 # import base image
-FROM ubuntu:trusty
+FROM ubuntu:xenial
 
 # install system-wide dependencies,
 # python3 and the build-time dependencies for c modules
@@ -14,14 +14,14 @@ libfontconfig \
 libfreetype6-dev \
 libjpeg8-dev \
 liblcms2-dev \
+libmagic-dev \
 libtiff5-dev \
 libwebp-dev \
 libxml2-dev \
 libxslt1-dev \
+locales \
 nano \
 nginx \
-nodejs \
-npm \
 python3 \
 python3-dev \
 python3-lxml \
@@ -33,18 +33,14 @@ vim \
 zlib1g-dev
 
 # misc 
-RUN echo "\ndaemon off;" >> /etc/nginx/nginx.conf && \
-rm /etc/nginx/sites-enabled/default && \
-ln --symbolic /usr/bin/nodejs /usr/bin/node && \
-npm cache clean && \
-npm install -g npm && \
-npm install -g n && \
-n 6.6.0 && \
-node -v && \
+RUN curl -sL https://deb.nodesource.com/setup_6.x | bash - && \
+apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends nodejs && \
 nodejs -v && \
+echo "\ndaemon off;" >> /etc/nginx/nginx.conf && \
+rm /etc/nginx/sites-enabled/default && \
+npm cache clean && \
 npm -g install grunt-cli && \
-cd /tmp && pip3 install -U pip setuptools && \
-locale-gen en_US.UTF-8
+cd /tmp && pip3 install -U pip setuptools && locale-gen en_US.UTF-8
 
 # Set the locale
 ENV LANG=en_US.UTF-8 LANGUAGE=en_US:en LC_ALL=en_US.UTF-8
@@ -77,8 +73,14 @@ COPY ./server /opt/superdesk
 COPY ./client /opt/superdesk/client
 
 # install server and client dependencies and sources
-RUN cd /tmp && pip3 install -U -r /tmp/requirements.txt && \
-cd /opt/superdesk/client && npm install && \
+#RUN cd /tmp && pip3 install --ignore-installed six -U -r /tmp/requirements.txt
+RUN npm -v && \
+node -v && \
+nodejs -v && \
+pip -V && \
+cat /tmp/requirements.txt && \
+cd /tmp && pip3 install -U -r /tmp/requirements.txt && \
+cd /opt/superdesk/client && npm cache clean && npm install && \
 cd /opt/superdesk/client && grunt build --disableEditorToolbar=true --defaultTimezone="Australia/Sydney"
 
 # end of file

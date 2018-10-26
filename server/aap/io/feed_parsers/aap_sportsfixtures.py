@@ -183,7 +183,7 @@ class AAPSportsFixturesParser(XMLFeedParser):
                             'tz': config.DEFAULT_TIMEZONE,
                         }
                         items.append(item)
-            except Exception as ex:
+            except Exception:
                 logger.exception('Failed to parse event fixtures.')
         else:
             # A fixture list that we need to pull out each match to determine the match date etc.
@@ -193,7 +193,7 @@ class AAPSportsFixturesParser(XMLFeedParser):
                 self.season = match.find('.//Match_Details').attrib.get('Season', '')
                 try:
                     when = datetime.strptime('{} {}'.format(start_date, start_time), '%Y-%m-%d %H:%M:%S')
-                except Exception as ex:
+                except Exception:
                     continue
                 if datetime.now() < when:
                     try:
@@ -238,7 +238,7 @@ class AAPSportsFixturesParser(XMLFeedParser):
                             # add location
                             self._set_location(item, '{}, {}'.format(venue_name, venue_location))
                             items.append(item)
-                    except Exception as ex:
+                    except Exception:
                         logger.exception('Failed to parse competition fixtures.')
 
     def _clear_values(self):
@@ -294,7 +294,7 @@ class AAPSportsFixturesParser(XMLFeedParser):
                 match_id = match.attrib.get('Match_ID')
                 try:
                     when = datetime.strptime('{} {}'.format(date, time), '%Y-%m-%d %H:%M')
-                except Exception as ex:
+                except Exception:
                     continue
                 if self._isDomestic(match_id):
                     match_id = match.attrib.get('Fixture_ID')  # fixture id should be fine for domestic
@@ -320,7 +320,7 @@ class AAPSportsFixturesParser(XMLFeedParser):
                             self.venues.get(match.attrib.get('Venue_ID')).get('name'),
                             self.venues.get(match.attrib.get('Venue_ID')).get('location')))
                         items.append(item)
-            except Exception as ex:
+            except Exception:
                 logger.exception('Failed to parse series fixtures.')
 
     def _set_location_not_found(self, item, location_string):

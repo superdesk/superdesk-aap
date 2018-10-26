@@ -134,5 +134,5 @@ class PDAResultsParser(FileFeedParser):
 
 try:
     register_feed_parser(PDAResultsParser.NAME, PDAResultsParser())
-except AlreadyExistsError as ex:
+except AlreadyExistsError:
     pass

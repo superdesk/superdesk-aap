@@ -81,7 +81,7 @@ def forecast_story(item, **kwargs):
                 value = direction_map.get(value)
             if node is not None:
                 dict['{}{}'.format(base, name).replace('-', '_')] = value
-        except Exception as ex:
+        except Exception:
             dict['{}{}'.format(base, name).replace('-', '_')] = 'N/A'
 
     # The place is used to determine the state the the requests will be limited to
@@ -131,10 +131,6 @@ def forecast_story(item, **kwargs):
                 add_value(observation, forecast_dict, 'wind-speed', base_str)
                 add_value(observation, forecast_dict, 'wind-dir', base_str)
                 add_value(observation, forecast_dict, 'visibility', base_str)
-
-    # for i, (k, v) in enumerate(forecast_dict.items()):
-    #     print('{} {} : {} ---> {{{{{}}}}}'.format(i, k, v, k))
-    #     print(k)
 
     item['body_html'] = render_template_string(item.get('body_html', ''), **forecast_dict)
 

@@ -194,7 +194,7 @@ class AppImportTextArchiveCommand(superdesk.Command):
                 local_tz = pytz.timezone('Australia/Sydney')
                 try:
                     aus_dt = local_tz.localize(value, is_dst=None)
-                except NonExistentTimeError as ex:
+                except NonExistentTimeError:
                     aus_dt = local_tz.localize(value, is_dst=True)
                 except AmbiguousTimeError:
                     aus_dt = local_tz.localize(value, is_dst=False)
@@ -325,7 +325,7 @@ class AppImportTextArchiveCommand(superdesk.Command):
                 if self._limit:
                     self._limit -= 1
                 # print(item)
-            except Exception as ex:
+            except Exception:
                 print('Exception parsing DC documnent {}'.format(id))
                 pass
 
@@ -369,7 +369,7 @@ class AppImportTextArchiveCommand(superdesk.Command):
                             s = time.time()
                             res.post(i)
                             print('Post single item to Superdesk in {:.2f} seconds'.format(time.time() - s))
-                        except Exception as ex:
+                        except Exception:
                             print('Exception posting single item')
             else:
                 print('Exception posting batch')

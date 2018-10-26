@@ -39,7 +39,7 @@ class ABSCalendarCSVParser(FileFeedParser):
                 if len(lines) > 0:
                     return True
                 return False
-        except Exception as ex:
+        except Exception:
             return False
 
     def _set_default_item(self):

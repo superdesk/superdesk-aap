@@ -82,5 +82,5 @@ class TextFileParser(FileFeedParser):
 
 try:
     register_feed_parser(TextFileParser.NAME, TextFileParser())
-except AlreadyExistsError as ex:
+except AlreadyExistsError:
     pass
