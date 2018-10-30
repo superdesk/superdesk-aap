@@ -18,6 +18,8 @@ from superdesk import get_resource_service
 from superdesk.utils import config
 from eve.utils import ParsedRequest
 from superdesk.metadata.item import ITEM_STATE, CONTENT_STATE
+from titlecase import titlecase
+import re
 
 logger = logging.getLogger(__name__)
 
@@ -78,6 +80,7 @@ def fuel_story(item, **kwargs):
             fuel_map[market.lower() + '_max_' + i.get('_id').lower().replace('-', '')] = '%.1f' % i.get('max')
             req = ParsedRequest()
             req.max_results = 3
+            req.sort = '[("price", 1)]'
             cheapest = get_resource_service('fuel').get_from_mongo(req=req, lookup={'market': market,
                                                                                     'sample_date': _get_today(),
                                                                                     'fuel_type': i.get('_id'),
@@ -85,12 +88,13 @@ def fuel_story(item, **kwargs):
             cheap_tag = market.lower() + '_cheap_' + i.get('_id').lower().replace('-', '')
             cheap_list = None
             for cheap in cheapest:
+                suburb = titlecase(cheap.get('address', {}).get('suburb', ''))
                 if cheap_list:
-                    if not cheap.get('address', {}).get('suburb', '') in cheap_list:
-                        cheap_list = cheap_list + ', ' + cheap.get('address', {}).get('suburb', '')
+                    if suburb not in cheap_list:
+                        cheap_list = cheap_list + ', ' + suburb
                 else:
-                    cheap_list = cheap.get('address', {}).get('suburb', '')
-            fuel_map[cheap_tag] = cheap_list
+                    cheap_list = suburb
+            fuel_map[cheap_tag] = re.sub(r",([^,]*)$", r" and\1", cheap_list)
 
     if len(area):
         for feature in area.get('features', []):
@@ -118,6 +122,7 @@ def fuel_story(item, **kwargs):
 
                 req = ParsedRequest()
                 req.max_results = 3
+                req.sort = '[("price", 1)]'
                 lookup = pipeline[0].get('$match')
                 lookup['fuel_type'] = i.get('_id')
                 lookup['price'] = i.get('min')
@@ -125,12 +130,13 @@ def fuel_story(item, **kwargs):
                 cheap_tag = area_name.lower() + '_cheap_' + i.get('_id').lower().replace('-', '')
                 cheap_list = None
                 for cheap in cheapest:
+                    suburb = titlecase(cheap.get('address', {}).get('suburb', ''))
                     if cheap_list:
-                        if not cheap.get('address', {}).get('suburb', '') in cheap_list:
-                            cheap_list = cheap_list + ', ' + cheap.get('address', {}).get('suburb', '')
+                        if suburb not in cheap_list:
+                            cheap_list = cheap_list + ', ' + suburb
                     else:
-                        cheap_list = cheap.get('address', {}).get('suburb', '')
-                fuel_map[cheap_tag] = cheap_list
+                        cheap_list = suburb
+                fuel_map[cheap_tag] = re.sub(r",([^,]*)$", r" and\1", cheap_list)
 
     item['body_html'] = render_template_string(item.get('body_html', ''), **fuel_map)
 
