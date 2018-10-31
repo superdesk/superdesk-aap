@@ -18,6 +18,7 @@ from flask import render_template_string
 from superdesk.utils import config
 from superdesk import get_resource_service
 from superdesk.metadata.item import ITEM_STATE, CONTENT_STATE
+from datetime import datetime
 
 logger = logging.getLogger(__name__)
 
@@ -30,7 +31,7 @@ met_forecast_areas = {'NSW': ['Sydney', 'Parramatta', 'Campbelltown', 'Penrith',
 
 # This is a list of the names ov the available observation stations
 met_observation_stations = {'NSW': ['Sydney - Observatory Hill', 'Sydney Olympic Park', 'Parramatta', 'Campbelltown',
-                                    'Penrith', 'Albion Park', 'Newcastle University'],
+                                    'Penrith', 'Albion Park', 'Newcastle University', 'Newcastle Nobbys'],
                             'QLD': ['Brisbane', 'Gold Coast Seaway', 'Cairns', 'Gladstone', 'Mount Isa'],
                             'VIC': ['Melbourne', 'Rhyll', 'Geelong Racecourse', 'Ballarat', 'Wilsons Promontory'],
                             'SA': ['Adelaide', 'Whyalla', 'Coober Pedy Airport', 'Port Augusta', 'Mount Gambier'],
@@ -65,10 +66,10 @@ def _get_forecast(url):
 def forecast_story(item, **kwargs):
     def add_value(period, dict, name, base):
 
-        direction_map = {'N': 'North', 'NNE': 'North-Northeast', 'NE': 'Northeast', 'ENE': 'East-Northeast',
-                         'E': 'East', 'ESE': 'East-Southeast', 'SE': 'Southeast', 'SSE': 'South-Southeast',
-                         'S': 'South', 'SSW': 'South-Southwest', 'SW': 'Southwest', 'WSW': 'West-Southwest',
-                         'W': 'West', 'WNW': 'West-Northwest', 'NW': 'Northwest', 'NNW': 'North-Northwest'}
+        direction_map = {'N': 'north', 'NNE': 'north-northeast', 'NE': 'northeast', 'ENE': 'east-northeast',
+                         'E': 'east', 'ESE': 'east-southeast', 'SE': 'southeast', 'SSE': 'south-southeast',
+                         'S': 'south', 'SSW': 'south-southwest', 'SW': 'southwest', 'WSW': 'west-southwest',
+                         'W': 'west', 'WNW': 'west-worthwest', 'NW': 'northwest', 'NNW': 'north-northwest'}
 
         try:
             node = period.find('sd:{}'.format(name), namespaces=NS)
@@ -106,6 +107,8 @@ def forecast_story(item, **kwargs):
                     base_str = '{}_{}_'.format(location_name.replace(' ', '_'), index)
 
                     forecast_dict['{}start'.format(base_str)] = period.attrib.get('start')
+                    forecast_dict['{}weekday'.format(base_str)] = datetime.strptime(period.attrib.get('start')[:10],
+                                                                                    '%Y-%m-%d').strftime('%A')
                     forecast_dict['{}end'.format(base_str)] = period.attrib.get('end')
 
                     add_value(period, forecast_dict, 'precis', base_str)
