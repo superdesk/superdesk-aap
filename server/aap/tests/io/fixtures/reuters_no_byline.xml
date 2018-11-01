@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+SUMMARY: 
+- Structure: NML2 SNI Text 
+- Based On: NML2 v2.10
+
+AUTHOR: thomsonreuters.com
+-->
+<!-- ========================================================= -->
+<newsMessage xmlns="http://iptc.org/std/nar/2006-10-01/" xmlns:rtr="http://www.reuters.com/ns/2003/08/content" xmlns:x="http://www.w3.org/1999/xhtml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <header>
+    <sent>2018-10-26T01:13:30.000Z</sent>
+    <sender>reuters.com</sender>
+    <transmitId>tag:reuters.com,2018:newsml_L3N1X604Z:536317572</transmitId>
+    <priority>3</priority>
+    <destination>AUF</destination>
+    <destination>CSA</destination>
+    <destination>SNI</destination>
+    <destination>SI</destination>
+    <destination>LBY</destination>
+    <destination>REULB</destination>
+    <destination>ABX</destination>
+    <destination>G</destination>
+    <destination>RAST</destination>
+    <destination>FNE</destination>
+    <destination>SOF</destination>
+    <destination>J</destination>
+    <destination>M</destination>
+    <destination>PGE</destination>
+    <destination>GNN</destination>
+    <destination>Z</destination>
+    <destination>PTD</destination>
+    <destination>RNP</destination>
+    <destination>E</destination>
+    <destination>C</destination>
+    <destination>AFA</destination>
+    <destination>BNX</destination>
+    <destination>GRO</destination>
+    <destination>PSC</destination>
+    <destination>FMW</destination>
+    <destination>U</destination>
+    <destination>O</destination>
+    <destination>DNP</destination>
+    <destination>MTL</destination>
+    <destination>FUN</destination>
+    <destination>UCDPTEST</destination>
+    <destination>RWSA</destination>
+    <destination>GNS</destination>
+    <destination>RWS</destination>
+    <destination>D</destination>
+    <destination>RBN</destination>
+    <destination>OIL</destination>
+    <channel>TXT</channel>
+  </header>
+  <itemSet>
+    <newsItem conformance="power" guid="tag:reuters.com,2018:newsml_L3N1X604Z" standard="NewsML-G2" standardversion="2.10" version="536317572" xml:lang="en">
+      <catalogRef href="http://www.iptc.org/std/catalog/catalog.IPTC-G2-Standards_3.xml"/>
+      <rightsInfo>
+        <copyrightHolder literal="Thomson Reuters"/>
+        <copyrightNotice xml:lang="en">(c) Copyright Thomson Reuters 2018. Click For Restrictions - https://agency.reuters.com/en/copyright.html</copyrightNotice>
+      </rightsInfo>
+      <itemMeta>
+        <itemClass qcode="icls:text" rtr:msgType="S"/>
+        <provider literal="reuters.com"/>
+        <versionCreated>2018-10-26T01:13:30.000Z</versionCreated>
+        <firstCreated>2018-10-26T01:13:30.000Z</firstCreated>
+        <pubStatus qcode="stat:usable"/>
+        <role qcode="itemRole:N"/>
+        <fileName>2018-10-26T011330Z_536317572_L3N1X604Z_RTRMADT_0_GLOBAL-MARKETS-WRAPUP-1.XML</fileName>
+        <generator versioninfo="1.0.0.21">LYNX:addT:001</generator>
+        <profile versioninfo="00.00.01">SNI-Text</profile>
+        <service qcode="svc:RTR_TNS"/>
+        <memberOf creator="trRule:rule1" modified="2018-10-26T01:29:48.000Z" literal="Business">
+          <name>Business</name>
+        </memberOf>
+        <memberOf creator="trRule:rule2" modified="2018-10-26T01:29:48.000Z" literal="Economy">
+          <name>Economy</name>
+        </memberOf>
+        <memberOf creator="trRule:rule22" modified="2018-10-26T01:29:48.000Z" literal="World-Asia">
+          <name>Asia</name>
+        </memberOf>
+        <memberOf creator="trRule:rule23" modified="2018-10-26T01:29:48.000Z" literal="World-Australia">
+          <name>Australia</name>
+        </memberOf>
+        <memberOf creator="trRule:rule25" modified="2018-10-26T01:29:48.000Z" literal="World-Europe">
+          <name>Europe</name>
+        </memberOf>
+        <memberOf creator="trRule:rule29" modified="2018-10-26T01:29:48.000Z" literal="World-US">
+          <name>US</name>
+        </memberOf>
+        <instanceOf qcode="NI:NI:MKTS/GLOB"/>
+        <signal qcode="edStat:N"/>
+        <signal qcode="prodId:TXT"/>
+        <signal qcode="pmt:text"/>
+        <signal qcode="sic:CPX"/>
+        <signal qcode="sic:XBSUM"/>
+        <rtr:versionedId guid="tag:reuters.com,2018:newsml_L3N1X604Z:536317572"/>
+      </itemMeta>
+      <contentMeta>
+        <urgency>3</urgency>
+        <infoSource literal="Reuters" qcode="NS:RTRS" role="cRole:origProv"/>
+        <creator literal="Reuters"/>
+        <altId rtr:isOriginal="1" type="idType:EAID">7a0b290a-b6d8-e811-2eae-3150569114be</altId>
+        <altId rtr:isOriginal="1" type="idType:USN">L3N1X604Z</altId>
+        <altId type="idType:OTR">L3N1X604Z</altId>
+        <language tag="en"/>
+        <subject qcode="MCC:OEC"/>
+        <subject qcode="MCCL:OEC"/>
+        <subject qcode="N2:COM"/>
+        <subject qcode="N2:CRU"/>
+        <subject qcode="N2:DBT"/>
+        <subject qcode="N2:ENG"/>
+        <subject qcode="N2:ENR"/>
+        <subject qcode="N2:FRX"/>
+        <subject qcode="N2:GOL"/>
+        <subject qcode="N2:GVD"/>
+        <subject qcode="N2:METL"/>
+        <subject qcode="N2:NEWS1"/>
+        <subject qcode="N2:NRG"/>
+        <subject qcode="N2:PREMTL"/>
+        <subject qcode="N2:STX"/>
+        <subject qcode="R:AMZN.O"/>
+        <subject qcode="R:GOOGL.O"/>
+        <subject qcode="R:MSFT.O"/>
+        <subject qcode="a1312cat:f"/>
+        <subject qcode="subj:04005000"/>
+        <subject qcode="subj:04005004"/>
+        <subject qcode="subj:04008003"/>
+        <subject qcode="subj:04008006"/>
+        <subject qcode="subj:04008008"/>
+        <subject qcode="subj:04008024"/>
+        <subject qcode="subj:04009001"/>
+        <subject qcode="subj:04009002"/>
+        <subject qcode="subj:04009003"/>
+        <subject qcode="subj:04012002"/>
+        <subject qcode="N2:WEU" type="cptType:5">
+          <name>Western Europe</name>
+          <facet qcode="geoProp:3"/>
+        </subject>
+        <subject qcode="N2:EASIA" type="cptType:5">
+          <name>East Asia</name>
+          <facet qcode="geoProp:3"/>
+        </subject>
+        <subject qcode="N2:KR" type="cptType:5">
+          <name>South Korea</name>
+          <facet qcode="geoProp:5"/>
+        </subject>
+        <subject qcode="N2:AMERS" type="cptType:5">
+          <name>Americas</name>
+          <facet qcode="geoProp:3"/>
+        </subject>
+        <subject qcode="N2:US" type="cptType:5">
+          <name>United States</name>
+          <facet qcode="geoProp:5"/>
+        </subject>
+        <subject qcode="N2:EUROP" type="cptType:5">
+          <name>Europe</name>
+          <facet qcode="geoProp:3"/>
+        </subject>
+        <genre qcode="N2:REP">
+          <name>Reports</name>
+        </genre>
+        <subject qcode="N2:SG" type="cptType:5">
+          <name>Singapore</name>
+          <facet qcode="geoProp:8"/>
+        </subject>
+        <subject qcode="N2:HK" type="cptType:5">
+          <name>Hong Kong</name>
+          <facet qcode="geoProp:8"/>
+        </subject>
+        <subject qcode="N2:AU" type="cptType:5">
+          <name>Australia</name>
+          <facet qcode="geoProp:5"/>
+        </subject>
+        <subject qcode="N2:ASEAN" type="cptType:5">
+          <name>ASEAN Countries</name>
+          <facet qcode="geoProp:3"/>
+        </subject>
+        <subject qcode="N2:TW" type="cptType:5">
+          <name>Taiwan</name>
+          <facet qcode="geoProp:5"/>
+        </subject>
+        <subject qcode="N2:NAMER" type="cptType:5">
+          <name>North America</name>
+          <facet qcode="geoProp:3"/>
+        </subject>
+        <subject qcode="N2:SEASIA" type="cptType:5">
+          <name>South-East Asia</name>
+          <facet qcode="geoProp:3"/>
+        </subject>
+        <subject qcode="N2:ASXPAC" type="cptType:5">
+          <name>Asia</name>
+          <facet qcode="geoProp:3"/>
+        </subject>
+        <subject qcode="N2:EMRG" type="cptType:5">
+          <name>Emerging Market Countries</name>
+          <facet qcode="geoProp:3"/>
+        </subject>
+        <subject qcode="N2:AUNZ" type="cptType:5">
+          <name>Australia / New Zealand</name>
+          <facet qcode="geoProp:3"/>
+        </subject>
+        <subject qcode="N2:CN" type="cptType:5">
+          <name>China (PRC)</name>
+          <facet qcode="geoProp:5"/>
+        </subject>
+        <subject qcode="N2:ASIA" type="cptType:5">
+          <name>Asia / Pacific</name>
+          <facet qcode="geoProp:3"/>
+        </subject>
+        <subject qcode="N2:JP" type="cptType:5">
+          <name>Japan</name>
+          <facet qcode="geoProp:5"/>
+        </subject>
+        <genre qcode="N2:MKTREP">
+          <name>Market Reports</name>
+        </genre>
+        <slugline separator="-">GLOBAL-MARKETS/ (WRAPUP 1)</slugline>
+        <headline>GLOBAL MARKETS-Asian shares struggle to shake off rout despite Wall St bounce</headline>
+        <creditline>Reuters</creditline>
+        <description role="descRole:caption">GLOBAL-MARKETS/ (WRAPUP 1):GLOBAL MARKETS-Asian shares struggle to shake off rout despite Wall St bounce</description>
+      </contentMeta>
+      <assert qcode="R:MSFT.O">
+        <name>Microsoft Corp</name>
+        <sameAs qcode="NDAID:26589"/>
+        <organisationDetails>
+          <rtr:companydata exchange="NSQ" exchangecv="MDNA" name="Microsoft Corp" ric="MSFT.O" tickersymbol="MSFT"/>
+        </organisationDetails>
+      </assert>
+      <assert qcode="R:AMZN.O">
+        <name>Amazon.com Inc</name>
+        <sameAs qcode="NDAID:115443"/>
+        <organisationDetails>
+          <rtr:companydata exchange="NSQ" exchangecv="MDNA" name="Amazon.com Inc" ric="AMZN.O" tickersymbol="AMZN"/>
+        </organisationDetails>
+      </assert>
+      <contentSet>
+        <inlineXML contenttype="application/xhtml+html" wordcount="636">
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <head>
+              <title/>
+            </head>
+            <body>
+              <p>* MSCI Asia Ex-Japan -0.06 pct</p>
+              <p>* Amazon, Alphabet earnings disappoint</p>
+              <p>* Euro falls after Draghi reaffirms end of asset purchase
+program</p>
+              <p>SHANGHAI, Oct 26 (Reuters) - Asian shares wobbled in early
+Friday trade, struggling to shake off the previous day\'s global
+markets rout, after weak results from tech giants Alphabet Inc
+and Amazon.com heightened concerns over world trade and economic
+growth.</p>
+              <p>The shaky start for regional bourses came despite a bounce
+on Wall Street overnight, which was helped by bargain-hunting
+and positive earnings from Microsoft Corp.</p>
+              <p>Those gains were put into perspective, however, as shares of
+both Amazon.com Inc and Alphabet Inc fell
+sharply after the closing bell on disappointing
+earnings.</p>
+              <p>Predictably, the Nasdaq futures turned down 0.9
+percent and S&amp;P E-mini futures fell 0.6 percent,
+underscoring broad worries about U.S. corporate earnings, and
+the outlook for the economy, which triggered a rout on Wall
+Street on Wednesday and sent global markets into a tailspin.</p>
+              <p>In Asia, MSCI\'s broadest index of Asia-Pacific shares
+outside Japan was flat after pushing slightly
+lower in the opening hour.</p>
+              <p>The index has been bruised by a heavy sell-off in the past
+several days, tumbling more than 3 percent this week.</p>
+              <p>South Korea\'s Kospi was also down 0.6 percent, and
+Australia\'s shares were hanging on to modest gains of
+0.2 percent. Japan\'s Nikkei stock index was the biggest
+gainer, up 0.5 percent, though that only partially erased
+Thursday\'s 3.7 percent slide.</p>
+              <p>Financial markets have been whipsawed in recent sessions on
+concerns over global growth as investors fretted over Sino-U.S.
+trade frictions, a mixed bag of U.S. corporate earnings, Federal
+Reserve rate hikes and Italian budget woes. A slowdown in China
+has been particularly worrying for policy makers and investors,
+hitting asset markets from stocks to currencies and commodities.</p>
+              <p>Analysts at Capital Economics sounded a cautious note,
+suggesting that the bounce in the S&amp;P 500 index on Thursday was
+only temporary as investors worries about the economic outlook
+worsen.</p>
+              <p>"The first, and most important (worry) is that Fed
+tightening and fading fiscal stimulus will cause the US economy
+to take a turn for the worse ... The second is that China\'s
+economy will continue to struggle," the analysts said in a note
+to clients.</p>
+              <p>"As we have been arguing for a while now, these worries are
+likely to get worse over the next twelve months or so."</p>
+              <p>Investors will get a chance to check the U.S. economic pulse
+later Friday when the government releases third-quarter GDP
+data.</p>
+              <p>ANZ analysts highlighted weak U.S. core durable goods data
+as suggesting that "investment is not taking off, even with the
+apparent tailwind from tax cuts and USD repatriation."</p>
+              <p>"This indicates that the boost to GDP growth from the fiscal
+stimulus could be fairly transitory," the analysts said.</p>
+              <p>In currency markets, the euro edged lower, extending
+weakness after European Central Bank President Mario Draghi said
+the bank\'s 2.6 trillion euro ($2.96 trillion) asset purchase
+program will end this year and interest rates could rise after
+next summer, despite fears about the monetary union\'s economic
+and political future.</p>
+              <p>The single currency was 0.04 percent lower at
+$1.1370.</p>
+              <p>The dollar dropped 0.1 percent against the yen to 112.29
+. The dollar index, which tracks the greenback
+against a basket of six major rivals, was also 0.1 percent lower
+at 96.594.</p>
+              <p>The yield on benchmark 10-year Treasury notes
+rose to 3.1073 percent compared with its U.S. close of 3.136
+percent on Thursday.</p>
+              <p>Oil prices gave up some ground after earlier rising on
+signals from Saudi Arabia\'s energy minister that there could be
+a need for intervention to reduce oil stockpiles.</p>
+              <p>U.S. crude dipped 0.85 percent at $66.76 a barrel.
+Brent crude fell 0.6 percent to $76.43 per barrel.</p>
+              <p>Spot gold was flat at $1,231.75 per ounce.
+($1 = 0.8794 euros)
+(Reporting by Andrew Galbraith
+Editing by Shri Navaratnam)</p>
+            </body>
+          </html>
+        </inlineXML>
+      </contentSet>
+    </newsItem>
+  </itemSet>
+</newsMessage>

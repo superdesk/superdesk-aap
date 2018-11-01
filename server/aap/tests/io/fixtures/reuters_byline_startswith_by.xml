@@ -1,0 +1,103 @@
+<newsMessage xmlns="http://iptc.org/std/nar/2006-10-01/" xmlns:rtr="http://www.reuters.com/ns/2003/08/content" xmlns:x="http://www.w3.org/1999/xhtml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <header>
+    <sent>2018-01-22T02:02:43.000Z</sent>
+    <sender>reuters.com</sender>
+    <transmitId>tag:reuters.com,2018:newsml_MT1VRT1202671819:159588122</transmitId>
+    <priority>3</priority>
+    <destination>VARENT</destination>
+    <channel>TXT</channel>
+  </header>
+  <itemSet>
+    <newsItem conformance="power" guid="tag:reuters.com,2018:newsml_MT1VRT1202671819" standard="NewsML-G2" standardversion="2.10" version="159588122" xml:lang="en">
+      <catalogRef href="http://www.iptc.org/std/catalog/catalog.IPTC-G2-Standards_3.xml"/>
+      <rightsInfo>
+        <copyrightHolder literal="Variety Media, LLC"/>
+        <copyrightNotice xml:lang="en">&#169; Copyright 2018 Variety Media, LLC, a subsidiary of Penske Business Media, LLC.</copyrightNotice>
+        <usageTerms>ANY</usageTerms>
+      </rightsInfo>
+      <itemMeta>
+        <itemClass qcode="icls:text" rtr:msgType="S"/>
+        <provider literal="reuters.com"/>
+        <versionCreated>2018-01-22T02:02:02.000Z</versionCreated>
+        <firstCreated>2018-01-22T02:01:43.000Z</firstCreated>
+        <pubStatus qcode="stat:usable"/>
+        <role qcode="itemRole:N"/>
+        <fileName>2018-01-22T020202Z_159588122_MT1VRT1202671819_RTRMADT_0_VARIETY-ENTERTAINMENT-TV-NEWS.XML</fileName>
+        <generator versioninfo="00.00.10">EXT:VRT</generator>
+        <profile versioninfo="00.00.01">SNI-Text</profile>
+        <service qcode="svc:RTR_TNS"/>
+        <memberOf creator="trRule:rule8" modified="2018-01-22T02:02:51.000Z" literal="Entertainment">
+          <name>Entertainment and Lifestyle</name>
+        </memberOf>
+        <memberOf creator="trRule:rule29" modified="2018-01-22T02:02:51.000Z" literal="World-US">
+          <name>US</name>
+        </memberOf>
+        <signal qcode="edStat:N"/>
+        <signal qcode="prodId:TXT"/>
+        <signal qcode="pmt:text"/>
+        <rtr:versionedId guid="tag:reuters.com,2018:newsml_MT1VRT1202671819:159588122"/>
+      </itemMeta>
+      <contentMeta>
+        <urgency>3</urgency>
+        <infoSource literal="Variety Media" role="cRole:origProv"/>
+        <creator literal="Variety Media, LLC"/>
+        <altId type="idType:TPCID">1202671819</altId>
+        <altId type="idType:OTR">MT1VRT1202671819</altId>
+        <language tag="en"/>
+        <subject qcode="MCC:e"/>
+        <subject qcode="MCCL:OVR"/>
+        <subject qcode="N2:ENT">
+          <name>Arts / Culture / Entertainment</name>
+        </subject>
+        <subject qcode="N2:TELE">
+          <name>Television</name>
+        </subject>
+        <subject qcode="N2:USA"/>
+        <subject qcode="a1312cat:e"/>
+        <subject qcode="subj:01000000"/>
+        <subject qcode="subj:01016000"/>
+        <subject qcode="N2:US" type="cptType:5">
+          <name>United States</name>
+          <facet qcode="geoProp:5"/>
+        </subject>
+        <subject literal="#MeToo">
+          <name>#MeToo</name>
+        </subject>
+        <subject literal="News">
+          <name>News</name>
+        </subject>
+        <subject literal="SAG Awards">
+          <name>SAG Awards</name>
+        </subject>
+        <subject literal="TV">
+          <name>TV</name>
+        </subject>
+        <subject literal="William H. Macy">
+          <name>William H. Macy</name>
+        </subject>
+        <slugline separator="-">VARIETY-ENTERTAINMENT-TV/NEWS</slugline>
+        <headline>William H. Macy at SAG Awards: 'It's Hard to Be a Man These Days'</headline>
+        <creditline>Variety Media, LLC</creditline>
+        <by>By Daniel Holloway</by>
+        <description role="descRole:caption">VARIETY-ENTERTAINMENT-TV/NEWS:William H. Macy at SAG Awards: 'It's Hard to Be a Man These Days'</description>
+      </contentMeta>
+      <contentSet>
+        <inlineXML contenttype="application/xhtml+html" wordcount="254">
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <head>
+              <title/>
+            </head>
+            <body>
+              <p>By Daniel Holloway</p>
+              <p>LOS ANGELES (Variety.com) - William H. Macy revealed Sunday that he participated in a meeting of Hollywood men related to the Time's Up movement.</p>
+              <p>"It's hard to be a man these days," Macy said backstage at the Screen Actors Guild Awards. "I think a lot of us feel like we're under attack and that we need to apologize, and perhaps we do." He added, "We had a meeting. A bunch of guys got together under the auspices of Time's Up. That's good for men. Men don't talk enough. And we talked."</p>
+              <p>Macy won the Screen Actors Guild Award Sunday for male actor in a drama series for his role in Showtime's "Shameless." He said after receiving his award that he sees progress in gender equality in Hollywood.</p>
+              <p>"In what we do for a living, we've got to be free to speak the unspeakable and try things," Macy said. "So I don't want it to throw a wet blanket on things, and I don't feel that it will, because half the business is women and they're smart and they're hip."</p>
+              <p>Noting that he has two daughters, Macy added, "It's a good time to be a girl. I'm proud of this business, because such things as safety in the workplace, that's done. We're not going back. It's changed. It changed in an instant and it's not going back. When it comes to equality in pay, it's inevitable. It's going to happen and it's going to happen quickly. My hat's off to our business."</p>
+            </body>
+          </html>
+        </inlineXML>
+      </contentSet>
+    </newsItem>
+  </itemSet>
+</newsMessage>

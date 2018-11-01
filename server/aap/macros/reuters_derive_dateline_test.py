@@ -94,7 +94,7 @@ class ReutersDeriveDatelineTests(TestCase):
         reuters_derive_dateline(item)
         self.assertNotIn('dateline', item)
 
-    def test_from_bagalore(self):
+    def test_from_bangalore(self):
         item = {'dateline': {'located': {'city': 'Bangalore'}}}
         item['firstcreated'] = datetime.datetime(2015, 10, 26, 11, 45, 19, 0)
         item['body_html'] = '<p>Wagga Wagga (Reuters) - Chicago Cubs supporters have \
