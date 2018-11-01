@@ -67,3 +67,50 @@ class ReutersWithLineBreaks(BaseNewMLTwoTestCase):
                                                                  'falls '))
         self.assertTrue('<p>SHANGHAI, Oct 26 (Reuters) - Asian shares wobbled in early Friday trade, struggling' in
                         self.item[0].get('body_html'))
+
+
+class ReutersBylineInBody(BaseNewMLTwoTestCase):
+    filename = 'reuters_byline_in_body.xml'
+
+    def test_byline_not_in_body(self):
+        self.assertTrue(self.item[0].get('body_html').startswith('<p>(Adds Gov. Cuomo\'s announcement that the '
+                                                                 'Statue of Liberty will'))
+        self.assertFalse('By Joseph Ax' in self.item[0].get('body_html'))
+
+    def test_byline(self):
+        self.assertEqual('By Joseph Ax', self.item[0].get('byline'))
+
+
+class ReutersWithByline(BaseNewMLTwoTestCase):
+    filename = 'reuters_with_byline.xml'
+
+    def test_byline_not_in_body(self):
+        self.assertTrue(self.item[0].get('body_html').startswith('<p>LOS ANGELES (Variety.com) - The 24th Annual '
+                                                                 'Screen Actors Guild Awards'))
+        self.assertFalse('By Dave McNary' in self.item[0].get('body_html'))
+
+    def test_byline(self):
+        self.assertEqual('Dave McNary', self.item[0].get('byline'))
+
+
+class ReutersNoByline(BaseNewMLTwoTestCase):
+    filename = 'reuters_no_byline.xml'
+
+    def test_byline_not_in_body(self):
+        self.assertTrue(self.item[0].get('body_html').startswith('<p>* MSCI Asia Ex-Japan -0.06 pct</p>'))
+
+    def test_byline(self):
+        self.assertIsNone(self.item[0].get('byline'))
+
+
+class ReutersBylineStartsWithBy(BaseNewMLTwoTestCase):
+    filename = 'reuters_byline_startswith_by.xml'
+
+    def test_byline_not_in_body(self):
+        self.assertTrue(self.item[0].get('body_html').startswith('<p>LOS ANGELES (Variety.com) - William H. Macy '
+                                                                 'revealed Sunday'))
+
+        self.assertFalse('By Daniel Holloway' in self.item[0].get('body_html'))
+
+    def test_byline(self):
+        self.assertEqual('By Daniel Holloway', self.item[0].get('byline'))

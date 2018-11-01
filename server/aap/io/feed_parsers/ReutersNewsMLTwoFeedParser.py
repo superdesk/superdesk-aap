@@ -8,11 +8,14 @@
 # AUTHORS and LICENSE files distributed with this source code, or
 # at https://www.sourcefabric.org/superdesk/license
 
+import re
+
 from superdesk.io.feed_parsers import NewsMLTwoFeedParser
 from superdesk.io.feed_parsers.newsml_2_0 import NS, NITF
 from superdesk.io.registry import register_feed_parser, register_feeding_service_parser
 from apps.io.feeding_services.reuters import ReutersHTTPFeedingService
 from superdesk.metadata.item import CONTENT_TYPE
+from aap.utils import DATELINE_REGEX
 
 
 class ReutersNewsMLTwoFeedParser(NewsMLTwoFeedParser):
@@ -43,10 +46,38 @@ class ReutersNewsMLTwoFeedParser(NewsMLTwoFeedParser):
                     elements.append(
                         '<%s>%s</%s>' % (tag, elem.text.replace('\n    ', '</p><p>').replace('\n', '<br/>'), tag))
             else:
+                dateline_found = None
+                line_counter = 0
                 for elem in body:
-                    if elem.text:
-                        tag = elem.tag.rsplit('}')[1]
-                        elements.append('<%s>%s</%s>' % (tag, elem.text.replace('\n', ' '), tag))
+                    if not elem.text:
+                        continue
+
+                    byline_found = False
+                    tag = elem.tag.rsplit('}')[1]
+                    elem_text = elem.text.replace('\n', ' ')
+                    # look for byline and dateline in first 10 lines
+                    if line_counter < 10:
+                        if not dateline_found:
+                            dateline_found = re.search(DATELINE_REGEX, elem_text, re.IGNORECASE | re.MULTILINE)
+
+                        if not dateline_found:
+                            byline = item.get('byline') or ''
+                            if byline:
+                                byline_prefix = ''
+                                if not byline.startswith('By '):
+                                    byline_prefix = 'By '
+                                byline_found = elem_text.lower().startswith('{}{}'.format(byline_prefix,
+                                                                                          byline).lower())
+                            else:
+                                byline_found = elem_text.startswith('By ')
+                                if byline_found:
+                                    item['byline'] = elem_text
+
+                    # remove the byline from the body text
+                    if not byline_found:
+                        elements.append('<%s>%s</%s>' % (tag, elem_text, tag))
+
+                    line_counter += 1
 
             content = dict()
             content['contenttype'] = tree.attrib['contenttype']
