@@ -36,9 +36,33 @@
     ></div>
 
     <div class="side-panel__content" ng-if="currentPanel === 'advanced'">
+        <div class="tab-box tab-box--no-padding">
+            <button class="tab-box__item"
+                    id="parameters-tab"
+                    type="button"
+                    ng-class="{'tab-box__item--active': currentTab==='parameters'}"
+                    ng-click="changeTab('parameters')"
+                    translate
+            >Parameters</button>
+            <button class="tab-box__item"
+                    id="filters-tab"
+                    type="button"
+                    ng-class="{'tab-box__item--active': currentTab==='filters'}"
+                    ng-click="changeTab('filters')"
+                    translate
+            >Filters</button>
+        </div>
+
+
         <div class="side-panel__content-block">
             <form name="missionReportForm">
-                <div ng-include="'mission-report-parameters.html'"></div>
+                <div ng-show="currentTab==='parameters'"
+                     ng-include="'mission-report-parameters.html'"
+                ></div>
+                <div sda-source-filters
+                     ng-if="currentTab === 'filters'"
+                     data-params="currentParams.params"
+                ></div>
             </form>
         </div>
     </div>

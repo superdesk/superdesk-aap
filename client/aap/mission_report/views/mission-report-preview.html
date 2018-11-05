@@ -1,24 +1,16 @@
-<div class="form__row form__row--no-padding">
-    <label class="form-label form-label--light" translate>Date Filter</label>
-    <p>{{dates}}</p>
-</div>
+<sda-preview-date-filter></sda-preview-date-filter>
+
+<sda-preview-source-filter></sda-preview-source-filter>
 
 <div class="form__row form__row--no-padding">
-    <label class="form-label form-label--light" translate>Exclude Categories</label>
-    <p>{{categories}}</p>
-</div>
-
-<div class="form__row form__row--no-padding">
-    <label class="form-label form-label--light" translate>Exclude Genres</label>
-    <p>{{genres}}</p>
-</div>
-
-<div class="form__row form__row--no-padding">
-    <label class="form-label form-label--light" translate>Exclude Ingest Sources</label>
-    <p>{{ingest}}</p>
-</div>
-
-<div class="form__row form__row--no-padding">
-    <label class="form-label form-label--light" translate>Exclude Stages</label>
-    <p>{{stages}}</p>
+    <label class="form-label form-label--light" translate>Reports</label>
+    <ul style="list-style-type: initial; padding-left: 40px;">
+        <li ng-if="report.params.reports.summary" translate>Summary</li>
+        <li ng-if="report.params.reports.categories" translate>Categories</li>
+        <li ng-if="report.params.reports.corrections" translate>Corrections</li>
+        <li ng-if="report.params.reports.kills" translate>Kills</li>
+        <li ng-if="report.params.reports.takedowns" translate>Takedowns</li>
+        <li ng-if="report.params.reports.updates" translate>Updates</li>
+        <li ng-if="report.params.reports.sms_alerts" translate>SMS Alerts</li>
+    </ul>
 </div>

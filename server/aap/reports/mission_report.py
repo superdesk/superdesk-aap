@@ -14,6 +14,9 @@ from superdesk.metadata.item import ITEM_STATE, CONTENT_STATE
 from superdesk.utc import utc_to_local
 
 from analytics.base_report import BaseReportService
+from analytics.chart_config import ChartConfig
+
+from aap.common import extract_kill_reason_from_html
 
 from flask import current_app as app
 
@@ -133,6 +136,7 @@ class MissionReportService(BaseReportService):
         kills = []
         takedowns = []
         rewrites = []
+        sms_alerts = []
 
         total_stories = 0
 
@@ -160,10 +164,21 @@ class MissionReportService(BaseReportService):
                 corrections.append(item)
 
             elif item_state == CONTENT_STATE.KILLED:
+                item['_reasons'] = extract_kill_reason_from_html(
+                    item.get('body_html') or '',
+                    is_kill=True
+                )
                 kills.append(item)
 
             elif item_state == CONTENT_STATE.RECALLED:
+                item['_reasons'] = extract_kill_reason_from_html(
+                    item.get('body_html') or '',
+                    is_kill=False
+                )
                 takedowns.append(item)
+
+            if (item.get('flags') or {}).get('marked_for_sms'):
+                sms_alerts.append(item)
 
         report = {
             'total_stories': total_stories,
@@ -173,6 +188,7 @@ class MissionReportService(BaseReportService):
             'takedowns': takedowns,
             'first_item': first_item,
             'rewrites': rewrites,
+            'sms_alerts': sms_alerts,
         }
 
         if include_categories:
@@ -189,108 +205,114 @@ class MissionReportService(BaseReportService):
         return BaseReportService.generate_elastic_query(self, args)
 
     def generate_highcharts_config(self, docs, args):
+        params = args.get('params') or {}
+
         def gen_summary_chart():
-            x_axis_titles = [
-                'Total Stories',
-                'Results/Fields/Comment/Betting',
-                'New Stories',
-                'Updates',
-                'Corrections',
-                'Kills',
-                'Takedowns'
-            ]
-
-            series_data = [
-                report['total_stories'],
-                report['new_stories']['categories']['results'],
-                report['new_stories']['count'],
-                len(report['rewrites']),
-                len(report['corrections']),
-                len(report['kills']),
-                len(report['takedowns'])
-            ]
-
-            subtitle = self.get_date_time_string(
-                report['first_item']['versioncreated'],
-                '%A %d %B %Y'
-            )
-
-            return {
-                'id': 'mission_report_summary',
-                'type': 'line',
-                'chart': {
-                    'type': 'line',
-                    'height': 300,
-                },
-                'title': {'text': 'Mission Report: Summary({})'.format(report['total_stories'])},
-                'subtitle': {'text': subtitle},
-                'xAxis': {'categories': x_axis_titles},
-                'yAxis': {
-                    'title': {'text': 'STORIES TRANSMITTED'},
-                    'labels': {'enabled': False},
-                },
-                'legend': {'enabled': False},
-                'tooltip': {'enabled': False},
-                'plotOptions': {
-                    'series': {
-                        'dataLabels': {'enabled': True},
-                    },
-                },
-                'series': [{
-                    'data': series_data
-                }],
-                'fullHeight': False,
+            source = {
+                'total_stories': report['total_stories'],
+                'new_stories': report['new_stories']['count'],
+                'results': report['new_stories']['categories']['results'],
+                'rewrites': len(report['rewrites']),
+                'corrections': len(report['corrections']),
+                'kills': len(report['kills']),
+                'takedowns': len(report['takedowns'])
             }
 
+            def get_sorted_keys(data):
+                return [
+                    'total_stories',
+                    'new_stories',
+                    'results',
+                    'rewrites',
+                    'corrections',
+                    'kills',
+                    'takedowns'
+                ]
+
+            def get_chart():
+                return {
+                    'type': chart_config.chart_type,
+                    'height': 300
+                }
+
+            def get_plot_options():
+                return {'series': {'dataLabels': {'enabled': True}}}
+
+            def gen_subtitle():
+                return chart_config.gen_subtitle_for_dates(params)
+
+            chart_config = ChartConfig('mission_report_summary', 'line')
+
+            chart_config.title = 'Mission Report Summary'
+            chart_config.get_subtitle = gen_subtitle
+
+            chart_config.translations = {
+                'summary': {
+                    'title': 'Summary',
+                    'names': {
+                        'total_stories': 'Total Stories',
+                        'results': 'Results/Fields/Comment/Betting',
+                        'new_stories': 'New Stories',
+                        'rewrites': 'Updates',
+                        'corrections': 'Corrections',
+                        'kills': 'Kills',
+                        'takedowns': 'Takedowns'
+                    }
+                }
+            }
+
+            chart_config.get_chart = get_chart
+            chart_config.get_plot_options = get_plot_options
+            chart_config.get_sorted_keys = get_sorted_keys
+
+            chart_config.add_source('summary', source)
+
+            chart_config.gen_config()
+            chart_config.config['fullHeight'] = False
+            chart_config.config['xAxis'].pop('title', None)
+
+            return chart_config.config
+
         def gen_category_chart():
-            categories = report.get('categories') or {}
+            categories = report.get('categories')
             categories['results'] = {
                 'qcode': 'results',
                 'name': 'Results/Fields/Comment/Betting'
             }
 
-            sorted_categories = sorted(
-                categories.items(),
-                key=lambda x: x[0]
-            )
-
-            x_axis_titles = [
-                category['name'] + ('' if qcode == 'results' else ' ({})'.format(qcode.upper()))
-                for qcode, category in sorted_categories
-            ]
-
-            series_data = [
-                report['new_stories']['categories'][qcode]
-                for qcode, category in sorted_categories
-            ]
-
-            return {
-                'id': 'mission_report_categories',
-                'type': 'bar',
-                'chart': {
-                    'type': 'bar',
-                    'zoomType': 'y'
-                },
-                'title': {'text': 'New Stories By Category'},
-                'xAxis': {
-                    'title': {'text': 'CATEGORY'},
-                    'categories': x_axis_titles
-                },
-                'yAxis': {
-                    'title': {'text': 'STORIES TRANSMITTED'},
-                    'labels': {'enabled': False}
-                },
-                'legend': {'enbaled': False},
-                'tooltip': {'enabled': False},
-                'plotOptions': {
-                    'series': {
-                        'dataLabels': {'enabled': True}
-                    }
-                },
-                'series': [{
-                    'data': series_data
-                }]
+            source = {
+                qcode: report['new_stories']['categories'][qcode]
+                for qcode, category in categories.items()
             }
+
+            def get_sorted_keys(data):
+                return [
+                    category for category, count
+                    in sorted(
+                        source.items(),
+                        key=lambda kv: kv[0]
+                    )
+                ]
+
+            chart_config = ChartConfig('mission_report_categories', 'bar')
+
+            chart_config.translations = {
+                'category': {
+                    'title': 'CATEGORY',
+                    'names': {
+                        qcode: category['name'] + (
+                            '' if qcode == 'results' else ' ({})'.format(qcode.upper())
+                        )
+                        for qcode, category in categories.items()
+                    }
+                }
+            }
+            chart_config.get_sorted_keys = get_sorted_keys
+
+            chart_config.title = 'New Stories By Category'
+            chart_config.add_source('category', source)
+
+            return chart_config.gen_config()
 
         def gen_table_rows(source):
             return [
@@ -319,24 +341,40 @@ class MissionReportService(BaseReportService):
 
         def gen_kills_chart():
             kills = report.get('kills') or []
+            rows = []
+
+            for item in kills:
+                rows.append([
+                    self.get_date_time_string(item['versioncreated'], '%d/%m/%Y %H:%M'),
+                    item.get('slugline') or '',
+                    item.get('_reasons') or '',
+                ])
 
             return {
                 'id': 'mission_report_kills',
                 'type': 'table',
-                'headers': ['Sent', 'Slugline', 'TakeKey', 'Ednote'],
+                'headers': ['Sent', 'Slugline', 'Reasons'],
                 'title': 'There were {} kills issued'.format(len(kills)),
-                'rows': gen_table_rows(kills)
+                'rows': rows
             }
 
         def gen_takedowns_chart():
             takedowns = report.get('takedowns') or []
+            rows = []
+
+            for item in takedowns:
+                rows.append([
+                    self.get_date_time_string(item['versioncreated'], '%d/%m/%Y %H:%M'),
+                    item.get('slugline') or '',
+                    item.get('_reasons') or '',
+                ])
 
             return {
                 'id': 'mission_report_takedowns',
                 'type': 'table',
-                'headers': ['Sent', 'Slugline', 'TakeKey', 'Ednote'],
+                'headers': ['Sent', 'Slugline', 'Reasons'],
                 'title': 'There were {} takedowns issued'.format(len(takedowns)),
-                'rows': gen_table_rows(takedowns)
+                'rows': rows
             }
 
         def gen_updates_chart():
@@ -345,6 +383,15 @@ class MissionReportService(BaseReportService):
                 'type': 'table',
                 'headers': ['Sent', 'Slugline', 'TakeKey', 'Ednote'],
                 'title': 'There were {} updates issued'.format(len(report.get('rewrites') or [])),
+                'rows': []
+            }
+
+        def gen_sms_alerts_chart():
+            return {
+                'id': 'mission_report_sms_alerts',
+                'type': 'table',
+                'headers': ['Sent', 'Slugline', 'TakeKey', 'Ednote'],
+                'title': 'There were {} SMS alerts issued'.format(len(report.get('sms_alerts') or [])),
                 'rows': []
             }
 
@@ -358,14 +405,32 @@ class MissionReportService(BaseReportService):
                 'rows': []
             }]
         else:
-            report['highcharts'] = [
-                gen_summary_chart(),
-                gen_category_chart(),
-                gen_corrections_chart(),
-                gen_kills_chart(),
-                gen_takedowns_chart(),
-                gen_updates_chart()
-            ]
+            charts = []
+
+            reports_enabled = params.get('reports') or {}
+
+            if reports_enabled.get('summary', True):
+                charts.append(gen_summary_chart())
+
+            if reports_enabled.get('categories', True):
+                charts.append(gen_category_chart())
+
+            if reports_enabled.get('corrections', True):
+                charts.append(gen_corrections_chart())
+
+            if reports_enabled.get('kills', True):
+                charts.append(gen_kills_chart())
+
+            if reports_enabled.get('takedowns', True):
+                charts.append(gen_takedowns_chart())
+
+            if reports_enabled.get('sms_alerts', True):
+                charts.append(gen_sms_alerts_chart())
+
+            if reports_enabled.get('updates', True):
+                charts.append(gen_updates_chart())
+
+            report['highcharts'] = charts
 
         report.pop('categories', None)
         return report
@@ -374,87 +439,3 @@ class MissionReportService(BaseReportService):
         report = self.generate_report(docs, args)
         report['highcharts'] = []
         return report
-
-    def _gen_html(self, first_item, total_stories, new_stories, corrections, kills, takedowns, rewrites, results):
-        return self._gen_summary_header(first_item, total_stories, new_stories) + \
-            self._gen_category_summary(new_stories['categories'], results) + \
-            self._gen_corrections_summary(corrections) + \
-            self._gen_kills_summary(kills) + \
-            self._gen_takedowns_summary(takedowns) + \
-            self._gen_rewrites_summary(rewrites)
-
-    @staticmethod
-    def _gen_summary_header(first_item, total_stories, new_stories):
-        return '''<p>SUMMARY FOR {}
-Total number of stories transmitted - {}
-Total New Stories - {}</p>'''.format(
-            utc_to_local(
-                app.config['DEFAULT_TIMEZONE'],
-                first_item.get('versioncreated')
-            ).strftime('%d%b%y'),
-            total_stories,
-            new_stories['count']
-        ).replace('\n', '<br>')
-
-    @staticmethod
-    def _gen_category_summary(categories, results):
-        html = '<p>New Stories by Category:<br>'
-        for category in sorted(categories):
-            html += '{} - {}<br>'.format(
-                category.upper(),
-                categories[category]
-            )
-
-            if category == 'r':
-                html += '(Results/Fields/Comment/Betting {})<br>'.format(len(results))
-
-        html += '</p>'
-        return html
-
-    def _gen_corrections_summary(self, corrections):
-        if len(corrections) < 1:
-            return '<p>There were no corrections issued.</p>'
-
-        html = '<p>There were {} corrections issued<br>'.format(len(corrections))
-        for correction in corrections:
-            html += '{} {} {}<br>'.format(
-                correction['slugline'],
-                correction.get('anpa_take_key') or '',
-                self.get_date_time_string(correction['versioncreated'])
-            )
-        html += '</p>'
-        return html
-
-    def _gen_kills_summary(self, kills):
-        if len(kills) < 1:
-            return '<p>There were no kills issued.</p>'
-
-        html = '<p>There were {} kills issued<br>'.format(len(kills))
-        for kill in kills:
-            html += '{} {} {}<br>'.format(
-                kill['slugline'],
-                kill.get('anpa_take_key') or '',
-                self.get_date_time_string(kill['versioncreated'])
-            )
-        html += '</p>'
-        return html
-
-    def _gen_takedowns_summary(self, takedowns):
-        if len(takedowns) < 1:
-            return '<p>There were no take downs issued.</p>'
-
-        html = '<p>There were {} take downs issued<br>'.format(len(takedowns))
-        for takedown in takedowns:
-            html += '{} {} {}<br>'.format(
-                takedown['slugline'],
-                takedown.get('anpa_take_key') or '',
-                self.et_date_time_string(takedown['versioncreated'])
-            )
-        html += '</p>'
-        return html
-
-    def _gen_rewrites_summary(self, rewrites):
-        if len(rewrites) < 1:
-            return '<p>There were no updates issued.</p>'
-
-        return '<p>There were {} updates issued<br>'.format(len(rewrites))
