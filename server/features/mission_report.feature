@@ -242,30 +242,36 @@ Feature: Mission Report
         ]
         """
         When we get "/mission_report?params={"query": {"filtered": {}}}&return_type=highcharts_config"
-        Then we get 6 charts
+        Then we get 7 charts
         """
         [{
             "chart": {
                 "height": 300,
                 "type": "line"
             },
-            "series": [{"data": [6, 0, 2, 1, 1, 1, 1]}],
-            "title": {"text": "Mission Report: Summary(6)"},
+            "series": [{
+                "name": "Published Stories",
+                "data": [6, 2, 0, 1, 1, 1, 1]
+            }],
+            "title": {"text": "Mission Report Summary"},
             "type": "line",
             "xAxis": {"categories": [
                 "Total Stories",
-                "Results/Fields/Comment/Betting",
                 "New Stories",
+                "Results/Fields/Comment/Betting",
                 "Updates",
                 "Corrections",
                 "Kills",
                 "Takedowns"
             ]},
-            "yAxis": {"title": {"text": "STORIES TRANSMITTED"}}
+            "yAxis": {"title": {"text": "Published Stories"}}
         }, {
             "type": "bar",
             "title": {"text": "New Stories By Category"},
-            "series": [{"data": [1, 0, 0, 0, 1]}],
+            "series": [{
+                "name": "Published Stories",
+                "data": [1, 0, 0, 0, 1]
+            }],
             "xAxis": {
                 "categories": [
                     "National (A)",
@@ -276,7 +282,7 @@ Feature: Mission Report
                 ],
                 "title": {"text": "CATEGORY"}
             },
-            "yAxis": {"title": {"text": "STORIES TRANSMITTED"}}
+            "yAxis": {"title": {"text": "Published Stories"}}
         }, {
             "type": "table",
             "title": "There were 1 corrections issued",
@@ -284,10 +290,14 @@ Feature: Mission Report
         }, {
             "type": "table",
             "title": "There were 1 kills issued",
-            "headers": ["Sent", "Slugline", "TakeKey", "Ednote"]
+            "headers": ["Sent", "Slugline", "Reasons"]
         }, {
             "type": "table",
             "title": "There were 1 takedowns issued",
+            "headers": ["Sent", "Slugline", "Reasons"]
+        }, {
+            "type": "table",
+            "title": "There were 0 SMS alerts issued",
             "headers": ["Sent", "Slugline", "TakeKey", "Ednote"]
         }, {
             "type": "table",

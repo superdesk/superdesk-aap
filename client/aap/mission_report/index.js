@@ -40,7 +40,7 @@ angular.module('aap.apps.mission-report', ['superdesk.analytics'])
 
     .controller('MissionReportController', ctrl.MissionReportController)
 
-    .directive('sdMissionReportPreview', directives.MissionReportPreview)
+    .directive('sdaMissionReportPreview', directives.MissionReportPreview)
 
     .run(cacheIncludedTemplates)
 
