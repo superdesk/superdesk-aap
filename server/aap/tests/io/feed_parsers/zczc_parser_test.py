@@ -9,6 +9,9 @@
 # at https://www.sourcefabric.org/superdesk/license
 
 import os
+import pytz
+from unittest import mock
+from datetime import datetime
 
 from superdesk.tests import TestCase
 from aap.io.feed_parsers.zczc import ZCZCFeedParser
@@ -243,20 +246,25 @@ class ZCZCTestCase(TestCase):
         self.assertTrue(self.items.get('body_html').startswith('<p>Legionella bacteria has been found in a regional'))
         self.assertTrue(self.items.get('genre')[0]['qcode'], 'Broadcast Script')
 
+    @mock.patch('aap.io.feed_parsers.zczc_bob.utcnow', lambda: datetime(2018, 11, 6, 2, 0, 0, 0, pytz.utc))
     def test_bob_am_headlines(self):
         filename = 'bob_am_headlines.tst'
         dirname = os.path.dirname(os.path.realpath(__file__))
         fixture = os.path.normpath(os.path.join(dirname, '../fixtures', filename))
-        self.provider['source'] = 'BOB'
+        self.provider['source'] = 'AAP'
+
         self.items = ZCZCBOBParser().parse(fixture, self.provider)
-        self.assertEqual(self.items.get('slugline'), 'Legionella')
+        self.assertEqual(self.items.get('slugline'), 'AM Sydney headlines')
         self.assertEqual(self.items.get('anpa_category')[0]['qcode'], 'A')
-        self.assertEqual(self.items.get('headline'), 'Legionella found in Qld hospital')
-        self.assertEqual(self.items.get('abstract'), 'Legionella found in Qld hospital')
-        self.assertEqual(self.items.get('anpa_take_key'), '(BRISBANE)')
+        self.assertEqual(self.items.get('headline'), 'Sydney headlines round-up Nov 06, 1200')
+        self.assertEqual(self.items.get('abstract'), 'Sydney headlines round-up Nov 06, 1200')
+        self.assertEqual(self.items.get('anpa_take_key'), '1200')
         self.assertEqual(self.items.get('subject')[0]['qcode'], '07000000')
-        self.assertTrue(self.items.get('body_html').startswith('<p>Legionella bacteria has been found in a regional'))
-        self.assertTrue(self.items.get('genre')[0]['qcode'], 'AM Service')
+        self.assertTrue(self.items.get('body_html').startswith('<p>Here are this morning\'s latest headlines'))
+        self.assertEqual(self.items.get('genre')[0]['qcode'], 'AM Service')
+        self.assertEqual(self.items.get('dateline')['located']['city'], 'Sydney')
+        self.assertEqual(self.items.get('dateline')['source'], 'AAP')
+        self.assertEqual(self.items.get('dateline')['text'], 'SYDNEY, Nov 6 AAP -')
 
     def test_bob_empty_header_line(self):
         filename = '612fa1dc-c476-425d-8c80-d40bdc9cc1d5.tst'
