@@ -9,10 +9,9 @@
 # at https://www.sourcefabric.org/superdesk/license
 
 import logging
-from apps.archive.common import format_dateline_to_locmmmddsrc
-from superdesk.utc import get_date
-from flask import current_app as app
 from superdesk.etree import parse_html
+from aap.utils import set_dateline
+
 
 logger = logging.getLogger(__name__)
 
@@ -38,25 +37,13 @@ def reuters_derive_dateline(item, **kwargs):
                     city = city.split(',')[0]
                     if any(char.isdigit() for char in city):
                         return
-                    cities = app.locators.find_cities()
-                    located = [c for c in cities if c['city'].lower() == city.lower()]
-                    # if not dateline we create one
-                    if 'dateline' not in item:
-                        item['dateline'] = {}
-                    # there is already a dateline that is not Bangalore don't do anything just return
-                    elif 'located' in item['dateline'] and 'BANGALORE' != item['dateline']['located'].get(
-                            'city').upper():
+
+                    # there is already a dateline that is not Bangalore/BENGALURU don't do anything just return
+                    if 'located' in (item.get('dateline') or {}) and \
+                            item['dateline']['located'].get('city').upper() not in ['BANGALORE', 'BENGALURU']:
                         return
 
-                    item['dateline']['located'] = located[0] if len(located) == 1 else {'city_code': city,
-                                                                                        'city': city,
-                                                                                        'tz': 'UTC',
-                                                                                        'dateline': 'city'}
-                    item['dateline']['source'] = item.get('original_source', 'Reuters')
-                    item['dateline']['text'] = format_dateline_to_locmmmddsrc(item['dateline']['located'],
-                                                                              get_date(item['firstcreated']),
-                                                                              source=item.get('original_source',
-                                                                                              'Reuters'))
+                    set_dateline(item, city, 'Reuters')
                     break
 
         return item

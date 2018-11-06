@@ -10,10 +10,8 @@
 
 from superdesk import etree as sd_etree
 import logging
-from flask import current_app as app
 from lxml import etree
-from apps.archive.common import format_dateline_to_locmmmddsrc
-from superdesk.utc import get_date
+from aap.utils import set_dateline
 
 logger = logging.getLogger(__name__)
 
@@ -39,20 +37,7 @@ def _yonhap_derive_dateline(item, **kwargs):
                     city = city.split(',')[0]
                     if any(char.isdigit() for char in city):
                         return
-                    cities = app.locators.find_cities()
-                    located = [c for c in cities if c['city'].lower() == city.lower()]
-                    # if not dateline we create one
-                    if 'dateline' not in item:
-                        item['dateline'] = {}
-
-                    item['dateline']['located'] = located[0] if len(located) == 1 else {'city_code': city,
-                                                                                        'city': city,
-                                                                                        'tz': 'UTC',
-                                                                                        'dateline': 'city'}
-                    item['dateline']['source'] = item.get('source', 'Yonhap')
-                    item['dateline']['text'] = format_dateline_to_locmmmddsrc(item['dateline']['located'],
-                                                                              get_date(item['firstcreated']),
-                                                                              source='Yonhap')
+                    set_dateline(item, city, 'Yonhap')
                     break
 
         return item
