@@ -56,7 +56,8 @@ class AgendaPlanningFormatter(Formatter):
     # If a place has been specified but no location then the city is set with this map
     place_city_map = {'ACT': 59, 'NSW': 106, 'NT': 62, 'QLD': 50, 'SA': 41, 'TAS': 76, 'VIC': 87, 'WA': 95}
 
-    coverage_type_map = {'text': 1, 'picture': 2, 'video': 3, 'graphic': 5, 'live_video': 3}
+    coverage_type_map = {'text': 1, 'picture': 2, 'video': 3, 'graphic': 5, 'live_video': 3, 'video_explainer': 6,
+                         'live_blog': 4, 'audio': 3}
 
     coverage_status_map = {'ncostat:int': 1, 'ncostat:notdec': 2, 'ncostat:notint': 3, 'ncostat:onreq': 2}
 
@@ -217,7 +218,7 @@ class AgendaPlanningFormatter(Formatter):
             if planning.get('pubstatus') == 'usable':
                 for coverage in planning.get('coverages', []):
                     coverage_type = coverage.get('planning', {}).get('g2_content_type', 'text')
-                    agenda_role = self.coverage_type_map.get(coverage_type)
+                    agenda_role = self.coverage_type_map.get(coverage_type, 1)
                     coverage_status = self.coverage_status_map.get(coverage.get('news_coverage_status').get('qcode'))
                     agenda_coverage = {'Role': {'ID': agenda_role}, 'CoverageStatus': {'ID': coverage_status}}
                     coverages.append(agenda_coverage)
@@ -277,7 +278,7 @@ class AgendaPlanningFormatter(Formatter):
             else:
                 if coverage.get('planning', {}).get('scheduled') > end_date:
                     end_date = coverage.get('planning', {}).get('scheduled')
-            agenda_role = self.coverage_type_map.get(coverage_type)
+            agenda_role = self.coverage_type_map.get(coverage_type, 1)
             coverage_status = self.coverage_status_map.get(coverage.get('news_coverage_status').get('qcode'))
             agenda_coverage = {'Role': {'ID': agenda_role}, 'CoverageStatus': {'ID': coverage_status}}
             coverages.append(agenda_coverage)
