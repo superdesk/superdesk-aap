@@ -572,3 +572,66 @@ class AgendaPlanningFormatterTest(TestCase):
         self.assertEqual(item.get('Title'), 'Superdesk Planning')
         self.assertEqual(len(item.get('Coverages')), 1)
         self.assertEqual(item.get('Type'), 'event')
+
+    def test_missing_mapping_for_content_types(self):
+        planning = {
+            "_id": "urn:newsml:localhost:2018-02-15T12:38:14.817988:baf0fa2b-b4c6-46ca-94b6-0ac95083a260",
+            "subject": [
+                {
+                    "name": "education",
+                    "qcode": "05000000",
+                    "parent": None
+                }
+            ],
+            "type": "planning",
+            "guid": "urn:newsml:localhost:2018-02-15T12:38:14.817988:baf0fa2b-b4c6-46ca-94b6-0ac95083a260",
+            "ednote": "ed notes",
+            "original_creator": "57bcfc5d1d41c82e8401dcc0",
+            "description_text": "Test Description",
+            "coverages": [
+                {
+                    "planning": {
+                        "slugline": "TEST",
+                        "scheduled": "REPLACE ME",
+                        "g2_content_type": "bogus",
+                        "genre": [
+                            {
+                                "name": "Article (news)",
+                                "qcode": "Article"
+                            }
+                        ]
+                    },
+                    "news_coverage_status": {
+                        "label": "Planned",
+                        "name": "coverage intended",
+                        "qcode": "ncostat:int"
+                    }
+                }
+            ],
+            "urgency": 2,
+            "state": "scheduled",
+            "flags": {
+                "marked_for_not_publication": False
+            },
+            "internal_note": "internal note",
+            "slugline": "TEST",
+            "agendas": [],
+            "item_class": "plinat:newscoverage",
+            "anpa_category": [
+                {
+                    "name": "Australian General News",
+                    "qcode": "a"
+                }
+            ],
+            "_planning_schedule": [
+                {
+                    "coverage_id": "urn:newsml:localhost:2018-02-15T12:38:15.344350:"
+                                   "af31ffb9-d0f7-4c42-9a62-598b55dbf808"
+                }
+            ],
+            "pubstatus": "usable"
+        }
+        planning['coverages'][0]['planning']['scheduled'] = datetime.datetime(2018, 1, 23, 13, 0, 0, 0)
+        doc = self.formatter.format(planning, {'name': 'Test Subscriber'})[0]
+        item = json.loads(doc[1])
+        self.assertEqual(item.get('Coverages')[0]['Role'], {'ID': 1})
