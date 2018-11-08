@@ -10,13 +10,14 @@
 
 
 import os
-import unittest
 
 from xml.etree import ElementTree
 from aap.io.feed_parsers.ReutersNewsMLTwoFeedParser import ReutersNewsMLTwoFeedParser
 
+from superdesk.tests import TestCase
 
-class BaseNewMLTwoTestCase(unittest.TestCase):
+
+class BaseNewMLTwoTestCase(TestCase):
     def setUp(self):
         dirname = os.path.dirname(os.path.realpath(__file__))
         fixture = os.path.normpath(os.path.join(dirname, '../fixtures', self.filename))
