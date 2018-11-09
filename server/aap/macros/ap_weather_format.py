@@ -10,14 +10,10 @@
 
 import re
 from io import StringIO
-from flask import current_app as app
-from apps.archive.common import format_dateline_to_locmmmddsrc
-from superdesk.utc import get_date
-from datetime import datetime
-from pytz import timezone
 from superdesk.errors import SuperdeskApiError
 import superdesk
 from superdesk.text_utils import get_text
+from aap.utils import set_dateline
 
 
 def ap_weather_format(item, **kwargs):
@@ -43,23 +39,10 @@ def ap_weather_format(item, **kwargs):
     output = StringIO()
     output.write(preamble)
 
-    # story is always datelined News York
-    city = 'New York City'
-    cities = app.locators.find_cities()
-    located = [c for c in cities if c['city'].lower() == city.lower()]
-    if 'dateline' not in item:
-        item['dateline'] = {}
-    item['dateline']['located'] = located[0] if len(located) > 0 else {'city_code': city, 'city': city,
-                                                                       'tz': 'UTC', 'dateline': 'city'}
-    item['dateline']['date'] = datetime.fromtimestamp(get_date(item['firstcreated']).timestamp(),
-                                                      tz=timezone(item['dateline']['located']['tz']))
-    item['dateline']['source'] = 'AP'
-    item['dateline']['text'] = format_dateline_to_locmmmddsrc(item['dateline']['located'],
-                                                              get_date(item['firstcreated']),
-                                                              source=item.get('original_source', 'AP'))
+    # story is always dateline News York
+    set_dateline(item, 'New York City', 'AP', set_date=True)
 
     item['headline'] = 'World Weather for ' + item['dateline']['date'].strftime('%b %-d')
-
     item['subject'] = [{"name": "weather", "qcode": "17000000"}]
     locator_map = superdesk.get_resource_service('vocabularies').find_one(req=None, _id='locators')
     item['place'] = [x for x in locator_map.get('items', []) if x['qcode'] == 'US']

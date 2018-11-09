@@ -10,10 +10,12 @@ from superdesk.metadata.item import FORMAT, FORMATS
 from superdesk.io.registry import register_feeding_service_error
 from superdesk.errors import AlreadyExistsError
 from superdesk.io.registry import register_feed_parser
+from superdesk.utc import utcnow
 from aap.errors import AAPParserError
 import re
 import superdesk
 from superdesk.logging import logger
+from aap.utils import set_dateline
 
 
 class ZCZCBOBParser(ZCZCFeedParser):
@@ -58,7 +60,16 @@ class ZCZCBOBParser(ZCZCFeedParser):
                     item.pop(self.ITEM_PLACE)
 
             if item.get('genre') and item.get('genre')[0] and item.get('genre')[0].get('qcode') == 'AM Service':
+                item['firstcreated'] = utcnow()
                 item['abstract'] = item['headline']
+                slugline = (item.get('slugline') or '').lower()
+                dateline_city = ''
+                for city in ['sydney', 'melbourne', 'brisbane', 'adelaide', 'perth']:
+                    if city in slugline:
+                        dateline_city = city
+                        break
+
+                set_dateline(item, dateline_city, provider.get('source'), set_date=True)
 
             # Remove the attribution
             item['body_html'] = item.get('body_html', '').replace('<p>AAP RTV</p>', '')
