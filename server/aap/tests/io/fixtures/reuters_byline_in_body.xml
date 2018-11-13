@@ -1,0 +1,246 @@
+<newsMessage xmlns="http://iptc.org/std/nar/2006-10-01/" xmlns:rtr="http://www.reuters.com/ns/2003/08/content" xmlns:x="http://www.w3.org/1999/xhtml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <header>
+    <sent>2018-01-21T20:23:15.000Z</sent>
+    <sender>reuters.com</sender>
+    <transmitId>tag:reuters.com,2018:newsml_L2N1PG091:1345039779</transmitId>
+    <priority>3</priority>
+    <destination>PSC</destination>
+    <destination>LBY</destination>
+    <destination>G</destination>
+    <destination>GNS</destination>
+    <destination>UCDPTEST</destination>
+    <destination>PGE</destination>
+    <destination>RWS</destination>
+    <destination>RAST</destination>
+    <destination>CSA</destination>
+    <destination>RWSA</destination>
+    <destination>RNP</destination>
+    <destination>REULB</destination>
+    <destination>AFA</destination>
+    <destination>RBN</destination>
+    <channel>TXT</channel>
+  </header>
+  <itemSet>
+    <newsItem conformance="power" guid="tag:reuters.com,2018:newsml_L2N1PG091" standard="NewsML-G2" standardversion="2.10" version="1345039779" xml:lang="en">
+      <catalogRef href="http://www.iptc.org/std/catalog/catalog.IPTC-G2-Standards_3.xml"/>
+      <rightsInfo>
+        <copyrightHolder literal="Thomson Reuters"/>
+        <copyrightNotice xml:lang="en">(c) Copyright Thomson Reuters 2018. Click For Restrictions - http://about.reuters.com/fulllegal.asp</copyrightNotice>
+      </rightsInfo>
+      <itemMeta>
+        <itemClass qcode="icls:text" rtr:msgType="S"/>
+        <provider literal="reuters.com"/>
+        <versionCreated>2018-01-21T20:23:15.000Z</versionCreated>
+        <firstCreated>2018-01-21T20:23:15.000Z</firstCreated>
+        <pubStatus qcode="stat:usable"/>
+        <role qcode="itemRole:N"/>
+        <fileName>2018-01-21T202315Z_1345039779_L2N1PG091_RTRMADT_0_USA-SHUTDOWN-TOURISTS-UPDATE-1-PIX-TV.XML</fileName>
+        <generator versioninfo="1.0.0.20">LYNX:addT:001</generator>
+        <profile versioninfo="00.00.01">SNI-Text</profile>
+        <service qcode="svc:RTR_TNS"/>
+        <memberOf creator="trRule:rule1" modified="2018-01-21T20:23:19.000Z" literal="Business">
+          <name>Business</name>
+        </memberOf>
+        <memberOf creator="trRule:rule2" modified="2018-01-21T20:23:19.000Z" literal="Economy">
+          <name>Economy</name>
+        </memberOf>
+        <memberOf creator="trRule:rule8" modified="2018-01-21T20:23:19.000Z" literal="Entertainment">
+          <name>Entertainment and Lifestyle</name>
+        </memberOf>
+        <memberOf creator="trRule:rule11" modified="2018-01-21T20:23:19.000Z" literal="Politics">
+          <name>Politics</name>
+        </memberOf>
+        <memberOf creator="trRule:rule29" modified="2018-01-21T20:23:19.000Z" literal="World-US">
+          <name>US</name>
+        </memberOf>
+        <signal qcode="edStat:N"/>
+        <signal qcode="prodId:TXT"/>
+        <signal qcode="pmt:text"/>
+        <signal qcode="var:itemEvol"/>
+        <rtr:versionedId guid="tag:reuters.com,2018:newsml_L2N1PG091:1345039779"/>
+      </itemMeta>
+      <contentMeta>
+        <urgency>3</urgency>
+        <infoSource literal="Reuters" qcode="NS:RTRS" role="cRole:origProv"/>
+        <creator literal="Reuters"/>
+        <altId rtr:isOriginal="1" type="idType:USN">L2N1PG091</altId>
+        <altId type="idType:OTR">L2N1PG091</altId>
+        <language tag="en"/>
+        <genre qcode="N2:MTPIX">
+          <name>Media type Pictures</name>
+        </genre>
+        <subject qcode="MCC:OEC"/>
+        <subject qcode="MCC:OVR"/>
+        <subject qcode="MCCL:OEC"/>
+        <subject qcode="MCCL:OVR"/>
+        <subject qcode="N2:BACT"/>
+        <subject qcode="N2:CCOS"/>
+        <subject qcode="N2:CYCS"/>
+        <subject qcode="N2:CYCS08"/>
+        <subject qcode="N2:DBT"/>
+        <subject qcode="N2:ENTS"/>
+        <subject qcode="N2:GEN"/>
+        <subject qcode="N2:GFIN"/>
+        <subject qcode="N2:GVD"/>
+        <subject qcode="N2:HREP"/>
+        <subject qcode="N2:MCE"/>
+        <subject qcode="N2:MSEUM"/>
+        <subject qcode="N2:NEWS1"/>
+        <subject qcode="N2:PIA"/>
+        <subject qcode="N2:POL"/>
+        <subject qcode="N2:PXP"/>
+        <subject qcode="N2:RELX"/>
+        <subject qcode="N2:SEN"/>
+        <subject qcode="N2:SOCI"/>
+        <subject qcode="N2:TOUR"/>
+        <subject qcode="N2:USA"/>
+        <subject qcode="N2:WASH"/>
+        <subject qcode="a1312cat:l"/>
+        <subject qcode="a1312cat:p"/>
+        <subject qcode="subj:04007000"/>
+        <subject qcode="subj:04008000"/>
+        <subject qcode="subj:04008003"/>
+        <subject qcode="subj:04008008"/>
+        <subject qcode="subj:04014000"/>
+        <subject qcode="subj:04014005"/>
+        <subject qcode="subj:10000000"/>
+        <subject qcode="subj:10006000"/>
+        <subject qcode="subj:11000000"/>
+        <subject qcode="N2:USAND" type="cptType:5">
+          <name>North Dakota</name>
+          <facet qcode="geoProp:7"/>
+        </subject>
+        <subject qcode="N2:AMERS" type="cptType:5">
+          <name>Americas</name>
+          <facet qcode="geoProp:3"/>
+        </subject>
+        <subject qcode="N2:USAAZ" type="cptType:5">
+          <name>Arizona</name>
+          <facet qcode="geoProp:7"/>
+        </subject>
+        <subject qcode="N2:USCNYC" type="cptType:5">
+          <name>New York City</name>
+          <facet qcode="geoProp:8"/>
+        </subject>
+        <subject qcode="N2:USACA" type="cptType:5">
+          <name>California</name>
+          <facet qcode="geoProp:7"/>
+        </subject>
+        <subject qcode="N2:USADC" type="cptType:5">
+          <name>Washington DC</name>
+          <facet qcode="geoProp:7"/>
+        </subject>
+        <subject qcode="N2:NAMER" type="cptType:5">
+          <name>North America</name>
+          <facet qcode="geoProp:3"/>
+        </subject>
+        <subject qcode="N2:US" type="cptType:5">
+          <name>United States</name>
+          <facet qcode="geoProp:5"/>
+        </subject>
+        <subject qcode="N2:USAMT" type="cptType:5">
+          <name>Montana</name>
+          <facet qcode="geoProp:7"/>
+        </subject>
+        <genre qcode="N2:MTVID">
+          <name>Media type Video</name>
+        </genre>
+        <subject qcode="N2:USANY" type="cptType:5">
+          <name>New York</name>
+          <facet qcode="geoProp:7"/>
+        </subject>
+        <subject qcode="N2:USASD" type="cptType:5">
+          <name>South Dakota</name>
+          <facet qcode="geoProp:7"/>
+        </subject>
+        <slugline separator="-">USA-SHUTDOWN/TOURISTS (UPDATE 1, PIX, TV)</slugline>
+        <headline>UPDATE 1-Statue of Liberty to reopen; shutdown keeps other parks, monuments closed</headline>
+        <creditline>Reuters</creditline>
+        <description role="descRole:caption">USA-SHUTDOWN/TOURISTS (UPDATE 1, PIX, TV):UPDATE 1-Statue of Liberty to reopen; shutdown keeps other parks, monuments closed </description>
+      </contentMeta>
+      <contentSet>
+        <inlineXML contenttype="application/xhtml+html" wordcount="620">
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <head>
+              <title/>
+            </head>
+            <body>
+              <p>(Adds Gov. Cuomo's announcement that the Statue of Liberty will
+reopen on Monday, details on park closures)</p>
+              <p>By Joseph Ax</p>
+              <p>NEW YORK, Jan 21 (Reuters) - The Statue of Liberty will
+reopen on Monday even if the U.S. government shutdown extends
+into the work week, New York Governor Andrew Cuomo said on
+Sunday, vowing to use state funds to keep the landmark monument
+in operation.</p>
+              <p>Dozens of other national parks and monuments were expected
+to remain partially or entirely closed after Congress failed to
+agree on a spending plan to keep the government running past a
+Friday midnight deadline.</p>
+              <p>In the hours leading up to the shutdown, the Trump
+administration worked on ways to keep hundreds of parks open
+without staff in an effort to avoid public anger, although it
+was unclear which ones would close.</p>
+              <p>"Not all parks are fully open but we are all working hard to
+make as many areas as accessible to the public as possible,"
+U.S. Interior Secretary Ryan Zinke said on Twitter on Saturday.</p>
+              <p>The hit-or-miss closures forced tourists and residents alike
+to alter their plans. In lower Manhattan, where ferries normally
+embark for the Statue of Liberty in New York Harbor, out-of-town
+visitors expressed frustration that the site was closed.</p>
+              <p>And San Diego Police Chief Shelley Zimmerman posted a photo
+of a "closed" sign outside Cabrillo National Monument on
+Twitter.</p>
+              <p>"I had planned to do some tide pool repeats to get some hill
+work in on my bicycle ride this morning," she wrote, referring
+to a local bike route. "Change of plans."</p>
+              <p>The National Parks Conservation Association, an advocacy
+group, estimated that one-third of the 417 national park sites
+were shuttered, "including places like the Statue of Liberty,
+presidential homes, and other historic and cultural sites
+primarily made up of buildings that can be locked."</p>
+              <p>Yellowstone National Park, a 3,500-square-mile (9,065 square
+km) wilderness located mostly in Montana, remained open but
+offered limited services, with visitor centers closed and park
+rangers absent. The association warned that the lack of staff
+could pose dangers to visitors.</p>
+              <p>Xanterra Parks &amp; Resorts, a private company that manages
+lodges, concessions and restaurants in numerous national parks
+including Yellowstone, Grand Canyon, Mount Rushmore, Rocky
+Mountain and Zion, said they will remain open during the
+shutdown.</p>
+              <p>In Washington, the Smithsonian museums and the National Zoo
+will remain open through Monday, using prior-year funds. In a
+tweet, the Smithsonian said it will update its status beyond
+Monday "as soon as we know." But in Philadelphia, visitors were
+turned away at the Liberty Bell.</p>
+              <p>During the last shutdown in 2013, a number of governors used
+state funds to keep parks open, including the Statue of Liberty,
+which at the time cost $61,600 per day to reopen.</p>
+              <p>At a news conference at the Statue of Liberty, Cuomo said
+the site generates tourism revenue, adding that the monument
+serves as a welcoming beacon to immigrants arriving in the
+United States.</p>
+              <p>"We don't want to lose the income," he said. "And
+symbolically, you can shut down the government, but you can't
+shut down the Statue of Liberty."</p>
+              <p>In Arizona, Republican Governor Doug Ducey committed state
+funds to keep the Grand Canyon open, including trash removal,
+snow plowing and public restrooms, according to Ducey spokesman
+Patrick Ptak.</p>
+              <p>"We recognize it&#8217;s a huge economic attractor and has a big
+impact not just on rural areas around the Grand Canyon but the
+state as a whole," Ptak said, adding that the expected cost is
+around $100,000 per week.</p>
+              <p>But in South Dakota, home of Mount Rushmore, Republican
+Governor Dennis Daugaard has said he would not take any action
+to keep the monument open during a shutdown.
+(Reporting by Joseph Ax; Editing by Frank McGurty and Jeffrey
+Benkoe)</p>
+            </body>
+          </html>
+        </inlineXML>
+      </contentSet>
+    </newsItem>
+  </itemSet>
+</newsMessage>
