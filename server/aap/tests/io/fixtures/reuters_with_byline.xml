@@ -1,0 +1,105 @@
+<newsMessage xmlns="http://iptc.org/std/nar/2006-10-01/" xmlns:rtr="http://www.reuters.com/ns/2003/08/content" xmlns:x="http://www.w3.org/1999/xhtml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <header>
+    <sent>2018-01-22T02:07:53.000Z</sent>
+    <sender>reuters.com</sender>
+    <transmitId>tag:reuters.com,2018:newsml_MT1VRT1202671839:159588191</transmitId>
+    <priority>3</priority>
+    <destination>VARENT</destination>
+    <channel>TXT</channel>
+  </header>
+  <itemSet>
+    <newsItem conformance="power" guid="tag:reuters.com,2018:newsml_MT1VRT1202671839" standard="NewsML-G2" standardversion="2.10" version="159588191" xml:lang="en">
+      <catalogRef href="http://www.iptc.org/std/catalog/catalog.IPTC-G2-Standards_3.xml"/>
+      <rightsInfo>
+        <copyrightHolder literal="Variety Media, LLC"/>
+        <copyrightNotice xml:lang="en">&#169; Copyright 2018 Variety Media, LLC, a subsidiary of Penske Business Media, LLC.</copyrightNotice>
+        <usageTerms>ANY</usageTerms>
+      </rightsInfo>
+      <itemMeta>
+        <itemClass qcode="icls:text" rtr:msgType="R"/>
+        <provider literal="reuters.com"/>
+        <versionCreated>2018-01-22T02:03:11.000Z</versionCreated>
+        <firstCreated>2018-01-22T01:44:24.000Z</firstCreated>
+        <pubStatus qcode="stat:usable"/>
+        <role qcode="itemRole:N"/>
+        <fileName>2018-01-22T020311Z_159588191_MT1VRT1202671839_RTRMADT_0_VARIETY-ENTERTAINMENT-FILM-AWARDS.XML</fileName>
+        <generator versioninfo="00.00.10">EXT:VRT</generator>
+        <profile versioninfo="00.00.01">SNI-Text</profile>
+        <service qcode="svc:RTR_TNS"/>
+        <memberOf creator="trRule:rule8" modified="2018-01-22T02:08:00.000Z" literal="Entertainment">
+          <name>Entertainment and Lifestyle</name>
+        </memberOf>
+        <memberOf creator="trRule:rule29" modified="2018-01-22T02:08:00.000Z" literal="World-US">
+          <name>US</name>
+        </memberOf>
+        <signal qcode="edStat:U"/>
+        <signal qcode="prodId:TXT"/>
+        <signal qcode="pmt:text"/>
+        <rtr:versionedId guid="tag:reuters.com,2018:newsml_MT1VRT1202671839:159588191"/>
+      </itemMeta>
+      <contentMeta>
+        <urgency>3</urgency>
+        <infoSource literal="Variety Media" role="cRole:origProv"/>
+        <creator literal="Variety Media, LLC"/>
+        <altId type="idType:TPCID">1202671839</altId>
+        <altId type="idType:OTR">MT1VRT1202671839</altId>
+        <language tag="en"/>
+        <subject qcode="MCC:e"/>
+        <subject qcode="MCCL:OVR"/>
+        <subject qcode="N2:ENT">
+          <name>Arts / Culture / Entertainment</name>
+        </subject>
+        <subject qcode="N2:FLM">
+          <name>Film</name>
+        </subject>
+        <subject qcode="N2:USA"/>
+        <subject qcode="a1312cat:e"/>
+        <subject qcode="subj:01000000"/>
+        <subject qcode="subj:01005000"/>
+        <subject qcode="N2:US" type="cptType:5">
+          <name>United States</name>
+          <facet qcode="geoProp:5"/>
+        </subject>
+        <subject literal="Awards">
+          <name>Awards</name>
+        </subject>
+        <subject literal="Film">
+          <name>Film</name>
+        </subject>
+        <subject literal="News">
+          <name>News</name>
+        </subject>
+        <subject literal="SAG Awards">
+          <name>SAG Awards</name>
+        </subject>
+        <subject literal="Veep">
+          <name>Veep</name>
+        </subject>
+        <slugline separator="-">VARIETY-ENTERTAINMENT-FILM/AWARDS</slugline>
+        <headline>SAG Awards: 'Big Little Lies' Wins for Nicole Kidman, Alexander Skarsgard</headline>
+        <creditline>Variety Media, LLC</creditline>
+        <by>Dave McNary</by>
+        <description role="descRole:caption">VARIETY-ENTERTAINMENT-FILM/AWARDS:SAG Awards: 'Big Little Lies' Wins for Nicole Kidman, Alexander Skarsgard</description>
+      </contentMeta>
+      <contentSet>
+        <inlineXML contenttype="application/xhtml+html" wordcount="229">
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <head>
+              <title/>
+            </head>
+            <body>
+              <p>By Dave McNary</p>
+              <p>LOS ANGELES (Variety.com) - The 24th Annual Screen Actors Guild Awards kicked off on Sunday night with a pair of big wins for "Big Little Lies" and "Veep."</p>
+              <p>Nicole Kidman and Alexander Skarsgard won the acting trophies for HBO's  "Big Little Lies." They portrayed a couple in a toxic relationship in the HBO series.</p>
+              <p>William H. Macy repeated as winner for best actor in the comedy series for "Shameless."</p>
+              <p>Allison Janney won the SAG supporting actress trophy for her role as a monster mother in "I, Tonya" and Sam Rockwell won for the supporting actor award for portraying a racist deputy in "Three Billboards Outside, Ebbing, Missouri."</p>
+              <p>"Veep" was the top early winner at the SAG Awards, with the cast taking the best comedy series trophy and Julia Louis-Dreyfus repeating as the best actress in the category. It was the third win for Louis-Dreyfus, who won the award in 2014 and 2017.</p>
+              <p>The awards ceremony, telecast from the Shrine Auditorium on TBS and TNT, included multiple mentions of the #MeToo movement with Kristen Bell serving as the first-ever host and the awards presenters all being female. SAG-AFTRA President Gabrielle Carteris said that the movement is making a difference.</p>
+              <p>"Truth is power and women are stepping into our power," she said. "We are making a difference. Change is coming and we are the agents of that change."</p>
+            </body>
+          </html>
+        </inlineXML>
+      </contentSet>
+    </newsItem>
+  </itemSet>
+</newsMessage>
