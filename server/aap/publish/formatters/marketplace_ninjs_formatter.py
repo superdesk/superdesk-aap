@@ -62,6 +62,11 @@ class MarketplaceNINJSFormatter(NewsroomNinjsFormatter):
         elif article.get('source') == 'AP':
             # if the string Writethru is not in the take key we assume the story is unique
             if 'Ld-Writethru' not in article.get('anpa_take_key'):
+                ingested = self._get_ingested(article)
+                if ingested:
+                    new_article = deepcopy(article)
+                    new_article['guid'] = ingested.get('guid')
+                    return new_article
                 return article
             # Try to find a the version of the article that is not a Writethru assuming it is the original
             prev = superdesk.get_resource_service('ingest').find(where={'slugline': article.get('slugline'),
