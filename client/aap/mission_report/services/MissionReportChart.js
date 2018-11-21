@@ -1,3 +1,5 @@
+import {SDChart} from 'superdesk-analytics/client/charts/SDChart';
+
 MissionReportChart.$inject = [
     'lodash',
     'gettext',
@@ -27,64 +29,59 @@ export function MissionReportChart(_, gettext, moment, chartConfig, $q, metadata
      * @description Generate the line chart to displaying the overall summary of the report
      */
     this.genSummaryChart = (data, params) => {
-        const totalStories = _.get(data, 'total_stories') || 0;
-
-        chartConfig.translations.summary = {
-            title: gettext('Summary'),
-            names: {
-                total_stories: gettext('Total Stories'),
-                results: gettext('Results/Fields/Comment/Betting'),
-                new_stories: gettext('New Stories'),
-                rewrites: gettext('Updates'),
-                corrections: gettext('Corrections'),
-                kills: gettext('Kills'),
-                takedowns: gettext('Takedowns'),
-            },
-        };
-
-        const source = {
-            total_stories: totalStories,
-            new_stories: _.get(data, 'new_stories.count') || 0,
-            results: _.get(data, 'new_stories.categories.results') || 0,
-            rewrites: _.get(data, 'rewrites.length') || 0,
-            corrections: _.get(data, 'corrections.length') || 0,
-            kills: _.get(data, 'kills.length') || 0,
-            takedowns: _.get(data, 'takedowns.length') || 0,
-        };
-
-        const chart = chartConfig.newConfig('mission_report_summary', 'line');
-
-        chart.getChart = () => ({
-            type: chart.chartType,
+        const chart = new SDChart.Chart({
+            id: 'mission_report_summary',
+            title: gettext('Mission Report Summary'),
+            subtitle: chartConfig.generateSubtitleForDates(params),
+            chartType: 'highcharts',
             height: 300,
+            dataLabels: false,
+            tooltipHeader: '{point.x}: {point.y}',
+            tooltipPoint: '',
+            defaultConfig: chartConfig.defaultConfig,
         });
 
-        chart.getSortedKeys = () => ([
-            'total_stories',
-            'new_stories',
-            'results',
-            'rewrites',
-            'corrections',
-            'kills',
-            'takedowns'
-        ]);
-
-        chart.getPlotOptions = () => ({
-            series: {dataLabels: {enabled: true}},
+        chart.setTranslation('summary', gettext('Summary'), {
+            total_stories: gettext('Total Stories'),
+            results: gettext('Results/Fields/Comment/Betting'),
+            new_stories: gettext('New Stories'),
+            rewrites: gettext('Updates'),
+            corrections: gettext('Corrections'),
+            kills: gettext('Kills'),
+            takedowns: gettext('Takedowns'),
         });
 
-        chart.title = gettext('Mission Report Summary')
-
-        chart.getSubtitle = () => chartConfig.generateSubtitleForDates(params);
-
-        chart.addSource('summary', source)
-        return chart.genConfig()
-            .then((config) => {
-                config.fullHeight = false;
-                delete config.xAxis.title;
-
-                return config;
+        chart.addAxis()
+            .setOptions({
+                type: 'category',
+                defaultChartType: 'line',
+                yTitle: gettext('Published Stories'),
+                categoryField: 'summary',
+                categories: [
+                    'total_stories',
+                    'new_stories',
+                    'results',
+                    'rewrites',
+                    'corrections',
+                    'kills',
+                    'takedowns'
+                ],
+            })
+            .addSeries()
+            .setOptions({
+                field: 'summary',
+                data: [
+                    _.get(data, 'total_stories') || 0,
+                    _.get(data, 'new_stories.count') || 0,
+                    _.get(data, 'new_stories.categories.results') || 0,
+                    _.get(data, 'rewrites.length') || 0,
+                    _.get(data, 'corrections.length') || 0,
+                    _.get(data, 'kills.length') || 0,
+                    _.get(data, 'takedowns.length') || 0
+                ],
             });
+
+        return chart.genConfig();
     };
 
     /**
@@ -95,6 +92,15 @@ export function MissionReportChart(_, gettext, moment, chartConfig, $q, metadata
      * @description Generate the bar chart to displaying the category report
      */
     this.genCategoryChart = (data) => {
+        const chart = new SDChart.Chart({
+            id: 'mission_report_categories',
+            title: gettext('New Stories By Category'),
+            dataLabels: true,
+            tooltipHeader: '{point.x}: {point.y}',
+            tooltipPoint: '',
+            fullHeight: true,
+        });
+
         const categories = _.keyBy(_.get(metadata, 'values.categories') || [], 'qcode');
 
         categories['results'] = {
@@ -102,41 +108,38 @@ export function MissionReportChart(_, gettext, moment, chartConfig, $q, metadata
             name: gettext('Results/Fields/Comment/Betting')
         };
 
-        const series = _.get(data, 'new_stories.categories') || {};
-
+        const translations = {};
         const source = {};
-
-        const chart = chartConfig.newConfig('mission_report_categories', 'bar');
-
-        chartConfig.translations.category = {
-            title: gettext('CATEGORY'),
-            names: {},
-        };
+        const series = _.get(data, 'new_stories.categories') || {};
 
         Object.keys(categories).forEach((qcode) => {
             source[qcode] = series[qcode] || 0;
-            chartConfig.translations.category.names[qcode] = categories[qcode].name + (
+            translations[qcode] = categories[qcode].name + (
                 qcode === 'results' ? '' : ` (${qcode.toUpperCase()})`
             );
         });
 
-        chart.getSortedKeys = (data) => (
-            _.sortBy(Object.keys(data))
-        );
+        chart.setTranslation('category', gettext('Category'), translations);
 
-        chart.getPlotOptions = () => ({
-            series: {dataLabels: {enabled: true}},
-        });
-
-        chart.title = gettext('New Stories by Category');
-        chart.addSource('category', source)
-
-        return chart.genConfig()
-            .then((config) => {
-                config.fullHeight = true;
-
-                return config;
+        chart.addAxis()
+            .setOptions({
+                type: 'category',
+                defaultChartType: 'bar',
+                yTitle: gettext('Category'),
+                xTitle: gettext('Published Stories'),
+                categoryField: 'category',
+                categories: _.sortBy(Object.keys(source)),
+            })
+            .addSeries()
+            .setOptions({
+                field: 'category',
+                data: _.map(
+                    _.sortBy(Object.keys(source)),
+                    (qcode) => _.get(source, qcode) || 0
+                ),
             });
+
+        return chart.genConfig();
     };
 
     /**
@@ -267,7 +270,7 @@ export function MissionReportChart(_, gettext, moment, chartConfig, $q, metadata
             title: `There were ${numSMSAlerts} SMS alerts issued`,
             rows: [],
         }
-    }
+    };
 
     /**
      * @ngdoc method
@@ -277,69 +280,56 @@ export function MissionReportChart(_, gettext, moment, chartConfig, $q, metadata
      * @description Generate the chart configs for the MissionReport charts
      */
     this.createChart = function(data, params) {
+        if ((_.get(data, 'total_stories') || 0) < 1) {
+            return $q.when({
+                charts: [{
+                    id: 'mission_report_empty',
+                    type: 'table',
+                    title: gettext('There were no stories published'),
+                    rows: [],
+                }],
+            });
+        }
+
         return metadata.initialize()
             .then(() => {
-                if ((_.get(data, 'total_stories') || 0) < 1) {
-                    return $q.when({
-                        charts: [{
-                            id: 'mission_report_empty',
-                            type: 'table',
-                            title: gettext('There were no stories published'),
-                            rows: [],
-                        }],
-                    });
-                }
-
                 const reportEnabled = (name) => _.get(params, `reports[${name}]`, true);
 
-                const promises = {};
+                const configs = [];
 
                 if (reportEnabled('summary')) {
-                    promises.summary = this.genSummaryChart(data, params);
+                    configs.push(this.genSummaryChart(data, params));
                 }
 
                 if (reportEnabled('categories')) {
-                    promises.categories = this.genCategoryChart(data);
+                    configs.push(this.genCategoryChart(data));
                 }
 
-                return $q.all(promises)
-                    .then((charts) => {
-                        const configs = [];
+                if (reportEnabled('corrections')) {
+                    configs.push(this.genCorrectionsChart(data));
+                }
 
-                        if (_.get(charts, 'summary')) {
-                            configs.push(charts.summary);
-                        }
+                if (reportEnabled('kills')) {
+                    configs.push(this.genKillsChart(data));
+                }
 
-                        if (_.get(charts, 'categories')) {
-                            configs.push(charts.categories);
-                        }
+                if (reportEnabled('takedowns')) {
+                    configs.push(this.genTakedownsChart(data));
+                }
 
-                        if (reportEnabled('corrections')) {
-                            configs.push(this.genCorrectionsChart(data));
-                        }
+                if (reportEnabled('sms_alerts')) {
+                    configs.push(this.genSMSAlertsChart(data));
+                }
 
-                        if (reportEnabled('kills')) {
-                            configs.push(this.genKillsChart(data));
-                        }
+                if (reportEnabled('updates')) {
+                    configs.push(this.genUpdatesChart(data));
+                }
 
-                        if (reportEnabled('takedowns')) {
-                            configs.push(this.genTakedownsChart(data));
-                        }
-
-                        if (reportEnabled('sms_alerts')) {
-                            configs.push(this.genSMSAlertsChart(data));
-                        }
-
-                        if (reportEnabled('updates')) {
-                            configs.push(this.genUpdatesChart(data));
-                        }
-
-                        return {
-                            charts: configs,
-                            multiChart: false,
-                            marginBottom: true,
-                        }
-                    });
+                return {
+                    charts: configs,
+                    multiChart: false,
+                    marginBottom: true,
+                }
             });
     }
 }
