@@ -23,7 +23,45 @@ class AgendaPlanningFormatter(Formatter):
 
     # select '''' + lower(Code) + ''': ' + CONVERT(varchar(10), IDCategory) + ',' from tbl_AGN_Category
     category_map = {'courts': 1, 'entertainment': 2, 'finance': 3, 'national': 4, 'sport': 5, 'world': 6,
-                    'politics': 9, 'holidays': 10, 'ann': 11}
+                    'politics': 9, 'holidays': 10, 'ann': 11,
+                    'awards': 2,
+                    'birthdays': 2,
+                    'company meetings': 3,
+                    'community events': 4,
+                    'cultural events': 2,
+                    'conferences': 4,
+                    'elections': 9,
+                    'exhibitions': 2,
+                    'festivals': 2,
+                    'inaugurations & openings': 4,
+                    'media opportunities': 4,
+                    'observances': 4,
+                    'press conferences': 4,
+                    'promotional events': 2,
+                    'reserve bank fixtures': 3,
+                    'special events': 4,
+                    'tournaments & competitions': 5,
+                    'trade fairs & expos': 3,
+                    'weddings': 2,
+                    'abs statistics': 3,
+                    'funerals and memorial services': 4,
+                    'diplomatic and business summits': 9,
+                    'speeches and addresses': 4,
+                    'royal family events': 2,
+                    'sportgeneral': 5,
+                    'political events': 9,
+                    'inquiries/royal commissons': 4,
+                    'rallies, protests or demonstrations': 4,
+                    'embargoed stories': 4,
+                    'canberra events': 9,
+                    'brisbane events': 4,
+                    'darwin events': 4,
+                    'hobart events': 4,
+                    'adelaide events': 4,
+                    'perth events': 4,
+                    'sydney events': 4,
+                    'melbourne events': 4,
+                    'interviews/tv program': 3}
 
     region_map = {'act': 2,
                   'aus': 1,
@@ -185,7 +223,8 @@ class AgendaPlanningFormatter(Formatter):
             for c in item['calendars']:
                 if self.category_map.get(c.get('qcode').lower()):
                     agenda_category.append({'ID': self.category_map.get(c.get('qcode').lower()), 'IsSelected': True})
-            agenda_event['Categories'] = agenda_category if len(agenda_category) > 0 else [
+            agenda_event['Categories'] = [dict(t) for t in {tuple(d.items()) for d in agenda_category}] if len(
+                agenda_category) > 0 else [
                 {'ID': 4, 'IsSelected': True}]
         else:
             agenda_event['Categories'] = [{'ID': 4, 'IsSelected': True}]
