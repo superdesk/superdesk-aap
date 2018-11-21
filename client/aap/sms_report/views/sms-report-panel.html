@@ -1,0 +1,87 @@
+<div class="side-panel side-panel--transparent side-panel--shadow-left"
+     ng-controller="SMSReportController"
+>
+    <div class="side-panel__header side-panel__header--border-b">
+        <div class="side-panel__tools">
+            <a class="icn-btn" data-flow="left" ng-click="toggleSidePanel()">
+                <i class="icon-close-small"></i>
+            </a>
+        </div>
+        <ul class="nav-tabs">
+            <li class="nav-tabs__tab"
+                ng-class="{'nav-tabs__tab--active': currentPanel === 'advanced'}"
+            >
+                <button class="nav-tabs__link"
+                        ng-click="changePanel('advanced')"
+                        translate
+                >Advanced</button>
+            </li>
+            <li class="nav-tabs__tab"
+                ng-class="{'nav-tabs__tab--active': currentPanel === 'saved'}"
+            >
+                <button class="nav-tabs__link"
+                        ng-click="changePanel('saved')"
+                        translate
+                >Saved</button>
+            </li>
+        </ul>
+    </div>
+
+    <div sd-saved-report-list
+         ng-if="currentPanel === 'saved'"
+         data-report-type="sms_report"
+         data-create-new-schedule="createNewSchedule"
+         data-view-schedules="viewSchedules"
+         class="side-panel__content"
+    ></div>
+
+    <div class="side-panel__content" ng-if="currentPanel === 'advanced'">
+        <div class="tab-box tab-box--no-padding">
+            <button class="tab-box__item"
+                    id="parameters-tab"
+                    type="button"
+                    ng-class="{'tab-box__item--active': currentTab==='parameters'}"
+                    ng-click="changeTab('parameters')"
+                    translate
+            >Parameters</button>
+            <button class="tab-box__item"
+                    id="filters-tab"
+                    type="button"
+                    ng-class="{'tab-box__item--active': currentTab==='filters'}"
+                    ng-click="changeTab('filters')"
+                    translate
+            >Filters</button>
+            <button class="tab-box__item"
+                    id="chart-tab"
+                    type="button"
+                    ng-class="{'tab-box__item--active': currentTab==='chartOptions'}"
+                    ng-click="changeTab('chartOptions')"
+                    translate
+            >Chart</button>
+        </div>
+
+        <div class="side-panel__content-block">
+            <form name="SMSReportForm">
+                <div ng-show="currentTab==='parameters'"
+                     ng-include="'sms-report-parameters.html'"
+                ></div>
+                <div sda-source-filters
+                     ng-if="currentTab === 'filters'"
+                     data-params="currentParams.params"
+                ></div>
+
+                <div ng-show="currentTab==='chartOptions'"
+                     ng-include="'chart-form-options.html'"
+                ></div>
+            </form>
+        </div>
+    </div>
+
+    <div sd-save-generate-report
+         ng-if="currentPanel === 'advanced'"
+         data-generate-report="generate"
+         data-get-report-params="getReportParams"
+         data-is-dirty="isDirty"
+         data-view-schedule="viewSchedule"
+    ></div>
+</div>
