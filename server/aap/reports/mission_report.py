@@ -14,7 +14,7 @@ from superdesk.metadata.item import ITEM_STATE, CONTENT_STATE
 from superdesk.utc import utc_to_local
 
 from analytics.base_report import BaseReportService
-from analytics.chart_config import ChartConfig
+from analytics.chart_config import ChartConfig, SDChart
 
 from aap.common import extract_kill_reason_from_html
 
@@ -83,14 +83,17 @@ class MissionReportService(BaseReportService):
                 terms = query.get('terms') or {}
                 if not terms.get('anpa_category.qcode'):
                     continue
-                exclude_categories = [qcode for qcode in terms['anpa_category.qcode'] or []]
+
+                exclude_categories = [
+                    qcode
+                    for qcode in terms.get('anpa_category.qcode') or []
+                ]
         elif args.get('params'):
-            must_not = args.get('params', {})\
-                           .get('must_not', {})
+            must_not = (args.get('params') or {}).get('must_not') or {}
 
             exclude_categories = [
                 qcode
-                for qcode in must_not.get('categories', [])
+                for qcode in must_not.get('categories') or []
             ]
 
         return {
@@ -208,18 +211,34 @@ class MissionReportService(BaseReportService):
         params = args.get('params') or {}
 
         def gen_summary_chart():
-            source = {
-                'total_stories': report['total_stories'],
-                'new_stories': report['new_stories']['count'],
-                'results': report['new_stories']['categories']['results'],
-                'rewrites': len(report['rewrites']),
-                'corrections': len(report['corrections']),
-                'kills': len(report['kills']),
-                'takedowns': len(report['takedowns'])
-            }
+            chart = SDChart.Chart(
+                'mission_report_summary',
+                title='Mission Report Summary',
+                subtitle=ChartConfig.gen_subtitle_for_dates(params),
+                chart_type='highcharts',
+                height=300,
+                data_labels=False,
+                tooltip_header='{point.x}: {point.y}',
+                tooltip_point='',
+                default_config=ChartConfig.defaultConfig
+            )
 
-            def get_sorted_keys(data):
-                return [
+            chart.set_translation('summary', 'Summary', {
+                'total_stories': 'Total Stories',
+                'results': 'Results/Fields/Comment/Betting',
+                'new_stories': 'New Stories',
+                'rewrites': 'Updates',
+                'corrections': 'Corrections',
+                'kills': 'Kills',
+                'takedowns': 'Takedowns'
+            })
+
+            axis = chart.add_axis().set_options(
+                type='category',
+                default_chart_type='line',
+                y_title='Published Stories',
+                category_field='summary',
+                categories=[
                     'total_stories',
                     'new_stories',
                     'results',
@@ -228,91 +247,78 @@ class MissionReportService(BaseReportService):
                     'kills',
                     'takedowns'
                 ]
+            )
 
-            def get_chart():
-                return {
-                    'type': chart_config.chart_type,
-                    'height': 300
-                }
+            axis.add_series().set_options(
+                field='summary',
+                data=[
+                    report['total_stories'],
+                    report['new_stories']['count'],
+                    report['new_stories']['categories']['results'],
+                    len(report['rewrites']),
+                    len(report['corrections']),
+                    len(report['kills']),
+                    len(report['takedowns'])
+                ]
+            )
 
-            def get_plot_options():
-                return {'series': {'dataLabels': {'enabled': True}}}
-
-            def gen_subtitle():
-                return chart_config.gen_subtitle_for_dates(params)
-
-            chart_config = ChartConfig('mission_report_summary', 'line')
-
-            chart_config.title = 'Mission Report Summary'
-            chart_config.get_subtitle = gen_subtitle
-
-            chart_config.translations = {
-                'summary': {
-                    'title': 'Summary',
-                    'names': {
-                        'total_stories': 'Total Stories',
-                        'results': 'Results/Fields/Comment/Betting',
-                        'new_stories': 'New Stories',
-                        'rewrites': 'Updates',
-                        'corrections': 'Corrections',
-                        'kills': 'Kills',
-                        'takedowns': 'Takedowns'
-                    }
-                }
-            }
-
-            chart_config.get_chart = get_chart
-            chart_config.get_plot_options = get_plot_options
-            chart_config.get_sorted_keys = get_sorted_keys
-
-            chart_config.add_source('summary', source)
-
-            chart_config.gen_config()
-            chart_config.config['fullHeight'] = False
-            chart_config.config['xAxis'].pop('title', None)
-
-            return chart_config.config
+            return chart.gen_config()
 
         def gen_category_chart():
+            chart = SDChart.Chart(
+                'mission_report_categories',
+                title='New Stories By Category',
+                data_labels=True,
+                tooltip_header='{point.x}: {point.y}',
+                tooltip_point='',
+                full_height=True,
+                default_config=ChartConfig.defaultConfig
+            )
+
             categories = report.get('categories')
             categories['results'] = {
                 'qcode': 'results',
                 'name': 'Results/Fields/Comment/Betting'
             }
 
+            chart.set_translation('category', 'CATEGORY', {
+                qcode: category['name'] + (
+                    '' if qcode == 'results' else ' ({})'.format(qcode.upper())
+                )
+                for qcode, category in categories.items()
+            })
+
             source = {
                 qcode: report['new_stories']['categories'][qcode]
                 for qcode, category in categories.items()
             }
 
-            def get_sorted_keys(data):
-                return [
-                    category for category, count
-                    in sorted(
-                        source.items(),
-                        key=lambda kv: kv[0]
-                    )
+            sorted_categories = [
+                category for category, count
+                in sorted(
+                    source.items(),
+                    key=lambda kv: kv[0]
+                )
+            ]
+
+            axis = chart.add_axis().set_options(
+                type='category',
+                default_chart_type='bar',
+                y_title='Category',
+                x_title='Published Stories',
+                category_field='category',
+                categories=sorted_categories
+            )
+
+            axis.add_series().set_options(
+                field='category',
+                data=[
+                    source.get(qcode) or 0
+                    for qcode in sorted_categories
                 ]
+            )
 
-            chart_config = ChartConfig('mission_report_categories', 'bar')
-
-            chart_config.translations = {
-                'category': {
-                    'title': 'CATEGORY',
-                    'names': {
-                        qcode: category['name'] + (
-                            '' if qcode == 'results' else ' ({})'.format(qcode.upper())
-                        )
-                        for qcode, category in categories.items()
-                    }
-                }
-            }
-            chart_config.get_sorted_keys = get_sorted_keys
-
-            chart_config.title = 'New Stories By Category'
-            chart_config.add_source('category', source)
-
-            return chart_config.gen_config()
+            return chart.gen_config()
 
         def gen_table_rows(source):
             return [

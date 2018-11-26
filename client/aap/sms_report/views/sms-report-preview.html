@@ -1,0 +1,10 @@
+<sda-preview-date-filter></sda-preview-date-filter>
+
+<div class="form__row form__row--no-padding">
+    <label class="form-label form-label--light" translate>Interval</label>
+    <p ng-if="report.params.histogram.interval === 'hourly'" translate>Hourly</p>
+    <p ng-if="report.params.histogram.interval === 'daily'" translate>Daily</p>
+    <p ng-if="report.params.histogram.interval === 'weekly'" translate>Weekly</p>
+</div>
+
+<sda-preview-source-filter></sda-preview-source-filter>
