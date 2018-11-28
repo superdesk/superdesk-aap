@@ -252,6 +252,9 @@ AUTO_PUBLISH_CONTENT_PROFILE = False
 # Expire items 3 days after their scheduled date
 PLANNING_EXPIRY_MINUTES = int(env('PLANNING_EXPIRY_MINUTES', 4320))
 
+# Delete spiked events/plannings after their scheduled date
+PLANNING_DELETE_SPIKED_MINUTES = int(env('PLANNING_DELETE_SPIKED_MINUTES', 4320))
+
 #: The number of minutes before Publish Queue is purged
 PUBLISH_QUEUE_EXPIRY_MINUTES = int(env('PUBLISH_QUEUE_EXPIRY_MINUTES', 3 * 24 * 60))
 
