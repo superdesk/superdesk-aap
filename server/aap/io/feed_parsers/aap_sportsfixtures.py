@@ -142,7 +142,8 @@ class AAPSportsFixturesParser(XMLFeedParser):
         item['state'] = CONTENT_STATE.INGESTED
         item['pubstatus'] = None
         calendars = superdesk.get_resource_service('vocabularies').find_one(req=None, _id='event_calendars')
-        item['calendars'] = [c for c in calendars.get('items', []) if c.get('qcode').lower() == 'sport']
+        item['calendars'] = [c for c in calendars.get('items', [])
+                             if c.get('qcode').lower() in ('sport', 'sportgeneral')]
 
         return item
 

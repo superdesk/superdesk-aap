@@ -20,8 +20,11 @@ class SportsAPITestCase(TestCase):
         "is_active": True,
         "qcode": "eocstat:eos5",
         "name": "Planned, occurs certainly"
-    }]}, {'_id': 'event_calendars', 'items': [{"name": "Sport",
+    }]}, {'_id': 'event_calendars', 'items': [{"name": "Sport Fixtures",
                                                "qcode": "sport",
+                                               "is_active": True},
+                                              {"name": "Sport",
+                                               "qcode": "sportgeneral",
                                                "is_active": True}]}]
 
     location = [{
@@ -103,6 +106,7 @@ class SportsAPITestCase(TestCase):
             items = AAPSportsFixturesParser().parse(fixture, None)
             self.assertTrue(len(items) == 1)
             self.assertEqual(items[0].get('calendars')[0].get('qcode'), 'sport')
+            self.assertEqual(items[0].get('calendars')[1].get('qcode'), 'sportgeneral')
 
     def test_fixture_list_with_no_dates(self):
         filename = 'aap_cricket.xml'
