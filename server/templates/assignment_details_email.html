@@ -1,0 +1,67 @@
+<b>Slugline: </b>{{ slugline }}
+<p>
+    <b>Description: </b>{{ assignment.description_text }}
+</p>
+{% if event %}
+<p>
+    <b>Event: </b>{{ event.name }}
+</p>
+<p>
+    <b>When: </b>{{ event.dates.start|format_datetime(timezone_string=event.dates.tz, date_format="%H:%M %a %b %d %Y") }} - {{ event.dates.end|format_datetime(timezone_string=event.dates.tz, date_format="%H:%M %a %b %d %Y (%Z)") }}
+</p>
+{% endif %}
+<p>
+    <b>Coverage due:</b> {{ assignment.planning.scheduled|format_datetime(date_format="%H:%M %a %b %d %Y (%Z)") }}
+</p>
+{% if assignment.planning.ednote %}
+<p>
+    <b>Editorial Note:</b><br>
+    {{ assignment.planning.ednote }}
+</p>
+{% endif %}
+{% if assignment.planning.internal_note %}
+<p>
+    <b>Internal Note:</b><br>
+    {{ assignment.planning.internal_note }}
+</p>
+{%  endif %}
+{% if event %}
+    <p>
+        <b><a href="https://www.google.com.au/maps/?q={{ event.location[0].name }}%20{{ event.location[0].address.line[0] }}%20{{ event.location[0].address.area }}%20{{ event.location[0].address.locality }}%20{{ event.location[0].address.postal_code }}%20{{ event.location[0].address.country }}">Location:</a></b><br>
+        {{ event.location[0].name }}<br>
+        {{ event.location[0].address.line[0] }}<br>
+        {{ event.location[0].address.area }}<br>
+        {{ event.location[0].address.locality }} {{ event.location[0].address.postal_code }}<br>
+        {{ event.location[0].address.country }}<br>
+    </p>
+    {% if event.links %}
+    <p>
+        <b>Links:</b><br>
+        {% for link in event.links %}
+            <a href="{{ link }}">{{ link }}</a><br>
+        {% endfor %}
+    </p>
+    {% endif %}
+    {% if event.event_contact_info is defined %}
+        <p>
+            <b>Contacts:</b><br>
+            {% for contact in event.event_contact_info %}
+                {{ contact.honorific }} {{ contact.first_name }} {{ contact.last_name }}<br>
+                {{ contact.job_title }}|{{ contact.organisation }}<br>
+                {% for email in contact.contact_email %}
+                    {{ email }}<br>
+                {% endfor %}
+                {% for phone in contact.contact_phone %}
+                    {{ phone.number }} {{ phone.usage }}<br>
+                {% endfor %}
+                {% for mobile in contact.mobile %}
+                    {{ mobile.number }} {{ mobile.usage }}<br>
+                {% endfor %}
+                Notes: {{ contact.notes }}<br><br>
+            {% endfor %}
+        </p>
+    {% endif %}
+{% endif %}
+<b>Assignment ID: </b>{{ assignment_id }}<br>
+<b>Details: </b><a href="{{ client_url }}/#/workspace/assignments?assignment={{ assignment_id }}">Assignment
+    Details</a> (Internal only)<br>
