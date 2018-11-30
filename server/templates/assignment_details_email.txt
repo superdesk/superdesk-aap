@@ -1,0 +1,67 @@
+Slugline: {{ slugline }}
+
+    Description: {{ assignment.description_text }}
+
+{% if event %}
+
+    Event: {{ event.name }}
+
+
+    When: {{ event.dates.start|format_datetime(timezone_string=event.dates.tz, date_format="%H:%M %a %b %d %Y") }} - {{ event.dates.end|format_datetime(timezone_string=event.dates.tz, date_format="%H:%M %a %b %d %Y (%Z)") }}
+
+{% endif %}
+
+    Coverage due: {{ assignment.planning.scheduled|format_datetime(date_format="%H:%M %a %b %d %Y (%Z)") }}
+
+{% if assignment.planning.ednote %}
+
+    Editorial Note:
+    {{ assignment.planning.ednote }}
+
+{% endif %}
+{% if assignment.planning.internal_note %}
+
+    Internal Note:
+    {{ assignment.planning.internal_note }}
+
+{%  endif %}
+{% if event %}
+    
+    Location:
+        {{ event.location[0].name }}
+        {{ event.location[0].address.line[0] }}
+        {{ event.location[0].address.area }}
+        {{ event.location[0].address.locality }} {{ event.location[0].address.postal_code }}
+        {{ event.location[0].address.country }}
+    
+    {% if event.links %}
+    
+        Links:
+        {% for link in event.links %}
+            {{ link }}
+        {% endfor %}
+    
+    {% endif %}
+    {% if event.event_contact_info is defined %}
+        
+            Contacts:
+            {% for contact in event.event_contact_info %}
+                {{ contact.honorific }} {{ contact.first_name }} {{ contact.last_name }}
+                {{ contact.job_title }}|{{ contact.organisation }}
+                {% for email in contact.contact_email %}
+                    {{ email }}
+                {% endfor %}
+                {% for phone in contact.contact_phone %}
+                    {{ phone.number }} {{ phone.usage }}
+                {% endfor %}
+                {% for mobile in contact.mobile %}
+                    {{ mobile.number }} {{ mobile.usage }}
+                {% endfor %}
+                Notes: {{ contact.notes }}
+
+
+            {% endfor %}
+        
+    {% endif %}
+{% endif %}
+Assignment ID: {{ assignment_id }}

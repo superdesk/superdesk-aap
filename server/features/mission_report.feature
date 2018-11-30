@@ -205,7 +205,7 @@ Feature: Mission Report
 
     @auth
     @wip
-    Scenario: Receive results as hicharts configs
+    Scenario: Receive results as higharts configs
         Given "published"
         """
         [
@@ -245,34 +245,55 @@ Feature: Mission Report
         Then we get 7 charts
         """
         [{
+            "id": "mission_report_summary",
             "chart": {
                 "height": 300,
-                "type": "line"
+                "zoomType": "x"
             },
             "series": [{
-                "name": "Published Stories",
-                "data": [6, 2, 0, 1, 1, 1, 1]
+                "name": "Summary",
+                "data": [6, 2, 0, 1, 1, 1, 1],
+                "type": "line",
+                "xAxis": 0
             }],
             "title": {"text": "Mission Report Summary"},
-            "type": "line",
-            "xAxis": {"categories": [
-                "Total Stories",
-                "New Stories",
-                "Results/Fields/Comment/Betting",
-                "Updates",
-                "Corrections",
-                "Kills",
-                "Takedowns"
-            ]},
-            "yAxis": {"title": {"text": "Published Stories"}}
+            "type": "highcharts",
+            "xAxis": [{
+                "allowDecimals": false,
+                "type": "category",
+                "categories": [
+                    "Total Stories",
+                    "New Stories",
+                    "Results/Fields/Comment/Betting",
+                    "Updates",
+                    "Corrections",
+                    "Kills",
+                    "Takedowns"
+                ]
+            }],
+            "yAxis": [{
+                "title": {"text": "Published Stories"},
+                "allowDecimals": false
+            }],
+            "credits": {"enabled": false},
+            "fullHeight": false,
+            "time": {"useUTC": true},
+            "legend": {"enabled": false},
+            "plotOptions": {"series": {"dataLabels": {"enabled": false}}}
         }, {
-            "type": "bar",
+            "id": "mission_report_categories",
+            "chart": {"zoomType": "y"},
+            "type": "highcharts",
             "title": {"text": "New Stories By Category"},
             "series": [{
-                "name": "Published Stories",
-                "data": [1, 0, 0, 0, 1]
+                "name": "CATEGORY",
+                "data": [1, 0, 0, 0, 1],
+                "type": "bar",
+                "xAxis": 0
             }],
-            "xAxis": {
+            "xAxis": [{
+                "allowDecimals": false,
+                "type": "category",
                 "categories": [
                     "National (A)",
                     "FormGuide (H)",
@@ -280,9 +301,17 @@ Feature: Mission Report
                     "Results/Fields/Comment/Betting",
                     "Advisories (V)"
                 ],
-                "title": {"text": "CATEGORY"}
-            },
-            "yAxis": {"title": {"text": "Published Stories"}}
+                "title": {"text": "Published Stories"}
+            }],
+            "yAxis": [{
+                "title": {"text": "Category"},
+                "allowDecimals": false
+            }],
+            "credits": {"enabled": false},
+            "fullHeight": true,
+            "time": {"useUTC": true},
+            "legend": {"enabled": false},
+            "plotOptions": {"series": {"dataLabels": {"enabled": true}}}
         }, {
             "type": "table",
             "title": "There were 1 corrections issued",

@@ -1,0 +1,21 @@
+<div class="sd-alert sd-alert--hollow" translate>
+    Generate a report showing statistics for published content with sms flag.
+</div>
+
+<div sda-date-filters
+     data-filters="dateFilters"
+     data-params="currentParams.params"
+     data-on-filter-change="onDateFilterChange"
+     data-on-dates-change="updateChartConfig"
+></div>
+
+<div class="form__row form__row--no-padding">
+    <div class="sd-line-input sd-line-input--is-select">
+        <label class="sd-line-input__label" translate>Interval</label>
+        <select ng-model="currentParams.params.histogram.interval">
+            <option value="hourly" translate>Hourly</option>
+            <option value="daily" translate>Daily</option>
+            <option value="weekly" translate>Weekly</option>
+        </select>
+    </div>
+</div>
