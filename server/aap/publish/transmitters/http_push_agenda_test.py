@@ -145,7 +145,7 @@ class AgendaFaileToGetKeyTransmit(TestCase):
         self.setupRemoteSyncMock(self)
 
     def setupRemoteSyncMock(self, context):
-        context.mock = HTTMock(*[self.user_search, self.get_key, self.save_entry])
+        context.mock = HTTMock(*[self.user_search, self.get_key, self.save_entry, self.get_resource])
         context.mock.__enter__()
 
     @urlmatch(scheme='http', netloc='bogus.aap.com.au', path='/api/user/search')
@@ -163,11 +163,22 @@ class AgendaFaileToGetKeyTransmit(TestCase):
     @urlmatch(scheme='http', netloc='bogus.aap.com.au', path='/api/entry/saveentry')
     def save_entry(self, url, request):
         self.assertEqual(request.headers.get('x-agenda-api-key'), '123456')
+        item = json.loads(request.body)
+        self.assertEqual(item['Coverages'][0]['Resources'][0].get('ID'), 999)
         return {'status_code': 200,
                 'headers': {'Location': 'x/9999'}}
 
+    @urlmatch(scheme='http', netloc='bogus.aap.com.au', path='/api/resource')
+    def get_resource(self, url, request):
+        resp = [{'ID': 999}]
+        resp_bytes = json.dumps(resp).encode('UTF-8')
+        return {'status_code': 200,
+                'content': resp_bytes
+                }
+
     def test_send_event(self):
-        user = [{'_id': 1, 'email': 'mock@mail.com.au', 'byline': 'A Mock Up', 'sign_off': 'TA'}]
+        user = [{'_id': 1, 'email': 'mock@mail.com.au', 'byline': 'A Mock Up', 'sign_off': 'TA', 'first_name': 'Billy',
+                 'last_name': 'Fish'}]
         self.app.data.insert('users', user)
         planning = [{'_id': '1234', 'type': 'planning'}]
         self.app.data.insert('planning', planning)
@@ -181,7 +192,8 @@ class AgendaFaileToGetKeyTransmit(TestCase):
             "delivery_type": "http_agenda_push"
         }
         item = "{\"Categories\": [{\"ID\": 4, \"IsSelected\": true}], \"Type\": \"planning\", \"TimeFromZone\": " \
-               "\"+11:00\", \"Coverages\": [{\"CoverageStatus\": {\"ID\": 1}, \"Role\": {\"ID\": 1}}], \"TimeFrom\": " \
+               "\"+11:00\", \"Coverages\": [{\"Resources\": [{\"ID\": 1}],  \"CoverageStatus\": {\"ID\": 1}, " \
+               "\"Role\": {\"ID\": 1}}], \"TimeFrom\": " \
                "\"10:40\", \"PublishingUser\": 1, \"TimeTo\": \"10:40\"," \
                " \"ExternalIdentifier\": \"1234\", \"Visibility\": {\"ID\": 1}, \"TimeToZone\": \"+11:00\", " \
                "\"Agencies\": [{\"ID\": 1, \"IsSelected\": true}], \"SpecialInstructions\": null, \"City\": " \
