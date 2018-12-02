@@ -260,6 +260,9 @@ class AgendaPlanningFormatter(Formatter):
                     agenda_role = self.coverage_type_map.get(coverage_type, 1)
                     coverage_status = self.coverage_status_map.get(coverage.get('news_coverage_status').get('qcode'))
                     agenda_coverage = {'Role': {'ID': agenda_role}, 'CoverageStatus': {'ID': coverage_status}}
+                    user_id = coverage.get('assigned_to', {}).get('user')
+                    if user_id:
+                        agenda_coverage['Resources'] = [{'ID': user_id}]
                     coverages.append(agenda_coverage)
         agenda_event['Coverages'] = coverages
 
@@ -320,6 +323,9 @@ class AgendaPlanningFormatter(Formatter):
             agenda_role = self.coverage_type_map.get(coverage_type, 1)
             coverage_status = self.coverage_status_map.get(coverage.get('news_coverage_status').get('qcode'))
             agenda_coverage = {'Role': {'ID': agenda_role}, 'CoverageStatus': {'ID': coverage_status}}
+            user_id = coverage.get('assigned_to', {}).get('user')
+            if user_id:
+                agenda_coverage['Resources'] = [{'ID': user_id}]
             coverages.append(agenda_coverage)
         if len(coverages) > 0:
             agenda_event['Coverages'] = coverages

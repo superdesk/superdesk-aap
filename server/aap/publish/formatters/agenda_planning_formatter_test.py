@@ -168,6 +168,7 @@ class AgendaPlanningFormatterTest(TestCase):
                     },
                     "coverage_id": "urn:newsml:localhost:2018-02-15T12:38:15.344350:"
                                    "af31ffb9-d0f7-4c42-9a62-598b55dbf808",
+                    "assigned_to": {"user": "123"}
                 }
             ],
             "urgency": 2,
@@ -197,6 +198,7 @@ class AgendaPlanningFormatterTest(TestCase):
         doc = self.formatter.format(planning, {'name': 'Test Subscriber'})[0]
         item = json.loads(doc[1])
         self.assertEqual(item.get('Title'), 'TEST')
+        self.assertEqual(item['Coverages'][0]['Resources'][0].get('ID'), '123')
 
     def test_planning_with_event(self):
         planning = {
@@ -217,7 +219,8 @@ class AgendaPlanningFormatterTest(TestCase):
                         "g2_content_type": "text"
                     },
                     "coverage_id": "urn:newsml:localhost:2018-02-19T13:47:"
-                                   "43.338910:41af3708-33f1-46f6-9f05-626907e83fa0"
+                                   "43.338910:41af3708-33f1-46f6-9f05-626907e83fa0",
+                    "assigned_to": {"user": "123"}
                 }
             ],
             "description_text": "Superdesk - Show & Tell",
@@ -293,6 +296,7 @@ class AgendaPlanningFormatterTest(TestCase):
         self.assertEqual(item.get('Title'), 'Superdesk Planning')
         self.assertEqual(len(item.get('Coverages')), 1)
         self.assertEqual(item.get('Type'), 'event')
+        self.assertEqual(item['Coverages'][0]['Resources'][0].get('ID'), '123')
 
     def test_place(self):
         event = {
