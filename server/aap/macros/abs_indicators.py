@@ -14,18 +14,22 @@ import re
 from flask import current_app as app
 import time
 import logging
+from flask import render_template_string
 
 cpi_url = 'CPI/2.50.999901.20.Q'
-cpi_token = '{{CPI}}'
+cpi_token = '__CPI__'
 
 unemployment_url = 'LF/0.14.3.1599.20.M'
-unemployment_token = '{{UNEMPLOYMENT}}'
+unemployment_token = '__UNEMPLOYMENT__'
 
 lending_url = 'HF/3.0.99.20.140_1.M'
-lending_token = '{{LENDING}}'
+lending_token = '__LENDING__'
 
 retail_url = 'RT/0.1.20.20.M'
-retail_trade_token = '{{RETAIL_TRADE}}'
+retail_trade_token = '__RETAIL_TRADE__'
+
+bop_url = 'BOP/1.100.20.Q'
+bop_token = '__BOP__'
 
 token_map = {cpi_token: cpi_url, unemployment_token: unemployment_url, lending_token: lending_url,
              retail_trade_token: retail_url}
@@ -33,7 +37,7 @@ token_map = {cpi_token: cpi_url, unemployment_token: unemployment_url, lending_t
 logger = logging.getLogger(__name__)
 
 
-def expand_token(token, item):
+def expand_token(token, item, template_map):
     url_prefix = app.config.get('ABS_WEB_SERVICE_URL')
     abs_web_service_token = app.config.get('ABS_WEB_SERVICE_TOKEN')
     url_suffix = '/all?dimensionAtObservation=allDimensions&detail=DataOnly&APIKey='
@@ -63,15 +67,21 @@ def expand_token(token, item):
             value = str(round(raw_value, 2))
         else:
             value = str(response['dataSets'][0]['observations'][dimension_key][0])
-        item['body_html'] = item.get('body_html').replace(token, value)
-        item['headline'] = item.get('headline').replace(token, value)
-        item['abstract'] = item.get('abstract').replace(token, value)
+
+        # convert the token to one that is jinja compliant
+        jinja_token = re.sub('\\.|/|\\+', '_', token)
+        item['body_html'] = item.get('body_html').replace(token, jinja_token)
+        item['headline'] = item.get('headline').replace(token, jinja_token)
+        item['abstract'] = item.get('abstract').replace(token, jinja_token)
+
+        template_map[jinja_token] = value
 
         # the token for the period
-        token = token.replace('}}', '#PERIOD}}')
-        item['body_html'] = item.get('body_html').replace(token, last_period_name)
-        item['headline'] = item.get('headline').replace(token, last_period_name)
-        item['abstract'] = item.get('abstract').replace(token, last_period_name)
+        jinja_token = jinja_token[:-1] + 'PERIOD__'
+        item['body_html'] = item.get('body_html').replace(token[:-2] + '#PERIOD__', jinja_token)
+        item['headline'] = item.get('headline').replace(token[:-2] + '#PERIOD__', jinja_token)
+        item['abstract'] = item.get('abstract').replace(token[:-2] + '#PERIOD__', jinja_token)
+        template_map[jinja_token] = last_period_name
 
         # calculate the change from the preceeding value
         last_period_index -= 1
@@ -86,24 +96,47 @@ def expand_token(token, item):
                 adjective = 'rose'
             else:
                 adjective = 'held steady'
-            token = token.replace('#PERIOD}}', '#ADJECTIVE}}')
-            item['body_html'] = item.get('body_html').replace(token, adjective)
-            item['headline'] = item.get('headline').replace(token, adjective)
-            item['abstract'] = item.get('abstract').replace(token, adjective)
+            jinja_token = jinja_token.replace('_PERIOD__', '_ADJECTIVE__')
+            item['body_html'] = item.get('body_html').replace(token[:-2] + '#ADJECTIVE__', jinja_token)
+            item['headline'] = item.get('headline').replace(token[:-2] + '#ADJECTIVE__', jinja_token)
+            item['abstract'] = item.get('abstract').replace(token[:-2] + '#ADJECTIVE__', jinja_token)
+            template_map[jinja_token] = adjective
+
+            if isinstance(prev_value, float):
+                value = str(round(prev_value, 2))
+            else:
+                value = str(response['dataSets'][0]['observations'][dimension_key][0])
+            jinja_token = jinja_token.replace('_ADJECTIVE__', '_PREV__')
+            item['body_html'] = item.get('body_html').replace(token[:-2] + '#PREV__', jinja_token)
+            item['headline'] = item.get('headline').replace(token[:-2] + '#PREV__', jinja_token)
+            item['abstract'] = item.get('abstract').replace(token[:-2] + '#PREV__', jinja_token)
+            template_map[jinja_token] = value
+
+            prev_period_name = response.get('structure').get('dimensions').get('observation')[-1].get('values')[-2].get(
+                'name')
+            jinja_token = jinja_token.replace('_PREV__', '_PREVPERIOD__')
+            item['body_html'] = item.get('body_html').replace(token[:-2] + '#PREVPERIOD__', jinja_token)
+            item['headline'] = item.get('headline').replace(token[:-2] + '#PREVPERIOD__', jinja_token)
+            item['abstract'] = item.get('abstract').replace(token[:-2] + '#PREVPERIOD__', jinja_token)
+            template_map[jinja_token] = prev_period_name
     else:
         logger.info('ABS API returned {}'.format(r.status_code))
     time.sleep(.120)
 
 
 def abs_expand(item, **kwargs):
-    # find the primary tokens
-    tokens = re.findall('{{(.[^#]*?)}}', item['body_html'])
+    template_map = {}
+    # find the primary tokens, delimitered double underscores
+    tokens = re.findall('__(.*?)__', item['body_html'])
     for t in tokens:
-        if '{{' + t + '}}' not in token_map:
-            token_map['{{' + t + '}}'] = t
+        if '__' + t + '__' not in token_map and '#' not in t:
+            token_map['__' + t + '__'] = t
     for e in token_map:
         if e in item['body_html'] or e in item['headline'] or e in item['abstract']:
-            expand_token(e, item)
+            expand_token(e, item, template_map)
+
+    item['body_html'] = render_template_string(item.get('body_html', ''), **template_map)
+
     return item
 
 
