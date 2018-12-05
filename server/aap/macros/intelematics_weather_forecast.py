@@ -69,7 +69,7 @@ def forecast_story(item, **kwargs):
         direction_map = {'N': 'north', 'NNE': 'north-northeast', 'NE': 'northeast', 'ENE': 'east-northeast',
                          'E': 'east', 'ESE': 'east-southeast', 'SE': 'southeast', 'SSE': 'south-southeast',
                          'S': 'south', 'SSW': 'south-southwest', 'SW': 'southwest', 'WSW': 'west-southwest',
-                         'W': 'west', 'WNW': 'west-worthwest', 'NW': 'northwest', 'NNW': 'north-northwest'}
+                         'W': 'west', 'WNW': 'west-northwest', 'NW': 'northwest', 'NNW': 'north-northwest'}
 
         try:
             node = period.find('sd:{}'.format(name), namespaces=NS)
