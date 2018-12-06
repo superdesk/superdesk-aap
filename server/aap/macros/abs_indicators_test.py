@@ -24,10 +24,11 @@ class ABSTestCase(AAPTestCase):
         context.mock.__enter__()
 
     def test_CPI(self):
-        item = {'body_html': 'something something {{CPI}} {{CPI#PERIOD}} something else',
+        item = {'body_html': 'something something {{__CPI/2.50.999901.20.Q__}} {{__CPI/2.50.999901.20.Q#PERIOD__}} '
+                             'something else {{(__CPI/2.50.999901.20.Q__|float)*100|int}}',
                 'headline': 'Test', 'abstract': 'Test'}
         updated_item = abs_expand(item)
-        self.assertEqual(updated_item, {'body_html': 'something something 0.5 Dec-2017 something else',
+        self.assertEqual(updated_item, {'body_html': 'something something 0.5 Dec-2017 something else 50.0',
                                         'abstract': 'Test', 'headline': 'Test'})
 
     @urlmatch(scheme='https', netloc='api.xxx.yyy.au',
