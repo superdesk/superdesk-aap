@@ -43,6 +43,9 @@ def am_snaps_auto_publish(item, **kwargs):
     for field in ['abstract', 'body_html']:
         item[field] = sms_message
 
+    # change the place to FED for all AM snaps
+    item['place'] = [{'name': 'FED', 'qcode': 'FED'}]
+
     # need to check that a story with the same sms_message has not been published to SMS before
     query = {
         "query": {
