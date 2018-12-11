@@ -17,10 +17,11 @@ from copy import deepcopy
 
 
 class MarketplaceNINJSFormatter(NewsroomNinjsFormatter):
+    """Formatter for publishing the market place content to Newsroom.
+    It attempts to update stories from Reuters, PA and AP if a newer version/correction is received.
+
     """
-    Formatter for publishing the market place content to Newsroom, it attempts to update stories from Reuters, PA and AP
-    If a newer version/correction is received.
-    """
+
     def __init__(self):
         self.format_type = 'marketplace ninjs'
         self.can_preview = False

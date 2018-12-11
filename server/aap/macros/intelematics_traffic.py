@@ -65,6 +65,25 @@ def traffic_story(item, **kwargs):
                                    {'incident_description': {
                                        '$not': re.compile('.*{}.*'.format('Roadworks'), re.IGNORECASE)}}]
 
+        # Attempt to remove the reporting of apparently permanently closed roads in Brisbane and Perth
+        if state == 'WA':
+            incident_query['$and'].append({'incident_description': {'$ne': 'Closed on Brearley Avenue Eastbound in '
+                                                                           'Perth between Great Eastern '
+                                                                           'Highway and Second Street.'}})
+            incident_query['$and'].append({'incident_description': {'$ne': 'Closed on Brearley Avenue Westbound in '
+                                                                           'Perth between Second Street and Great '
+                                                                           'Eastern Highway.'}})
+        if state == 'QLD':
+            incident_query['$and'].append({'incident_description': {'$ne': 'Entry slip road closed on Sandgate Road '
+                                                                    'Northbound in Brisbane between Holroyd '
+                                                                    'Street and Gateway Motorway.'}})
+            incident_query['$and'].append({'incident_description': {'$ne': 'Closed on William Street '
+                                                                           'Northbound in Brisbane '
+                                                                    'between Margaret Street and Elizabeth Street.'}})
+            incident_query['$and'].append({'incident_description': {'$ne': 'Closed on William Street South '
+                                                                           'Bound in Brisbane '
+                                                                    'between Elizabeth Street and Margaret Street.'}})
+
         incidents = service.get_from_mongo(req=req, lookup=incident_query)
         if incidents.count():
             incidents_html += '<p><b>{}</b></p>'.format(area['properties']['area'])

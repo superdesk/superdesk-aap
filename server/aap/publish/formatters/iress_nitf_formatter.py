@@ -22,6 +22,7 @@ from eve.utils import config
 from superdesk.text_utils import get_text
 from .field_mappers.locator_mapper import LocatorMapper
 from .field_mappers.slugline_mapper import SluglineMapper
+from aap.publish.formatters.unicodetoascii import to_ascii
 
 
 class IRESSNITFFormatter(NITFFormatter):
@@ -98,13 +99,13 @@ class IRESSNITFFormatter(NITFFormatter):
         nitf_body = []
 
         if article.get('ednote'):
-            nitf_body.append(self._format_line(article.get('ednote')))
+            nitf_body.append(to_ascii(self._format_line(article.get('ednote'))))
 
         if article.get(BYLINE):
-            nitf_body.append(self._format_line(get_text(article.get(BYLINE))))
+            nitf_body.append(to_ascii(self._format_line(get_text(article.get(BYLINE)))))
 
         if article.get(FORMAT) == FORMATS.PRESERVED:
-            nitf_body.append(get_text(self.append_body_footer(article), content='html'))
+            nitf_body.append(to_ascii(get_text(self.append_body_footer(article), content='html')))
         else:
             body = article.get('body_html', '')
             # we need to inject the dateline
@@ -121,7 +122,7 @@ class IRESSNITFFormatter(NITFFormatter):
 
         sign_off = '{} {}'.format(article.get('source') or '', (article.get('sign_off') or '')).strip()
         if sign_off:
-            nitf_body.append(self._format_line(sign_off))
+            nitf_body.append(to_ascii(self._format_line(sign_off)))
 
         SubElement(body_content, 'pre').text = ''.join(nitf_body)
 
@@ -144,7 +145,7 @@ class IRESSNITFFormatter(NITFFormatter):
         para_text = "".join(x for x in parsed.itertext())
         # multiple line breaks to one line break
         para_text = re.sub('[{}]+'.format(self.line_feed), self.line_feed, para_text)
-        return para_text
+        return to_ascii(para_text)
 
     def _format_head(self, article, head):
         tobject = self._format_tobject(article, head)
