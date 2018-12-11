@@ -305,7 +305,7 @@ class IRESSNITFFormatterTest(AAPTestCase):
         doc = self.formatter.format(article, {'name': 'Test Subscriber'})[0]
         item = doc['formatted_item'].replace(self.line_ender, self.line_feed)
         nitf_xml = etree.fromstring(item)
-        self.assertEqual(nitf_xml.find('body/body.content/pre').text, '   a b c d e  f gZZZZYYYY\n   AAPZZZZYYYY\n')
+        self.assertEqual(nitf_xml.find('body/body.content/pre').text, '   a b c d e  f gZZZZYYYY\n   AAPZZZZYYYY\n')
 
     def testControlCharsContent(self):
         article = {
@@ -328,7 +328,7 @@ class IRESSNITFFormatterTest(AAPTestCase):
         doc = self.formatter.format(article, {'name': 'Test Subscriber'})[0]
         item = doc['formatted_item'].replace(self.line_ender, self.line_feed)
         nitf_xml = etree.fromstring(item)
-        self.assertEqual(nitf_xml.find('body/body.content/pre').text, '      AAPZZZZYYYY\n')
+        self.assertEqual(nitf_xml.find('body/body.content/pre').text, '      AAPZZZZYYYY\n')
 
     def testNullTakeKeyContent(self):
         article = {
@@ -432,3 +432,28 @@ class IRESSNITFFormatterTest(AAPTestCase):
         self.assertEqual(nitf_xml.find('head/title').text, 'CRIK:Drop gang campaign, bishop tells Vic Libs')
         self.assertEqual(nitf_xml.find('body/body.head/hedline/hl1').text,
                          'CRIK:Drop gang campaign, bishop tells Vic Libs')
+
+    def testSmartQuotes(self):
+        article = {
+            '_id': '3',
+            'source': 'AAP',
+            'anpa_category': [{'qcode': 'a'}],
+            'headline': 'This is a test headline',
+            'byline': None,
+            'format': 'HTML',
+            'versioncreated': datetime(2018, 6, 13, 11, 45, 19, 0, tzinfo=pytz.UTC),
+            'slugline': 'slugline',
+            'subject': [{'qcode': '02011001'}],
+            'anpa_take_key': None,
+            'unique_id': 1,
+            'type': 'text',
+            'body_html': '<p>“Why is society being so childish.” and the Yen ¥</p>',
+            'word_count': '1',
+            'priority': 1,
+            'abstract': None
+        }
+        doc = self.formatter.format(article, {'name': 'Test Subscriber'})[0]
+        item = doc['formatted_item'].replace(self.line_ender, self.line_feed)
+        nitf_xml = etree.fromstring(item)
+        self.assertEqual(nitf_xml.find('body/body.content/pre').text, '   "Why is society being so childish." and '
+                                                                      'the Yen Y=ZZZZYYYY\n   AAPZZZZYYYY\n')
