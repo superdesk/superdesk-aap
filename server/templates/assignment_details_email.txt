@@ -25,7 +25,7 @@ Slugline: {{ slugline }}
     {{ assignment.planning.internal_note }}
 
 {%  endif %}
-{% if event %}
+{% if event and event.location and event.location[0] %}
     
     Location:
         {{ event.location[0].name }}
