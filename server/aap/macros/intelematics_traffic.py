@@ -133,3 +133,4 @@ label = 'Traffic Information'
 callback = traffic_story
 access_type = 'frontend'
 action_type = 'direct'
+group = 'AM Desk'
