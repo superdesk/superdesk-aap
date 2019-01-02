@@ -4,7 +4,7 @@
 Published At : {{ article.versioncreated | format_datetime(date_format='%c') }}
 {% if article.associations is defined and article.associations.featuremedia is defined %}
 <br>
-    <img src="CID:MainImage">
+    <img style="height: auto;width: 100%;max-width: max-content;" src="CID:MainImage">
 <br>
 {% endif %}
 <b>{{ article.slugline}}</b>&nbsp;{% if article.anpa_take_key is defined and article.anpa_take_key %}{{ article.anpa_take_key }}&nbsp;{% endif %}
