@@ -267,6 +267,17 @@ INGEST_EXPIRY_MINUTES = int(env('INGEST_EXPIRY_MINUTES', 2 * 24 * 60))
 #: The number of minutes before audit content is purged
 AUDIT_EXPIRY_MINUTES = int(env('AUDIT_EXPIRY_MINUTES', 43200))
 
+with open(os.path.join(os.path.dirname(__file__), 'picture-profile.json')) as profile_json:
+    picture_profile = json.load(profile_json)
+
+EDITOR = {
+    "picture": picture_profile['editor'],
+}
+
+SCHEMA = {
+    "picture": picture_profile['schema'],
+}
+
 VALIDATOR_MEDIA_METADATA = {
     "headline": {
         "required": True,
