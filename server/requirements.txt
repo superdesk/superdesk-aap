@@ -8,6 +8,8 @@ pyasn1==0.3.7
 geopy==1.11.0
 slackclient==1.0.9
 pyasn1==0.3.7
+gtfs-realtime-bindings==0.0.5
+protobuf3-to-dict==0.1.5
 
 git+git://github.com/superdesk/superdesk-core.git@204abd1a8#egg=Superdesk-Core
 git+git://github.com/superdesk/superdesk-planning.git@07f814c#egg=superdesk-planning
