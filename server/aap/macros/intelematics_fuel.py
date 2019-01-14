@@ -163,3 +163,4 @@ label = 'Fuel Injection'
 callback = fuel_story
 access_type = 'frontend'
 action_type = 'direct'
+group = 'AM Desk'
