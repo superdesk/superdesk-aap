@@ -160,3 +160,4 @@ label = 'Weather Forecast/Observations'
 callback = forecast_story
 access_type = 'frontend'
 action_type = 'direct'
+group = 'AM Desk'

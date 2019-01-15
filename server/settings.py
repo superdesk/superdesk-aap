@@ -267,6 +267,17 @@ INGEST_EXPIRY_MINUTES = int(env('INGEST_EXPIRY_MINUTES', 2 * 24 * 60))
 #: The number of minutes before audit content is purged
 AUDIT_EXPIRY_MINUTES = int(env('AUDIT_EXPIRY_MINUTES', 43200))
 
+with open(os.path.join(os.path.dirname(__file__), 'picture-profile.json')) as profile_json:
+    picture_profile = json.load(profile_json)
+
+EDITOR = {
+    "picture": picture_profile['editor'],
+}
+
+SCHEMA = {
+    "picture": picture_profile['schema'],
+}
+
 VALIDATOR_MEDIA_METADATA = {
     "headline": {
         "required": True,
@@ -316,4 +327,10 @@ ABS_WEB_SERVICE_URL = env('ABS_WEB_SERVICE_URL', None)
 ABS_WEB_SERVICE_TOKEN = env('ABS_WEB_SERVICE_TOKEN', None)
 
 START_OF_WEEK = int(env('START_OF_WEEK', 0))
+
 WATERMARK_IMAGE = env('WATERMARK_IMAGE', 'templates/watermark.png')
+
+SYDNEY_TRANSPORT_API_KEY = env('SYDNEY_TRANSPORT_API_KEY', None)
+
+VICTORIAN_TRANSPORT_DEVICE_ID = env('VICTORIAN_TRANSPORT_DEVICE_ID', None)
+VICTORIAN_TRANSPORT_SIGNATURE = env('VICTORIAN_TRANSPORT_SIGNATURE', None)
