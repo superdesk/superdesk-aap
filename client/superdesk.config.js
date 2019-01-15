@@ -44,6 +44,7 @@ module.exports = function() {
             editorAttachments: false,
             editorInlineComments: false,
             editorSuggestions: false,
+            validatePointOfInterestForImages: true,
         },
 
         activity: {
