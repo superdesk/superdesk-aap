@@ -17,6 +17,10 @@ import re
 import datetime as datetime
 from superdesk.utc import utcnow
 from lxml import html
+from superdesk.utils import config
+from superdesk import get_resource_service
+from superdesk.metadata.item import ITEM_STATE, CONTENT_STATE
+
 
 logger = logging.getLogger(__name__)
 
@@ -35,8 +39,7 @@ def expand_brisbane_transport(item, **kwargs):
 
     incidents_map = dict()
 
-    response = requests.get('https://translink.com.au/service-updates/rss', headers={
-        'Accept': 'application/rss+xml'})
+    response = requests.get('https://translink.com.au/service-updates/rss', headers={'Accept': 'application/rss+xml'})
     response.raise_for_status()
     rss = etree.fromstring(response.content)
     for rssitem in rss.findall('./channel/item'):
@@ -68,9 +71,6 @@ def expand_brisbane_transport(item, **kwargs):
             # Try to find the node that contains the details of the entry
             content = tree.xpath('.//div[@class="templateinsert"]')[0] if len(tree.xpath(
                 './/div[@class="templateinsert"]')) else None
-            if content is None:
-                content = tree.xpath('.//div[@class="bs-callout bs-callout-info"]')[0].getnext() if len(
-                    tree.xpath('.//div[@class="bs-callout bs-callout-info"]')) else None
 
             # Try to find the node that
             mode = tree.xpath('.//div[@id="affected-services"]/div/h3')
@@ -90,15 +90,31 @@ def expand_brisbane_transport(item, **kwargs):
                 elif transport_mode == 'Tram':
                     tram_story.write('<p>{}</p><p>{}</p><hr>'.format(title, stuff))
             else:
-                logger.warning('Could not find expected content node in {}'.format(link))
+                content = tree.xpath('.//div[@class="bs-callout bs-callout-info"]')[0].getnext() if len(
+                    tree.xpath('.//div[@class="bs-callout bs-callout-info"]')) else None
+                stuff = ''
+                while content is not None:
+                    stuff += '<br>' + ' '.join(content.itertext())
+                    content = content.getnext()
+
                 if transport_mode == 'Bus':
-                    bus_story.write('<p>{}</p>'.format(title))
+                    bus_story.write('<p>{}</p><p>{}</p><hr>'.format(title, stuff))
                 elif transport_mode == 'Train':
-                    train_story.write('<p>{}</p>'.format(title))
+                    train_story.write('<p>{}</p><p>{}</p><hr>'.format(title, stuff))
                 elif transport_mode == 'Ferry':
-                    ferry_story.write('<p>{}</p>'.format(title))
+                    ferry_story.write('<p>{}</p><p>{}</p><hr>'.format(title, stuff))
                 elif transport_mode == 'Tram':
-                    tram_story.write('<p>{}</p>'.format(title))
+                    tram_story.write('<p>{}</p><p>{}</p><hr>'.format(title, stuff))
+                else:
+                    logger.warning('Could not find expected content node in {}'.format(link))
+                    if transport_mode == 'Bus':
+                        bus_story.write('<p>{}</p>'.format(title))
+                    elif transport_mode == 'Train':
+                        train_story.write('<p>{}</p>'.format(title))
+                    elif transport_mode == 'Ferry':
+                        ferry_story.write('<p>{}</p>'.format(title))
+                    elif transport_mode == 'Tram':
+                        tram_story.write('<p>{}</p>'.format(title))
 
     incidents_map['bus_alerts'] = bus_story.getvalue()
     incidents_map['train_alerts'] = train_story.getvalue()
@@ -110,6 +126,17 @@ def expand_brisbane_transport(item, **kwargs):
     train_story.close()
 
     item['body_html'] = render_template_string(item.get('body_html', ''), **incidents_map)
+
+    # If the macro is being executed by a scheduled template then publish the item as well
+    if 'desk' in kwargs and 'stage' in kwargs:
+        update = {'body_html': item.get('body_html', '')}
+        get_resource_service('archive').system_update(item[config.ID_FIELD], update, item)
+
+        get_resource_service('archive_publish').patch(id=item[config.ID_FIELD],
+                                                      updates={ITEM_STATE: CONTENT_STATE.PUBLISHED,
+                                                      'auto_publish': True})
+        return get_resource_service('archive').find_one(req=None, _id=item[config.ID_FIELD])
+
     return item
 
 
