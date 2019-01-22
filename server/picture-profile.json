@@ -92,10 +92,10 @@
             "nullable": true
         },
         "genre" : {
-            "required" : true,
-            "minlength" : 1,
+            "required" : false,
+            "minlength" : 0,
             "type" : "list",
-            "nullable" : false,
+            "nullable" : true,
             "default" : [
                 {
                     "scheme" : null,
