@@ -196,6 +196,20 @@
             "type": "string",
             "required": false,
             "nullable": true
+        },
+        "renditions" : {
+            "schema" : {
+                "16-9" : {
+                    "required" : true,
+                    "type" : "dict"
+                },
+                "4-3" : {
+                    "required" : true,
+                    "type" : "dict"
+                }
+            },
+            "required" : true,
+            "type" : "dict"
         }
     }
 }
