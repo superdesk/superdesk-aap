@@ -93,7 +93,7 @@ class IRESSNITFFormatter(NITFFormatter):
             SubElement(head, 'meta', {'name': 'asx-codes', 'content': " ".join(codes)})
 
     def _format_line(self, line_text):
-            return '{}{}{}'.format(self.line_prefix, line_text, self.line_feed)
+        return '{}{}{}'.format(self.line_prefix, line_text, self.line_feed)
 
     def _format_body_content(self, article, body_content):
         nitf_body = []

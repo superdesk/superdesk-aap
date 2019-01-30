@@ -153,11 +153,11 @@ class AppImportTextArchiveCommand(superdesk.Command):
         return None
 
     def _addkeywords(self, key, doc, item):
-            code = self._get_head_value(doc, key)
-            if code:
-                if 'keywords' not in item:
-                    item['keywords'] = []
-                item['keywords'].append(code)
+        code = self._get_head_value(doc, key)
+        if code:
+            if 'keywords' not in item:
+                item['keywords'] = []
+            item['keywords'].append(code)
 
     def _process_bunch(self, x):
         # x.findall('dc_rest_docs/dc_rest_doc')[0].get('href')
