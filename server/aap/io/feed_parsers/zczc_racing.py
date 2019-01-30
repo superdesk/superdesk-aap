@@ -43,10 +43,10 @@ class ZCZCRacingParser(ZCZCFeedParser):
             if lines[0].upper().find('YY ') != -1 or lines[0].upper().find('HH ') != -1:
                 destinations = lines[0].split(' ')
                 for dest in destinations[1:]:
-                        if (item.get('keywords')):
-                            item.get('keywords', []).append(dest)
-                        else:
-                            item['keywords'] = [dest]
+                    if (item.get('keywords')):
+                        item.get('keywords', []).append(dest)
+                    else:
+                        item['keywords'] = [dest]
 
             if lines[2] and lines[2].find(':SPORT -') != -1:
                 item[self.ITEM_HEADLINE] = lines[2][9:]
