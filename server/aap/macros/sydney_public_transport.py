@@ -228,7 +228,7 @@ def expand_sydney_public_transport(item, **kwargs):
                     train_story.write('<p>{} {}</p><hr>'.format(
                         alert.get('header_text').get('translation')[0].get('text'),
                         alert.get('description_text').get('translation')[0].get('text')))
-    except HTTPError as ex:
+    except HTTPError:
         logger.warning('Exception retrieving gtfs')
 
     incidents_map['train_alerts'] = train_story.getvalue()
