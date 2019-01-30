@@ -30,7 +30,7 @@ module.exports = function() {
 
         features: {
             elasticHighlight: 1,
-            swimlane: {columnsLimit: 4},
+            swimlane: {defaultNumberOfColumns: 4},
             editFeaturedImage: 1,
             confirmMediaOnUpdate: 1,
             hideLiveSuggestions: 1,
