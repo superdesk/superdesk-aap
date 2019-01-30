@@ -63,7 +63,7 @@ class LocatorMapper(FieldMapper):
         '15040000': 'MOTOR',  # motor rallying
         '15041000': 'MOTOR',  # motor cycling
         '15042000': 'NET',
-        '15003001': 'NFL',
+        '15003000': 'NFL',
         '15073001': 'OLY',
         '15073002': 'OLY',
         '15073047': 'PARA',
