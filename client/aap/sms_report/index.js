@@ -42,7 +42,7 @@ angular.module('aap.apps.sms-report', [])
             id: 'sms_report',
             label: gettext('SMS'),
             sidePanelTemplate: 'sms-report-panel.html',
-            priority: 600,
+            priority: 650,
             privileges: {sms_report: 1},
             allowScheduling: true,
         });

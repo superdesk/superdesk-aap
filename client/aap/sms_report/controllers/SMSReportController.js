@@ -31,8 +31,6 @@ export function SMSReportController(
     deployConfig
 ) {
     this.init = () => {
-        $scope.currentTab = 'parameters';
-
         $scope.dateFilters = [
             DATE_FILTERS.YESTERDAY,
             DATE_FILTERS.LAST_WEEK,
@@ -159,12 +157,6 @@ export function SMSReportController(
         $scope.updateChartConfig();
     };
 
-    $scope.runQuery = (params) => searchReport.query(
-        'sms_report',
-        params,
-        true
-    );
-
     $scope.generate = () => {
         $scope.changeContentView('report');
 
@@ -190,10 +182,6 @@ export function SMSReportController(
                     )
                 );
             })
-    };
-
-    $scope.changeTab = (tabName) => {
-        $scope.currentTab = tabName;
     };
 
     this.createChart = (report) => {

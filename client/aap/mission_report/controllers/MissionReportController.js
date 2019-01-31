@@ -39,7 +39,6 @@ export function MissionReportController(
      */
     this.init = () => {
         $scope.ready = false;
-        $scope.currentTab = 'parameters';
         $scope.dateFilters = [
             DATE_FILTERS.YESTERDAY,
             DATE_FILTERS.RELATIVE,
@@ -100,18 +99,6 @@ export function MissionReportController(
 
     /**
      * @ngdoc method
-     * @name MissionReportController#runQuery
-     * @returns {Promise<Object>} - Search API query response
-     * @description Sends the current form parameters to the search API
-     */
-    this.runQuery = (params) => searchReport.query(
-        'mission_report',
-        params,
-        true
-    );
-
-    /**
-     * @ngdoc method
      * @name MissionReportController#generate
      * @description Using the current form parameters, query the Search API and update the chart configs
      */
@@ -133,16 +120,6 @@ export function MissionReportController(
     $scope.getReportParams = () => (
         $q.when(_.cloneDeep($scope.currentParams))
     );
-
-    /**
-     * @ngdoc method
-     * @name MissionReportController#changeTab
-     * @param {String} tabName - The name of the tab to change to
-     * @description Change the current tab in the filters panel
-     */
-    $scope.changeTab = (tabName) => {
-        $scope.currentTab = tabName;
-    };
 
     this.init();
 }

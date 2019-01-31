@@ -49,7 +49,7 @@ angular.module('aap.apps.mission-report', ['superdesk.analytics'])
             id: 'mission_report',
             label: gettext('Mission'),
             sidePanelTemplate: 'mission-report-panel.html',
-            priority: 500,
+            priority: 350,
             privileges: {mission_report: 1},
             allowScheduling: true,
         });
