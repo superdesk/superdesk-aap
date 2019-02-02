@@ -32,3 +32,4 @@ class VolumeTestCase(unittest.TestCase):
         self.assertEqual(diff['1-16 lbs'], '1-16 lbs (0.45-7 kg)')
         self.assertEqual(diff['16.7-pound'], '16.7-pound (7.6 kg)')
         self.assertEqual(diff['16,500-lb'], '16,500-lb (7,484 kg)')
+        self.assertEqual(res['body_html'], item['body_html'])

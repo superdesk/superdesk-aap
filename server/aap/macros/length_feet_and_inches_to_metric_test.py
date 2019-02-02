@@ -58,3 +58,4 @@ class FeetInchesTestCase(unittest.TestCase):
         self.assertEqual(diff['10-12 in'], '10-12 in (25.40-30.48 cm)')
         self.assertEqual(diff['5-foot-10'], '5-foot-10 (1.78 m)')
         self.assertEqual(diff['5-feet-10'], '5-feet-10 (1.78 m)')
+        self.assertEqual(res['body_html'], item['body_html'])

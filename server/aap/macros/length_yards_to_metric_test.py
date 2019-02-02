@@ -32,3 +32,4 @@ class YardTestCase(unittest.TestCase):
         self.assertEqual(diff['12.5 yd'], '12.5 yd (11.4 metres)')
         self.assertEqual(diff['12,500 yards'], '12,500 yards (11,430 metres)')
         self.assertEqual(diff['100-12500 Yards'], '100-12500 Yards (91-11,430 metres)')
+        self.assertEqual(res['body_html'], item['body_html'])

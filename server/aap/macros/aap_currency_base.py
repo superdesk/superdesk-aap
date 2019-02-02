@@ -186,6 +186,6 @@ def do_conversion(item, rate, currency, search_param, match_index, value_index, 
 
     for field in macro_replacement_fields:
         if item.get(field, None):
-            item[field] = re.sub(search_param, convert, item[field])
+            re.sub(search_param, convert, item[field])
 
     return (item, diff)

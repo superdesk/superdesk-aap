@@ -70,3 +70,4 @@ class CurrencyTestCase(CurrencyTestClass):
         self.assertEqual(diff['¥ 4000'], '¥ 4000 ($A8,000)')
         self.assertEqual(diff['500 Japanese yen'], '500 Japanese yen ($A1,000)')
         self.assertEqual(diff['100,000 Japanese Yen'], '100,000 Japanese Yen ($A200,000)')
+        self.assertEqual(res['body_html'], item['body_html'])

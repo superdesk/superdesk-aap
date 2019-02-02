@@ -30,3 +30,4 @@ class AreaTestCase(unittest.TestCase):
         self.assertEqual(diff['1-16 sq-mi'], '1-16 sq-mi (2.6-41.4 square km)')
         self.assertEqual(diff['16.7-Square-mi'], '16.7-Square-mi (43.3 square km)')
         self.assertEqual(diff['16,500-sq. mi'], '16,500-sq. mi (42,735 square km)')
+        self.assertEqual(res['body_html'], item['body_html'])

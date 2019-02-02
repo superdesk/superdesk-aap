@@ -36,3 +36,4 @@ class MilesTestCase(unittest.TestCase):
         self.assertEqual(diff['12.5-nmi'], '12.5-nmi (23.2 km)')
         self.assertEqual(diff['12,500 nautical miles'], '12,500 nautical miles (23,150 km)')
         self.assertEqual(diff['100-12500 Nautical Miles'], '100-12500 Nautical Miles (185.2-23,150 km)')
+        self.assertEqual(res['body_html'], item['body_html'])
