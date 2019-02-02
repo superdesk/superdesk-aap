@@ -82,3 +82,4 @@ class CurrencyTestCase(CurrencyTestClass):
         self.assertEqual(diff['£ 40000'], '£ 40000 ($A80,000)')
         self.assertEqual(diff['GBP1.88 billion'], 'GBP1.88 billion ($A3.76 billion)')
         self.assertEqual(diff['£2.62bn'], '£2.62bn ($A5.24 bn)')
+        self.assertEqual(res['body_html'], item['body_html'])

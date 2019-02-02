@@ -32,3 +32,4 @@ class VolumeTestCase(unittest.TestCase):
         self.assertEqual(diff['1-16 cb. in'], '1-16 cb. in (16-262 cubic centimeter)')
         self.assertEqual(diff['16.7-Cubic-in'], '16.7-Cubic-in (273.7 cubic centimeter)')
         self.assertEqual(diff['16,500-cu. in'], '16,500-cu. in (0.3 cubic meter)')
+        self.assertEqual(res['body_html'], item['body_html'])

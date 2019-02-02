@@ -86,7 +86,7 @@ def do_conversion(item, converter, formatter, search_param):
 
     for field in macro_replacement_fields:
         if item.get(field, None):
-            item[field] = re.sub(search_param, convert, item[field])
+            re.sub(search_param, convert, item[field])
 
     return (item, diff)
 

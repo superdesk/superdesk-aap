@@ -30,3 +30,4 @@ class TemperatureTestCase(unittest.TestCase):
         self.assertEqual(diff['1-16 acres'], '1-16 acres (0.4-6.5 ha)')
         self.assertEqual(diff['16.7-acres'], '16.7-acres (6.8 ha)')
         self.assertEqual(diff['16,500-acre'], '16,500-acre (6,677 ha)')
+        self.assertEqual(res['body_html'], item['body_html'])
