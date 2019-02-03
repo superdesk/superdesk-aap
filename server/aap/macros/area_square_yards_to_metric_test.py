@@ -30,3 +30,4 @@ class TemperatureTestCase(unittest.TestCase):
         self.assertEqual(diff['1-16 sq-yds'], '1-16 sq-yds (0.84-13 square meter)')
         self.assertEqual(diff['16.7-Square-yds'], '16.7-Square-yds (14.0 square meter)')
         self.assertEqual(diff['16,500-Square Yards'], '16,500-Square Yards (1.4 ha)')
+        self.assertEqual(res['body_html'], item['body_html'])
