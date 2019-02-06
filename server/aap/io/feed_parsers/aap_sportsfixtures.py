@@ -160,6 +160,11 @@ class AAPSportsFixturesParser(XMLFeedParser):
         start_date = competition_detail.attrib.get('Start_Date', '')
         end_date = competition_detail.attrib.get('End_Date', '')
         comp_type = competition_detail.attrib.get('Comp_Type', '')
+        if comp_type == '':
+            if 'Test' in fixture.get('comp_name'):
+                comp_type = 'test'
+            elif 'One Day' in fixture.get('comp_name'):
+                comp_type = 'odi'
         # A fixture list that the competition details provide the start and end date
         if start_date != '' and end_date != '':
             try:
