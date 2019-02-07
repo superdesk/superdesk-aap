@@ -107,7 +107,7 @@ export function MissionReportController(
 
         const params = _.cloneDeep($scope.currentParams.params);
 
-        this.runQuery(params).then((data) => {
+        $scope.runQuery(params).then((data) => {
             missionReportChart.createChart(data, params)
                 .then((config) => {
                     $scope.changeReportParams(config)
