@@ -375,7 +375,7 @@ class AMFronterTest(AAPTestCase):
         {
             "_id": "5c40c1d08e64b91f5861c71f",
             "_created": "2019-01-17T17:56:32.000+0000",
-            "body_html": "<p>(Not for publication, this is a guide only.)<br></p><p>PAGE 1:<br></p><p>The Royal A"
+            "body_html": "<p>(Not for publication, this is a guide only.)<br></p><p>PAGE 1: The Royal A"
                          "ustralasian College of Physicians has rubbished Premier Gladys Berejiklian’s claim ther"
                          "e is insufficient evidence to support pill testing, calling on the state’s leader&nbsp;t"
                          "o introduce trials at music festivals to save lives.</p><p> </p><p>PAGES 2-5:</p><p>Nata"
@@ -429,7 +429,8 @@ class AMFronterTest(AAPTestCase):
                          " after it defied the gloom surrounding the nation’s bricks-and-mortar retail sector to rep"
                          "ort its strongest Christmas period on record.</p><p> </p><p>SPORT:</p><p>Another Australia"
                          "n teen sensation, Alexei Popyrin, is into the third round of the Australian Open after Dom"
-                         "inic Thiem retired midway through the third set of their Melbourne Park&nbsp;clash.</p>",
+                         "inic Thiem retired midway through the third set of their Melbourne Park&nbsp;clash.</p><p>"
+                         "</p>",
             "anpa_category": [
                 {
                     "name": "Advisories",
