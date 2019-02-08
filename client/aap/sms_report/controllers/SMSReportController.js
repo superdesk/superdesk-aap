@@ -1,5 +1,6 @@
 import {getErrorMessage, getUtcOffsetInMinutes} from 'superdesk-analytics/client/utils';
 import {DATE_FILTERS} from 'superdesk-analytics/client/search/directives/DateFilters.js';
+import {CHART_FIELDS, CHART_TYPES} from 'superdesk-analytics/client/charts/directives/ChartOptions';
 import {SDChart} from 'superdesk-analytics/client/charts/SDChart';
 
 SMSReportController.$inject = [
@@ -36,6 +37,17 @@ export function SMSReportController(
             DATE_FILTERS.LAST_WEEK,
             DATE_FILTERS.LAST_MONTH,
             DATE_FILTERS.RANGE,
+        ];
+
+        $scope.chartFields = [
+            CHART_FIELDS.TITLE,
+            CHART_FIELDS.SUBTITLE,
+            CHART_FIELDS.TYPE,
+        ];
+
+        $scope.chartTypes = [
+            CHART_TYPES.BAR,
+            CHART_TYPES.COLUMN,
         ];
 
         this.initDefaultParams();
@@ -158,6 +170,7 @@ export function SMSReportController(
     };
 
     $scope.generate = () => {
+        $scope.beforeGenerateChart();
         $scope.changeContentView('report');
 
         const params = _.cloneDeep($scope.currentParams.params);
