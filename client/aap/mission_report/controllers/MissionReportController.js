@@ -103,11 +103,12 @@ export function MissionReportController(
      * @description Using the current form parameters, query the Search API and update the chart configs
      */
     $scope.generate = () => {
+        $scope.beforeGenerateChart();
         $scope.changeContentView('report');
 
         const params = _.cloneDeep($scope.currentParams.params);
 
-        this.runQuery(params).then((data) => {
+        $scope.runQuery(params).then((data) => {
             missionReportChart.createChart(data, params)
                 .then((config) => {
                     $scope.changeReportParams(config)
