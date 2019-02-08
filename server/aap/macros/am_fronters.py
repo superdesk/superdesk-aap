@@ -42,59 +42,67 @@ def am_fronters(item, **kwargs):
               {'heading': 'CANBERRA TIMES', 'name': 'The Canberra Times'},
               {'heading': 'NT NEWS', 'name': 'The NT News'}]
     for paper in papers:
-        service = get_resource_service('published')
-        req = ParsedRequest()
-        query = {
-            "query": {
-                "filtered": {
-                    "query": {
-                        "query_string": {
-                            "query": "headline:(\"Main+stories+in+{}\")".format(paper.get('name').replace(' ', '+'))
-                        }
-                    },
-                    "filter": {
-                        "and": [
-                            {
-                                "term": {
-                                    "anpa_category.qcode": "v"
-                                }
+        try:
+            service = get_resource_service('published')
+            req = ParsedRequest()
+            query = {
+                "query": {
+                    "filtered": {
+                        "query": {
+                            "query_string": {
+                                "query": "headline:(\"Main+stories+in+{}\")".format(paper.get('name').replace(' ', '+'))
                             }
-                        ]
+                        },
+                        "filter": {
+                            "and": [
+                                {
+                                    "term": {
+                                        "anpa_category.qcode": "v"
+                                    }
+                                }
+                            ]
+                        }
                     }
                 }
             }
-        }
-        req.sort = '[("_created", -1)]'
-        req.args = {'source': json.dumps(query)}
-        req.max_results = 1
-        articles = service.get(req=req, lookup=None)
-        if articles.count():
-            article = articles[0]
-            # Check that the article is for today, check day month and year
-            if now.strftime('%B') in article.get('abstract') and now.strftime('%-d') in article.get(
-                    'abstract') and now.strftime('%Y') in article.get('abstract'):
-                body.write('<p>{}</p>'.format(paper.get('heading')))
-                tree = html.fromstring(article.get('body_html'))
-                pars = tree.xpath('./p')
-                for par in pars:
-                    if par.text.startswith('PAGE 1:'):
-                        if par.getnext() is not None:
-                            body.write('<p>PAGE 1: {}</p>'.format(par.getnext().text))
-                        else:
-                            body.write('<p>PAGE 1: {}</p>'.format(par.text.replace('PAGE 1: ', '')))
-                        continue
-                    if par.text.startswith('SPORT:'):
-                        if par.getnext() is not None:
-                            body.write('<p>SPORT: {}</p>'.format(par.getnext().text))
-                        else:
-                            body.write('<p>SPORT: {}</p>'.format(par.text.replace('SPORT: ', '')))
-                        continue
+            req.sort = '[("_created", -1)]'
+            req.args = {'source': json.dumps(query)}
+            req.max_results = 1
+            articles = service.get(req=req, lookup=None)
+            if articles.count():
+                article = articles[0]
+                # Check that the article is for today, check day month and year
+                if now.strftime('%B') in article.get('abstract') and now.strftime('%-d') in article.get(
+                        'abstract') and now.strftime('%Y') in article.get('abstract'):
+                    body.write('<p>{}</p>'.format(paper.get('heading')))
+                    tree = html.fromstring(article.get('body_html'))
+                    pars = tree.xpath('./p')
+                    for par in pars:
+                        if par.text and par.text.startswith('PAGE 1:'):
+                            if len(par.text) > len('PAGE 1:') + 20:
+                                body.write('<p>{}</p>'.format(par.text))
+                            elif par.getnext() is not None:
+                                body.write('<p>PAGE 1: {}</p>'.format(par.getnext().text))
+                            else:
+                                body.write('<p>PAGE 1: {}</p>'.format(par.text.replace('PAGE 1: ', '')))
+                            continue
+                        if par.text and par.text.startswith('SPORT:'):
+                            if len(par.text) > len('SPORT:') + 20:
+                                body.write('<p>SPORT: {}</p>'.format(par.text.replace('SPORT: ', '')))
+                            elif par.getnext() is not None:
+                                body.write('<p>SPORT: {}</p>'.format(par.getnext().text))
+                            else:
+                                body.write('<p>SPORT: {}</p>'.format(par.text.replace('SPORT: ', '')))
+                            continue
+                else:
+                    print('Todays fronter story for {} was not found'.format(paper))
+                    logger.warning('Todays fronter story for {} was not found'.format(paper))
             else:
-                print('Todays fronter story for {} was not found'.format(paper))
-                logger.warning('Todays fronter story for {} was not found'.format(paper))
-        else:
-            print('Fronter story for {} was not found'.format(paper))
-            logger.warning('Fronter story for {} was not found'.format(paper))
+                print('Fronter story for {} was not found'.format(paper))
+                logger.warning('Fronter story for {} was not found'.format(paper))
+        except Exception as e:
+            logger.warning('Fronter story for {} raised exception: {}'.format(paper, e))
+            pass
 
     item['body_html'] = body.getvalue()
     body.close()
