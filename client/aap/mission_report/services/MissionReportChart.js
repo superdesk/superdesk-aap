@@ -95,7 +95,7 @@ export function MissionReportChart(_, gettext, moment, chartConfig, $q, metadata
         const chart = new SDChart.Chart({
             id: 'mission_report_categories',
             title: gettext('New Stories By Category'),
-            dataLabels: true,
+            dataLabels: false,
             tooltipHeader: '{point.x}: {point.y}',
             tooltipPoint: '',
             fullHeight: true,
@@ -129,6 +129,7 @@ export function MissionReportChart(_, gettext, moment, chartConfig, $q, metadata
                 xTitle: gettext('Published Stories'),
                 categoryField: 'category',
                 categories: _.sortBy(Object.keys(source)),
+                stackLabels: true,
             })
             .addSeries()
             .setOptions({
@@ -137,6 +138,8 @@ export function MissionReportChart(_, gettext, moment, chartConfig, $q, metadata
                     _.sortBy(Object.keys(source)),
                     (qcode) => _.get(source, qcode) || 0
                 ),
+                stack: 0,
+                stackType: 'normal'
             });
 
         return chart.genConfig();
