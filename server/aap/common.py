@@ -10,6 +10,9 @@
 
 from superdesk.etree import parse_html, to_string
 from lxml import etree
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 REASON_PREFIX = 'AAP has become aware that the story may potentially expose AAP ' \
@@ -29,43 +32,48 @@ def extract_kill_reason_from_html(html, is_kill):
     :param is_kill:
     :return:
     """
-    # Create a new tree that we will use to construct the reason nodes
-    root = etree.Element('div')
+    try:
+        # Create a new tree that we will use to construct the reason nodes
+        root = etree.Element('div')
 
-    # A flag to indicate if we're to add the current child node to our reason tree
-    adding_nodes = False
-    for child in parse_html(html, content='html'):
-        # Obtain the text from our child nodes (including sub-child nodes)
-        child_text = ''.join(child.itertext())
+        # A flag to indicate if we're to add the current child node to our reason tree
+        adding_nodes = False
+        for child in parse_html(html, content='html'):
+            # Obtain the text from our child nodes (including sub-child nodes)
+            child_text = ''.join(child.itertext())
 
-        if not adding_nodes and REASON_PREFIX in child_text:
-            # This child node contains the reason prefix (and we haven't found it already)
-            # Therefor set the flag to True indicating that the following child nodes
-            # are to be added to our reason tree
-            adding_nodes = True
-            continue
-        elif adding_nodes:
-            # If the kill/takedown suffix has been found, then our reason tree is complete
-            if is_kill and KILL_SUFFIX in child_text:
-                break
-            elif not is_kill and TAKEDOWN_SUFFIX in child_text:
-                break
+            if not adding_nodes and REASON_PREFIX in child_text:
+                # This child node contains the reason prefix (and we haven't found it already)
+                # Therefor set the flag to True indicating that the following child nodes
+                # are to be added to our reason tree
+                adding_nodes = True
+                continue
+            elif adding_nodes:
+                # If the kill/takedown suffix has been found, then our reason tree is complete
+                if is_kill and KILL_SUFFIX in child_text:
+                    break
+                elif not is_kill and TAKEDOWN_SUFFIX in child_text:
+                    break
 
-            # Otherwise continue adding the child nodes to our reason tree
+                # Otherwise continue adding the child nodes to our reason tree
 
-            # Remove the last sub-child if it only contains a line break
-            last_child = child[-1]
-            if etree.tostring(last_child) == b'<p><br/></p>':
-                child.remove(last_child)
+                # Remove the last sub-child if it only contains a line break
+                if len(child) > 0:
+                    last_child = child[-1]
+                    if etree.tostring(last_child) == b'<p><br/></p>':
+                        child.remove(last_child)
 
-            # Then add this child node to our reason tree
-            root.append(child)
+                # Then add this child node to our reason tree
+                root.append(child)
 
-    num_children = len(list(root))
+        num_children = len(list(root))
 
-    # If the reason tree was not populated, then return the original html provided
-    if num_children == 0:
+        # If the reason tree was not populated, then return the original html provided
+        if num_children == 0:
+            return html
+
+        # Our reason tree was populated, convert the tree to a string and return it
+        return to_string(root, method='html', remove_root_div=num_children == 1)
+    except Exception as e:
+        logger.exception(e)
         return html
-
-    # Our reason tree was populated, convert the tree to a string and return it
-    return to_string(root, method='html', remove_root_div=num_children == 1)

@@ -89,12 +89,6 @@ export function SMSReportController(
                 },
                 must: {},
                 must_not: {},
-                repos: {
-                    ingest: false,
-                    archive: false,
-                    published: true,
-                    archived: true,
-                },
                 chart: {
                     type: _.get($scope, 'chart_types[1].qcode') || 'column',
                     sort_order: 'desc',
