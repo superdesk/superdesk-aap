@@ -30,6 +30,7 @@ class AAPNINJSFormatter(NINJSFormatter):
         self.format_type = 'aap ninjs'
         self.can_preview = False
         self.can_export = False
+        self.internal_renditions = ['original', 'viewImage', 'baseImage']
 
     def format(self, article, subscriber, codes=None):
         try:

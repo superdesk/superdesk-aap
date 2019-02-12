@@ -29,6 +29,27 @@ class AAPNINJSFormatterTest(TestCase):
                     {"is_active": True, "name": "NSW", "qcode": "NSW", "state": "New South Wales",
                      "country": "Australia", "world_region": "Oceania", "group": "Australia"},
                 ],
+            },
+            {
+                "_id": "crop_sizes",
+                "display_name": "Image Crop Sizes",
+                "type": "manageable",
+                "items": [
+                    {
+                        "width": 800,
+                        "is_active": True,
+                        "height": 600,
+                        "name": "4-3"
+                    },
+                    {
+                        "width": 1280,
+                        "is_active": True,
+                        "height": 720,
+                        "name": "16-9"
+                    }
+                ],
+                "unique_field": "name",
+                "selection_type": "do not show"
             }
         ])
 
@@ -71,6 +92,12 @@ class AAPNINJSFormatterTest(TestCase):
                 "original": {
                     "href": "https://one-api.aap.com.au/api/v3/Assets/20150723001158606583/Original/download",
                     "mimetype": "image/jpeg"
+                },
+                'viewImage': {
+                    'width': 640,
+                    'href': 'http://localhost:5000/api/upload/55b032041d41c8d278d21b6f/raw?_schema=http',
+                    'mimetype': 'image/jpeg',
+                    "height": 401
                 },
             },
             "headline": "AMAZING PICTURE",
@@ -347,21 +374,79 @@ class AAPNINJSFormatterTest(TestCase):
                     "genre": [{"name": "Article", "code": "Article"}], "priority": 6, "urgency": 3,
                     "readtime": 0,
                     "associations": {
-                        "featuremedia": {"body_text": "alt text", "byline": "DEAN LEWINS", "headline": "Picture Title",
-                                         "renditions": {"original": {"poi": {"x": 3396, "y": 1484},
-                                                                     "href": "http://localhost:5000/api/"
-                                                                             "upload-raw/59a769b71d41c88f16818b14.jpg",
-                                                                     "media": "59a769b71d41c88f16818b14",
-                                                                     "height": 3712, "mimetype": "image/jpeg",
-                                                                     "width": 5568}},
-                                         "description_text": "Picture Caption", "source": "AAP",
-                                         "versioncreated": "2017-08-31T01:43:19+0000",
-                                         "service": [{"name": "International News", "code": "i"}],
-                                         "genre": [{"name": "Article", "code": "Article"}], "type": "picture",
-                                         "language": "en", "version": "1", "urgency": 3, "pubstatus": "usable",
-                                         "priority": 6, "ednote": "", "mimetype": "image/jpeg",
-                                         "slugline": "RACING WINX ROSEHILL TRACKWORK",
-                                         "firstcreated": "2017-08-30T19:58:33+0000", "guid": "20170831001315774144"}},
+                        "featuremedia": {
+                            "body_text": "alt text", "byline": "DEAN LEWINS", "headline": "Picture Title",
+                            "renditions": {
+                                "original": {
+                                    "poi": {"x": 3396, "y": 1484},
+                                    "href": "http://localhost:5000/api/upload-raw/59a769b71d41c88f16818b14.jpg",
+                                    "media": "59a769b71d41c88f16818b14",
+                                    "height": 3712, "mimetype": "image/jpeg",
+                                    "width": 5568
+                                },
+                                "4-3": {
+                                    "CropBottom": 3712,
+                                    "mimetype": "image/jpeg",
+                                    "CropRight": 5568,
+                                    "CropTop": 0,
+                                    "height": 600,
+                                    "CropLeft": 636,
+                                    "width": 800,
+                                    "media": "59a769f61d41c88f16818b29",
+                                    "poi": {
+                                        "x": 2760,
+                                        "y": 1484
+                                    },
+                                    "href": "http://localhost:5000/api/upload-raw/59a769f61d41c88f16818b29.jpg"
+                                },
+                                "baseImage": {
+                                    "width": 1400,
+                                    "mimetype": "image/jpeg",
+                                    "href": "http://localhost:5000/api/upload-raw/"
+                                            "59a769ba1d41c88f16818b23?_schema=http",
+                                    "poi": {
+                                        "x": 854,
+                                        "y": 373
+                                    },
+                                    "height": 933,
+                                    "media": "59a769ba1d41c88f16818b23"
+                                },
+                                "viewImage": {
+                                    "width": 640,
+                                    "mimetype": "image/jpeg",
+                                    "href": "http://localhost:5000/api/upload-raw/"
+                                            "59a769b91d41c88f16818b21?_schema=http",
+                                    "poi": {
+                                        "x": 390,
+                                        "y": 170
+                                    },
+                                    "height": 426,
+                                    "media": "59a769b91d41c88f16818b21"
+                                },
+                                "16-9": {
+                                    "CropBottom": 3143,
+                                    "mimetype": "image/jpeg",
+                                    "CropRight": 5568,
+                                    "CropTop": 0,
+                                    "height": 720,
+                                    "CropLeft": 0,
+                                    "width": 1280,
+                                    "media": "59a769f81d41c88f16818b2c",
+                                    "poi": {
+                                        "x": 3396,
+                                        "y": 1484
+                                    },
+                                    "href": "http://localhost:5000/api/upload-raw/59a769f81d41c88f16818b2c.jpg"
+                                }
+                            },
+                            "description_text": "Picture Caption", "source": "AAP",
+                            "versioncreated": "2017-08-31T01:43:19+0000",
+                            "service": [{"name": "International News", "code": "i"}],
+                            "genre": [{"name": "Article", "code": "Article"}], "type": "picture",
+                            "language": "en", "version": "1", "urgency": 3, "pubstatus": "usable",
+                            "priority": 6, "ednote": "", "mimetype": "image/jpeg",
+                            "slugline": "RACING WINX ROSEHILL TRACKWORK",
+                            "firstcreated": "2017-08-30T19:58:33+0000", "guid": "20170831001315774144"}},
                     "profile": "58cf62e01d41c8208dc20375", "place": [{"name": "New South Wales", "code": "NSW"}],
                     "pubstatus": "usable"}
         self.assertEqual(expected, json.loads(doc))
