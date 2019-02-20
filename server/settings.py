@@ -149,7 +149,8 @@ INSTALLED_APPS.extend([
     'analytics',
     'aap.reports',
     'aap.fuel',
-    'aap.traffic_incidents'
+    'aap.traffic_incidents',
+    'aap.subscriber_transmit_references',
 ])
 
 RENDITIONS = {

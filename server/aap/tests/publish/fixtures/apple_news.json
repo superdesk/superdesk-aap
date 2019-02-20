@@ -1,0 +1,336 @@
+{
+	"advertisingSettings": {
+		"frequency": 5,
+		"layout": {
+			"margin": {
+				"bottom": 15,
+				"top": 15
+			}
+		}
+	},
+	"componentLayouts": {
+		"bodyLayout": {
+			"columnSpan": 6,
+			"columnStart": 0,
+			"margin": {
+				"bottom": 15,
+				"top": 15
+			}
+		},
+		"claimTagLayout": {
+			"columnSpan": 7,
+			"columnStart": 0
+		},
+		"fixed_image_header_container": {
+			"columnSpan": 7,
+			"columnStart": 0,
+			"ignoreDocumentMargin": true,
+			"minimumHeight": "45vh"
+		},
+		"fixed_image_header_section": {
+			"ignoreDocumentMargin": true,
+			"margin": {
+				"bottom": 0,
+				"top": 40
+			}
+		},
+		"header-top-spacer": {
+			"minimumHeight": 30
+		},
+		"statementAttributionLayout": {
+			"margin": {
+				"bottom": 10
+			}
+		},
+		"statementLayout": {
+			"contentInset": true,
+			"margin": {
+				"bottom": 10,
+				"top": 10
+			}
+		},
+		"subHeaderLayout": {
+			"horizontalContentAlignment": "left",
+			"margin": {
+				"bottom": 10,
+				"top": 15
+			}
+		},
+		"titleLayout": {
+			"columnSpan": 7,
+			"columnStart": 0,
+			"margin": {
+				"bottom": 15,
+				"top": 5
+			}
+		},
+		"verdictContainerLayout": {
+			"contentInset": true,
+			"ignoreDocumentMargin": true,
+			"margin": {
+				"bottom": 15,
+				"top": 5
+			}
+		},
+		"verdictLayout": {
+			"margin": {
+				"bottom": 20
+			}
+		}
+	},
+	"componentStyles": {
+		"headerContainerStyle": {
+			"backgroundColor": "#000"
+		}
+	},
+	"componentTextStyles": {
+		"bodyStyle": {
+			"fontName": "Merriweather-Regular",
+			"fontSize": 16,
+			"lineHeight": 26,
+			"linkStyle": {
+				"textColor": "#000",
+				"underline": {
+					"color": "#000"
+				}
+			},
+			"textAlignment": "left",
+			"textColor": "#000"
+		},
+		"claimTagStyle": {
+			"fontName": "Merriweather-Bold",
+			"fontSize": 18,
+			"lineHeight": 17,
+			"textAlignment": "left",
+			"textColor": "#FFF",
+			"textShadow": {
+				"color": "#000",
+				"offset": {
+					"x": 1,
+					"y": 1
+				},
+				"opacity": 0.5,
+				"radius": 2
+			}
+		},
+		"statementAttributionStyle": {
+			"fontName": "Merriweather-Italic",
+			"fontSize": 14,
+			"hyphenation": false,
+			"lineHeight": 22,
+			"textAlignment": "right",
+			"textColor": "#000"
+		},
+		"statementStyle": {
+			"fontName": "Merriweather-BoldItalic",
+			"fontSize": 18,
+			"hyphenation": false,
+			"lineHeight": 26,
+			"textColor": "#FFF"
+		},
+		"subHeaderStyle": {
+			"fontName": "FiraSans-Bold",
+			"fontSize": 30,
+			"hyphenation": false,
+			"lineHeight": 40,
+			"textColor": "#063c7f"
+		},
+		"titleStyle": {
+			"fontName": "Merriweather-Black",
+			"fontSize": 40,
+			"lineHeight": 50,
+			"textAlignment": "left",
+			"textColor": "#FFF"
+		},
+		"verdictStyle": {
+			"fontName": "Merriweather-Regular",
+			"fontSize": 18,
+			"lineHeight": 26,
+			"textAlignment": "left",
+			"textColor": "#000"
+		}
+	},
+	"components": [
+		{
+		"behavior": {
+			"type": "background_parallax"
+		},
+		"components": [{
+			"anchor": {
+				"originAnchorPosition": "bottom",
+				"targetAnchorPosition": "bottom"
+			},
+			"components": [{
+				"layout": "claimTagLayout",
+				"role": "body",
+				"text": "Checkable Claim #1",
+				"textStyle": "claimTagStyle"
+			},
+			{
+				"layout": {
+					"columnStart": 0,
+					"horizontalContentAlignment": "left",
+					"margin": {
+						"bottom": 5,
+						"top": 5
+					},
+					"maximumContentWidth": 180
+				},
+				"role": "divider",
+				"stroke": {
+					"color": "#FFF",
+					"width": 1
+				}
+			},
+			{
+				"layout": "titleLayout",
+				"role": "title",
+				"text": "Does the road toll cost Australians $30 billion per year?",
+				"textStyle": "titleStyle"
+			}],
+			"layout": "fixed_image_header_section",
+			"role": "section",
+			"style": {
+				"fill": {
+					"angle": 180,
+					"colorStops": [{
+						"color": "#00000000"
+					},
+					{
+						"color": "#063c7f"
+					}],
+					"type": "linear_gradient"
+				}
+			}
+		}],
+		"layout": "fixed_image_header_container",
+		"role": "container",
+		"style": {
+			"fill": {
+				"URL": "bundle://header.jpg",
+				"type": "image"
+			}
+		}
+	},
+	{
+		"layout": "subHeaderLayout",
+		"role": "heading",
+		"text": "The Statement",
+		"textStyle": "subHeaderStyle"
+	},
+	{
+		"layout": "statementLayout",
+		"role": "body",
+		"style": {
+			"backgroundColor": "#063c7f"
+		},
+		"text": "“In reality, the road toll costs us $30 billion per year, which everyone has to pay for.”",
+		"textStyle": "statementStyle"
+	},
+	{
+		"layout": "statementAttributionLayout",
+		"role": "body",
+		"text": "Harold Scruby, Pedestrian Council of Australia, calling for new on-the-spot fines for dangerously distracted pedestrians. November 29, 2018.",
+		"textStyle": "statementAttributionStyle"
+	},
+	{
+		"layout": {
+			"horizontalContentAlignment": "right",
+			"margin": {
+				"bottom": 5
+			},
+			"maximumContentWidth": 180
+		},
+		"role": "divider",
+		"stroke": {
+			"color": "#063c7f",
+			"style": "dashed",
+			"width": 1
+		}
+	},
+	{
+		"layout": "subHeaderLayout",
+		"role": "heading",
+		"text": "The Analysis",
+		"textStyle": "subHeaderStyle"
+	},
+	{
+		"format": "html",
+		"layout": "bodyLayout",
+		"role": "body",
+		"text": "<p>In lobbying for a new $200 on-the-spot fine for pedestrians who are distracted while crossing roads, the Pedestrian Council of Australia (PCA) told news.com.au the road toll costs Australians $30bn each year (Ref 1).</p><p><strong>AAP CrossCheck</strong> examined the figure council president Harold Scruby relied upon as justification for seeking this additional revenue from pedestrians.</p><p>The road toll is an official tally of road-related fatalities. The Centre for Road Safety – the NSW government agency with responsibility for keeping state road toll statistics – only includes fatal traffic incidents in its road toll (Ref 2), while statistics on non-fatal road trauma are collected separately (Ref 3). A similar methodology is applied in Queensland (Ref 4) and other jurisdictions.</p><p>The most recent, holistic economic analysis of road trauma is not limited to the cost of road fatalities alone. The Cost of Road Trauma in Australia report published in September 2017 (Ref 5) was commissioned by the industry group, Australian Automobile Association (AAA), and conducted by Economic Connections (ECON). The analysis was based on 2015 data, and included the cost of road fatalities and all injuries. In the summary of findings, the report says: “ECON finds that for the 2015 calendar year the total cost of road trauma was $29.7 billion”.</p><p>In its campaign for new pedestrian fines, the PCA has rounded this figure up to the nearest billion.</p><p>However, a problem arises because Mr Scruby presented this figure as the annual cost of the “road toll” – implying it related to road fatalities only. </p><p>It is <strong>AAP CrossCheck</strong>’s position that the $30 billion quoted by Mr Scruby in the news.com.au article is not misleading in itself, but it’s not accurate to frame it as the cost of the “road toll”. Had the figure been attributed to annual road trauma, it would have been correct.</p><p>The PCA’s further contention that “everyone has to pay for” the cost of the road toll would be understood by readers to be a reference to taxpayers.</p>",
+		"textStyle": "bodyStyle"
+	},
+	{
+		"components": [{
+			"layout": "subHeaderLayout",
+			"role": "heading",
+			"text": "The Verdict",
+			"textStyle": "subHeaderStyle"
+		},
+		{
+			"format": "html",
+			"layout": "verdictLayout",
+			"role": "body",
+			"text": "<strong>Mostly True</strong> – Mostly accurate, but there is a minor error or problem",
+			"textStyle": "verdictStyle"
+		}],
+		"layout": "verdictContainerLayout",
+		"role": "container",
+		"animation": {
+			"type": "move_in",
+			"preferredStartingPosition": "left"
+		},
+		"style": {
+			"backgroundColor": "#e7ebf1"
+		}
+	},
+	{
+		"layout": "subHeaderLayout",
+		"role": "heading",
+		"text": "The References",
+		"textStyle": "subHeaderStyle"
+	},
+	{
+		"format": "html",
+		"layout": "bodyLayout",
+		"role": "body",
+		"text": "<ol><li>Original Claim as published in News.com.au. <a href='https://www.news.com.au/technology/innovation/motoring/on-the-road/calls-for-new-fine-that-would-see-pedestrians-penalised-200/news-story/84058822a7ae95cddf82585c7e26033e'>https://www.news.com.au/technology/innovation/motoring/on-the-road/calls-for-new-fine-that-would-see-pedestrians-penalised-200/news-story/84058822a7ae95cddf82585c7e26033e</a></li><li>NSW Centre for Road Safety Daily Road Toll report. <a href='https://roadsafety.transport.nsw.gov.au/downloads/dynamic/nsw-road-toll-daily.pdf'>https://roadsafety.transport.nsw.gov.au/downloads/dynamic/nsw-road-toll-daily.pdf</a></li><li>Quarterly Bulletin of Serious Injury Crash Data. <a href='https://roadsafety.transport.nsw.gov.au/downloads/serious-injuries-mar2018-quarter.pdf'>https://roadsafety.transport.nsw.gov.au/downloads/serious-injuries-mar2018-quarter.pdf</a></li><li>Queensland Government Road Safety statistics information. <a href='https://www.qld.gov.au/transport/safety/road-safety/statistics'>https://www.qld.gov.au/transport/safety/road-safety/statistics</a></li><li>Cost of Road Trauma in Australia. <a href='https://www.aaa.asn.au/wp-content/uploads/2018/03/AAA-ECON_Cost-of-road-trauma-summary-report_Sep-2017.pdf'>https://www.aaa.asn.au/wp-content/uploads/2018/03/AAA-ECON_Cost-of-road-trauma-summary-report_Sep-2017.pdf</a></li>",
+		"textStyle": "bodyStyle"
+	},
+	{
+		"layout": "subHeaderLayout",
+		"role": "heading",
+		"text": "Revision History",
+		"textStyle": "subHeaderStyle"
+	},
+	{
+		"format": "html",
+		"layout": "bodyLayout",
+		"role": "body",
+		"text": "<ul><li>First published Dec 6, 2018 18:00 AEDT</li>",
+		"textStyle": "bodyStyle"
+	}],
+	"documentStyle": {
+		"backgroundColor": "#FFF"
+	},
+	"identifier": "AAPCrossCheckTemplate",
+	"language": "en",
+	"layout": {
+		"columns": 7,
+		"gutter": 20,
+		"margin": 50,
+		"width": 1024
+	},
+	"metadata": {
+		"dateCreated": "2019-02-06T20:44:24+11:00",
+		"dateModified": "2019-02-06T20:44:24+11:00",
+		"datePublished": "2019-02-06T20:44:24+11:00",
+		"excerpt": "In lobbying for a new $200 on-the-spot fine for pedestrians who are distracted while crossing roads, the Pedestrian Council of Australia (PCA) told news.com.au the road toll costs Australians $30bn each year",
+		"thumbnailURL": "bundle://header.jpg",
+		"canonicalURL": "https://crosscheck.aap.com.au/home/Does-the-road-toll-cost-Australians-30-billion-per-year"
+	},
+	"subtitle": "In lobbying for a new $200 on-the-spot fine for pedestrians who are distracted while crossing roads, the Pedestrian Council of Australia (PCA) told news.com.au the road toll costs Australians $30bn each year",
+	"title": "Does the road toll cost Australians $30 billion per year?",
+	"version": "1.8"
+}
