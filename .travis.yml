@@ -31,22 +31,15 @@ cache:
 before_install:
     - sudo apt-get purge elasticsearch -y
     - sudo apt-get install -y elasticsearch=2.4.6
-    - nvm install 6
-    - nvm use 6
+    - nvm install 6.10
+    - nvm use 6.10
     - node --version
-    - npm install -g npm@latest
+    - npm install -g npm@3
     - npm install -g grunt-cli
-    - pip install requests
-    - export DISPLAY=:99.0
-    - /sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1920x1080x24
-    - ./scripts/get-chrome-url | wget -N --no-verbose -i -
-    - unzip chrome-linux.zip
-    - export CHROME_BIN=`pwd`/chrome-linux/chrome
-    - $CHROME_BIN --version
 
 install:
     - cd server && pip install -r dev-requirements.txt && cd ..
-    - cd client && npm install --python=python2.7 && cd ..
+    - cd client && npm install && cd ..
 
 before_script: >
     sudo sed -i 's\enabled: true\enabled: false\' /etc/mongod.conf
