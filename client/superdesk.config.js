@@ -1,7 +1,7 @@
 module.exports = function() {
     return {
         apps: ['superdesk-planning', 'superdesk.analytics', 'aap.apps'],
-        importApps: ['superdesk-planning', 'superdesk-analytics', 'aap'],
+        importApps: ['superdesk-planning', 'superdesk-analytics', '../aap'],
         defaultRoute: '/workspace',
         workspace: {
             ingest: 1,
