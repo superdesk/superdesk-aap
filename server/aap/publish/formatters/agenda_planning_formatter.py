@@ -106,6 +106,8 @@ class AgendaPlanningFormatter(Formatter):
         :param article:
         :return:
         """
+        if article.get('source', '') == 'AAP Sports Sheet':
+            return False
         can_format = article.get('type') == 'event' or article.get('type') == 'planning'
         return format_type == 'agenda_planning' and can_format
 
