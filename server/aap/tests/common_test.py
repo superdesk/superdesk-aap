@@ -147,6 +147,43 @@ class CommonTestCase(TestCase):
             '</div>'
         )
 
+        # Test data from UAT (previously caused index error)
+        html = '<p>Please kill story slugged Kill Test headlined Kill Test ex Sydney at ' \
+               '11 Feb 2019 10:38 AEDT.</p><p>Pursuant to your Information Supply Agreement ' \
+               'with Australian Associated Press (AAP) , AAP requests that you remove the ' \
+               'above story from any media you publish and access to the story be immediately ' \
+               'disabled including but not limited to those websites in either your direct or ' \
+               'indirect possession, custody, or control. AAP has become aware that the story ' \
+               'may potentially expose AAP and those who publish the story to the risk of:</p>' \
+               '<p>[insert relevant option/s from below] - a claim in defamation. - a possible ' \
+               'prosecution for contempt. - a contempt prosecution arising out of breach of an ' \
+               'order of the Family/Supreme/District/Federal Court. - a breach of a law ' \
+               'prohibiting publication. - a breach of an order prohibiting publication that ' \
+               'has retrospective effect. - a breach of any State or Commonwealth privacy ' \
+               'laws. - a claim for damages. - publishing extremely erroneous material.</p>' \
+               '<p>This kill/takedown is mandatory, and no further use can be made of the story.' \
+               '</p><p>A replacement story will be issued shortly/will not be issued.</p>' \
+               '<p>AAP will not be liable for any losses, costs and expenses, damages and ' \
+               'other costs (including without limitation reasonable legal costs), indirect, ' \
+               'consequential special or punitive loss or damage, arising out of the story ' \
+               'and this Notice suffered or incurred by you after receipt of this Notice.</p>'
+
+        self.assertEqual(
+            extract_kill_reason_from_html(html, is_kill=True),
+            '<p>'
+            '[insert relevant option/s from below]'
+            ' - a claim in defamation.'
+            ' - a possible prosecution for contempt.'
+            ' - a contempt prosecution arising out of breach of an order of the '
+            'Family/Supreme/District/Federal Court.'
+            ' - a breach of a law prohibiting publication.'
+            ' - a breach of an order prohibiting publication that has retrospective effect.'
+            ' - a breach of any State or Commonwealth privacy laws.'
+            ' - a claim for damages.'
+            ' - publishing extremely erroneous material.'
+            '</p>'
+        )
+
     def test_extract_takedown_reason_from_html(self):
         # Test takedown with unmodified template
         html = '<p>Pursuant to your Information Supply Agreement with Australian Associated ' \

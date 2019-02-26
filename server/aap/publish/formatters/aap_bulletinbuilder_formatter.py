@@ -16,6 +16,7 @@ from superdesk.utils import json_serialize_datetime_objectId
 from superdesk.utc import utcnow
 from superdesk.errors import FormatterError
 from superdesk.metadata.item import ITEM_TYPE, ITEM_STATE, CONTENT_STATE, ASSOCIATIONS, CONTENT_TYPE
+from aap.utils import isFactCheck
 from .field_mappers.locator_mapper import LocatorMapper
 from .field_mappers.slugline_mapper import SluglineMapper
 from .aap_formatter_common import set_subject
@@ -56,9 +57,11 @@ class AAPBulletinBuilderFormatter(Formatter):
             if formatted_article.get(ITEM_STATE, '') == CONTENT_STATE.SCHEDULED:
                 formatted_article['versioncreated'] = utcnow()
 
-            formatted_article['body_text'] = self.get_text_content(body_html)
+            # first get the abstract and then look for abstract in body_html
             formatted_article['abstract'] = self.get_text_content(
                 to_ascii(formatted_article.get('abstract', '') or '')).strip()
+            formatted_article['body_text'] = self.get_text_content(body_html, formatted_article, isFactCheck(article))
+
             formatted_article['headline'] = self.get_text_content(
                 to_ascii(formatted_article.get('headline', ''))).strip()
             formatted_article['byline'] = self.get_text_content(
@@ -106,7 +109,7 @@ class AAPBulletinBuilderFormatter(Formatter):
     def can_format(self, format_type, article):
         return format_type == 'AAP BULLETIN BUILDER'
 
-    def get_text_content(self, content):
+    def get_text_content(self, content, formatted_article=None, is_fact_check=False):
         content = content.replace('<br>', '<br/>').replace('</br>', '')
         # remove control chars except \n
         content = re.sub('[\x00-\x09\x0b-\x1f]', '', content)
@@ -123,8 +126,16 @@ class AAPBulletinBuilderFormatter(Formatter):
         etree.strip_elements(parsed, 'br', with_tail=False)
 
         text = ''
+        abstract = formatted_article.get('abstract') if formatted_article else None
+        abstract_found = False
         for top_level_tag in parsed.xpath('/html/div/child::*'):
-            text += self.format_text_content(top_level_tag)
+            tag_text = self.format_text_content(top_level_tag)
+            if is_fact_check and abstract and not abstract_found:
+                # remove abstract from body_text
+                if tag_text and tag_text.lower().strip() == abstract.lower().strip():
+                    abstract_found = True
+                    continue
+            text += tag_text
 
         return re.sub(' +', ' ', text)
 
