@@ -21,7 +21,6 @@ from superdesk.utils import config
 from superdesk import get_resource_service
 from superdesk.metadata.item import ITEM_STATE, CONTENT_STATE
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -80,7 +79,7 @@ def expand_brisbane_transport(item, **kwargs):
             transport_mode = mode[0].text
 
             if content is not None:
-                stuff = ''.join(content.itertext())
+                stuff = ''.join([x.replace('\n', '<br>') for x in content.itertext() if not x.startswith('Map of')])
                 if transport_mode == 'Bus':
                     bus_story.write('<p>{}</p><p>{}</p><hr>'.format(title, stuff))
                 elif transport_mode == 'Train':
@@ -94,7 +93,8 @@ def expand_brisbane_transport(item, **kwargs):
                     tree.xpath('.//div[@class="bs-callout bs-callout-info"]')) else None
                 stuff = ''
                 while content is not None:
-                    stuff += '<br>' + ' '.join(content.itertext())
+                    stuff += '<br>' + ' '.join(
+                        [x.replace('\n', '<br>') for x in content.itertext() if not x.startswith('Map of')])
                     content = content.getnext()
 
                 if transport_mode == 'Bus':
@@ -134,7 +134,7 @@ def expand_brisbane_transport(item, **kwargs):
 
         get_resource_service('archive_publish').patch(id=item[config.ID_FIELD],
                                                       updates={ITEM_STATE: CONTENT_STATE.PUBLISHED,
-                                                      'auto_publish': True})
+                                                               'auto_publish': True})
         return get_resource_service('archive').find_one(req=None, _id=item[config.ID_FIELD])
 
     return item
