@@ -15,3 +15,4 @@ from .remote_sync import RemoteSyncCommand  # noqa
 from .fix_items_expired import FixItemsExpiry  # noqa
 from .export_legal_archive_to_archived import ExportLegalArchiveToArchived  # noqa
 from .export_to_newroom import ExportToNewsroom  # noqa
+from .import_sport_calendar import ImportSportCalendarDoc  # noqa
