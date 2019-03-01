@@ -1,0 +1,24 @@
+<div class="field">
+    <label for="resource_url" translate>Apple News API URL</label>
+    <input type="text" id="resource_url" placeholder="{{ :: 'Apple News API URL'|translate }}" ng-model="destination.config.resource_url" ng-change="$parent.setConfig(destination)">
+</div>
+
+<div class="field">
+    <label for="api_key" translate>Apple News API Key</label>
+    <input type="text" id="api_key" placeholder="{{ :: 'API Key'|translate }}" ng-model="destination.config.api_key" ng-change="$parent.setConfig(destination)">
+</div>
+
+<div class="field">
+    <label for="api_secret" translate>Apple News API Secret</label>
+    <input type="text" id="api_secret" placeholder="{{ :: 'Apple News API Secret'|translate }}" ng-model="destination.config.api_secret" ng-change="$parent.setConfig(destination)">
+</div>
+
+<div class="field">
+    <label for="channel" translate>Apple News Channel</label>
+    <input type="text" id="channel" placeholder="{{ :: 'Apple News Channel'|translate }}" ng-model="destination.config.channel" ng-change="$parent.setConfig(destination)">
+</div>
+
+<div class="field">
+    <label for="header_image_rendition" translate>Header Image Rendition Name</label>
+    <input type="text" id="header_image_rendition" placeholder="{{ :: 'Header Image Rendition Name'|translate }}" ng-model="destination.config.header_image_rendition" ng-change="$parent.setConfig(destination)">
+</div>
