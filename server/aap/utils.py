@@ -16,7 +16,6 @@ from superdesk.utc import get_date
 from apps.archive.common import format_dateline_to_locmmmddsrc
 from flask import current_app as app
 from superdesk.etree import parse_html
-from superdesk.metadata.utils import ITEM_TYPE, CONTENT_TYPE
 
 
 def set_dateline(item, city, source, set_date=False, text=None):
@@ -67,10 +66,3 @@ def remove_dateline(item):
             search_string = ''.join([s for s in [city, source]])
             item['body_html'] = html.replace(search_string, '')
             break
-
-
-def isFactCheck(item):
-    """Check if the content is fact check"""
-    return item.get(ITEM_TYPE) == CONTENT_TYPE.TEXT and item.get('genre') \
-        and len(item.get('genre')) > 0 \
-        and item.get('genre')[0].get('qcode').lower() == 'Fact Check'.lower()
