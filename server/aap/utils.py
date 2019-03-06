@@ -69,7 +69,7 @@ def remove_dateline(item):
             break
 
 
-def isFactCheck(item):
+def is_fact_check(item):
     """Check if the content is fact check"""
     return item.get(ITEM_TYPE) == CONTENT_TYPE.TEXT and item.get('genre') \
         and len(item.get('genre')) > 0 \

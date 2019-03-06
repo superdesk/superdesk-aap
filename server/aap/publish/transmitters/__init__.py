@@ -9,3 +9,4 @@
 # at https://www.sourcefabric.org/superdesk/license
 
 import aap.publish.transmitters.http_push_agenda  # NOQA
+import aap.publish.transmitters.http_push_apple_news  # NOQA
