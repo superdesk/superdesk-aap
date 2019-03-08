@@ -4634,5 +4634,56 @@
                 "is_active" : true
             }
         ]
+    },
+    {
+        "_id": 'g2_content_type',
+        "display_name": 'Coverage content types',
+        "type": 'manageable',
+        "unique_field": 'qcode',
+        "schema": {'qcode': {'type': 'string'}, 'name': {'type': 'string'}},
+        "items": [
+            {
+                'is_active': True,
+                'name': 'Text',
+                'qcode': 'text',
+                "content item type": "text"
+            },
+            {
+                'is_active': True,
+                'name': 'Picture',
+                'qcode': 'picture',
+                "content item type": "picture"
+            },
+            {
+                'is_active': True,
+                'name': 'Video',
+                'qcode': 'video',
+                "content item type": "video"
+            },
+            {
+                'is_active': True,
+                'name': 'Audio',
+                'qcode': 'audio',
+                "content item type": "audio"
+            },
+            {
+                'is_active': True,
+                'name': 'Graphic',
+                'qcode': 'graphic',
+                "content item type": ""
+            },
+            {
+                'is_active': True,
+                'name': 'Live video',
+                'qcode': 'live_video',
+                "content item type": ""
+            },
+            {
+                'is_active': True,
+                'name': 'Live blog',
+                'qcode': 'live_blog',
+                "content item type": ""
+            }
+        ]
     }
 ]
