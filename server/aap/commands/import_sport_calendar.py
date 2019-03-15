@@ -27,6 +27,7 @@ import hashlib
 from eve.utils import config
 from flask import current_app as app
 from eve.utils import ParsedRequest
+import json
 
 logger = logging.getLogger(__name__)
 
@@ -79,8 +80,11 @@ class ImportSportCalendarDoc(superdesk.Command):
     sheet_map = {'Swimming': '15062000',
                  'Women''s Cricket Internationals': '15017000',
                  'Soccer Internationals': '15054000',
+                 'Soccer': '15054000',
+                 'Asian Champions League': '15054000',
                  'Surfing': '15061000',
                  'Men''s cricket Internationals': '15017000',
+                 'Cricket': '15017000',
                  'MotoGP': '15041000',
                  'Cycling': '15019000',
                  'LPGA Tour': '15027000',
@@ -102,7 +106,8 @@ class ImportSportCalendarDoc(superdesk.Command):
                  'WTA': '15065000',
                  'Hockey': '15024000',
                  'Sheffield Shield': '15017000',
-                 'Supercars': '15039000'}
+                 'Supercars': '15039000',
+                 'Netball': '15042000'}
 
     tz_map = dict()
 
@@ -110,36 +115,97 @@ class ImportSportCalendarDoc(superdesk.Command):
         self.geolocator = Nominatim(user_agent='Superdesk Planning')
         self.not_found = set()
 
-    def _set_location_not_found(self, item, location_string):
-        item['location'] = [{
-            'name': location_string,
-            'qcode': '',
-            'geo': ''
-        }]
-        # print('Location not found : {}'.format(location_string))
-        self.not_found.add(location_string)
-
-    def _set_location(self, item, location_string):
+    def _set_location(self, item, name, city, state, country):
 
         # lookup the location string as unique name in the location collection, if this is found then we use that
-        locations_service = superdesk.get_resource_service('locations')
-        req = ParsedRequest()
-        req.args = {'q': location_string, 'default_operator': 'AND'}
-        location = locations_service.get(req=req, lookup=None)
-        if location.count():
-            item['location'] = [{
-                'name': location[0].get('name', location[0].get('name', '')),
-                'address': {
-                    'line': location[0].get('address', {}).get('line', []),
-                    'area': location[0].get('address', {}).get('area', ''),
-                    'locality': location[0].get('address', {}).get('locality', ''),
-                    'postal_code': location[0].get('address', {}).get('postal_code', ''),
-                    'country': location[0].get('address', {}).get('country', ''),
-                },
-                'qcode': location[0].get('guid')
-            }]
-            return
-        self._set_location_not_found(item, location_string)
+        try:
+            location = None
+            locations_service = superdesk.get_resource_service('locations')
+            req = ParsedRequest()
+            if name and name != '':
+                # req.args = {'q': 'name:' + name.translate(str.maketrans('', '', string.punctuation)) +
+                #                 ' AND address.country:' + country}
+                # query = {"query": {"bool": {"must": [{"query_string":
+                #                                           {"default_field": "name", "query":
+                #         name.translate(str.maketrans('', '', string.punctuation)) + ' AND address.country:'
+                # + country }}]}}}
+
+                # query = {
+                #     "query": {
+                #         "filtered": {
+                #             "query": {"query_string": {
+                #                 "default_operator": "AND",
+                #                 "query": name.translate(str.maketrans('', '', string.punctuation))
+                #             }},
+                #             "filter": {"term": {"address.country": country.lower()}}
+                #         }
+                #     }
+                # }
+
+                query = {
+                    "query": {
+                        "filtered": {
+                            "query": {
+                                "query_string": {
+                                    "default_operator": "AND",
+                                    "query": name.replace('& ', '') +
+                                    ' address.country:' + country.replace(' ', '+').lower()
+                                }
+                            }
+                        }
+                    }
+                }
+
+                # query = {
+                #     "query": {
+                #         "filtered": {
+                #             "query": {"query_string": {
+                #                 "default_operator": "AND",
+                #                 "query": name.translate(str.maketrans('', '', string.punctuation)) + ' ' + country
+                #             }}
+                #         }
+                #     }
+                # }
+                req.args = {'source': json.dumps(query)}
+                location = locations_service.get(req=req, lookup=None)
+            elif city and city != '':
+                req.args = {'q': city + ' AND  address.country:' + country}
+
+                # query = {
+                #     "query": {
+                #         "filtered": {
+                #             "query": {"query_string": {
+                #                 "query": city.lower()
+                #             }},
+                #             "filter": {"term": {"address.country": country.lower()}}
+                #         }
+                #     }
+                # }
+
+                # req.args = {'source': json.dumps(query)}
+                location = locations_service.get(req=req, lookup=None)
+            if location and location.count():
+                item['location'] = [{
+                    'name': location[0].get('name', ''),
+                    'address': {
+                        'line': location[0].get('address', {}).get('line', []),
+                        'area': location[0].get('address', {}).get('area', ''),
+                        'locality': location[0].get('address', {}).get('locality', ''),
+                        'postal_code': location[0].get('address', {}).get('postal_code', ''),
+                        'country': location[0].get('address', {}).get('country', ''),
+                    },
+                    'qcode': location[0].get('guid')
+                }]
+                if location[0].get('address', {}).get('country', '').lower() != country.lower():
+                    print('{} == {}'.format(location[0].get('address', {}).get('country', '').lower(), country.lower()))
+                    item.pop('location')
+                else:
+                    print('FOUND {} {}'.format(location[0].get('name', ''), location[0].get('address',
+                                                                                            {}).get('country', '')))
+                return
+        except Exception as ex:
+            print(ex)
+        print('NOT FOUND {} {} {} {}'.format(name, city, state, country))
         return
 
     def _set_default_item(self, title, _id, thumbprint, country):
@@ -159,7 +225,7 @@ class ImportSportCalendarDoc(superdesk.Command):
             {'qcode': 's', 'subject': '15000000', 'name': 'Overseas Sport'}]
 
         for k, v in self.sheet_map.items():
-            if k in title:
+            if k.lower() in title.lower():
                 item['subject'] = [{'qcode': v,
                                     'name': subject_codes.get(v, ''), 'parent': '15000000'}]
                 break
@@ -210,11 +276,11 @@ class ImportSportCalendarDoc(superdesk.Command):
             v = values[i]
             item = self._set_default_item(title, _id, hashlib.sha1('-'.join(v).encode('utf8')).hexdigest(),
                                           v[7] if v[7] else 'australia')
-            self._set_location(item, '{} {} {} {}'.format(v[4], v[5], v[6], v[7]))
 
             sheet_country = self._set_country(v[7])
             sheet_city = v[5].lower()
             loc = sheet_city + '/' + sheet_country
+            self._set_location(item, v[4], v[5], v[6], sheet_country)
 
             tz = self.tz_map.get(loc, config.DEFAULT_TIMEZONE)
 
@@ -237,8 +303,12 @@ class ImportSportCalendarDoc(superdesk.Command):
             # print('{} {} {} {} {}'.format(title, item['name'], item.get('dates').get('start'),
             # item.get('dates').get('end'), tz))
             # print('{}-{} city:[{}] state:[{}] county[{}] ---> {}'.format(title, item['name'], v[5], v[6], v[7], tz))
-            print('{},{},{},{},{},{}'.format(title.replace(',', ' '), item['name'].replace(',', ' '), v[5], v[6], v[7],
-                                             tz))
+            if 'location' not in item:
+                print('{},{},{},{},{},{},{},{},{},{}'.format(title.replace(',', ' '), item['name'].replace(',', ' '),
+                                                             v[5], v[6], v[7],
+                                                             tz, v[4], v[5], v[6], v[7]))
+                item['definition_short'] = item['definition_short'] + ' at {}, {}, {} {}'.format(v[4], v[5], v[6], v[7])
+
             old = superdesk.get_resource_service('events').find_one(req=None, guid=item['guid'])
             if old:
                 superdesk.get_resource_service('events').patch(old.get('_id'), item)
