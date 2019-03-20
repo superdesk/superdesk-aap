@@ -12,5 +12,5 @@ gtfs-realtime-bindings==0.0.5
 protobuf3-to-dict==0.1.5
 
 git+git://github.com/superdesk/superdesk-core.git@50ab5e104#egg=Superdesk-Core
-git+git://github.com/superdesk/superdesk-planning.git@7cd8d7f#egg=superdesk-planning
+git+git://github.com/superdesk/superdesk-planning.git@b2735c0#egg=superdesk-planning
 git+git://github.com/superdesk/superdesk-analytics.git@ea2ae6e#egg=superdesk-analytics
