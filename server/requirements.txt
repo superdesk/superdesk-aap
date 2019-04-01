@@ -11,6 +11,6 @@ pyasn1==0.3.7
 gtfs-realtime-bindings==0.0.5
 protobuf3-to-dict==0.1.5
 
-git+git://github.com/superdesk/superdesk-core.git@50ab5e104#egg=Superdesk-Core
-git+git://github.com/superdesk/superdesk-planning.git@b2735c0#egg=superdesk-planning
-git+git://github.com/superdesk/superdesk-analytics.git@ea2ae6e#egg=superdesk-analytics
+git+git://github.com/superdesk/superdesk-core.git@c235985a2#egg=Superdesk-Core
+git+git://github.com/superdesk/superdesk-planning.git@112e140#egg=superdesk-planning
+git+git://github.com/superdesk/superdesk-analytics.git@457ad07#egg=superdesk-analytics
