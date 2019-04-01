@@ -21,7 +21,7 @@ from superdesk import app
 from superdesk.publish.publish_service import PublishService
 from superdesk.publish import register_transmitter
 from superdesk.errors import PublishHTTPPushError, PublishHTTPPushServerError, PublishHTTPPushClientError
-from superdesk import get_resource_service
+from superdesk import get_resource_service, config
 from superdesk.metadata.item import ITEM_STATE, CONTENT_STATE
 
 
@@ -113,6 +113,7 @@ class HTTPAppleNewsPush(PublishService):
         )
 
         try:
+            response = None
             if item.get(ITEM_STATE) not in {CONTENT_STATE.RECALLED, CONTENT_STATE.KILLED}:
                 headers['Content-Type'] = content_type
                 session = requests.Session()
@@ -136,9 +137,11 @@ class HTTPAppleNewsPush(PublishService):
             logging.info('Apple News: Successfully transmitted {}.'.format(item.get('item_id')))
         except Exception as ex:
             logger.exception(ex)
-            if response:
+            if response is not None:
                 message = 'Error pushing item to apple news %s: %s' % (response.status_code, response.text)
-                self._raise_publish_error(response.status_code, Exception(message), destination)
+            else:
+                message = 'Failed to publish item to apple news. Queue Id: {}'.format(queue_item.get(config.ID_FIELD))
+            self._raise_publish_error(response.status_code, Exception(message), destination)
 
     def _part(self, name, data, length, content_type):
         part = RequestField(name, data)

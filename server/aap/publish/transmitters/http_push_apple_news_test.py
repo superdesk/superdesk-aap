@@ -16,6 +16,7 @@ from mock import patch, Mock, MagicMock
 from superdesk.tests import TestCase
 from datetime import datetime
 from .http_push_apple_news import HTTPAppleNewsPush
+from superdesk.errors import PublishHTTPPushClientError
 from hashlib import sha256
 
 
@@ -82,6 +83,17 @@ class HttpAppleNewsPushTestCase(TestCase):
         self.assertEqual('application/json', request.headers.get('accept'))
         return {
             'status_code': 204
+        }
+
+    @all_requests
+    def fail_item_response(self, url, request):
+        self.assertEqual(request.method, 'POST')
+        self.assertEqual(request.url, 'https://news-api.apple.com/channels/channel1234/articles')
+        self.assertIn('multipart/form-data', request.headers.get('Content-Type'))
+        self.assertEqual('application/json', request.headers.get('accept'))
+        return {
+            'status_code': 400,
+            'content': 'Failed to process request'.encode('UTF-8'),
         }
 
     def test_transmit_new_item(self):
@@ -192,3 +204,23 @@ class HttpAppleNewsPushTestCase(TestCase):
         self.assertIn(signature, headers.get('authorization'))
         self.assertIn(api_key, headers.get('authorization'))
         self.assertIn(current_date, headers.get('authorization'))
+
+    def test_transmit_fail(self):
+        queue_item = self.get_queue_item()
+        find_one = Mock(return_value={'item_id': '1', 'state': 'published'})
+        get_subscriber_reference = Mock(return_value=None)
+        insert_update_reference = Mock()
+        mocked_service = MagicMock()
+        mocked_service.return_value = MockedResourceService(
+            find_one=find_one,
+            get_subscriber_reference=get_subscriber_reference,
+            insert_update_reference=insert_update_reference
+        )
+        with patch('aap.publish.transmitters.http_push_apple_news.get_resource_service', mocked_service):
+            with HTTMock(self.fail_item_response):
+                with self.assertRaises(PublishHTTPPushClientError) as context:
+                    self.http_push._push_item(queue_item)
+
+                self.assertTrue('HTTP push publish client error' in str(context.exception))
+                self.assertTrue('Failed to process request' in str(context.exception.system_exception))
+                self.assertEqual(context.exception.status_code, 400)
