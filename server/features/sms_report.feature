@@ -21,7 +21,7 @@ Feature: SMS Report
         Then we get list with 1 items
         """
         {"_items": [{
-            "start_epoch": 1530226800000,
+            "start_epoch": 1530223200000,
             "interval": 86400000,
             "with_sms": [0, 1, 1],
             "without_sms": [1, 1, 0]
@@ -71,14 +71,14 @@ Feature: SMS Report
                 "type": "column",
                 "xAxis": 0,
                 "data": [0, 1, 1],
-                "pointStart": 1530226800000,
+                "pointStart": 1530223200000,
                 "pointInterval": 86400000
             }, {
                 "name": "Without SMS",
                 "type": "column",
                 "xAxis": 0,
                 "data": [1, 1, 0],
-                "pointStart": 1530226800000,
+                "pointStart": 1530223200000,
                 "pointInterval": 86400000
             }]
         }]
@@ -106,7 +106,7 @@ Feature: SMS Report
         Then we get list with 1 items
         """
         {"_items": [{
-            "start_epoch": 1530313200000,
+            "start_epoch": 1530309600000,
             "interval": 3600000,
             "with_sms": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
             "without_sms": [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
@@ -155,15 +155,15 @@ Feature: SMS Report
                 "name": "With SMS",
                 "type": "column",
                 "xAxis": 0,
-                "data": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
-                "pointStart": 1530313200000,
+                "data": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
+                "pointStart": 1530309600000,
                 "pointInterval": 3600000
             }, {
                 "name": "Without SMS",
                 "type": "column",
                 "xAxis": 0,
-                "data": [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                "pointStart": 1530313200000,
+                "data": [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                "pointStart": 1530309600000,
                 "pointInterval": 3600000
             }]
         }]
@@ -194,7 +194,7 @@ Feature: SMS Report
         Then we get list with 1 items
         """
         {"_items": [{
-            "start_epoch": 1529190000000,
+            "start_epoch": 1529186400000,
             "interval": 604800000,
             "with_sms": [1, 2],
             "without_sms": [1, 1]
@@ -247,14 +247,14 @@ Feature: SMS Report
                 "type": "column",
                 "xAxis": 0,
                 "data": [1, 2],
-                "pointStart": 1529190000000,
+                "pointStart": 1529186400000,
                 "pointInterval": 604800000
             }, {
                 "name": "Without SMS",
                 "type": "column",
                 "xAxis": 0,
                 "data": [1, 1],
-                "pointStart": 1529190000000,
+                "pointStart": 1529186400000,
                 "pointInterval": 604800000
             }]
         }]
