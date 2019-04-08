@@ -27,6 +27,12 @@ class MarketplaceNINJSFormatter(NewsroomNinjsFormatter):
         self.can_preview = False
         self.can_export = False
 
+    def _transform_to_ninjs(self, article, subscriber, recursive=True):
+        ninjs = super(NewsroomNinjsFormatter, self)._transform_to_ninjs(article, subscriber, recursive)
+        ninjs['products'] = self._format_products(article)
+
+        return ninjs
+
     def _get_ingested(self, article):
         """
         Passed am article it will try to return the article as ingested.
