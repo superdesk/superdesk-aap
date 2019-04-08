@@ -51,14 +51,15 @@ class AAPAppleNewsFormatter(Formatter):
         self._parse_content(article)
         if not article.get('_title') or not article.get('_analysis_first_line') or not article.get('_analysis') \
             or not article.get('_statement') or not article.get('_statement_attribution') or \
-                not article.get('_verdict') or not article.get('_references'):
+                not article.get('_verdict1') or not article.get('_verdict2') or not article.get('_references'):
             missing_fields = {
                 'title': True if article.get('_title') else False,
                 'subtitle': True if article.get('_analysis_first_line') else False,
                 'analysis': True if article.get('_analysis') else False,
                 'statement': True if article.get('_statement') else False,
                 'statement_attribution': True if article.get('_statement_attribution') else False,
-                'verdict': True if article.get('_verdict') else False,
+                'verdict1': True if article.get('_verdict1') else False,
+                'verdict2': True if article.get('_verdict2') else False,
                 'references': True if article.get('_references') else False,
             }
 
@@ -86,6 +87,10 @@ class AAPAppleNewsFormatter(Formatter):
                 }
             }
         }
+
+    def _is_featuremedia_exists(self, article):
+        """Checks if the feature media exists"""
+        return True if (article.get('associations') or {}).get('featuremedia') else False
 
     def _set_language(self, apple_news, article):
         """Set language"""
@@ -115,9 +120,10 @@ class AAPAppleNewsFormatter(Formatter):
             'dateCreated': self._format_datetime(article.get('firstcreated')),
             'datePublished': self._format_datetime(article.get('firstpublished')),
             'dateModified': self._format_datetime(article.get('versioncreated')),
-            'excerpt': article.get('_title'),
-            'thumbnailURL': 'bundle://header.jpg',
+            'excerpt': article.get('_title')
         }
+        if self._is_featuremedia_exists(article):
+            apple_news['metadata']['thumbnailURL'] = 'bundle://header.jpg'
 
     def _format_datetime(self, article_date, date_format='%Y-%m-%dT%H:%M:%S%z'):
         return datetime.strftime(utc_to_local(config.DEFAULT_TIMEZONE, article_date), date_format)
@@ -297,13 +303,14 @@ class AAPAppleNewsFormatter(Formatter):
                 'width': 1
             }
         })
+        components.extend(self._set_verdict_component(article, '_verdict1'))
         components.extend(self._set_analysis_component(article))
-        components.extend(self._set_verdict_component(article))
+        components.extend(self._set_verdict_component(article, '_verdict2'))
         components.extend(self._set_references_component(article))
         components.extend(self._set_revision_history_component(article))
 
     def _set_header_component(self, article):
-        return {
+        header = {
             'behaviour': {'type': 'background_parallax'},
             'layout': 'fixed_image_header_container',
             'role': 'container',
@@ -342,6 +349,11 @@ class AAPAppleNewsFormatter(Formatter):
                 }
             ]
         }
+
+        if not self._is_featuremedia_exists(article):
+            header.pop('style', None)
+
+        return header
 
     def _set_statement_component(self, article):
         """Set the statement component
@@ -399,12 +411,12 @@ class AAPAppleNewsFormatter(Formatter):
             }
         ]
 
-    def _set_verdict_component(self, article):
+    def _set_verdict_component(self, article, field_name):
         """Set the verdict component
 
         :param dict article:
         """
-        if not article.get('_verdict'):
+        if not article.get(field_name):
             return []
 
         return [
@@ -420,7 +432,7 @@ class AAPAppleNewsFormatter(Formatter):
                         'format': 'html',
                         'layout': 'verdictLayout',
                         'role': 'body',
-                        'text': article.get('_verdict'),
+                        'text': article.get(field_name),
                         'textStyle': 'verdictStyle'
                     }
                 ],
@@ -493,7 +505,7 @@ class AAPAppleNewsFormatter(Formatter):
         analysis_regex = re.compile(r'^The Analysis$', re.IGNORECASE)
         verdict_regex = re.compile(r'^The Verdict$', re.IGNORECASE)
         references_regex = re.compile(r'^The References$', re.IGNORECASE)
-        url_regex = re.compile(r'(?:(?:https?|ftp):\/\/)?[\w/\-?=%.]+\.[\w/\-?=%.]+', re.IGNORECASE)
+        url_regex = re.compile(r'(?:(?:https|http)://)[\w/\-?=%.]+\.[\w/\-?=%.]+', re.IGNORECASE)
         abstract = get_text(article.get('abstract'), content='html').strip()
 
         article['_title'] = abstract
@@ -502,7 +514,8 @@ class AAPAppleNewsFormatter(Formatter):
         article['_analysis'] = ''
         article['_statement'] = ''
         article['_statement_attribution'] = ''
-        article['_verdict'] = ''
+        article['_verdict1'] = ''
+        article['_verdict2'] = ''
         article['_references'] = ''
         article['_revision_history'] = ''
 
@@ -512,17 +525,18 @@ class AAPAppleNewsFormatter(Formatter):
             article['_analysis'] = 'This article has been removed.'
             article['_statement'] = 'This article has been removed.'
             article['_statement_attribution'] = 'This article has been removed.'
-            article['_verdict'] = 'This article has been removed.'
+            article['_verdict1'] = 'This article has been removed.'
+            article['_verdict2'] = 'This article has been removed.'
             article['_references'] = 'This article has been removed.'
             self._set_revision_history(article)
             return
 
         parsed_content = parse_html(body_html, content='html')
-        abstract_found = False
         statement_found = False
         analysis_found = False
         analysis_first_line = False
-        verdict_found = False
+        verdict1_found = False
+        verdict2_found = False
         references_found = False
         statement_elements = []
 
@@ -530,21 +544,18 @@ class AAPAppleNewsFormatter(Formatter):
             tag_text = format_text_content(top_level_tag).strip()
             if not tag_text:
                 continue
-            if not abstract_found and tag_text.lower() == abstract.lower():
-                abstract_found = True
-                continue
 
-            if not analysis_found:
+            if not verdict1_found:
                 if not statement_found:
                     match = statement_regex.search(tag_text)
                     if match:
                         statement_found = True
-                        continue
+                    continue
                 else:
                     # statement found
-                    match = analysis_regex.search(tag_text)
+                    match = verdict_regex.search(tag_text)
                     if match:
-                        analysis_found = True
+                        verdict1_found = True
                         if len(statement_elements) > 1:
                             statement_length = len(statement_elements) - 1
                             for i in range(statement_length):
@@ -566,27 +577,35 @@ class AAPAppleNewsFormatter(Formatter):
                             )
                         continue
 
-                statement_elements.append(top_level_tag)
+                    statement_elements.append(top_level_tag)
+                    continue
+
+            if verdict1_found and not analysis_found:
+                match = analysis_regex.search(tag_text)
+                if match:
+                    analysis_found = True
+                else:
+                    article['_verdict1'] += to_string(top_level_tag, remove_root_div=False)
                 continue
 
-            if analysis_found and not verdict_found:
+            if analysis_found and not verdict2_found:
                 if not analysis_first_line:
                     article['_analysis_first_line'] = tag_text
                     analysis_first_line = True
 
                 match = verdict_regex.search(tag_text)
                 if match:
-                    verdict_found = True
+                    verdict2_found = True
                 else:
                     article['_analysis'] += to_string(top_level_tag, remove_root_div=False)
                 continue
 
-            if verdict_found and not references_found:
+            if verdict2_found and not references_found:
                 match = references_regex.search(tag_text)
                 if match:
                     references_found = True
                 else:
-                    article['_verdict'] += to_string(top_level_tag, remove_root_div=False)
+                    article['_verdict2'] += to_string(top_level_tag, remove_root_div=False)
                 continue
 
             if references_found:

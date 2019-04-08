@@ -54,13 +54,17 @@ class AAPAppleNewsFormatterTest(TestCase):
                          '<p>This is statement first line</p>'
                          '<p>This is statement second line</p>'
                          '<p></p>'
+                         '<p>The Verdict</p>'
+                         '<p>This is verdict 1 first line</p>'
+                         '<p>This is verdict 1 second line</p>'
+                         '<p></p>'
                          '<p>The Analysis</p>'
                          '<p>This is analysis first line</p>'
                          '<p>This is analysis second line</p>'
                          '<p></p>'
                          '<p>The Verdict</p>'
-                         '<p>This is verdict first line</p>'
-                         '<p>This is verdict second line</p>'
+                         '<p>This is verdict 2 first line</p>'
+                         '<p>This is verdict 2 second line</p>'
                          '<p></p>'
                          '<p>The References</p>'
                          '<p>1. This is references http://test.com</p>'
@@ -103,10 +107,17 @@ class AAPAppleNewsFormatterTest(TestCase):
             '<p>This is analysis second line</p>'
         )
         self.assertEqual(
-            article.get('_verdict'),
-            '<p>This is verdict first line</p>'
-            '<p>This is verdict second line</p>'
+            article.get('_verdict1'),
+            '<p>This is verdict 1 first line</p>'
+            '<p>This is verdict 1 second line</p>'
         )
+
+        self.assertEqual(
+            article.get('_verdict2'),
+            '<p>This is verdict 2 first line</p>'
+            '<p>This is verdict 2 second line</p>'
+        )
+
         self.assertEqual(
             article.get('_references'),
             '<ol><li>This is references <a href="http://test.com">http://test.com</a></li>'
@@ -135,7 +146,11 @@ class AAPAppleNewsFormatterTest(TestCase):
         article = self._get_article()
         article['body_html'] = '<p>The Statement</p>'\
                                '<p>This is statement first line</p>' \
-                               '<p></p>'\
+                               '<p></p>' \
+                               '<p>The Verdict</p>' \
+                               '<p>This is verdict first line</p>' \
+                               '<p>This is verdict second line</p>' \
+                               '<p></p>' \
                                '<p>The Analysis</p>'\
                                '<p>This is analysis first line</p>'\
                                '<p>This is analysis second line</p>'\
@@ -242,13 +257,7 @@ class AAPAppleNewsFormatterTest(TestCase):
                                      }
                                  }],
                                  'layout': 'fixed_image_header_container',
-                                 'role': 'container',
-                                 'style': {
-                                     'fill': {
-                                         'URL': 'bundle://header.jpg',
-                                         'type': 'image'
-                                     }
-                                 }
+                                 'role': 'container'
                              },
                              {
                                  'layout': 'subHeaderLayout',
@@ -287,6 +296,33 @@ class AAPAppleNewsFormatterTest(TestCase):
                                  }
                              },
                              {
+                                 'animation': {
+                                     'preferredStartingPosition': 'left',
+                                     'type': 'move_in'
+                                 },
+                                 'components': [
+                                     {
+                                         'layout': 'subHeaderLayout',
+                                         'role': 'heading',
+                                         'text': 'The Verdict',
+                                         'textStyle': 'subHeaderStyle'
+                                     },
+                                     {
+                                         'format': 'html',
+                                         'layout': 'verdictLayout',
+                                         'role': 'body',
+                                         'text': '<p>This is verdict 1 first line</p>'
+                                                 '<p>This is verdict 1 second line</p>',
+                                         'textStyle': 'verdictStyle'
+                                     }
+                                 ],
+                                 'layout': 'verdictContainerLayout',
+                                 'role': 'container',
+                                 'style': {
+                                     'backgroundColor': '#e7ebf1'
+                                 }
+                             },
+                             {
                                  'layout': 'subHeaderLayout',
                                  'role': 'heading',
                                  'text': 'The Analysis',
@@ -316,8 +352,8 @@ class AAPAppleNewsFormatterTest(TestCase):
                                          'format': 'html',
                                          'layout': 'verdictLayout',
                                          'role': 'body',
-                                         'text': '<p>This is verdict first line</p>'
-                                                 '<p>This is verdict second line</p>',
+                                         'text': '<p>This is verdict 2 first line</p>'
+                                                 '<p>This is verdict 2 second line</p>',
                                          'textStyle': 'verdictStyle'
                                      }
                                  ],
