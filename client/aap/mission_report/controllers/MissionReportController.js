@@ -1,4 +1,4 @@
-import {DATE_FILTERS} from 'superdesk-analytics/client/search/directives/DateFilters.js';
+import {DATE_FILTERS} from 'superdesk-analytics/client/search/common';
 
 MissionReportController.$inject = [
     '$scope',
@@ -8,6 +8,7 @@ MissionReportController.$inject = [
     'searchReport',
     '$q',
     'missionReportChart',
+    'reportConfigs',
 ];
 
 /**
@@ -21,6 +22,7 @@ MissionReportController.$inject = [
  * @requires searchReport
  * @requires $q
  * @requires missionReportChart
+ * @requires reportConfigs
  * @description Controller for the Mission Analytics report
  */
 export function MissionReportController(
@@ -30,19 +32,23 @@ export function MissionReportController(
     _,
     searchReport,
     $q,
-    missionReportChart
+    missionReportChart,
+    reportConfigs
 ) {
+    const reportName = 'mission_report';
     /**
      * @ngdoc method
      * @name MissionReportController#init
      * @description Initializes the scope parameters for use with the form and charts
      */
     this.init = () => {
+        $scope.form = {
+            datesError: null,
+            submitted: false,
+            showErrors: false,
+        };
+        $scope.config = reportConfigs.getConfig(reportName);
         $scope.ready = false;
-        $scope.dateFilters = [
-            DATE_FILTERS.YESTERDAY,
-            DATE_FILTERS.RELATIVE,
-        ];
 
         this.initDefaultParams();
 
@@ -58,9 +64,10 @@ export function MissionReportController(
      */
     this.initDefaultParams = () => {
         $scope.currentParams = {
-            params: {
+            report: reportName,
+            params: $scope.config.defaultParams({
                 dates: {
-                    filter: 'yesterday',
+                    filter: DATE_FILTERS.YESTERDAY,
                 },
                 size: 2000,
                 repos: {published: true},
@@ -79,8 +86,7 @@ export function MissionReportController(
                     updates: true,
                     sms_alerts: true,
                 },
-            },
-            report: 'mission_report',
+            }),
         };
 
         $scope.defaultReportParams = _.cloneDeep($scope.currentParams);
@@ -103,15 +109,24 @@ export function MissionReportController(
      * @description Using the current form parameters, query the Search API and update the chart configs
      */
     $scope.generate = () => {
-        $scope.beforeGenerateChart();
         $scope.changeContentView('report');
+        $scope.form.submitted = true;
+
+        if ($scope.form.datesError) {
+            $scope.form.showErrors = true;
+            return;
+        }
+
+        $scope.form.showErrors = false;
+        $scope.beforeGenerateChart();
 
         const params = _.cloneDeep($scope.currentParams.params);
 
         $scope.runQuery(params).then((data) => {
             missionReportChart.createChart(data, params)
                 .then((config) => {
-                    $scope.changeReportParams(config)
+                    $scope.changeReportParams(config);
+                    $scope.form.submitted = false;
                 });
         }).catch((error) => {
             notify.error(error);
