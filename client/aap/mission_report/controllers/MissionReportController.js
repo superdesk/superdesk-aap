@@ -94,14 +94,13 @@ export function MissionReportController(
 
     $scope.isDirty = () => true;
 
-    $scope.$watch(() => savedReports.currentReport._id, (newReportId) => {
-        if (newReportId) {
+    $scope.$watch(() => savedReports.currentReport, (newReport) => {
+        if (_.get(newReport, '_id')) {
             $scope.currentParams = _.cloneDeep(savedReports.currentReport);
-            $scope.changePanel('advanced');
         } else {
             $scope.currentParams = _.cloneDeep($scope.defaultReportParams);
         }
-    });
+    }, true);
 
     /**
      * @ngdoc method
