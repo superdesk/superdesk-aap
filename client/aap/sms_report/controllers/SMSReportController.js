@@ -1,5 +1,5 @@
 import {getErrorMessage, getUtcOffsetInMinutes} from 'superdesk-analytics/client/utils';
-import {DATE_FILTERS} from 'superdesk-analytics/client/search/directives/DateFilters.js';
+import {DATE_FILTERS} from 'superdesk-analytics/client/search/common';
 import {CHART_FIELDS, CHART_TYPES} from 'superdesk-analytics/client/charts/directives/ChartOptions';
 import {SDChart} from 'superdesk-analytics/client/charts/SDChart';
 
@@ -15,6 +15,7 @@ SMSReportController.$inject = [
     '$q',
     'config',
     'deployConfig',
+    'reportConfigs',
 ];
 
 
@@ -29,25 +30,23 @@ export function SMSReportController(
     gettext,
     $q,
     config,
-    deployConfig
+    deployConfig,
+    reportConfigs
 ) {
+    const reportName = 'sms_report';
+
     this.init = () => {
-        $scope.dateFilters = [
-            DATE_FILTERS.YESTERDAY,
-            DATE_FILTERS.LAST_WEEK,
-            DATE_FILTERS.LAST_MONTH,
-            DATE_FILTERS.RANGE,
-        ];
+        $scope.form = {
+            datesError: null,
+            submitted: false,
+            showErrors: false,
+        };
+        $scope.config = reportConfigs.getConfig(reportName);
 
         $scope.chartFields = [
             CHART_FIELDS.TITLE,
             CHART_FIELDS.SUBTITLE,
             CHART_FIELDS.TYPE,
-        ];
-
-        $scope.chartTypes = [
-            CHART_TYPES.BAR,
-            CHART_TYPES.COLUMN,
         ];
 
         this.initDefaultParams();
@@ -62,10 +61,6 @@ export function SMSReportController(
             ['published', 'killed', 'corrected', 'recalled']
         );
 
-        $scope.chart_types = chartConfig.filterChartTypes(
-            ['bar', 'column']
-        );
-
         $scope.intervals = [{
             qcode: 'hourly',
             name: gettext('Hourly'),
@@ -78,10 +73,10 @@ export function SMSReportController(
         }];
 
         $scope.currentParams = {
-            report: 'sms_report',
-            params: {
+            report: reportName,
+            params: $scope.config.defaultParams({
                 dates: {
-                    filter: 'range',
+                    filter: DATE_FILTERS.RANGE,
                     start: moment()
                         .subtract(30, 'days')
                         .format(config.model.dateformat),
@@ -90,7 +85,7 @@ export function SMSReportController(
                 must: {},
                 must_not: {},
                 chart: {
-                    type: _.get($scope, 'chart_types[1].qcode') || 'column',
+                    type: CHART_TYPES.COLUMN,
                     sort_order: 'desc',
                     title: null,
                     subtitle: null,
@@ -98,7 +93,7 @@ export function SMSReportController(
                 histogram: {
                     interval: 'daily',
                 },
-            },
+            }),
         };
 
         $scope.defaultReportParams = _.cloneDeep($scope.currentParams);
@@ -145,14 +140,13 @@ export function SMSReportController(
 
     $scope.isDirty = () => true;
 
-    $scope.$watch(() => savedReports.currentReport._id, (newReportId) => {
-        if (newReportId) {
+    $scope.$watch(() => savedReports.currentReport, (newReport) => {
+        if (_.get(newReport, '_id')) {
             $scope.currentParams = _.cloneDeep(savedReports.currentReport);
-            $scope.changePanel('advanced');
         } else {
             $scope.currentParams = _.cloneDeep($scope.defaultReportParams);
         }
-    });
+    }, true);
 
     $scope.onDateFilterChange = () => {
         if ($scope.currentParams.params.dates.filter !== 'range') {
@@ -164,8 +158,16 @@ export function SMSReportController(
     };
 
     $scope.generate = () => {
-        $scope.beforeGenerateChart();
         $scope.changeContentView('report');
+        $scope.form.submitted = true;
+
+        if ($scope.form.datesError) {
+            $scope.form.showErrors = true;
+            return;
+        }
+
+        $scope.form.showErrors = false;
+        $scope.beforeGenerateChart();
 
         const params = _.cloneDeep($scope.currentParams.params);
 
@@ -180,6 +182,7 @@ export function SMSReportController(
                 )
                     .then((chartConfig) => {
                         $scope.changeReportParams(chartConfig);
+                        $scope.form.submitted = false;
                     });
             }, (error) => {
                 notify.error(
@@ -202,7 +205,7 @@ export function SMSReportController(
         );
 
         const chart = new SDChart.Chart({
-            id: 'sms_report',
+            id: reportName,
             chartType: 'highcharts',
             title: $scope.generateTitle(),
             subtitle: $scope.generateSubtitle(),

@@ -15,6 +15,7 @@ from superdesk.utc import utc_to_local
 
 from analytics.base_report import BaseReportService
 from analytics.chart_config import ChartConfig, SDChart
+from analytics.common import REPORT_CONFIG, DATE_FILTERS
 
 from aap.common import extract_kill_reason_from_html
 
@@ -35,6 +36,18 @@ class MissionReportResource(Resource):
 class MissionReportService(BaseReportService):
     repos = ['published']
     aggregations = {}
+
+    defaultConfig = {
+        REPORT_CONFIG.DATE_FILTERS: {
+            # These are the only two available date filters
+            # The 'report_configs' endpoint will omit all others
+            DATE_FILTERS.RELATIVE_HOURS: {
+                'enabled': True,
+                'max': 72
+            },
+            DATE_FILTERS.YESTERDAY: {'enabled': True},
+        }
+    }
 
     @staticmethod
     def get_date_time_string(datetime_utc, str_format='%X %d%b%y'):

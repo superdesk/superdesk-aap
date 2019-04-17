@@ -13,7 +13,7 @@ from superdesk.errors import SuperdeskApiError
 
 from analytics.base_report import BaseReportService
 from analytics.chart_config import SDChart, ChartConfig
-from analytics.common import get_utc_offset_in_minutes
+from analytics.common import get_utc_offset_in_minutes, REPORT_CONFIG, CHART_TYPES
 
 from flask import current_app as app
 from datetime import datetime
@@ -35,6 +35,20 @@ class SMSReportService(BaseReportService):
                 'field': 'flags.marked_for_sms',
                 'min_doc_count': 0
             }
+        }
+    }
+
+    defaultConfig = {
+        REPORT_CONFIG.CHART_TYPES: {
+            # Disable Table chart type
+            # The 'report_configs' endpoint will omit table from the result
+            CHART_TYPES.BAR: {'enabled': True},
+            CHART_TYPES.COLUMN: {'enabled': True},
+            CHART_TYPES.AREA: {'enabled': False},
+            CHART_TYPES.LINE: {'enabled': False},
+            CHART_TYPES.PIE: {'enabled': False},
+            CHART_TYPES.SCATTER: {'enabled': False},
+            CHART_TYPES.SPLINE: {'enabled': False}
         }
     }
 
