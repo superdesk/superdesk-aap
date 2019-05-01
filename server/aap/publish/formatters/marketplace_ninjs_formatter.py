@@ -14,6 +14,7 @@ from superdesk.publish.formatters.ninjs_newsroom_formatter import NewsroomNinjsF
 from superdesk.utils import json_serialize_datetime_objectId
 from superdesk.errors import FormatterError
 from copy import deepcopy
+from .unicodetoascii import clean_string
 
 
 class MarketplaceNINJSFormatter(NewsroomNinjsFormatter):
@@ -21,6 +22,7 @@ class MarketplaceNINJSFormatter(NewsroomNinjsFormatter):
     It attempts to update stories from Reuters, PA and AP if a newer version/correction is received.
 
     """
+    clean_fields = ('body_html', 'headline', 'description_text', 'description_html')
 
     def __init__(self):
         self.format_type = 'marketplace ninjs'
@@ -29,7 +31,9 @@ class MarketplaceNINJSFormatter(NewsroomNinjsFormatter):
 
     def _transform_to_ninjs(self, article, subscriber, recursive=True):
         ninjs = super(NewsroomNinjsFormatter, self)._transform_to_ninjs(article, subscriber, recursive)
-        ninjs['products'] = self._format_products(article)
+        for f in self.clean_fields:
+            if ninjs.get(f):
+                ninjs[f] = clean_string(ninjs.get(f))
 
         return ninjs
 
