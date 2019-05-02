@@ -10,6 +10,7 @@
 
 import superdesk
 from .mission_report import MissionReportResource, MissionReportService
+from .gen_mission_report_stats import *  # noqa
 from .sms_report import SMSReportResource, SMSReportService
 
 from analytics.common import register_report

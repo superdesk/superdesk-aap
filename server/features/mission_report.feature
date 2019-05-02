@@ -33,24 +33,22 @@ Feature: Mission Report
             }
         ]
         """
-        Given "published"
-        """
-        [
-            {
-                "_id": "archive1", "_type": "published", "source": "AAP",
-                "task": {"stage": "5b501a511d41c84c0bfced4b", "desk": "5b501a501d41c84c0bfced4a"},
-                "anpa_category": [{"qcode": "a"}], "state": "published"
-            },
-            {
-                "_id": "archive2", "_type": "published", "source": "AAP",
-                "task": {"stage": "5b501a6f1d41c84c0bfced4c", "desk": "5b501a501d41c84c0bfced4a"},
-                "anpa_category": [{"qcode": "v"}], "state": "published"
-            }
-        ]
-        """
+        Given empty "archive_statistics"
 
     @auth
     Scenario: Generate the Mission report
+        Given "archive_history"
+        """
+        [{
+            "_id": "his1", "version": 0, "item_id": "archive1", "operation": "publish",
+            "update": {"state": "published", "anpa_category": [{"qcode": "a"}], "pubstatus": "usable"}
+        },
+        {
+            "_id": "his2", "version": 0, "item_id": "archive2", "operation": "publish",
+            "update": {"state": "published", "anpa_category": [{"qcode": "v"}], "pubstatus": "usable"}
+        }]
+        """
+        When we generate stats from archive history
         When we get "/mission_report?params={"query": {"filtered": {}}}"
         Then we get list with 1 items
         """
@@ -58,10 +56,13 @@ Feature: Mission Report
             "corrections": [],
             "kills": [],
             "takedowns": [],
-            "rewrites": [],
+            "rewrites": 0,
+            "sms_alerts": 0,
             "new_stories": {
                 "categories": {
                     "a": 1,
+                    "h": 0,
+                    "r": 0,
                     "v": 1
                 },
                 "count": 2
@@ -72,115 +73,135 @@ Feature: Mission Report
 
     @auth
     Scenario: Include corrections, kills, takedowns and rewrites
-        Given "published"
+        Given "archive_history"
         """
-        [
-            {
-                "_id": "archive1", "_type": "published", "source": "AAP",
-                "task": {"stage": "5b501a511d41c84c0bfced4b", "desk": "5b501a501d41c84c0bfced4a"},
-                "anpa_category": [{"qcode": "a"}], "state": "published"
-            },
-            {
-                "_id": "archive2", "_type": "published", "source": "AAP",
-                "task": {"stage": "5b501a6f1d41c84c0bfced4c", "desk": "5b501a501d41c84c0bfced4a"},
-                "anpa_category": [{"qcode": "v"}], "state": "published"
-            },
-            {
-                "_id": "archive3", "_type": "published", "source": "AAP",
-                "task": {"stage": "5b501a6f1d41c84c0bfced4c", "desk": "5b501a501d41c84c0bfced4a"},
-                "anpa_category": [{"qcode": "v"}], "state": "published", "rewrite_of": "archive1"
-            },
-            {
-                "_id": "archive4", "_type": "published", "source": "AAP",
-                "task": {"stage": "5b501a6f1d41c84c0bfced4c", "desk": "5b501a501d41c84c0bfced4a"},
-                "anpa_category": [{"qcode": "v"}], "state": "corrected"
-            },
-            {
-                "_id": "archive5", "_type": "published", "source": "AAP",
-                "task": {"stage": "5b501a6f1d41c84c0bfced4c", "desk": "5b501a501d41c84c0bfced4a"},
-                "anpa_category": [{"qcode": "v"}], "state": "killed"
-            },
-            {
-                "_id": "archive6", "_type": "published", "source": "AAP",
-                "task": {"stage": "5b501a6f1d41c84c0bfced4c", "desk": "5b501a501d41c84c0bfced4a"},
-                "anpa_category": [{"qcode": "v"}], "state": "recalled"
+        [{
+            "_id": "his1", "version": 0, "item_id": "archive1", "operation": "publish",
+            "update": {
+                "state": "published", "anpa_category": [{"qcode": "a"}], "pubstatus": "usable",
+                "source": "AAP", "task": {"stage": "5b501a6f1d41c84c0bfced4c", "desk": "5b501a501d41c84c0bfced4a"}
             }
-        ]
+        },
+        {
+            "_id": "his2", "version": 0, "item_id": "archive2", "operation": "publish",
+            "update": {
+                "state": "published", "anpa_category": [{"qcode": "v"}], "pubstatus": "usable",
+                "source": "AAP", "task": {"stage": "5b501a6f1d41c84c0bfced4c", "desk": "5b501a501d41c84c0bfced4a"}
+            }
+        },
+        {
+            "_id": "his3", "version": 0, "item_id": "archive3", "operation": "publish",
+            "update": {
+                "state": "published", "anpa_category": [{"qcode": "v"}], "pubstatus": "usable", "rewrite_of": "archive1",
+                "source": "AAP", "task": {"stage": "5b501a6f1d41c84c0bfced4c", "desk": "5b501a501d41c84c0bfced4a"}
+            }
+        },
+        {
+            "_id": "his4", "version": 0, "item_id": "archive4", "operation": "correct",
+            "update": {
+                "state": "corrected", "anpa_category": [{"qcode": "v"}], "pubstatus": "usable",
+                "source": "AAP", "task": {"stage": "5b501a6f1d41c84c0bfced4c", "desk": "5b501a501d41c84c0bfced4a"}
+            }
+        },
+        {
+            "_id": "his5", "version": 0, "item_id": "archive5", "operation": "kill",
+            "update": {
+                "state": "killed", "anpa_category": [{"qcode": "v"}], "pubstatus": "usable",
+                "source": "AAP", "task": {"stage": "5b501a6f1d41c84c0bfced4c", "desk": "5b501a501d41c84c0bfced4a"}
+            }
+        },
+        {
+            "_id": "his6", "version": 0, "item_id": "archive6", "operation": "takedown",
+            "update": {
+                "state": "recalled", "anpa_category": [{"qcode": "v"}], "pubstatus": "usable",
+                "source": "AAP", "task": {"stage": "5b501a6f1d41c84c0bfced4c", "desk": "5b501a501d41c84c0bfced4a"}
+            }
+        }]
         """
+        When we generate stats from archive history
         When we get "/mission_report?params={"query": {"filtered": {}}}"
         Then we get list with 1 items
         """
         {"_items": [{
             "corrections": [{
-                "_id": "archive4", "_type": "published", "source": "AAP",
+                "_id": "archive4", "source": "AAP",
                 "task": {"stage": "5b501a6f1d41c84c0bfced4c", "desk": "5b501a501d41c84c0bfced4a"},
                 "anpa_category": [{"qcode": "v"}], "state": "corrected"
             }],
             "kills": [{
-                "_id": "archive5", "_type": "published", "source": "AAP",
+                "_id": "archive5", "source": "AAP",
                 "task": {"stage": "5b501a6f1d41c84c0bfced4c", "desk": "5b501a501d41c84c0bfced4a"},
                 "anpa_category": [{"qcode": "v"}], "state": "killed"
             }],
             "takedowns": [{
-                "_id": "archive6", "_type": "published", "source": "AAP",
+                "_id": "archive6", "source": "AAP",
                 "task": {"stage": "5b501a6f1d41c84c0bfced4c", "desk": "5b501a501d41c84c0bfced4a"},
                 "anpa_category": [{"qcode": "v"}], "state": "recalled"
             }],
-            "rewrites": [{
-                "_id": "archive3", "_type": "published", "source": "AAP",
-                "task": {"stage": "5b501a6f1d41c84c0bfced4c", "desk": "5b501a501d41c84c0bfced4a"},
-                "anpa_category": [{"qcode": "v"}],
-                "state": "published", "rewrite_of": "archive1"
-            }],
+            "rewrites": 1,
+            "sms_alerts": 0,
             "new_stories": {
                 "categories": {
                     "a": 1,
-                    "v": 1
+                    "h": 0,
+                    "r": 0,
+                    "v": 4
                 },
-                "count": 2
+                "count": 5
             },
-            "total_stories": 6
+            "total_stories": 9
         }]}
         """
 
     @auth
     Scenario: Calculates count for results, fields, comment and betting
-        Given "published"
+        Given "archive_history"
         """
-        [
-            {
-                "_id": "archive1", "_type": "published", "source": "AAP",
-                "task": {"stage": "5b501a511d41c84c0bfced4b", "desk": "5b501a501d41c84c0bfced4a"},
-                "anpa_category": [{"qcode": "a"}], "state": "published"
-            },
-            {
-                "_id": "archive2", "_type": "published", "source": "AAP",
-                "task": {"stage": "5b501a6f1d41c84c0bfced4c", "desk": "5b501a501d41c84c0bfced4a"},
-                "anpa_category": [{"qcode": "v"}], "state": "published"
-            },
-            {
-                "_id": "archive3", "_type": "published", "source": "AAP",
-                "task": {"stage": "5b501a6f1d41c84c0bfced4c", "desk": "5b501a501d41c84c0bfced4a"},
-                "anpa_category": [{"qcode": "r"}], "state": "published"
-            },
-            {
-                "_id": "archive4", "_type": "published", "source": "AP",
-                "task": {"stage": "5b501a6f1d41c84c0bfced4c", "desk": "5b501a501d41c84c0bfced4a"},
-                "anpa_category": [{"qcode": "r"}], "state": "published"
-            },
-            {
-                "_id": "archive5", "_type": "published", "source": "BRA",
-                "task": {"stage": "5b501a6f1d41c84c0bfced4c", "desk": "5b501a501d41c84c0bfced4a"},
-                "anpa_category": [{"qcode": "r"}], "state": "published"
-            },
-            {
-                "_id": "archive6", "_type": "published", "source": "AAP",
-                "task": {"stage": "5b501a6f1d41c84c0bfced4c", "desk": "5b501a501d41c84c0bfced4a"},
-                "anpa_category": [{"qcode": "r"}], "state": "published",
+        [{
+            "_id": "his1", "version": 0, "item_id": "archive1", "operation": "publish",
+            "update": {
+                "state": "published", "anpa_category": [{"qcode": "a"}], "pubstatus": "usable",
+                "source": "AAP", "task": {"stage": "5b501a6f1d41c84c0bfced4c", "desk": "5b501a501d41c84c0bfced4a"}
+            }
+        },
+        {
+            "_id": "his2", "version": 0, "item_id": "archive2", "operation": "publish",
+            "update": {
+                "state": "published", "anpa_category": [{"qcode": "v"}], "pubstatus": "usable",
+                "source": "AAP", "task": {"stage": "5b501a6f1d41c84c0bfced4c", "desk": "5b501a501d41c84c0bfced4a"}
+            }
+        },
+        {
+            "_id": "his3", "version": 0, "item_id": "archive3", "operation": "publish",
+            "update": {
+                "state": "published", "anpa_category": [{"qcode": "r"}], "pubstatus": "usable",
+                "source": "AAP", "task": {"stage": "5b501a6f1d41c84c0bfced4c", "desk": "5b501a501d41c84c0bfced4a"}
+            }
+        },
+        {
+            "_id": "his4", "version": 0, "item_id": "archive4", "operation": "publish",
+            "update": {
+                "state": "published", "anpa_category": [{"qcode": "r"}], "pubstatus": "usable",
+                "source": "AP", "task": {"stage": "5b501a6f1d41c84c0bfced4c", "desk": "5b501a501d41c84c0bfced4a"}
+            }
+        },
+        {
+            "_id": "his5", "version": 0, "item_id": "archive5", "operation": "publish",
+            "update": {
+                "state": "published", "anpa_category": [{"qcode": "r"}], "pubstatus": "usable",
+                "source": "BRA", "task": {"stage": "5b501a6f1d41c84c0bfced4c", "desk": "5b501a501d41c84c0bfced4a"}
+            }
+        },
+        {
+            "_id": "his6", "version": 0, "item_id": "archive6", "operation": "publish",
+            "update": {
+                "state": "published", "anpa_category": [{"qcode": "r"}], "pubstatus": "usable",
+                "source": "AAP", "task": {"stage": "5b501a6f1d41c84c0bfced4c", "desk": "5b501a501d41c84c0bfced4a"},
                 "genre": [{"qcode": "Results (sport)"}]
             }
-        ]
+        }]
         """
+        When we generate stats from archive history
         When we get "/mission_report?params={"query": {"filtered": {}}}"
         Then we get list with 1 items
         """
@@ -188,7 +209,7 @@ Feature: Mission Report
             "corrections": [],
             "kills": [],
             "takedowns": [],
-            "rewrites": [],
+            "rewrites": 0,
             "new_stories": {
                 "categories": {
                     "a": 1,
@@ -204,43 +225,54 @@ Feature: Mission Report
         """
 
     @auth
-    @wip
     Scenario: Receive results as higharts configs
-        Given "published"
+        Given "archive_history"
         """
-        [
-            {
-                "_id": "archive1", "_type": "published", "source": "AAP",
-                "task": {"stage": "5b501a511d41c84c0bfced4b", "desk": "5b501a501d41c84c0bfced4a"},
-                "anpa_category": [{"qcode": "a"}], "state": "published"
-            },
-            {
-                "_id": "archive2", "_type": "published", "source": "AAP",
-                "task": {"stage": "5b501a6f1d41c84c0bfced4c", "desk": "5b501a501d41c84c0bfced4a"},
-                "anpa_category": [{"qcode": "v"}], "state": "published"
-            },
-            {
-                "_id": "archive3", "_type": "published", "source": "AAP",
-                "task": {"stage": "5b501a6f1d41c84c0bfced4c", "desk": "5b501a501d41c84c0bfced4a"},
-                "anpa_category": [{"qcode": "v"}], "state": "published", "rewrite_of": "archive1"
-            },
-            {
-                "_id": "archive4", "_type": "published", "source": "AAP",
-                "task": {"stage": "5b501a6f1d41c84c0bfced4c", "desk": "5b501a501d41c84c0bfced4a"},
-                "anpa_category": [{"qcode": "v"}], "state": "corrected"
-            },
-            {
-                "_id": "archive5", "_type": "published", "source": "AAP",
-                "task": {"stage": "5b501a6f1d41c84c0bfced4c", "desk": "5b501a501d41c84c0bfced4a"},
-                "anpa_category": [{"qcode": "v"}], "state": "killed"
-            },
-            {
-                "_id": "archive6", "_type": "published", "source": "AAP",
-                "task": {"stage": "5b501a6f1d41c84c0bfced4c", "desk": "5b501a501d41c84c0bfced4a"},
-                "anpa_category": [{"qcode": "v"}], "state": "recalled"
+        [{
+            "_id": "his1", "version": 0, "item_id": "archive1", "operation": "publish",
+            "update": {
+                "state": "published", "anpa_category": [{"qcode": "a"}], "pubstatus": "usable",
+                "source": "AAP", "task": {"stage": "5b501a6f1d41c84c0bfced4c", "desk": "5b501a501d41c84c0bfced4a"}
             }
-        ]
+        },
+        {
+            "_id": "his2", "version": 0, "item_id": "archive2", "operation": "publish",
+            "update": {
+                "state": "published", "anpa_category": [{"qcode": "v"}], "pubstatus": "usable",
+                "source": "AAP", "task": {"stage": "5b501a6f1d41c84c0bfced4c", "desk": "5b501a501d41c84c0bfced4a"}
+            }
+        },
+        {
+            "_id": "his3", "version": 0, "item_id": "archive3", "operation": "publish",
+            "update": {
+                "state": "published", "anpa_category": [{"qcode": "v"}], "pubstatus": "usable",
+                "source": "AAP", "task": {"stage": "5b501a6f1d41c84c0bfced4c", "desk": "5b501a501d41c84c0bfced4a"},
+                "rewrite_of": "archive1"
+            }
+        },
+        {
+            "_id": "his4", "version": 0, "item_id": "archive4", "operation": "correct",
+            "update": {
+                "state": "corrected", "anpa_category": [{"qcode": "v"}], "pubstatus": "usable",
+                "source": "AAP", "task": {"stage": "5b501a6f1d41c84c0bfced4c", "desk": "5b501a501d41c84c0bfced4a"}
+            }
+        },
+        {
+            "_id": "his5", "version": 0, "item_id": "archive5", "operation": "kill",
+            "update": {
+                "state": "killed", "anpa_category": [{"qcode": "v"}], "pubstatus": "usable",
+                "source": "AAP", "task": {"stage": "5b501a6f1d41c84c0bfced4c", "desk": "5b501a501d41c84c0bfced4a"}
+            }
+        },
+        {
+            "_id": "his6", "version": 0, "item_id": "archive6", "operation": "takedown",
+            "update": {
+                "state": "recalled", "anpa_category": [{"qcode": "v"}], "pubstatus": "usable",
+                "source": "AAP", "task": {"stage": "5b501a6f1d41c84c0bfced4c", "desk": "5b501a501d41c84c0bfced4a"}
+            }
+        }]
         """
+        When we generate stats from archive history
         When we get "/mission_report?params={"query": {"filtered": {}}}&return_type=highcharts_config"
         Then we get 7 charts
         """
@@ -252,7 +284,7 @@ Feature: Mission Report
             },
             "series": [{
                 "name": "Summary",
-                "data": [6, 2, 0, 1, 1, 1, 1],
+                "data": [9, 5, 0, 1, 1, 1, 1],
                 "type": "line",
                 "xAxis": 0
             }],
@@ -287,7 +319,7 @@ Feature: Mission Report
             "title": {"text": "New Stories By Category"},
             "series": [{
                 "name": "CATEGORY",
-                "data": [1, 0, 0, 0, 1],
+                "data": [1, 0, 0, 0, 4],
                 "type": "bar",
                 "xAxis": 0
             }],
