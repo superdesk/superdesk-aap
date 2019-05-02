@@ -10,7 +10,7 @@
 
 from unittest import TestCase
 
-from .unicodetoascii import to_ascii
+from .unicodetoascii import to_ascii, clean_string
 
 
 class ToAsciiConverterTest(TestCase):
@@ -36,3 +36,17 @@ class ToAsciiConverterTest(TestCase):
         self.assertEqual(to_ascii('ˮ'), '"')
         self.assertEqual(to_ascii(None), '')
         self.assertEqual(to_ascii(''), '')
+
+
+class CleanStringTest(TestCase):
+    def TestClean(self):
+        self.assertEqual(clean_string('ˮ'), '"')
+        self.assertEqual(clean_string('´'), '\'')
+        self.assertEqual(clean_string('`'), '`')
+        self.assertEqual(clean_string('"'), '"')
+        self.assertEqual(to_ascii('ʹ'), '\'')
+        self.assertEqual(clean_string('ʻ'), '\'')
+        self.assertEqual(clean_string('ʼ'), '\'')
+        self.assertEqual(clean_string('ʺ'), '"')
+        self.assertEqual(clean_string('̀'), '\'')
+        self.assertEqual(clean_string('ˮ'), '"')
