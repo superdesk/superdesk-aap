@@ -13,16 +13,35 @@ from superdesk.resource import Resource
 from superdesk.metadata.item import ITEM_STATE, CONTENT_STATE
 from superdesk.utc import utc_to_local
 
-from analytics.base_report import BaseReportService
 from analytics.chart_config import ChartConfig, SDChart
-from analytics.common import REPORT_CONFIG, DATE_FILTERS
-
-from aap.common import extract_kill_reason_from_html
+from analytics.stats.stats_report_service import StatsReportService
 
 from flask import current_app as app
+from copy import deepcopy
+from collections import namedtuple
 
 
 RESULTS_CATEGORIES = ['r', 'h']
+
+report_types = [
+    'summary',
+    'categories',
+    'corrections',
+    'kills',
+    'takedowns',
+    'sms_alerts',
+    'updates'
+]
+
+REPORT_TYPES = namedtuple('REPORT_TYPES', [
+    'SUMMARY',
+    'CATEGORIES',
+    'CORRECTIONS',
+    'KILLS',
+    'TAKEDOWNS',
+    'SMS_ALERTS',
+    'UPDATES'
+])(*report_types)
 
 
 class MissionReportResource(Resource):
@@ -33,21 +52,11 @@ class MissionReportResource(Resource):
     privileges = {'GET': 'mission_report'}
 
 
-class MissionReportService(BaseReportService):
-    repos = ['published']
+class MissionReportService(StatsReportService):
     aggregations = {}
 
-    defaultConfig = {
-        REPORT_CONFIG.DATE_FILTERS: {
-            # These are the only two available date filters
-            # The 'report_configs' endpoint will omit all others
-            DATE_FILTERS.RELATIVE_HOURS: {
-                'enabled': True,
-                'max': 72
-            },
-            DATE_FILTERS.YESTERDAY: {'enabled': True},
-        }
-    }
+    def get_request_aggregations(self, params, args):
+        return None
 
     @staticmethod
     def get_date_time_string(datetime_utc, str_format='%X %d%b%y'):
@@ -116,109 +125,287 @@ class MissionReportService(BaseReportService):
             category.get('qcode') not in exclude_categories
         }
 
+    def add_query_clause(self, params, query):
+        if query.get('must'):
+            params['source']['query']['filtered']['filter']['bool']['must'].extend(query['must'])
+
+        if query.get('must_not'):
+            params['source']['query']['filtered']['filter']['bool']['must_not'].extend(query['must_not'])
+
+        if query.get('should'):
+            params['source']['query']['filtered']['filter']['bool']['should'] = query['should']
+
+        if query.get('minimum_should_match'):
+            params['source']['query']['filtered']['filter']['bool']['minimum_should_match'] = \
+                query['minimum_should_match']
+
+        if query.get('aggs'):
+            params['source']['aggs'] = query['aggs']
+
+        if query.get('size'):
+            params['source']['size'] = query['size']
+
+        return params
+
+    def _es_set_size(self, query, params):
+        pass
+
+    def run_query(self, params, args):
+        reports = (args.get('params') or {}).get('reports') or {
+            REPORT_TYPES.SUMMARY: True,
+            REPORT_TYPES.CATEGORIES: True,
+            REPORT_TYPES.CORRECTIONS: True,
+            REPORT_TYPES.KILLS: True,
+            REPORT_TYPES.TAKEDOWNS: True,
+            REPORT_TYPES.SMS_ALERTS: True,
+            REPORT_TYPES.UPDATES: True
+        }
+        docs = {}
+
+        # Get New Story Counts (excluding results/fields/comment/betting)
+        if reports.get(REPORT_TYPES.SUMMARY, True) or reports.get(REPORT_TYPES.CATEGORIES, True):
+            es_query = {
+                'must': [
+                    {
+                        'terms': {
+                            'state': [
+                                'published',
+                                'corrected',
+                                'killed',
+                                'recalled'
+                            ]
+                        }
+                    }
+                ],
+                'must_not': [
+                    {'exists': {'field': 'rewrite_of'}},
+                    {
+                        'bool': {
+                            'must': [
+                                {'terms': {'anpa_category.qcode': ['r', 'h']}},
+                                {'term': {'source': 'BRA'}}
+                            ]
+                        }
+                    }, {
+                        'bool': {
+                            'must': [
+                                {'terms': {'anpa_category.qcode': ['r', 'h']}},
+                                {'term': {'genre.qcode': 'Results (sport)'}}
+                            ]
+                        }
+                    }
+                ],
+                'size': 0
+            }
+
+            if reports.get(REPORT_TYPES.CATEGORIES, True):
+                es_query['aggs'] = {
+                    'categories': {
+                        'terms': {
+                            'field': 'anpa_category.qcode',
+                            'size': 0
+                        }
+                    }
+                }
+
+            query = self.add_query_clause(deepcopy(params), es_query)
+            docs['new'] = StatsReportService.run_query(self, query, args)
+
+            # Get Results/Fields/Comment/Betting counts
+            query = self.add_query_clause(deepcopy(params), {
+                'must': [{
+                    'terms': {
+                        'state': [
+                            'published',
+                            'corrected',
+                            'killed',
+                            'recalled'
+                        ]
+                    }
+                }, {
+                    'terms': {
+                        'anpa_category.qcode': ['r', 'h']
+                    }
+                }],
+                'must_not': [{
+                    'exists': {'field': 'rewrite_of'}
+                }],
+                'should': [{
+                    'term': {'source': 'BRA'}
+                }, {
+                    'term': {
+                        'genre.qcode': 'Results (sport)'
+                    }
+                }],
+                'minimum_should_match': 1,
+                'size': 0
+            })
+            docs['sports'] = StatsReportService.run_query(self, query, args)
+
+        # Get Corrections/Kills/Takedowns
+        if reports.get(REPORT_TYPES.SUMMARY, True) or \
+                reports.get(REPORT_TYPES.CORRECTIONS, True) or \
+                reports.get(REPORT_TYPES.KILLS, True) or \
+                reports.get(REPORT_TYPES.TAKEDOWNS, True):
+            query = self.add_query_clause(deepcopy(params), {
+                'must': [{
+                    'terms': {
+                        'state': {
+                            'corrected',
+                            'killed',
+                            'recalled'
+                        }
+                    }
+                }]
+            })
+            docs[REPORT_TYPES.KILLS] = StatsReportService.run_query(self, query, args)
+
+        # Get Update Counts
+        if reports.get(REPORT_TYPES.SUMMARY, True) or reports.get(REPORT_TYPES.UPDATES, True):
+            query = self.add_query_clause(deepcopy(params), {
+                'must': [{
+                    'terms': {
+                        'state': {
+                            'published',
+                            'corrected',
+                            'killed',
+                            'recalled'
+                        }
+                    }
+                }, {
+                    'exists': {'field': 'rewrite_of'}
+                }],
+                'size': 0
+            })
+            docs[REPORT_TYPES.UPDATES] = StatsReportService.run_query(self, query, args)
+
+        # Get SMS Counts
+        if reports.get(REPORT_TYPES.SMS_ALERTS, True):
+            query = self.add_query_clause(deepcopy(params), {
+                'must': [{
+                    'terms': {
+                        'state': [
+                            'published',
+                            'corrected',
+                            'killed',
+                            'recalled'
+                        ]
+                    }
+                }, {
+                    'term': {'flags.marked_for_sms': 'true'}
+                }],
+                'aggs': {
+                    'timeline': {
+                        'nested': {'path': 'stats.timeline'},
+                        'aggs': {
+                            'operations': {
+                                'terms': {
+                                    'field': 'stats.timeline.operation',
+                                    'size': 0,
+                                    'include': [
+                                        'publish',
+                                        'correct',
+                                        'kill',
+                                        'correct'
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                'size': 0
+            })
+            docs[REPORT_TYPES.SMS_ALERTS] = StatsReportService.run_query(self, query, args)
+
+        return docs
+
+    def _get_total_hits(self, doc):
+        return (doc.hits.get('hits') or {}).get('total') or 0
+
+    def _get_aggs(self, doc, name):
+        return ((doc.hits.get('aggregations') or {}).get(name) or {}).get('buckets') or []
+
     def generate_report(self, docs, args, include_categories=False):
         """Returns the category count
 
         :param docs: document used for generating the report
         :return dict: report
         """
-        items = list(docs)
-        total_stories = len(items)
-
-        if total_stories < 1:
-            return {
-                'total_stories': 0,
-                'new_stories': {
-                    'categories': {},
-                    'count': 0
-                },
-                'corrections': [],
-                'kills': [],
-                'takedowns': [],
-                'first_item': {},
-                'rewrites': [],
-            }
-
-        categories = self._get_filtered_categories(args)
-
-        new_stories = {
-            'count': 0,
-            'categories': {qcode: 0 for qcode in categories.keys()}
-        }
-
-        new_stories['categories']['results'] = 0
-
-        corrections = []
-        kills = []
-        takedowns = []
-        rewrites = []
-        sms_alerts = []
-
-        total_stories = 0
-
-        first_item = None
-
-        for item in items:
-            if first_item is None:
-                first_item = item
-
-            total_stories += 1
-            item_state = item.get(ITEM_STATE)
-
-            if item_state == CONTENT_STATE.PUBLISHED:
-                if self._is_rewrite(item):
-                    rewrites.append(item)
-                else:
-                    new_stories['count'] += 1
-                    if self._is_results_field(item):
-                        new_stories['categories']['results'] += 1
-                    else:
-                        for category in item.get('anpa_category') or []:
-                            new_stories['categories'][category.get('qcode')] += 1
-
-            elif item_state == CONTENT_STATE.CORRECTED:
-                corrections.append(item)
-
-            elif item_state == CONTENT_STATE.KILLED:
-                item['_reasons'] = extract_kill_reason_from_html(
-                    item.get('body_html') or '',
-                    is_kill=True
-                )
-                kills.append(item)
-
-            elif item_state == CONTENT_STATE.RECALLED:
-                item['_reasons'] = extract_kill_reason_from_html(
-                    item.get('body_html') or '',
-                    is_kill=False
-                )
-                takedowns.append(item)
-
-            if (item.get('flags') or {}).get('marked_for_sms'):
-                sms_alerts.append(item)
-
         report = {
-            'total_stories': total_stories,
-            'new_stories': new_stories,
-            'corrections': corrections,
-            'kills': kills,
-            'takedowns': takedowns,
-            'first_item': first_item,
-            'rewrites': rewrites,
-            'sms_alerts': sms_alerts,
+            'total_stories': 0,
+            'new_stories': {
+                'count': 0,
+                'categories': {}
+            },
+            'rewrites': 0,
+            'sms_alerts': 0,
+            'kills': [],
+            'takedowns': [],
+            'corrections': []
         }
 
-        if include_categories:
-            report['categories'] = categories
+        # Add new story stats
+        if docs.get('new'):
+            categories = self._get_filtered_categories(args)
+
+            if include_categories:
+                report['categories'] = categories
+
+            agg_categories = {
+                cat['key']: cat['doc_count']
+                for cat in self._get_aggs(docs['new'], 'categories')
+            }
+            report['new_stories']['count'] = self._get_total_hits(docs['new'])
+            report['new_stories']['categories'] = {
+                qcode: agg_categories.get(qcode) or 0
+                for qcode in categories.keys()
+            }
+            report['total_stories'] += report['new_stories']['count']
+
+        # Add stats for Results/Fields/Comment/Betting
+        if docs.get('sports'):
+            sports_count = self._get_total_hits(docs['sports'])
+            if sports_count > 0:
+                report['new_stories']['categories']['results'] = sports_count
+                report['new_stories']['count'] += sports_count
+                report['total_stories'] += sports_count
+            else:
+                report['new_stories']['categories']['results'] = 0
+        else:
+            report['new_stories']['categories']['results'] = 0
+
+        # Add update stats
+        if docs.get(REPORT_TYPES.UPDATES):
+            report['rewrites'] = self._get_total_hits(docs[REPORT_TYPES.UPDATES])
+            report['total_stories'] += report['rewrites']
+
+        # Add sms stats
+        if docs.get(REPORT_TYPES.SMS_ALERTS):
+            timeline_aggs = (docs[REPORT_TYPES.SMS_ALERTS].hits.get('aggregations') or {}).get('timeline') or {}
+            report[REPORT_TYPES.SMS_ALERTS] = sum([
+                sms.get('doc_count') or 0
+                for sms in (timeline_aggs.get('operations') or {}).get('buckets') or []
+            ])
+
+            if list(docs.keys()) == [REPORT_TYPES.SMS_ALERTS]:
+                report['total_stories'] = report[REPORT_TYPES.SMS_ALERTS]
+
+        if docs.get(REPORT_TYPES.KILLS):
+            for item in docs[REPORT_TYPES.KILLS]:
+                if item[ITEM_STATE] == CONTENT_STATE.KILLED:
+                    item['_reasons'] = ((item.get('extra') or {}).get('mission') or {}).get('reasons') or ''
+                    report[REPORT_TYPES.KILLS].append(item)
+                elif item[ITEM_STATE] == CONTENT_STATE.RECALLED:
+                    item['_reasons'] = ((item.get('extra') or {}).get('mission') or {}).get('reasons') or ''
+                    report[REPORT_TYPES.TAKEDOWNS].append(item)
+                elif item[ITEM_STATE] == CONTENT_STATE.CORRECTED:
+                    report[REPORT_TYPES.CORRECTIONS].append(item)
+
+            report['total_stories'] += len(report[REPORT_TYPES.KILLS])
+            report['total_stories'] += len(report[REPORT_TYPES.TAKEDOWNS])
+            report['total_stories'] += len(report[REPORT_TYPES.CORRECTIONS])
 
         return report
-
-    def generate_elastic_query(self, args):
-        if not args.get('params'):
-            args['params'] = {}
-
-        args['include_items'] = 1
-        args['params'].setdefault('size', 2000)
-        return BaseReportService.generate_elastic_query(self, args)
 
     def generate_highcharts_config(self, docs, args):
         params = args.get('params') or {}
@@ -268,7 +455,7 @@ class MissionReportService(BaseReportService):
                     report['total_stories'],
                     report['new_stories']['count'],
                     report['new_stories']['categories']['results'],
-                    len(report['rewrites']),
+                    report['rewrites'],
                     len(report['corrections']),
                     len(report['kills']),
                     len(report['takedowns'])
@@ -401,7 +588,7 @@ class MissionReportService(BaseReportService):
                 'id': 'mission_report_updates',
                 'type': 'table',
                 'headers': ['Sent', 'Slugline', 'TakeKey', 'Ednote'],
-                'title': 'There were {} updates issued'.format(len(report.get('rewrites') or [])),
+                'title': 'There were {} updates issued'.format(report.get('rewrites') or 0),
                 'rows': []
             }
 
@@ -410,7 +597,7 @@ class MissionReportService(BaseReportService):
                 'id': 'mission_report_sms_alerts',
                 'type': 'table',
                 'headers': ['Sent', 'Slugline', 'TakeKey', 'Ednote'],
-                'title': 'There were {} SMS alerts issued'.format(len(report.get('sms_alerts') or [])),
+                'title': 'There were {} SMS alerts issued'.format(report.get('sms_alerts') or 0),
                 'rows': []
             }
 

@@ -74,7 +74,7 @@ export function MissionReportChart(_, gettext, moment, chartConfig, $q, metadata
                     _.get(data, 'total_stories') || 0,
                     _.get(data, 'new_stories.count') || 0,
                     _.get(data, 'new_stories.categories.results') || 0,
-                    _.get(data, 'rewrites.length') || 0,
+                    _.get(data, 'rewrites') || 0,
                     _.get(data, 'corrections.length') || 0,
                     _.get(data, 'kills.length') || 0,
                     _.get(data, 'takedowns.length') || 0
@@ -103,16 +103,22 @@ export function MissionReportChart(_, gettext, moment, chartConfig, $q, metadata
 
         const categories = _.keyBy(_.get(metadata, 'values.categories') || [], 'qcode');
 
-        categories['results'] = {
-            qcode: 'results',
-            name: gettext('Results/Fields/Comment/Betting')
-        };
+        if (_.get(data, 'new_stories.categories.results', 0) > 0) {
+            categories['results'] = {
+                qcode: 'results',
+                name: gettext('Results/Fields/Comment/Betting')
+            };
+        }
 
         const translations = {};
         const source = {};
         const series = _.get(data, 'new_stories.categories') || {};
 
         Object.keys(categories).forEach((qcode) => {
+            if (!(qcode in series)) {
+                return;
+            }
+
             source[qcode] = series[qcode] || 0;
             translations[qcode] = categories[qcode].name + (
                 qcode === 'results' ? '' : ` (${qcode.toUpperCase()})`
@@ -244,7 +250,7 @@ export function MissionReportChart(_, gettext, moment, chartConfig, $q, metadata
      * @description Generate the table displaying the updates
      */
     this.genUpdatesChart = (data) => {
-        const numUpdates = _.get(data, 'rewrites.length') || 0;
+        const numUpdates = _.get(data, 'rewrites') || 0;
 
         return {
             id: 'mission_report_updates',
@@ -263,7 +269,7 @@ export function MissionReportChart(_, gettext, moment, chartConfig, $q, metadata
      * @description Generate the SMS Alerts chart config
      */
     this.genSMSAlertsChart = (data) => {
-        const numSMSAlerts = _.get(data, 'sms_alerts.length') || 0;
+        const numSMSAlerts = _.get(data, 'sms_alerts') || 0;
 
         return {
             id: 'mission_report_sms_alerts',
