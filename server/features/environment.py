@@ -19,6 +19,8 @@ def before_scenario(context, scenario):
     config = {
         'INSTALLED_APPS': INSTALLED_APPS,
         'ELASTICSEARCH_FORCE_REFRESH': True,
-        'MACROS_MODULE': MACROS_MODULE
+        'MACROS_MODULE': MACROS_MODULE,
+        'STATISTICS_MONGO_DBNAME': 'sptests',
+        'STATISTICS_ELASTIC_INDEX': 'sptest_statistics'
     }
     setup_before_scenario(context, scenario, config, app_factory=get_app)
