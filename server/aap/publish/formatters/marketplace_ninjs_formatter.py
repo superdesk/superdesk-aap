@@ -22,6 +22,7 @@ class MarketplaceNINJSFormatter(NewsroomNinjsFormatter):
     It attempts to update stories from Reuters, PA and AP if a newer version/correction is received.
 
     """
+
     clean_fields = ('body_html', 'headline', 'description_text', 'description_html')
 
     def __init__(self):
