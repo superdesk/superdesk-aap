@@ -385,3 +385,41 @@ class AAPAppleNewsFormatterTest(TestCase):
         apple_news = self.formatter._format(article)
         self.assertEqual(apple_news.get('title'), 'This article has been removed.')
         self.assertEqual(apple_news.get('subtitle'), 'This article has been removed.')
+
+    def test_format_url_to_anchor_tag(self):
+        inputs = [
+            'this is http://test.com',
+            'this is second line',
+            'Australian politics live with Amy Remeikis, by Amy Remeikis.'
+            'The Guardian.May 3, 2019: https://www.theguardian.com/australia-news/live/2019/'
+            'may/03/federal-election-2019-liberals-to-dump-another-candidate-politics-live?'
+            'page=with:block-5ccb88c18f086f179813a12b',
+            '7121.0 - Agricultural Commodities Australia 2017 - 18. Australian Bureau of Statistics:'
+            ' https://www.abs.gov.au/AUSSTATS/abs@.nsf/Lookup/7121.0Main+Features12017-18?OpenDocument',
+            'Explanatory Notes.7121.0 - Agricultural Commodities, Australia, 2017 - 18. Australian'
+            ' Bureau of Statistics: https://www.abs.gov.au/AUSSTATS/abs@.nsf/Lookup/7121.0'
+            'Explanatory%20Notes12017-18?OpenDocument'
+        ]
+
+        outputs = [
+            'this is <a href="http://test.com">http://test.com</a>',
+            'this is second line',
+            'Australian politics live with Amy Remeikis, by Amy Remeikis.'
+            'The Guardian.May 3, 2019: <a href="https://www.theguardian.com/australia-news/live/2019/'
+            'may/03/federal-election-2019-liberals-to-dump-another-candidate-politics-live?'
+            'page=with:block-5ccb88c18f086f179813a12b">https://www.theguardian.com/australia-news/live/2019/'
+            'may/03/federal-election-2019-liberals-to-dump-another-candidate-politics-live?'
+            'page=with:block-5ccb88c18f086f179813a12b</a>',
+            '7121.0 - Agricultural Commodities Australia 2017 - 18. Australian Bureau of Statistics:'
+            ' <a href="https://www.abs.gov.au/AUSSTATS/abs@.nsf/Lookup/7121.0Main+Features12017-18?OpenDocument">'
+            'https://www.abs.gov.au/AUSSTATS/abs@.nsf/Lookup/7121.0Main+Features12017-18?OpenDocument</a>',
+            'Explanatory Notes.7121.0 - Agricultural Commodities, Australia, 2017 - 18. Australian'
+            ' Bureau of Statistics: <a href="https://www.abs.gov.au/AUSSTATS/abs@.nsf/Lookup/7121.0'
+            'Explanatory%20Notes12017-18?OpenDocument">https://www.abs.gov.au/AUSSTATS/abs@.nsf/Lookup/7121.0'
+            'Explanatory%20Notes12017-18?OpenDocument</a>'
+
+        ]
+
+        for i in range(len(inputs)):
+            text = self.formatter._format_url_to_anchor_tag(inputs[i])
+            self.assertEqual(outputs[i], text)

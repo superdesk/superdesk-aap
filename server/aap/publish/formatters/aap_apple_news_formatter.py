@@ -31,6 +31,7 @@ logger = logging.getLogger(__name__)
 
 class AAPAppleNewsFormatter(Formatter):
     APPLE_NEWS_VERSION = '1.8'
+    URL_REGEX = re.compile(r'(?:(?:https|http)://)[\w/\-?=%.]+\.[\w/\-?=%#@.\+:]+', re.IGNORECASE)
 
     def __init__(self):
         self.format_type = 'AAP Apple News'
@@ -505,7 +506,6 @@ class AAPAppleNewsFormatter(Formatter):
         analysis_regex = re.compile(r'^The Analysis$', re.IGNORECASE)
         verdict_regex = re.compile(r'^The Verdict$', re.IGNORECASE)
         references_regex = re.compile(r'^The References$', re.IGNORECASE)
-        url_regex = re.compile(r'(?:(?:https|http)://)[\w/\-?=%.]+\.[\w/\-?=%.]+', re.IGNORECASE)
         abstract = get_text(article.get('abstract'), content='html').strip()
 
         article['_title'] = abstract
@@ -609,16 +609,10 @@ class AAPAppleNewsFormatter(Formatter):
                 continue
 
             if references_found:
-                def replacement(match_object):
-                    value = match_object.group(0)
-                    if value:
-                        return '<a href="{0}">{0}</a>'.format(value)
-                    return ''
-
                 tag_text = re.sub(r'^\d*\s*[.):]?', '', tag_text).strip()
 
                 article['_references'] += '<li>{}</li>'.format(
-                    re.sub(url_regex, replacement, tag_text)
+                    self._format_url_to_anchor_tag(tag_text)
                 )
 
         if len(article['_references']):
@@ -630,6 +624,19 @@ class AAPAppleNewsFormatter(Formatter):
             article['_statement_attribution'] = ''
 
         self._set_revision_history(article)
+
+        # append footer to the analysis section
+        if article.get('_analysis') and article.get('body_footer'):
+            article['_analysis'] += article.get('body_footer')
+
+    def _format_url_to_anchor_tag(self, tag_text):
+        def replacement(match_object):
+            value = match_object.group(0)
+            if value:
+                return '<a href="{0}">{0}</a>'.format(value)
+            return ''
+
+        return re.sub(self.URL_REGEX, replacement, tag_text)
 
     def _set_revision_history(self, article):
         """Get revision history of published article
