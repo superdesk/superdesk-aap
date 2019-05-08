@@ -80,7 +80,10 @@ def expand_brisbane_transport(item, **kwargs):
             transport_mode = mode[0].text
 
             if content is not None:
-                stuff = ''.join(content.itertext())
+                for n in tree.xpath('.//div[@class="mapinsert"]'):
+                    n.getparent().remove(n)
+
+                stuff = ''.join([x.replace('\n', '<br>') for x in content.itertext()])
                 if transport_mode == 'Bus':
                     bus_story.write('<p>{}</p><p>{}</p><hr>'.format(title, stuff))
                 elif transport_mode == 'Train':
