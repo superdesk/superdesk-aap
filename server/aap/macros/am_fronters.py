@@ -71,9 +71,9 @@ def am_fronters(item, **kwargs):
             articles = service.get(req=req, lookup=None)
             if articles.count():
                 article = articles[0]
-                # Check that the article is for today, check day month and year
+                # Check that the article is for today, check day month
                 if now.strftime('%B') in article.get('abstract') and now.strftime('%-d') in article.get(
-                        'abstract') and now.strftime('%Y') in article.get('abstract'):
+                        'abstract'):
                     body.write('<p>{}</p>'.format(paper.get('heading')))
                     tree = html.fromstring(article.get('body_html'))
                     pars = tree.xpath('./p')
