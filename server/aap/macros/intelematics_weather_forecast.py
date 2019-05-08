@@ -43,7 +43,7 @@ NS = {'sd': 'http://www.sunatraffic.com.au'}
 @cache(ttl=600)
 def _get_urls():
     resp = dict()
-    url = 'http://dataservices.sunatraffic.com.au/SunaDataServices'
+    url = 'https://dataservices.sunatraffic.com.au/SunaDataServices'
     payload = {'key': app.config.get('INTELEMATICS_WEATHER_API_KEY', '')}
     response = requests.get(url, params=payload)
     response.raise_for_status()

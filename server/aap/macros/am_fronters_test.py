@@ -449,7 +449,7 @@ class AMFronterTest(AAPTestCase):
     def setUp(self):
         now = datetime.now()
         for i in self.published_items:
-            i['abstract'] = i['abstract'].replace('January 18, 2019', now.strftime('%B %-d, %Y'))
+            i['abstract'] = i['abstract'].replace('January 18, 2019', now.strftime('%B %-d'))
         self.app.data.insert('published', self.published_items)
 
     def test_fronters(self):
