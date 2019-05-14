@@ -269,5 +269,40 @@
                 "enabled" : false
             }
         }
+    },
+    {
+        "_id": "event_postpone",
+        "name": "event_postpone",
+        "schema": {
+            "reason": {"required":  false}
+        }
+    },
+    {
+        "_id": "event_reschedule",
+        "name": "event_reschedule",
+        "schema": {
+            "reason": {"required":  false}
+        }
+    },
+    {
+        "_id": "event_cancel",
+        "name": "event_cancel",
+        "schema": {
+            "reason": {"required":  false}
+        }
+    },
+    {
+        "_id": "planning_planning_cancel",
+        "name": "planning_planning_cancel",
+        "schema": {
+            "reason": {"required":  false}
+        }
+    },
+    {
+        "_id": "planning_cancel_all_coverage",
+        "name": "planning_cancel_all_coverage",
+        "schema": {
+            "reason": {"required":  false}
+        }
     }
 ]
