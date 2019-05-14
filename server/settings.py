@@ -349,7 +349,14 @@ PLANNING_CHECK_FOR_ASSIGNMENT_ON_PUBLISH = strtobool(env('PLANNING_CHECK_FOR_ASS
 
 PLANNING_FULFIL_ON_PUBLISH_FOR_DESKS = env(
     'PLANNING_FULFIL_ON_PUBLISH_FOR_DESKS',
-    '54e68fcd1024542de76d6643,54e691ca1024542de640fef1,54e6928d1024542de640fef5,5768dd55a5398f5efb985e19,5768ddc2a5398f5efa2cda65,57b0f07ea5398f41862b951e'  # noqa: E501
+    ','.join([
+        '57b0f07ea5398f41862b951e',  # Court Production
+        '54e691ca1024542de640fef1',  # Finance
+        '54e68fcd1024542de76d6643',  # News
+        '57b23179a5398f460d9489e8',  # Planning
+        '54e6928d1024542de640fef5',  # Sport
+        '5768dd55a5398f5efb985e19'  # World News
+    ])
 )
 
 try:

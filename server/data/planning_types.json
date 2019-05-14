@@ -37,9 +37,8 @@
                 "enabled": true
             },
             "slugline": {
-                "enabled": true
+                "enabled": false
             },
-
             "subject": {
                 "enabled": true
             }
@@ -119,6 +118,20 @@
                     "scheme": {}
                 }
             }
+        },
+        "list" : {
+            "primary_fields" : [
+                "slugline",
+                "internalnote",
+                "name"
+            ],
+            "secondary_fields" : [
+                "state",
+                "actionedState",
+                "calendars",
+                "location",
+                "files"
+            ]
         }
     },
     {
@@ -126,7 +139,7 @@
         "name": "coverage",
         "schema": {
             "g2_content_type": {
-                "required": false,
+                "required": true,
                 "type": "list"
             },
             "internal_note": {
@@ -156,6 +169,10 @@
             "keyword": {
                 "required": false,
                 "type": "list"
+            },
+            "contact_info" : {
+                "required" : false,
+                "type" : "list"
             }
         },
         "editor": {
@@ -179,6 +196,9 @@
             },
             "keyword": {
                 "enabled":true
+            },
+            "contact_info" : {
+                "enabled" : true
             }
         }
     },
@@ -303,6 +323,166 @@
         "name": "planning_cancel_all_coverage",
         "schema": {
             "reason": {"required":  false}
+        }
+    },
+    {
+        "_id" : "advanced_search",
+        "name" : "advanced_search",
+        "editor" : {
+            "event" : {
+                "slugline" : {
+                    "enabled" : false,
+                    "index" : 1
+                },
+                "name" : {
+                    "enabled" : true,
+                    "index" : 2
+                },
+                "anpa_category" : {
+                    "enabled" : true,
+                    "index" : 3
+                },
+                "subject" : {
+                    "enabled" : true,
+                    "index" : 4
+                },
+                "place" : {
+                    "enabled" : true,
+                    "index" : 5
+                },
+                "source" : {
+                    "enabled" : true,
+                    "index" : 6
+                },
+                "location" : {
+                    "enabled" : true,
+                    "index" : 7
+                },
+                "state" : {
+                    "enabled" : true,
+                    "index" : 8
+                },
+                "pub_status" : {
+                    "enabled" : true,
+                    "index" : 9
+                },
+                "spike_state" : {
+                    "enabled" : true,
+                    "index" : 10
+                },
+                "start_date_time" : {
+                    "enabled" : true,
+                    "index" : 11
+                },
+                "end_date_time" : {
+                    "enabled" : true,
+                    "index" : 12
+                },
+                "date_filter" : {
+                    "enabled" : true,
+                    "index" : 13
+                }
+            },
+            "planning" : {
+                "slugline" : {
+                    "enabled" : true,
+                    "index" : 1
+                },
+                "content_type" : {
+                    "enabled" : true,
+                    "index" : 2
+                },
+                "no_coverage" : {
+                    "enabled" : true,
+                    "index" : 3
+                },
+                "featured" : {
+                    "enabled" : true,
+                    "index" : 4
+                },
+                "anpa_category" : {
+                    "enabled" : true,
+                    "index" : 5
+                },
+                "subject" : {
+                    "enabled" : true,
+                    "index" : 6
+                },
+                "place" : {
+                    "enabled" : true,
+                    "index" : 7
+                },
+                "urgency" : {
+                    "enabled" : true,
+                    "index" : 8
+                },
+                "state" : {
+                    "enabled" : true,
+                    "index" : 9
+                },
+                "pub_status" : {
+                    "enabled" : true,
+                    "index" : 10
+                },
+                "spike_state" : {
+                    "enabled" : true,
+                    "index" : 11
+                },
+                "start_date_time" : {
+                    "enabled" : true,
+                    "index" : 12
+                },
+                "end_date_time" : {
+                    "enabled" : true,
+                    "index" : 13
+                },
+                "date_filter" : {
+                    "enabled" : true,
+                    "index" : 14
+                }
+            },
+            "combined" : {
+                "slugline" : {
+                    "enabled" : false,
+                    "index" : 1
+                },
+                "anpa_category" : {
+                    "enabled" : true,
+                    "index" : 2
+                },
+                "subject" : {
+                    "enabled" : true,
+                    "index" : 3
+                },
+                "place" : {
+                    "enabled" : true,
+                    "index" : 4
+                },
+                "state" : {
+                    "enabled" : true,
+                    "index" : 5
+                },
+                "pub_status" : {
+                    "enabled" : true,
+                    "index" : 6
+                },
+                "spike_state" : {
+                    "enabled" : true,
+                    "index" : 7
+                },
+                "start_date_time" : {
+                    "enabled" : true,
+                    "index" : 8
+                },
+                "end_date_time" : {
+                    "enabled" : true,
+                    "index" : 9
+                },
+                "date_filter" : {
+                    "enabled" : true,
+                    "index" : 10
+                }
+            }
         }
     }
 ]
