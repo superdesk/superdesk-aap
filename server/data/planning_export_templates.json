@@ -1,0 +1,10 @@
+{
+    "_id" : "planning_outlook",
+    "name" : "outlook",
+    "type" : "planning",
+    "data" : {
+        "slugline" : "Outlook",
+        "body_html_template" : "outlook_planning_template.html"
+    },
+    "label" : "Outlook"
+}
