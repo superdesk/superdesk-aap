@@ -371,3 +371,17 @@ class TestMarketplaceNINJS(TestCase):
         seq, doc = self.formatter.format(self.article[2], {'_id': 1, 'name': 'Test Subscriber'})[0]
         ninjs = json.loads(doc)
         self.assertEqual(ninjs['guid'], 'tag:localhost:2018:861146a6-9a01-48bc-8fb4-7757c7f236af')
+
+    def test_missing_takekey(self):
+        bad_article = {
+            "_id": "tag:localhost:2018:5514f993-b342-4231-a74c-b686a8205baf",
+            "source": "AP",
+            "body_html": "<p>Body</p>",
+            "ingest_id": "123456",
+            "format": "HTML",
+            "type": "text",
+            "guid": "tag:localhost:2018:5514f993-b342-4231-a74c-b686a8205baf"
+        }
+        seq, doc = self.formatter.format(bad_article, {'_id': 1, 'name': 'Test Subscriber'})[0]
+        ninjs = json.loads(doc)
+        self.assertEqual(ninjs['guid'], 'tag:localhost:2018:5514f993-b342-4231-a74c-b686a8205baf')
