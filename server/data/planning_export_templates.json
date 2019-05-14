@@ -1,4 +1,4 @@
-{
+[{
     "_id" : "planning_outlook",
     "name" : "outlook",
     "type" : "planning",
@@ -7,4 +7,4 @@
         "body_html_template" : "outlook_planning_template.html"
     },
     "label" : "Outlook"
-}
+}]
