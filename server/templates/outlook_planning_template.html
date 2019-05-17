@@ -1,4 +1,4 @@
 {% for item in items %}
-<p>{% if item.get('place') %}{{ item.get('place')|join(', ') }} - {% endif %}{% if item.get('description_text') %}{{ item.description_text }}, {% endif %}{% if (item.get('event') or {}).get('location') %}{{ item.event.location[0].name }}
-{% endif %}{% if item.get('schedule') %}{{ ', ' + item.schedule }} {% endif %}({{ item.slugline }}) - {{ item.get('assignees')|join(', ') }}</p>
+<p>{% if item.get('place') %}{{ item.get('place')|join(', ') }} - {% endif %}{% if item.get('description_text') %}{{ item.description_text }}, {% endif %}{% if (item.get('event') or {}).get('location') %}{{ item.event.location[0].name }},
+{% endif %}{% if item.get('schedule') %}{{ item.schedule }} {% endif %}({{ item.slugline }}) - {{ item.get('assignees')|join(', ') }}</p>
 {% endfor %}
