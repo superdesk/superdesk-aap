@@ -10,7 +10,8 @@ slackclient==1.0.9
 pyasn1==0.3.7
 gtfs-realtime-bindings==0.0.5
 protobuf3-to-dict==0.1.5
+requests<2.22
 
-git+git://github.com/superdesk/superdesk-core.git@8101e767b#egg=Superdesk-Core
-git+git://github.com/superdesk/superdesk-planning.git@9df8c02#egg=superdesk-planning
+git+git://github.com/superdesk/superdesk-core.git@2d7ed4d#egg=Superdesk-Core
+git+git://github.com/superdesk/superdesk-planning.git@48bf53e#egg=superdesk-planning
 git+git://github.com/superdesk/superdesk-analytics.git@b64edcd#egg=superdesk-analytics
