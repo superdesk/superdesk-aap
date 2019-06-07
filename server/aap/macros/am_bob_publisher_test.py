@@ -185,5 +185,5 @@ class AMBOBPublisherTest(AAPTestCase):
         self.assertEqual(item['slugline'], 'AM UK Gove')
         self.assertEqual(item['place'], [{'country': '', 'qcode': 'UK', 'group': 'Rest Of World', 'name': 'UK',
                                           'world_region': 'Europe', 'state': ''}])
-        self.assertIn('<p>RAW</p>', item['body_html'])
+        self.assertIn('<p>Reuters</p>', item['body_html'])
         self.assertEqual(item['genre'], [{'name': 'AM Service', 'qcode': 'AM Service'}])

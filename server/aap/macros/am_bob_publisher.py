@@ -57,7 +57,7 @@ def am_bob_publish(item, **kwargs):
                 # If the item has a location/place prefix then try to remove that from the headline
                 if len(item.get('place', [])):
                     item['headline'] = re.sub('^' + item.get('place')[0].get('qcode', '') + ': ', '',
-                                              item.get('headline', ''), re.IGNORECASE)
+                                              item.get('headline', ''), flags=re.IGNORECASE)
 
             html = item.get('body_html')
             if html:
@@ -71,7 +71,7 @@ def am_bob_publish(item, **kwargs):
                         item['body_html'] = item.get('body_html', '').replace('<p>RTV</p>', '')
                         break
                     if re.search(r'^[A-Za-z0-9_]{2,8} RTV', par.text, re.IGNORECASE):
-                        par.text = par.text.replace(' RTV', '')
+                        par.text = par.text.replace(' RTV', '').replace('RAW', 'Reuters')
                         item['body_html'] = to_string(parsed, method='html')
                         break
                     count = ++count
