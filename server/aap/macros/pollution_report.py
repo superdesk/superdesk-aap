@@ -49,7 +49,16 @@ def generate_pollution_story(item, **kwargs):
     # the regional value or just the site value, regional value rows seem to also contain a site value AQI
     # The results are stored into the values map
     url = 'https://airquality.environment.nsw.gov.au/aquisnetnswphp/getPage.php?reportid=1'
-    page = requests.get(url)
+    tries = 0
+    while tries < 5:
+        try:
+            page = requests.get(url, timeout=5, verify=False, allow_redirects=True)
+            break
+        except Exception as ex:
+            logger.exception(ex)
+            tries += 1
+            if tries == 5:
+                raise ex
     tree = html.fromstring(page.content)
     rows = tree.xpath('/html/body/table[2]/tbody/tr')
     for row in rows:
@@ -82,8 +91,17 @@ def generate_pollution_story(item, **kwargs):
 
     # Attempt to extract the forecast from the page below
     url = 'https://airquality.environment.nsw.gov.au/aquisnetnswphp/getPage.php?reportid=9'
-    page = requests.get(url)
-    tree = html.fromstring(page.content)
+    tries = 0
+    while tries < 5:
+        try:
+            forecast_page = requests.get(url, timeout=5, verify=False, allow_redirects=True)
+            break
+        except Exception as ex:
+            logger.exception(ex)
+            tries += 1
+            if tries == 5:
+                raise ex
+    tree = html.fromstring(forecast_page.content)
     # Extract the value
     values_map['sydney_forecast'] = str(tree.xpath('/html/body/center/table/tbody/tr[1]/td/p/b/text()')[0])
     # Get the day that the forecast is for
