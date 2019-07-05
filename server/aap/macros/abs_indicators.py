@@ -15,6 +15,8 @@ from flask import current_app as app
 import time
 import logging
 from flask import render_template_string
+from superdesk import get_resource_service
+from superdesk.utils import config
 
 cpi_url = 'CPI/2.50.999901.20.Q'
 cpi_token = '__CPI__'
@@ -135,6 +137,15 @@ def abs_expand(item, **kwargs):
         item['headline'] = render_template_string(item.get('headline', ''), **template_map)
     except Exception as ex:
         logger.warning(ex)
+
+    # If the macro is being executed by a stage macro then update the item directly
+    if 'desk' in kwargs and 'stage' in kwargs:
+        update = {'body_html': item.get('body_html', ''),
+                  'abstract': item.get('abstract', ''),
+                  'headline': item.get('headline', '')}
+        get_resource_service('archive').system_update(item[config.ID_FIELD], update, item)
+
+        return get_resource_service('archive').find_one(req=None, _id=item[config.ID_FIELD])
 
     return item
 
