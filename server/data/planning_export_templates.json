@@ -1,10 +1,22 @@
-[{
-    "_id" : "planning_outlook",
-    "name" : "outlook",
-    "type" : "planning",
-    "data" : {
-        "slugline" : "Outlook",
-        "body_html_template" : "outlook_planning_template.html"
+[
+    {
+        "_id" : "planning_outlook",
+        "name" : "outlook",
+        "type" : "planning",
+        "data" : {
+            "slugline" : "Outlook",
+            "body_html_template" : "outlook_planning_template.html"
+        },
+        "label" : "Outlook"
     },
-    "label" : "Outlook"
-}]
+    {
+        "_id" : "event_courts_download",
+        "name" : "event_courts_download",
+        "type" : "event",
+        "data" : {
+            "template_file" : "event_courts_download.html"
+        },
+        "label" : "Courts",
+        "download" : true
+    }
+]
