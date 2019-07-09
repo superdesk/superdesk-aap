@@ -22,7 +22,7 @@ REQUIREMENTS = [str(ir.req) for ir in parse_requirements('server/requirements.tx
 
 setup(
     name='Superdesk-Server',
-    version='0.1.3-dev',
+    version='1.29.3-rc2',
     description='Superdesk REST API server',
     long_description=LONG_DESCRIPTION,
     author='petr jasek',
