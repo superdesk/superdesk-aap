@@ -10,11 +10,29 @@
 
 from superdesk.publish.formatters.ninjs_newsroom_formatter import NewsroomNinjsFormatter
 from .unicodetoascii import clean_string
+import re
+from superdesk.metadata.item import FORMATS, FORMAT
+import html
 
 
 class AAPNewsroomNinjsFormatter(NewsroomNinjsFormatter):
 
     clean_fields = ('body_html', 'headline', 'description_text', 'description_html')
+
+    PATTERN = r'((?:<a href[^>]+>)|(?:<a href=\"))?((?:(?:https|http)://)[\w/\-?=%.]+\.[\w/\-?=&;%#@.\+:]+)'
+    URL_REGEX = re.compile(PATTERN, re.IGNORECASE)
+
+    def _format_url_to_anchor_tag(self, tag_text):
+        def replacement(match_object):
+            href_tag, url = match_object.groups()
+            if href_tag:
+                # Since it has an href tag, this isn't what we want to change,
+                # so return the whole match.
+                return match_object.group(0)
+            else:
+                return '<a href="{0}">{0}</a>'.format(html.unescape(url), url)
+
+        return re.sub(self.URL_REGEX, replacement, tag_text)
 
     def __init__(self):
         self.format_type = 'aap newsroom ninjs'
@@ -24,6 +42,10 @@ class AAPNewsroomNinjsFormatter(NewsroomNinjsFormatter):
 
     def _transform_to_ninjs(self, article, subscriber, recursive=True):
         ninjs = super()._transform_to_ninjs(article, subscriber, recursive)
+
+        if article.get(FORMAT) == FORMATS.HTML:
+            ninjs['body_html'] = self._format_url_to_anchor_tag(ninjs.get('body_html', ''))
+
         # Replace such things as smart quotes to ensure that the usage of quotes is consistent within the article
         for f in self.clean_fields:
             if ninjs.get(f):
