@@ -195,7 +195,8 @@
                     {"name": "NEWSROOM NINJS",  "qcode": "newsroom ninjs"},
                     {"name": "IRESS NITF",  "qcode": "iress_nitf"},
                     {"name" : "AAP Newsroom NINJS", "qcode" : "aap newsroom ninjs"},
-                    {"name" : "Market Place NINJS", "qcode" : "marketplace ninjs"}
+                    {"name" : "Market Place NINJS", "qcode" : "marketplace ninjs"},
+                    {"name" : "KVH newsml 1.2", "qcode" : "kvh_newsml12"}
                 ]},
             {"is_active": true, "name": "Digital/Internet", "qcode": "digital",
                 "formats": [
@@ -207,7 +208,8 @@
                     {"name": "NEWSROOM NINJS",  "qcode": "newsroom ninjs"},
                     {"name": "IRESS NITF",  "qcode": "iress_nitf"},
                     {"name" : "AAP Newsroom NINJS", "qcode" : "aap newsroom ninjs"},
-                    {"name" : "Market Place NINJS", "qcode" : "marketplace ninjs"}
+                    {"name" : "Market Place NINJS", "qcode" : "marketplace ninjs"},
+                    {"name" : "KVH newsml 1.2", "qcode" : "kvh_newsml12"}
                 ]},
             {"is_active": true, "name": "Wire/Paper", "qcode": "wire",
                 "formats": [
@@ -227,7 +229,8 @@
                     {"name": "NEWSROOM NINJS",  "qcode": "newsroom ninjs"},
                     {"name": "IRESS NITF",  "qcode": "iress_nitf"},
                     {"name" : "AAP Newsroom NINJS", "qcode" : "aap newsroom ninjs"},
-                    {"name" : "Market Place NINJS", "qcode" : "marketplace ninjs"}
+                    {"name" : "Market Place NINJS", "qcode" : "marketplace ninjs"},
+                    {"name" : "KVH newsml 1.2", "qcode" : "kvh_newsml12"}
                 ]}
         ]
     },
