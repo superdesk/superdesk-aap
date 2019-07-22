@@ -17,12 +17,18 @@ from .generate_slugline_story_by_desk import (
     GenerateBodyHtmlForPublishedArticlesByDesk,
     generate_published_slugline_story_by_desk
 )
+from . import init_app
 
 
 class SluglineStoryByDesk(TestCase):
     articles = []
     published = []
     desks = []
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        init_app(None)
 
     def setUp(self):
         local_time = utc_to_local(self.app.config['DEFAULT_TIMEZONE'], utcnow())
@@ -51,7 +57,7 @@ class SluglineStoryByDesk(TestCase):
                 }
             },
             {
-                '_id': '2', 'type': 'text', 'abstract': 'abstract "item 2"', 'slugline': 'slugline item 2',
+                '_id': '2', 'type': 'text', 'abstract': 'abstract "item 2" A\\ test.', 'slugline': 'slugline item 2',
                 'dateline': {
                     'text': 'Sydney, 01 Jan AAP -',
                     'located': {
@@ -256,6 +262,6 @@ class SluglineStoryByDesk(TestCase):
         }
 
         generate_published_slugline_story_by_desk(item)
-        self.assertTrue('SYDNEY abstract "item 2" (slugline item 2)' in item['body_html'])
+        self.assertTrue('SYDNEY abstract "item 2" A\\ test. (slugline item 2)' in item['body_html'])
         self.assertTrue('SYDNEY abstract item 2a (slugline item 2a)' in item['body_html'])
         self.assertTrue('SYDNEY abstract item 7 (slugline item 7)' in item['body_html'])
