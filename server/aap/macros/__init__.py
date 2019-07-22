@@ -10,6 +10,18 @@
 
 import os
 from superdesk.macros import *  # noqa
+from superdesk import register_jinja_filter
 
 
 load_macros(os.path.realpath(os.path.dirname(__file__)), 'aap.macros')  # noqa
+
+
+def escape_for_json(data):
+    return data.translate(str.maketrans({
+        "\\": "\\\\",
+        "\"": "\\\""
+    }))
+
+
+def init_app(app):
+    register_jinja_filter('escape_for_json', escape_for_json)
