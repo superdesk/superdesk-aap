@@ -1,7 +1,9 @@
 
-## [1.29.3] NOT RELEASE YET
+## [1.29.3] 2019-07-22
 ### Superdesk Change Log
 #### Added
+- [SDESK-4517] Jinja filter to escape quotes and backslashes (#746)
+- [SDESK-4503] Formatter for kvh that includes the take key (#745)
 - [SDESK-4436] Template for downloading events for courts listing
 
 #### Fixed
