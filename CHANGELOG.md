@@ -1,3 +1,7 @@
+## [1.29.3-1] 2019-07-24
+#### Superdesk Change Log
+#### Fixed
+- [SDESK-4494] (fix): Sync vocab and planning types from production (#748)
 
 ## [1.29.3] 2019-07-22
 ### Superdesk Change Log
