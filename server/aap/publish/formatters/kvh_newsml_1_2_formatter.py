@@ -24,9 +24,9 @@ class KVHNewsML12Formatter(NewsML12Formatter):
         """
         super()._format_descriptive_metadata(article, main_news_component)
         descriptive_metadata = main_news_component.find('DescriptiveMetadata')
-        if descriptive_metadata and 'anpa_take_key' in article:
+        if descriptive_metadata and 'anpa_take_key' in article and article.get('anpa_take_key'):
             SubElement(descriptive_metadata, 'Property',
-                       {'FormalName': 'TakeKey', 'Value': article.get('anpa_take_key')})
+                       {'FormalName': 'TakeKey', 'Value': article.get('anpa_take_key', '')})
 
     def can_format(self, format_type, article):
         """
