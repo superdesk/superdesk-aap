@@ -260,17 +260,18 @@ class AAPNINJSFormatterTest(TestCase):
         }
         seq, doc = self.formatter.format(article, {'_id': 1, 'name': 'Test Subscriber'})[0]
         expected = {'body_html': '<p>Article Body</p><p>Some text <a '
-                                 'href="http://aap.com.au">http://aap.com.au</a> some more '
+                                 'href="http://aap.com.au" target="_blank">http://aap.com.au</a> some more '
                                  'text</p><p>A bit more</p><p><a '
-                                 'href="https://a.b.c/sjhfkjhf">https://a.b.c/sjhfkjhf</a></p><p>yadda '
+                                 'href="https://a.b.c/sjhfkjhf" target="_blank">https://a.b.c/sjhfkjhf</a></p><p>yadda '
                                  '<a href="https://a.b.c/existing">Existing link text</a> '
                                  'fkjhkjfhk</p><p>This is a NSW local court decision&nbsp;<a '
-                                 'href="https://www.caselaw.nsw.gov.au/decision/5d243010e4b08c5b85d8ac7f">https://www.'
-                                 'caselaw.nsw.gov.au/decision/5d243010e4b08c5b85d8ac7f</a></p><p><br/></p><p> '
-                                 'BEFORE <a '
+                                 'href="https://www.caselaw.nsw.gov.au/decision/5d243010e4b08c5b85d8ac7f" '
+                                 'target="_blank">https://www.caselaw.nsw.gov.au/decision/5d243010e4b08c5b85d8ac7f</a>'
+                                 '</p><p><br/></p><p> BEFORE <a '
                                  'href="http://127.0.0.1:9000/#/workspace/monitoring?assignment=5cb57b165f627d6b2c55a'
                                  '192&item=urn:newsml:localhost:2019-07-10T14:24:14.653510:f7554544-88b1-4263-9d46-db'
-                                 '4424541eff&action=edit">http://127.0.0.1:9000/#/workspace/monitoring?assignment=5cb5'
+                                 '4424541eff&action=edit"'
+                                 ' target="_blank">http://127.0.0.1:9000/#/workspace/monitoring?assignment=5cb5'
                                  '7b165f627d6b2c55a192&item=urn:newsml:localhost:2019-07-10T14:24:14.653510:f7554544-8'
                                  '8b1-4263-9d46-db4424541eff&action=edit</a> '
                                  'AFTER<br/></p><p>Instagram ( <a '
@@ -280,7 +281,8 @@ class AAPNINJSFormatterTest(TestCase):
                                  'am.com_automobilityla_%2526d%253DDwMGaQ%2526c%253D9wxE0DgWbPxd1HCzjwN8Eaww1--ViDajIU'
                                  '4RXCxgSXE%2526r%253DTsighQ5d9Vys_pgjwOXtbe-L7jq0CiKHyITp_PSm_7w%2526m%253D4NT5PB8zM8'
                                  'WgWXWL9xj-7rCog61nziXpkuqaIM3yrvM%2526s%253DDhXARHgccri7aqVjW4fNJ33toDz3OKMKBPQzLVKK'
-                                 'lyM%2526e%253D%26a%3DInstagram&a=Instagram">https://c212.net/c/link/?t=0&l=en&o=2519'
+                                 'lyM%2526e%253D%26a%3DInstagram&a=Instagram"'
+                                 ' target="_blank">https://c212.net/c/link/?t=0&l=en&o=2519'
                                  '051-1&h=802772405&u=https%3A%2F%2Fc212.net%2Fc%2Flink%2F%3Ft%3D0%26l%3Den%26o%3D2434'
                                  '488-1%26h%3D3410101566%26u%3Dhttps%253A%252F%252Furldefense.proofpoint.com%252Fv2%25'
                                  '2Furl%253Fu%253Dhttps-3A__www.instagram.com_automobilityla_%2526d%253DDwMGaQ%2526c%2'
@@ -315,4 +317,5 @@ class AAPNINJSFormatterTest(TestCase):
                     'version': '2',
                     'versioncreated': '2017-08-31T01:44:24.000Z',
                     'wordcount': 29}
+        # raise self.failureException(json.loads(doc))
         self.assertEqual(expected, json.loads(doc))
