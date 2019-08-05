@@ -1,5 +1,32 @@
+## [1.29.4] Not Released Yet
+### Superdesk Change Log
+#### Fixed
+- (fix): Use hachoir instead of hachoir3 package (#1639)
+- [SDESK-4584] In Newsroom, NINJS formatter, HTML links in the body should open in a new browser tab
+
+### Superdesk Planning Change Log
+#### Features
+- [SDESK-4469] Introduce modal to prompt for a 'reason' to cancel individual coverages
+- [SDESK-4427] New Event action 'Mark as Completed'
+
+#### Improvements
+- [SDESK-3286] Close popup modals with ESC key
+- [SDESK-4428] Multiselect in the Event list and Planning list
+- [SDESK-4402] Improve location display in planning lists
+- [SDESK-4493] Create a history record for Planning items and events when an Event is created from planning item
+- [SDESK-4421] Add details to location dropdown
+- [SDESK-4522] Use event's description in precedence of name in event's 'Courts' template
+
+#### Fixes
+- [SDESK-4286] List Item format for exporting and downloading events/planning
+- [SDESK-4478] Correctly display the number of events in Post/Unpost popup
+- [SDESK-4549] Coverages are inheriting published time and not scheduled time of a story
+- [SDESK-4328] Remove ability to clear the coverage type in the editor
+- (fix): Update enzyme-adapter-react-16
+
+
 ## [1.29.3-1] 2019-07-24
-#### Superdesk Change Log
+### Superdesk Change Log
 #### Fixed
 - [SDESK-4494] (fix): Sync vocab and planning types from production (#748)
 
