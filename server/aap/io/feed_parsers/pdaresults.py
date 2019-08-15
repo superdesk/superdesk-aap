@@ -14,7 +14,6 @@ from superdesk.utc import utcnow
 from superdesk.metadata.item import ITEM_TYPE, CONTENT_TYPE, FORMAT, FORMATS
 from aap.errors import AAPParserError
 import superdesk
-import logging
 import re
 import uuid
 from titlecase import titlecase
@@ -63,13 +62,14 @@ class PDAResultsParser(FileFeedParser):
                     b'\x1f(.*)' +
                     b'\x1f(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)', lines[0], flags=re.I)
                 if m:
-                    state = m.group(5).decode('ascii')
-                    item['slugline'] = titlecase(m.group(1).decode('ascii')) + ' Gallop'
-                    item['anpa_take_key'] = ('Result ' if '-' not in m.group(2).decode('ascii') else 'Results ') + \
-                        m.group(2).decode('ascii') + ' ' + self.CityMap.get(state, '')
-                    correction = m.group(3).decode('ascii')
-                    abandoned = m.group(4).decode('ascii')
-                    day_of_week = m.group(6).decode('ascii')
+                    state = m.group(5).decode('ascii', errors='ignore')
+                    item['slugline'] = titlecase(m.group(1).decode('ascii', errors='ignore')) + ' Gallop'
+                    item['anpa_take_key'] = ('Result ' if '-' not in m.group(2).decode('ascii', errors='ignore')
+                                             else 'Results ') + m.group(2).decode('ascii', errors='ignore') + \
+                        ' ' + self.CityMap.get(state, '')
+                    correction = m.group(3).decode('ascii', errors='ignore')
+                    abandoned = m.group(4).decode('ascii', errors='ignore')
+                    day_of_week = m.group(6).decode('ascii', errors='ignore')
                     item['headline'] = item.get('slugline', '') + ' ' + item.get('anpa_take_key', '') + ' ' + \
                         day_of_week
 
@@ -81,8 +81,9 @@ class PDAResultsParser(FileFeedParser):
                         if state.upper() in set(['VIC', 'QLD', 'SA']):
                             city = self.CityMap.get(state, '')[:5]
                         # append the city to the take key
-                        item['anpa_take_key'] = ('Result ' if '-' not in m.group(2).decode('ascii') else 'Results ') + \
-                            m.group(2).decode('ascii') + ' ' + city
+                        item['anpa_take_key'] = ('Result ' if '-' not in m.group(2).decode('ascii', errors='ignore')
+                                                 else 'Results ') + m.group(2).decode('ascii', errors='ignore') + \
+                            ' ' + city
                         item['headline'] = item.get('slugline', '') + ' ' + item.get('anpa_take_key', '') + ' ' + \
                             day_of_week
 
@@ -95,7 +96,7 @@ class PDAResultsParser(FileFeedParser):
                 else:
                     raise AAPParserError.PDAResulstParserError()
 
-                item['body_html'] = '<pre>' + b'\n'.join(lines[1:]).decode('ascii') + '</pre>'
+                item['body_html'] = '<pre>' + b'\n'.join(lines[1:]).decode('ascii', errors='ignore') + '</pre>'
                 # remove the sign off as recieved, it will get put back on when published
                 if item.get('body_html', '').find('AAP RESULTS'):
                     item['body_html'] = item.get('body_html', '').replace('AAP RESULTS', '')
@@ -110,7 +111,7 @@ class PDAResultsParser(FileFeedParser):
                 self.truncate_fields(item)
                 return item
         except Exception as ex:
-            logging.exception(ex)
+            raise ex
 
     def truncate_fields(self, item):
         """
