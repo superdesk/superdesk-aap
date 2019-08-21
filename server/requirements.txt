@@ -13,6 +13,6 @@ gspread==3.1.0
 oauth2client==4.1.3
 requests<2.22
 
-git+git://github.com/superdesk/superdesk-core.git@b7188c6#egg=Superdesk-Core
-git+git://github.com/superdesk/superdesk-planning.git@fbc0684#egg=superdesk-planning
+git+git://github.com/superdesk/superdesk-core.git@48b1478#egg=Superdesk-Core
+git+git://github.com/superdesk/superdesk-planning.git@14a2721#egg=superdesk-planning
 git+git://github.com/superdesk/superdesk-analytics.git@e4188fd#egg=superdesk-analytics
