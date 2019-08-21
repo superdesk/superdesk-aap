@@ -1,6 +1,6 @@
 # Superdesk AAP Changelog
 
-## [1.29.4] Not Released Yet
+## [1.29.4] 2019-08-21
 ### Superdesk Change Log
 #### Improvements
 - [SDESK-4603] Small changes to the IPTC code mappings (#756)
@@ -13,11 +13,13 @@
 - [SDESK-4571] Do not expire items from production if they reference an assignment (#1643)
 - [SDESK-4613] Remove multibyte and characters to avoid from filenames/id's used in Amazon s3 keys (#1647)
 - fix(pda parser) Handle unicode chars in input (#755)
+- [SDESK-4641] (fix): Item not being removed from workqueue on publish (#3067)
+- [SDESK-4634] (fix): Update newsroom formatter to use abstract not alt_text
+- fix(ap anpa wordcount) Handle missing word count (#1649)
 
-### Superdesk Planning Change Log (v1.6.2-rc2)
+### Superdesk Planning Change Log (v1.6.2)
 #### Features
 - [SDESK-4469] Introduce modal to prompt for a 'reason' to cancel individual coverages (#1260)
-- [SDESK-4427] New Event action 'Mark as Completed' (#1273)
 
 #### Improvements
 - [SDESK-3286] Close popup modals with ESC key (#1272)
@@ -37,7 +39,6 @@
 - [SDESK-4549] Coverages are inheriting published time and not scheduled time of a story (#1271)
 - [SDESK-4328] Remove ability to clear the coverage type in the editor (1270)
 - (fix): Update enzyme-adapter-react-16 (#1269)
-- [SDESK-4427] Mark for complete fix to cater for events that start on same day but ahead in time. (#1278)
 - [SDESK-4571] Allow content unlinking when content has been archived (1280)
 - [SDESK-4552] (fix): Assignment preview not showing from monitoring preview (#1285)
 - [SDESK-4477] (fix): Cannot lower repetitions unless on the first event (#1286))
@@ -45,6 +46,8 @@
 - [SDESK-4524] Make contact form read only when embedded in read only coverage form (#1289)
 - [SDESK-4535] Fulfill assignment available for Reporters (#1288)
 - [SDESK-4609] Filter soft deleted locations out from the browse view (#1290)
+- [SDESK-4637] (fix) Select first assignment on fulfill on publish (#1296)
+- [SDESK-4608] (fix) Advance Search Panel was collapsing if list item has a long text (#1298)
 
 
 ## [1.29.3-1] 2019-07-24
