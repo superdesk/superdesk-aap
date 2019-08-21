@@ -46,6 +46,12 @@ class AAPNewsroomNinjsFormatter(NewsroomNinjsFormatter):
         if article.get(FORMAT) == FORMATS.HTML:
             ninjs['body_html'] = self._format_url_to_anchor_tag(ninjs.get('body_html', ''))
 
+        # if the article has an abstract then the description text has been over written by the abstract
+        if article.get('abstract'):
+            # if it is a picture then put it back
+            if article.get('type') == 'picture':
+                ninjs['description_text'] = article.get('description_text', '')
+
         # Replace such things as smart quotes to ensure that the usage of quotes is consistent within the article
         for f in self.clean_fields:
             if ninjs.get(f):
