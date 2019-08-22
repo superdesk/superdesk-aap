@@ -1,5 +1,92 @@
 # Superdesk AAP Changelog
 
+## [1.30] Not Released Yet
+### Superdesk-Core Change Log
+#### Feature
+- [ ] [SDESK-3834] setup `extract_messages` command (superdesk-core#1574)
+
+#### Improvements
+- [ ] [SDANSA-196] add shortcut flag to saved searches (superdesk-core#1577)
+- [ ] [SDNTB-577] add item_publish signal (superdesk-core#577)
+- [ ] Provide an additional request arguments for download_file_from_url function (superdesk-core#1592)
+- [ ] [SDESK-4272] Additional logging in expiry (superdesk-core#1594)
+- [ ] [SDESK-2390] add structured field info to publish validation errors (superdesk-core#1597)
+- [ ] [SDANSA-269] log time for media upload (superdesk-core#1605)
+
+### Fixes
+- [ ] Fix AttributeError when url is not in config. Remove redundant validation (superdesk-core#1581)
+- [ ] [SDESK-4105] fix(upload): make media description multi line field (superdesk-core#1583)
+- [ ] [STTNHUB-58] - Auto published ingested items should preserve id (superdesk-core#1579)
+- [ ] [SDANSA-267] avoid validation errors for missing cvs (superdesk-core#1590)
+- [ ] [SDESK-4150] (validation) fix subject required error when custom vocabulary is used (superdesk-core#1593)
+- [ ] handle application/ content type reponses when fetching image from url (superdesk-core#1599)
+- [ ] [SDESK-4129] Fixed: Cannot deschedule scheduled articles (superdesk-core#1578)
+- [ ] [SDESK-4229] fixed: fetched image item belonging to package can't be saved in media gallery (superdesk-core#1591)
+- [ ] [SDANSA-266] fix(formatter): fix newsmlg2 sent timestamp was wrong (superdesk-core#1606)
+- [ ] [SDANSA-252] avoid client caching when fetching content profile for editing (superdesk-core#1604)
+- [ ] fix newsml g2 content parser and introduce new item_validate signal (superdesk-core#1621)
+- [ ] [SDESK-4466] (fix): Use default locale for translations if user language is not supported (superdesk-core#1623)
+- [ ] [SDESK-4423][SDESK-4463] Fix ordering of media-gallry and related items in ninjs (superdesk-core#1632)
+- [ ] [SDESK-4463] fix ordering of related items in ninjs output (superdesk-core#1640)
+- [ ] [SDESK-4574] fix related items reference in associations (superdesk-core#1641)
+
+### Superdesk-Client-Core Change Log
+#### Feature
+- [ ] Settings Dashboard (superdesk-client-core#2926)
+- [ ] [SDESK-4128] FunctionPoint service for generic function extensions (superdesk-client-core#2930)
+- [ ] [SDANSA-196] feat(search): display selected saved searches as shortcuts (superdesk-client-core#2925)
+- [ ] [SDANSA-247] add initial middleware support to authoring (superdesk-client-core#2948)
+- [ ] [SDESK-4262] fetch images from external source when dropped to editor3 (superdesk-client-core#2961)
+
+#### Improvements
+- [ ] remove-old-errors-after-successful-save (superdesk-client-core#2934)
+- [ ] [SDESK-4179] Add instagram icon to contact info card in Media Contacts page (superdesk-client-core#2938)
+- [ ] [SDESK-4122] Allow assignment notification to open the assignment on clicking (superdesk-client-core#2939)
+- [ ] [SDESK-4129] Make delaying of item creation in internal destinations configurable. (superdesk-client-core#2965)
+- [ ] [SDANSA-297] implement line count component (superdesk-client-core#3007)
+- [ ] [SDESK-4274] Small move of the public switch in the contacts form (superdesk-client-core#3012)
+
+#### Fixes
+- [ ] [SDESK-4112] Text added before or after an annotation does not activate the save button and throws errors in console (superdesk-client-core#2916)
+- [ ] [SDESK-4107] Fixed(Custom CVs): 'Single selection' option is not reflected in the editor. (superdesk-client-core#2918)
+- [ ] [SDESK-4182] fixed: can't save changes in saved search (superdesk-client-core#2931)
+- [ ] [SDESK-2393] Remove the publish button when an item in personal is selected (superdesk-client-core#2933)
+- [ ] [SDESK-2390] fix(authoring): add missing error indicator on custom required fields (superdesk-client-core#2940)
+- [ ] [SDESK-4175][SDESK-4187] (editor-3) Image dropped next to table area crashes the editor (superdesk-client-core#2941)
+- [ ] [SDESK-4203] Hide 'edit in new window' button if the item is locked by current user (superdesk-client-core#2944)
+- [ ] [SDESK-4158] Fixed: Pasted metadata is lost if image is deselected & then selected again. (superdesk-client-core#2936)
+- [ ] [SDESK-4226] Fixed: When editing routed composite an item's view stretches the image displayed to an enormously large scale (superdesk-client-core#2946)
+- [ ] [SDESK-4255] Prohibit drag and drop of saved authoring item or ingested composite items to featured media field (superdesk-client-core#2947)
+- [ ] [SDESK-4201] fixed: Broken media gallery (superdesk-client-core#2943)
+- [ ] (fix): FunctionPoint 'authoring:publish' not sending through _id and type (superdesk-client-core#2949)
+- [ ] [SDESK-4183] fix(search): Fix issue saving changes on search after updating subscriptions (superdesk-client-core#2935)
+- [ ] [SDESK-4265] Hide copy/paste metadata button from 'edit image' section (superdesk-client-core#2954)
+- [ ] [SDESK-4257] Fix(Subscribers): Cannot create 'Content API-only' destination (superdesk-client-core#2953)
+- [ ] [SDANSA-261] Bug the counter of max chars for body html does not work (superdesk-client-core#2956)
+- [ ] fix(editor3): fix typo in generated html (superdesk-client-core#2963)
+- [ ] fix(authoring): make fetched image from external source editable (superdesk-client-core#2968)
+- [ ] add: publishing side panel class for Publisher SEO UI implementation (superdesk-client-core#2971)
+- [ ] [SDESK-4182] fixed: While editing saved searches some of the fields do not keep and display the search criteria that was originally there. (superdesk-client-core#2942)
+- [ ] fix default edit featured image config (superdesk-client-core#2973)
+- [ ] [SDESK-4237] Set 'Allow multiple items' limit in related content to minimum 2. (superdesk-client-core#2945)
+- [ ] [SDESK-3380] Fixed: error is thrown on sending correction for an item containing images with adjusted brightness in custom media field (superdesk-client-core#2962)
+- [ ] [SDANSA-265] As a user i don t have a use for the td button in the editor toolbar (superdesk-client-core#2958)
+- [ ] [SDESK-2390] fix error display in authoring for custom fields (superdesk-client-core#2964)
+- [ ] [SDESK-4310][SDESK-4333] Fix embeds in preview (superdesk-client-core#2982)
+- [ ] [SDANSA-273] fix(monitoring): Fixed issue with infinite scroll on single stage (superdesk-client-core#2984)
+- [ ] [SDBELGA-105] (media-metadata-editor): Fixed support for custom text fields as metadata. (superdesk-client-core#2972)
+- [ ] [SDESK-4194] fix: Changes in subscribers content API tab are not activating the save button (superdesk-client-core#2979)
+- [ ] [SDESK-4303] fixed: Removing a filter statement from a content filter does not enable the save button. (superdesk-client-core#2981)
+- [ ] Fix support for string fields (superdesk-client-core#2991)
+- [ ] [SDANSA-282] Fix duplicated string fields (like language) on image upload (superdesk-client-core#2998)
+- [ ] [SDESK-4412] Content views are not getting more items on scroll (superdesk-client-core#3001)
+- [ ] fix(metadata): Fixed issue with list scroll on metadata widget (superdesk-client-core#3010)
+- [ ] [SDANSA-282] Fix photo upload form (superdesk-client-core#3002)
+- [ ] [SDANSA-307][SDANSA-308] fix search shortcuts (superdesk-client-core#3032)
+- [ ] [SDESK-4496] fix(poi):: Fixed issue with setting default poi (superdesk-client-core#3044)
+- [ ] [SDESK-4574] fix related item references including full item for published items (superdesk-client-core#3048)
+
+
 ## [1.29.4] 2019-08-21
 ### Superdesk Change Log
 #### Improvements
