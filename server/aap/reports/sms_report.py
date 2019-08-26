@@ -16,7 +16,7 @@ from analytics.chart_config import SDChart, ChartConfig
 from analytics.common import get_utc_offset_in_minutes, REPORT_CONFIG, CHART_TYPES
 
 from flask import current_app as app
-from datetime import datetime
+from datetime import datetime, timedelta
 
 
 class SMSReportResource(Resource):
@@ -48,7 +48,9 @@ class SMSReportService(BaseReportService):
             CHART_TYPES.LINE: {'enabled': False},
             CHART_TYPES.PIE: {'enabled': False},
             CHART_TYPES.SCATTER: {'enabled': False},
-            CHART_TYPES.SPLINE: {'enabled': False}
+            CHART_TYPES.SPLINE: {'enabled': False},
+
+            CHART_TYPES.TABLE: {'enabled': True}
         }
     }
 
@@ -98,11 +100,17 @@ class SMSReportService(BaseReportService):
     def generate_highcharts_config(self, docs, args):
         params = args.get('params') or {}
         report = self.generate_report(docs, args)
+        histogram = params.get('histogram') or {}
+        interval = histogram.get('interval') or 'daily'
+        point_interval = report.get('interval')
+        start_epoch = report.get('start_epoch')
+        with_sms = report.get('with_sms')
+        without_sms = report.get('without_sms')
+        chart_type = (params.get('chart') or {}).get('type') or 'column'
 
         if (params.get('chart') or {}).get('title'):
             title = params['chart']['title']
         else:
-            interval = (params.get('histogram') or {}).get('interval') or 'daily'
             if interval == 'hourly':
                 title = 'Hourly SMS Report'
             elif interval == 'weekly':
@@ -122,43 +130,93 @@ class SMSReportService(BaseReportService):
             datetime.utcfromtimestamp(int(report['start_epoch'] / 1000))
         )
 
-        chart = SDChart.Chart(
-            'sms_report',
-            title=title,
-            subtitle=subtitle,
-            chart_type='highcharts',
-            start_of_week=app.config.get('START_OF_WEEK') or 0,
-            timezone_offset=timezone_offset,
-            use_utc=False
-        )
+        def gen_chart_config():
+            chart = SDChart.Chart(
+                'sms_report',
+                title=title,
+                subtitle=subtitle,
+                chart_type='highcharts',
+                start_of_week=app.config.get('START_OF_WEEK') or 0,
+                timezone_offset=timezone_offset,
+                use_utc=False
+            )
 
-        chart.set_translation('sms', 'SMS', {
-            'with_sms': 'With SMS',
-            'without_sms': 'Without SMS'
-        })
+            chart.set_translation('sms', 'SMS', {
+                'with_sms': 'With SMS',
+                'without_sms': 'Without SMS'
+            })
 
-        axis = chart.add_axis().set_options(
-            y_title='Published Stories',
-            x_title=chart.get_translation_title('sms'),
-            type='datetime',
-            default_chart_type=(params.get('chart') or {}).get('type') or 'column',
-            point_start=report.get('start_epoch'),
-            point_interval=report.get('interval'),
-            stack_labels=False
-        )
+            axis = chart.add_axis().set_options(
+                y_title='Published Stories',
+                x_title=chart.get_translation_title('sms'),
+                type='datetime',
+                default_chart_type=chart_type,
+                point_start=start_epoch,
+                point_interval=point_interval,
+                stack_labels=False
+            )
 
-        axis.add_series().set_options(
-            field='sms',
-            name='with_sms',
-            data=report.get('with_sms')
-        )
+            axis.add_series().set_options(
+                field='sms',
+                name='with_sms',
+                data=with_sms
+            )
 
-        axis.add_series().set_options(
-            field='sms',
-            name='without_sms',
-            data=report.get('without_sms')
-        )
+            axis.add_series().set_options(
+                field='sms',
+                name='without_sms',
+                data=without_sms
+            )
 
-        report['highcharts'] = [chart.gen_config()]
+            return chart.gen_config()
+
+        def gen_table_config():
+            date_header = 'Date'
+            if interval == 'hourly':
+                date_header = 'Date/Time'
+            elif interval == 'weekly':
+                date_header = 'Week Starting'
+
+            headers = [date_header, 'With SMS', 'Without SMS']
+            rows = []
+            totals = [0, 0]
+            date_format = '%b %-d %H:%M' if interval == 'hourly' else '%b %-d'
+
+            for index in range(0, len(with_sms)):
+                current_interval = datetime.strftime(
+                    datetime.utcfromtimestamp(int(report['start_epoch'] / 1000)) + timedelta(
+                        seconds=(index * (point_interval / 1000)),
+                        minutes=timezone_offset
+                    ),
+                    date_format
+                )
+
+                totals[0] += with_sms[index]
+                totals[1] += without_sms[index]
+
+                rows.append([
+                    current_interval,
+                    with_sms[index],
+                    without_sms[index]
+                ])
+
+            rows.append([
+                'Total',
+                totals[0],
+                totals[1]
+            ])
+
+            return {
+                'id': 'sms_report',
+                'type': 'table',
+                'chart': {'type': 'column'},
+                'headers': headers,
+                'title': title,
+                'rows': rows
+            }
+
+        report['highcharts'] = [
+            gen_table_config() if chart_type == 'table' else gen_chart_config()
+        ]
 
         return report
