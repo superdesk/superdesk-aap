@@ -145,6 +145,9 @@ class MissionReportService(StatsReportService):
         if query.get('size'):
             params['source']['size'] = query['size']
 
+        if query.get('_source'):
+            params['source']['_source'] = query['_source']
+
         return params
 
     def _es_set_size(self, query, params):
@@ -248,6 +251,17 @@ class MissionReportService(StatsReportService):
                 reports.get(REPORT_TYPES.KILLS, True) or \
                 reports.get(REPORT_TYPES.TAKEDOWNS, True):
             query = self.add_query_clause(deepcopy(params), {
+                '_source': {
+                    'include': [
+                        '_id',
+                        'slugline',
+                        'anpa_take_key',
+                        'ednote',
+                        'extra',
+                        'versioncreated',
+                        'state'
+                    ]
+                },
                 'must': [{
                     'terms': {
                         'state': {
@@ -256,7 +270,8 @@ class MissionReportService(StatsReportService):
                             'recalled'
                         }
                     }
-                }]
+                }],
+                "size": 500
             })
             docs[REPORT_TYPES.KILLS] = StatsReportService.run_query(self, query, args)
 

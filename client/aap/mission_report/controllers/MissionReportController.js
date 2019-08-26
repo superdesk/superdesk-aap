@@ -69,8 +69,6 @@ export function MissionReportController(
                 dates: {
                     filter: DATE_FILTERS.YESTERDAY,
                 },
-                size: 2000,
-                repos: {published: true},
                 must_not: {
                     categories: [],
                     genre: [],
