@@ -15,12 +15,12 @@
 
 ### Fixes
 - [ ] Fix AttributeError when url is not in config. Remove redundant validation (superdesk-core#1581)
-- [ ] [SDESK-4105] fix(upload): make media description multi line field (superdesk-core#1583)
+- [x] [SDESK-4105] fix(upload): make media description multi line field (superdesk-core#1583)
 - [ ] [STTNHUB-58] - Auto published ingested items should preserve id (superdesk-core#1579)
 - [ ] [SDANSA-267] avoid validation errors for missing cvs (superdesk-core#1590)
 - [ ] [SDESK-4150] (validation) fix subject required error when custom vocabulary is used (superdesk-core#1593)
 - [ ] handle application/ content type reponses when fetching image from url (superdesk-core#1599)
-- [ ] [SDESK-4129] Fixed: Cannot deschedule scheduled articles (superdesk-core#1578)
+- [x] [SDESK-4129] Fixed: Cannot deschedule scheduled articles (superdesk-core#1578)
 - [ ] [SDESK-4229] fixed: fetched image item belonging to package can't be saved in media gallery (superdesk-core#1591)
 - [ ] [SDANSA-266] fix(formatter): fix newsmlg2 sent timestamp was wrong (superdesk-core#1606)
 - [ ] [SDANSA-252] avoid client caching when fetching content profile for editing (superdesk-core#1604)
@@ -40,8 +40,8 @@
 
 #### Improvements
 - [ ] remove-old-errors-after-successful-save (superdesk-client-core#2934)
-- [ ] [SDESK-4179] Add instagram icon to contact info card in Media Contacts page (superdesk-client-core#2938)
-- [ ] [SDESK-4122] Allow assignment notification to open the assignment on clicking (superdesk-client-core#2939)
+- [x] [SDESK-4179] Add instagram icon to contact info card in Media Contacts page (superdesk-client-core#2938)
+- [x] [SDESK-4122] Allow assignment notification to open the assignment on clicking (superdesk-client-core#2939)
 - [ ] [SDESK-4129] Make delaying of item creation in internal destinations configurable. (superdesk-client-core#2965)
 - [ ] [SDANSA-297] implement line count component (superdesk-client-core#3007)
 - [ ] [SDESK-4274] Small move of the public switch in the contacts form (superdesk-client-core#3012)
