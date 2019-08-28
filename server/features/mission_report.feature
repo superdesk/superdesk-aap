@@ -124,19 +124,13 @@ Feature: Mission Report
         """
         {"_items": [{
             "corrections": [{
-                "_id": "archive4", "source": "AAP",
-                "task": {"stage": "5b501a6f1d41c84c0bfced4c", "desk": "5b501a501d41c84c0bfced4a"},
-                "anpa_category": [{"qcode": "v"}], "state": "corrected"
+                "_id": "archive4", "state": "corrected"
             }],
             "kills": [{
-                "_id": "archive5", "source": "AAP",
-                "task": {"stage": "5b501a6f1d41c84c0bfced4c", "desk": "5b501a501d41c84c0bfced4a"},
-                "anpa_category": [{"qcode": "v"}], "state": "killed"
+                "_id": "archive5", "state": "killed"
             }],
             "takedowns": [{
-                "_id": "archive6", "source": "AAP",
-                "task": {"stage": "5b501a6f1d41c84c0bfced4c", "desk": "5b501a501d41c84c0bfced4a"},
-                "anpa_category": [{"qcode": "v"}], "state": "recalled"
+                "_id": "archive6", "state": "recalled"
             }],
             "rewrites": 1,
             "sms_alerts": 0,
