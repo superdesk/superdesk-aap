@@ -195,6 +195,12 @@ export function SMSReportController(
     };
 
     this.createChart = (report) => {
+        return _.get($scope, 'currentParams.params.chart.type') === 'table' ?
+            this.genTableConfig(report) :
+            this.genChartConfig(report);
+    };
+
+    this.genChartConfig = (report) => {
         // Calculate the UTC Offset in minutes for the start date of the results
         // This will cause an issue if a report crosses over the daylight savings change
         // Any data after the daylight savings change will be 1 hour out
@@ -252,6 +258,81 @@ export function SMSReportController(
             fullWidth: true,
             multiChart: false,
         })
+    };
+
+    this.genTableConfig = (report) => {
+        let dateHeader;
+
+        switch ($scope.currentParams.params.histogram.interval) {
+        case 'hourly':
+            dateHeader = gettext('Date/Time');
+            break;
+        case 'weekly':
+            dateHeader = gettext('Week Starting');
+            break;
+        case 'daily':
+        default:
+            dateHeader = gettext('Date');
+            break;
+        }
+
+        const headers = [
+            dateHeader,
+            gettext('With SMS'),
+            gettext('Without SMS'),
+        ];
+
+        const rows = [];
+        const totals = [0, 0];
+        const startEpoch = _.get(report, 'start_epoch');
+        const interval = _.get(report, 'interval') / 1000;
+        const withSms = _.get(report, 'with_sms', []);
+        const withoutSms = _.get(report, 'without_sms', []);
+        let dateFormat;
+
+        switch ($scope.currentParams.params.histogram.interval) {
+        case 'hourly':
+            dateFormat = 'MMM Do HH:mm';
+            break;
+        case 'daily':
+        case 'weekly':
+        default:
+            dateFormat = 'MMM Do';
+            break;
+        }
+
+        withSms.forEach((_, index) => {
+            totals[0] += withSms[index];
+            totals[1] += withoutSms[index];
+
+            rows.push([
+                moment(startEpoch).add(index * interval, 'seconds').format(dateFormat),
+                withSms[index],
+                withoutSms[index],
+            ]);
+        });
+
+        rows.push([
+            gettext('Total'),
+            totals[0],
+            totals[1],
+        ]);
+
+        return $q.when({
+            charts: [{
+                id: reportName,
+                type: 'table',
+                chart: {type: 'column'},
+                headers: headers,
+                title: $scope.generateTitle(),
+                subtitle: $scope.generateSubtitle(),
+                rows: rows,
+            }],
+            wrapCharts: true,
+            height500: false,
+            fullWidth: true,
+            multiChart: false,
+        });
     };
 
     $scope.getReportParams = () => (
