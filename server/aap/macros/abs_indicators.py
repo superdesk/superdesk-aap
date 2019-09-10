@@ -80,7 +80,9 @@ def expand_token(token, item, template_map):
         dimension_key = '0:' * (dimensions - 1) + str(last_period_index)
 
         raw_value = response['dataSets'][0]['observations'][dimension_key][0]
-        if isinstance(raw_value, float):
+        if raw_value is None:
+            value = 'N/A'
+        elif isinstance(raw_value, float):
             value = str(round(raw_value, 2))
         else:
             value = str(response['dataSets'][0]['observations'][dimension_key][0])
@@ -89,23 +91,28 @@ def expand_token(token, item, template_map):
         # the token for the period
         template_map[value_token[:-1] + 'PERIOD__'] = last_period_name
 
-        # calculate the change from the preceeding value
+        # calculate the change from the preceding value
         last_period_index -= 1
         if last_period_index >= 0:
             # construct the dimension key of the last data item
             dimension_key = '0:' * (dimensions - 1) + str(last_period_index)
 
             prev_value = response['dataSets'][0]['observations'][dimension_key][0]
-            if prev_value > raw_value:
-                adjective = 'fell'
-            elif prev_value < raw_value:
-                adjective = 'rose'
+            if raw_value and prev_value:
+                if prev_value > raw_value:
+                    adjective = 'fell'
+                elif prev_value < raw_value:
+                    adjective = 'rose'
+                else:
+                    adjective = 'held steady'
             else:
-                adjective = 'held steady'
+                adjective = 'N/A'
 
             template_map[value_token[:-1] + 'ADJECTIVE__'] = adjective
 
-            if isinstance(prev_value, float):
+            if prev_value is None:
+                value = 'N/A'
+            elif isinstance(prev_value, float):
                 value = str(round(prev_value, 2))
             else:
                 value = str(response['dataSets'][0]['observations'][dimension_key][0])
