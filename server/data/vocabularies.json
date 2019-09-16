@@ -3686,5 +3686,73 @@
 			{"name": "Live blog", "qcode": "live_blog", "is_active": true},
 			{"name": "Video explainer", "qcode": "video_explainer", "is_active": true}
         ]
+    },
+    {
+        "_id": "ap_category_map",
+        "description": "Map the AP category codes"
+        "field_type": null,
+        "unique_field": "ap_code",
+        "type": "manageable",
+        "service": {
+            "all": 1
+        },
+        "schema": {
+            "category_code": {
+                "type": "string",
+                "required": true
+            },
+            "ap_code": {
+                "type": "string",
+                "required": true
+            }
+        },
+        "display_name": "AP Category Map",
+        "items": [
+            {
+                "is_active": true,
+                "ap_code": "e",
+                "category_code": "e"
+            },
+            {
+                "is_active": true,
+                "ap_code": "f",
+                "category_code": "f"
+            },
+            {
+                "is_active": true,
+                "ap_code": "j",
+                "category_code": "l"
+            },
+            {
+                "is_active": true,
+                "ap_code": "l",
+                "category_code": "e"
+            },
+            {
+                "is_active": true,
+                "ap_code": "q",
+                "category_code": "s"
+            },
+            {
+                "is_active": true,
+                "ap_code": "r",
+                "category_code": "v"
+            },
+            {
+                "is_active": true,
+                "ap_code": "s",
+                "category_code": "s"
+            },
+            {
+                "is_active": true,
+                "ap_code": "z",
+                "category_code": "s"
+            },
+            {
+                "is_active": true,
+                "ap_code": "default",
+                "category_code": "i"
+            }
+        ]
     }
 ]
