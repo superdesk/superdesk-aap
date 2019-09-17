@@ -18,7 +18,7 @@ from superdesk.metadata.item import ITEM_STATE, CONTENT_STATE
 logger = logging.getLogger(__name__)
 
 
-def ap_wire_aapx_worldview_route(item, **kwargs):
+def aapx_worldview_route(item, **kwargs):
     """
     This macro will look for a configured list of subscribers and set the target subscribers in the item to that list.
     It will also set the keywords for marketplace and worldview. If the macro is not being run interactively it will
@@ -47,11 +47,17 @@ def ap_wire_aapx_worldview_route(item, **kwargs):
         if 'worldview' not in item.get('keywords', []):
             item['keywords'].append('worldview')
 
+        # if the subjects array is empty
+        if 'subject' in item and len(item['subject']) == 0:
+            item['subject'] = [{'qcode': '99010000', 'name': 'World View', 'scheme': None}]
+
         # If a desk and stage in the kwargs then it's being run as a stage macro, so publish it as well.
         if 'desk' in kwargs and 'stage' in kwargs:
             update = {'keywords': item.get('keywords')}
             if item.get('target_subscribers'):
                 update['target_subscribers'] = item['target_subscribers']
+            if 'subject' in item:
+                update['subject'] = item['subject']
             get_resource_service('archive').system_update(item[config.ID_FIELD], update, item)
 
             get_resource_service('archive_publish').patch(id=item[config.ID_FIELD],
@@ -60,13 +66,13 @@ def ap_wire_aapx_worldview_route(item, **kwargs):
             return get_resource_service('archive').find_one(req=None, _id=item[config.ID_FIELD])
 
         return item
-    except:
-        logger.warning('Exception caught in macro: market_place_worldview_route_process')
+    except Exception:
+        logger.exception('Exception caught in macro: aapx_worldview_route')
         return item
 
 
-name = 'AP wire AAPX Worldview'
-label = 'AP wire AAPX Worldview'
-callback = ap_wire_aapx_worldview_route
+name = 'AAPX Worldview'
+label = 'AAPX Worldview'
+callback = aapx_worldview_route
 access_type = 'frontend'
 action_type = 'direct'
