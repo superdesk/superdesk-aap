@@ -15,6 +15,7 @@
 - (fix-requirements) Add responses to dev-requirements.txt (#768)
 - fix(abs macro) stop null values crashing the macro (#765)
 - Add AP to AAP anpa category map (#767)
+- fix world view to handle empty subject codes (#771)
 
 ### Superdesk-Core Change Log (v1.30.1)
 #### Feature
@@ -111,7 +112,7 @@
 - [SDESK-4658] Fix grammar issue with default ednote for a correction (superdesk-client-core#3082)
 - backward compatibility fix
 
-### Superdesk Planning Change Log (v1.7.0-rc1)
+### Superdesk Planning Change Log (v1.7.0-rc2)
 #### Features
 - [SDESK-4427] New Event action 'Mark as Completed' (#1273)
 - [SDNTB-584] feat(draggable): Added ability to make modals draggable (#1294)
@@ -138,6 +139,7 @@
 - fix(flake8): Resolve 'D413 Missing blank line after last section' (#1312)
 - fix(import ui-framework): Add helpers and colors to scss imports (#1323)
 - fix to use modal__backdrop class locally (#1326)
+- [SDESK-4691] Planning was not published when event was completed (#1330)
 
 
 ## [1.29.4] 2019-08-21
