@@ -28,12 +28,7 @@ Slugline: {{ slugline }}
 {% if event and event.location and event.location[0] %}
     
     Location:
-        {{ event.location[0].name }}
-        {{ event.location[0].address.line[0] }}
-        {{ event.location[0].address.area }}
-        {{ event.location[0].address.locality }} {{ event.location[0].address.postal_code }}
-        {{ event.location[0].address.country }}
-    
+    {{ event.location[0]|formatted_address(seperator='\n    ') }}
     {% if event.links %}
     
         Links:
