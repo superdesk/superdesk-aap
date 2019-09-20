@@ -1,6 +1,6 @@
 # Superdesk AAP Changelog
 
-## [1.30] Not Released Yet
+## [1.30] 2019-09-20
 ### AAP-Superdesk Change Log
 #### Features
 - None
@@ -16,6 +16,7 @@
 - fix(abs macro) stop null values crashing the macro (#765)
 - Add AP to AAP anpa category map (#767)
 - fix world view to handle empty subject codes (#771)
+- fix(assignment templates) handle missing bits of address (#773)
 
 ### Superdesk-Core Change Log (v1.30.1)
 #### Feature
@@ -111,35 +112,40 @@
 - [SDESK-4004] Fixed: 'Edit image' action done from article should not modify the orginial image file. (superdesk-client-core#3011)
 - [SDESK-4658] Fix grammar issue with default ednote for a correction (superdesk-client-core#3082)
 - backward compatibility fix
+- fix(auuthoring): Fixed issue with dropdown positions (superdesk-client-core#3056)
 
-### Superdesk Planning Change Log (v1.7.0-rc2)
+### Superdesk Planning Change Log (v1.7.0)
 #### Features
-- [SDESK-4427] New Event action 'Mark as Completed' (#1273)
-- [SDNTB-584] feat(draggable): Added ability to make modals draggable (#1294)
+- [SDESK-4427] New Event action 'Mark as Completed' (superdesk-planning#1273)
+- [SDNTB-584] feat(draggable): Added ability to make modals draggable (superdesk-planning#1294)
 
 #### Improvements
-- [SDESK-4599] Review planning workflow notifications (#1301)
-- [SDESK-4598] Add Place to event and planning filter (#1302)
-- [SDESK-4618] Remove the folder from the filename returned for attachments (#1307)
-- [SDESK-4595] Move the attachment icon in lists (#1311)
-- [SDESK-4651] Show all desks by default in Fulfil Assignment modal (#1305)
-- [SDESK-4676] Hide 'all day' as an event form option (#1320)
+- [SDESK-4599] Review planning workflow notifications (superdesk-planning#1301)
+- [SDESK-4598] Add Place to event and planning filter (superdesk-planning#1302)
+- [SDESK-4618] Remove the folder from the filename returned for attachments (superdesk-planning#1307)
+- [SDESK-4595] Move the attachment icon in lists (superdesk-planning#1311)
+- [SDESK-4651] Show all desks by default in Fulfil Assignment modal (superdesk-planning#1305)
+- [SDESK-4676] Hide 'all day' as an event form option (superdesk-planning#1320)
+- [SDESK-4705] modify the internal note message (superdesk-planning#1334)
 
 #### Fixes
-- [SDESK-4427] Mark for complete fix to cater for events that start on same day but ahead in time. (#1278)
-- [SDESK-4592] Restrict some item actions on expired items (#1297)
-- actioned_date was removed when posting an event (#1299)
-- [SDESK-4224][SDESK-4510][SDESK-4513] (fix): Don't unmount the PopupEditor when action modal is shown (#1274)
-- [SDESK-4572] Don't close dropdown on scroll bar click (#1303)
-- [SDESK-4654] Handle the enter key in Selecting subject codes etc. (#1312)
-- [SDESK-4669] Location was getting deleted when event was marked as complete or assigned to calendar (#1310)
-- [SDESK-4661] (fix) Fulfil Assignment button visible if Assignment is locked (#1306)
-- (fix-requirements) Add responses lib in dev-requirements.txt (#1315)
-- [SDESK-4678] When marking an Event as completed Planning and Assignments need to be updated (#1317)
-- fix(flake8): Resolve 'D413 Missing blank line after last section' (#1312)
-- fix(import ui-framework): Add helpers and colors to scss imports (#1323)
-- fix to use modal__backdrop class locally (#1326)
-- [SDESK-4691] Planning was not published when event was completed (#1330)
+- [SDESK-4427] Mark for complete fix to cater for events that start on same day but ahead in time. (superdesk-planning#1278)
+- [SDESK-4592] Restrict some item actions on expired items (superdesk-planning#1297)
+- actioned_date was removed when posting an event (superdesk-planning#1299)
+- [SDESK-4224][SDESK-4510][SDESK-4513] (fix): Don't unmount the PopupEditor when action modal is shown (superdesk-planning#1274)
+- [SDESK-4572] Don't close dropdown on scroll bar click (superdesk-planning#1303)
+- [SDESK-4654] Handle the enter key in Selecting subject codes etc. (superdesk-planning#1312)
+- [SDESK-4669] Location was getting deleted when event was marked as complete or assigned to calendar (superdesk-planning#1310)
+- [SDESK-4661] (fix) Fulfil Assignment button visible if Assignment is locked (superdesk-planning#1306)
+- (fix-requirements) Add responses lib in dev-requirements.txt (superdesk-planning#1315)
+- [SDESK-4678] When marking an Event as completed Planning and Assignments need to be updated (superdesk-planning#1317)
+- fix(flake8): Resolve 'D413 Missing blank line after last section' (superdesk-planning#1312)
+- fix(import ui-framework): Add helpers and colors to scss imports (superdesk-planning#1323)
+- fix to use modal__backdrop class locally (superdesk-planning#1326)
+- [SDESK-4691] Planning was not published when event was completed (superdesk-planning#1330)
+- fix(assignment templates) handle missing bits of address, add slugline to subject (superdesk-planning#1333)
+- [SDESK-4704] Send Assignment notification when Event is updated (superdesk-planning#1337)
+- [SDNTB-599] 'duplicate_from' was missing when duplicating an Event. (superdesk-planning#1335)
 
 
 ## [1.29.4] 2019-08-21
