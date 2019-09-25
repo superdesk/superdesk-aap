@@ -8,11 +8,13 @@
 # AUTHORS and LICENSE files distributed with this source code, or
 # at https://www.sourcefabric.org/superdesk/license
 
+from datetime import datetime
+import json
+from copy import deepcopy
+
 from superdesk.tests import TestCase
 from apps.publish import init_app
 from .marketplace_ninjs_formatter import MarketplaceNINJSFormatter
-from datetime import datetime
-import json
 
 
 def ISODate(dt):
@@ -59,10 +61,24 @@ class TestMarketplaceNINJS(TestCase):
         "anpa_take_key": "1stLd-Writethru",
         "_created": ISODate("2018-11-10T20:16:29.000+0000"),
         "headline": "Big studies give mixed news on fish oil, vitamin D"
+    }, {
+        "_id": "urn:newsml:localhost:2018-11-09T03:01:27.558606:2a806251-790c-4615-944f-7856f0d417ac",
+        "slugline": "Technology Xiaomi",
+        "ingest_provider": "5615d77f069b7f774d66003a",
+        "family_id": "urn:newsml:localhost:2018-11-09T03:01:27.558606:2a806251-790c-4615-944f-7856f0d417ac",
+        "versioncreated": ISODate("2018-11-08T16:00:00.000+0000"),
+        "type": "text",
+        "state": "ingested",
+        "headline": "XIAOMI LAUNCHES IN THE UK AS NEWEST PHONE RIVAL TO APPLE AND SAMSUNG",
+        "uri": "19f5b765-e160-4661-a8bb-b7f0a86a5107HHH-3-1",
+        "source": "PAA",
+        "ingest_provider_sequence": "3142",
+        "archived": ISODate("2018-11-08T16:01:27.000+0000"),
+        "guid": "/mnt/content-fs/input/ASIANET_FTP/AsiaNet Press Release 80708.tst-123-456-789-0abc-defg12345678"
     }
     ]
 
-    article = [{
+    articles = [{
         "_id": "5be33cdec08c285b2e89967f",
         "slugline": "VARIETY-ENTERTAINMENT-FILM/NEWS",
         "event_id": "tag:localhost:2018:51e14b77-0fd9-465a-a107-26750023ed80",
@@ -349,6 +365,103 @@ class TestMarketplaceNINJS(TestCase):
         "auto_publish": True,
         "firstpublished": ISODate("2018-11-10T20:16:30.000+0000"),
         "publish_schedule": None
+    }, {
+        "_id": "5be33cdec08c285b2e89967a",
+        "slugline": "VARIETY-ENTERTAINMENT-FILM/NEWS",
+        "event_id": "tag:localhost:2018:51e14b77-0fd9-465a-a107-26750023ed80",
+        "urgency": 3,
+        "guid": "/mnt/content-fs/input/ASIANET_FTP/AsiaNet Press Release 80708.tst-123-456-789-0abc-defg12345678",
+        "publish_sequence_no": 3587288,
+        "subject": [
+            {
+                "name": "arts, culture and entertainment",
+                "qcode": "01000000"
+            },
+            {
+                "name": "cinema",
+                "qcode": "01005000"
+            },
+            {
+                "name": "television",
+                "qcode": "01016000"
+            }
+        ],
+        "version_creator": None,
+        "priority": 3,
+        "queue_state": "queued",
+        "anpa_category": [
+            {
+                "name": "Entertainment",
+                "qcode": "e"
+            }
+        ],
+        "schedule_settings": {
+            "utc_publish_schedule": None,
+            "time_zone": None,
+            "utc_embargo": None
+        },
+        "language": "en",
+        "pubstatus": "usable",
+        "place": [
+
+        ],
+        "type": "text",
+        "byline": "Brent Lang",
+        "unique_name": "#34049135",
+        "state": "published",
+        "headline": "Fox Quarterly Earnings Climb as Disney Deal Looms",
+        "archive_description": "VARIETY-ENTERTAINMENT-FILM/NEWS:Fox Quarterly Earnings Climb as Disney Deal Looms",
+        "genre": [
+            {
+                "name": "Article",
+                "scheme": None,
+                "qcode": "Article"
+            }
+        ],
+        "source": "Reuters",
+        "renditions": {
+
+        },
+        "publish_schedule": None,
+        "is_take_item": False,
+        "version": "184620126",
+        "ingest_provider": "563181f8069b7f7e6664283a",
+        "family_id": "urn:newsml:localhost:2018-11-08T06:28:29.851340:47ebdba0-bcfa-4fe4-bad7-a186136ed93b",
+        "body_html": "<p>Body</p>",
+        "description_text": "VARIETY-ENTERTAINMENT-FILM/NEWS:Fox Quarterly Earnings Climb as Disney Deal Looms",
+        "firstcreated": ISODate("2018-11-07T13:22:31.000+0000"),
+        "profile": "58b788bd069b7f6953927e9d",
+        "moved_to_legal": True,
+        "_current_version": 2,
+        "last_published_version": True,
+        "target_subscribers": [
+            {
+                "name": "System - Bulletin Builder Database (TEST)",
+                "scheme": None,
+                "_id": "5721524fca6a9346e8aab767"
+            }
+        ],
+        "authors": [
+
+        ],
+        "ingest_provider_sequence": "2693",
+        "operation": "publish",
+        "ednote": "",
+        "original_creator": "",
+        "_created": ISODate("2018-11-07T19:28:30.000+0000"),
+        "word_count": 379,
+        "item_id": "tag:localhost:2018:9a1b49b0-9026-4215-9a46-fb760fead170",
+        "expiry": ISODate("2018-11-10T19:28:30.000+0000"),
+        "usageterms": "ANY",
+        "format": "HTML",
+        "_etag": "8e9c1ae70e046d6df9f50544b9e9a8a54a961e01",
+        "_updated": ISODate("2018-11-07T19:28:33.000+0000"),
+        "versioncreated": ISODate("2018-11-07T19:28:30.000+0000"),
+        "ingest_id": "urn:newsml:localhost:2018-11-08T06:28:29.851340:47ebdba0-bcfa-4fe4-bad7-a186136ed937",
+        "firstpublished": ISODate("2018-11-07T19:28:30.000+0000"),
+        "unique_id": 34049135,
+        "auto_publish": True,
+        "last_queue_event": ISODate("2018-11-07T19:28:30.000+0000")
     }
     ]
 
@@ -358,17 +471,17 @@ class TestMarketplaceNINJS(TestCase):
         self.app.data.insert('ingest', self.ingest)
 
     def test_update_reuters_id(self):
-        seq, doc = self.formatter.format(self.article[0], {'_id': 1, 'name': 'Test Subscriber'})[0]
+        seq, doc = self.formatter.format(self.articles[0], {'_id': 1, 'name': 'Test Subscriber'})[0]
         ninjs = json.loads(doc)
         self.assertEqual(ninjs['guid'], 'tag:reuters.com,2018:newsml_MT1VRT1203021832')
 
     def test_update_pa(self):
-        seq, doc = self.formatter.format(self.article[1], {'_id': 1, 'name': 'Test Subscriber'})[0]
+        seq, doc = self.formatter.format(self.articles[1], {'_id': 1, 'name': 'Test Subscriber'})[0]
         ninjs = json.loads(doc)
         self.assertEqual(ninjs['guid'], '19f5b765-e160-4661-a8bb-b7f0a86a5107HHH-1')
 
     def test_spoof_ap(self):
-        seq, doc = self.formatter.format(self.article[2], {'_id': 1, 'name': 'Test Subscriber'})[0]
+        seq, doc = self.formatter.format(self.articles[2], {'_id': 1, 'name': 'Test Subscriber'})[0]
         ninjs = json.loads(doc)
         self.assertEqual(ninjs['guid'], 'tag:localhost:2018:861146a6-9a01-48bc-8fb4-7757c7f236af')
 
@@ -385,3 +498,16 @@ class TestMarketplaceNINJS(TestCase):
         seq, doc = self.formatter.format(bad_article, {'_id': 1, 'name': 'Test Subscriber'})[0]
         ninjs = json.loads(doc)
         self.assertEqual(ninjs['guid'], 'tag:localhost:2018:5514f993-b342-4231-a74c-b686a8205baf')
+
+    def test_fs_path_guid(self):
+        article = deepcopy(self.articles[3])
+        article.update({
+            'guid': '/mnt/content-fs/input/ASIANET_FTP/AsiaNet Press Release 80708'
+                    '.tst-123-456-789-0abc-defg12345678',
+            'ingest_id': '/mnt/content-fs/input/ASIANET_FTP/AsiaNet Press Release 80708'
+                         '.tst-123-456-789-0abc-defg12345678',
+            'auto_publish': True
+        })
+        seq, doc = self.formatter.format(article, {'_id': 1, 'name': 'Test Subscriber'})[0]
+        ninjs = json.loads(doc)
+        self.assertEqual(ninjs['guid'], article['family_id'])
