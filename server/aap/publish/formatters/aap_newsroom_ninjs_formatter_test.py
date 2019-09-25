@@ -9,12 +9,101 @@
 # at https://www.sourcefabric.org/superdesk/license
 
 import json
+from copy import deepcopy
+
 from superdesk.tests import TestCase
 from apps.publish import init_app
 from .aap_newsroom_ninjs_formatter import AAPNewsroomNinjsFormatter
 
 
 class AAPNINJSFormatterTest(TestCase):
+
+    base_article = {
+        "_id": "urn:newsml:localhost:2017-08-31T11:40:29.408059:fd448b37-f35d-4bb2-a565-2433dcf1c338",
+        "dateline": {
+            "source": "AAP",
+            "text": "MILTON KEYNES, Aug 31 AAP -",
+            "date": "2017-08-31T01:40:29.000Z",
+            "located": {
+                "tz": "Europe/London",
+                "city_code": "Milton Keynes",
+                "country": "United Kingdom",
+                "city": "Milton Keynes",
+                "dateline": "city",
+                "state": "England",
+                "alt_name": "",
+                "country_code": "GB",
+                "state_code": "GB.ENG"
+            }
+        },
+        "pubstatus": "usable",
+        "profile": "58cf62e01d41c8208dc20375",
+        "flags": {
+            "marked_archived_only": False,
+            "marked_for_sms": False,
+            "marked_for_not_publication": False,
+            "marked_for_legal": False
+        },
+        "version_creator": "57bcfc5d1d41c82e8401dcc0",
+        "version": 1,
+        "state": "in_progress",
+        "event_id": "tag:localhost:2017:39642f28-ebb6-4767-863e-58ac9e5810fd",
+        "unique_name": "#32467",
+        "operation": "update",
+        "versioncreated": "2017-08-31T01:44:24.000Z",
+        "_created": "2017-08-31T01:40:29.000Z",
+        "type": "text",
+        "format": "HTML",
+        "family_id": "urn:newsml:localhost:2017-08-31T11:40:29.408059:fd448b37-f35d-4bb2-a565-2433dcf1c338",
+        "_current_version": 2,
+        "sign_off": "MAR",
+        "priority": 6,
+        "firstcreated": "2017-08-31T01:40:29.000Z",
+        "source": "AAP",
+        "original_creator": "57bcfc5d1d41c82e8401dcc0",
+        "language": "en",
+        "unique_id": 32467,
+        "guid": "urn:newsml:localhost:2017-08-31T11:40:29.408059:fd448b37-f35d-4bb2-a565-2433dcf1c338",
+        "anpa_category": [
+            {
+                "qcode": "i",
+                "scheme": None,
+                "name": "International News"
+            }
+        ],
+        "place": [
+            {
+                "name": "NSW",
+                "country": "Australia",
+                "group": "Australia",
+                "qcode": "NSW",
+                "state": "New South Wales",
+                "world_region": "Oceania"
+            }
+        ],
+        "urgency": 3,
+        "genre": [
+            {
+                "qcode": "Article",
+                "name": "Article"
+            }
+        ],
+        "slugline": "Article Slugline",
+        "anpa_take_key": "takekey",
+        "ednote": "Article ed note",
+        "byline": "Article Byline",
+        "subject": [
+            {
+                "qcode": "01000000",
+                "name": "arts, culture and entertainment",
+            }
+        ],
+        "abstract": "<p>Article abstract</p>",
+        "sms_message": "",
+        "headline": "Article Headline",
+        "word_count": 2,
+    }
+
     def setUp(self):
         self.formatter = AAPNewsroomNinjsFormatter()
         init_app(self.app)
@@ -54,92 +143,13 @@ class AAPNINJSFormatterTest(TestCase):
         ])
 
     def test_associated_media_formatter(self):
-        article = {
-            "_id": "urn:newsml:localhost:2017-08-31T11:40:29.408059:fd448b37-f35d-4bb2-a565-2433dcf1c338",
-            "dateline": {
-                "source": "AAP",
-                "text": "MILTON KEYNES, Aug 31 AAP -",
-                "date": "2017-08-31T01:40:29.000Z",
-                "located": {
-                    "tz": "Europe/London",
-                    "city_code": "Milton Keynes",
-                    "country": "United Kingdom",
-                    "city": "Milton Keynes",
-                    "dateline": "city",
-                    "state": "England",
-                    "alt_name": "",
-                    "country_code": "GB",
-                    "state_code": "GB.ENG"
-                }
-            },
-            "pubstatus": "usable",
-            "profile": "58cf62e01d41c8208dc20375",
-            "flags": {
-                "marked_archived_only": False,
-                "marked_for_sms": False,
-                "marked_for_not_publication": False,
-                "marked_for_legal": False
-            },
-            "version_creator": "57bcfc5d1d41c82e8401dcc0",
-            "version": 1,
-            "state": "in_progress",
-            "event_id": "tag:localhost:2017:39642f28-ebb6-4767-863e-58ac9e5810fd",
-            "unique_name": "#32467",
-            "operation": "update",
-            "versioncreated": "2017-08-31T01:44:24.000Z",
-            "_created": "2017-08-31T01:40:29.000Z",
-            "type": "text",
-            "format": "HTML",
-            "family_id": "urn:newsml:localhost:2017-08-31T11:40:29.408059:fd448b37-f35d-4bb2-a565-2433dcf1c338",
-            "_current_version": 2,
-            "sign_off": "MAR",
-            "priority": 6,
-            "firstcreated": "2017-08-31T01:40:29.000Z",
-            "source": "AAP",
-            "original_creator": "57bcfc5d1d41c82e8401dcc0",
-            "language": "en",
-            "unique_id": 32467,
-            "guid": "urn:newsml:localhost:2017-08-31T11:40:29.408059:fd448b37-f35d-4bb2-a565-2433dcf1c338",
-            "anpa_category": [
-                {
-                    "qcode": "i",
-                    "scheme": None,
-                    "name": "International News"
-                }
-            ],
-            "place": [
-                {
-                    "name": "NSW",
-                    "country": "Australia",
-                    "group": "Australia",
-                    "qcode": "NSW",
-                    "state": "New South Wales",
-                    "world_region": "Oceania"
-                }
-            ],
-            "urgency": 3,
-            "genre": [
-                {
-                    "qcode": "Article",
-                    "name": "Article"
-                }
-            ],
-            "slugline": "Article Slugline",
-            "anpa_take_key": "takekey",
-            "ednote": "Article ed note",
-            "byline": "Article Byline",
-            "subject": [
-                {
-                    "qcode": "01000000",
-                    "name": "arts, culture and entertainment",
-                }
-            ],
-            "abstract": "<p>“Article abstract“</p>",
-            "sms_message": "",
+        article = deepcopy(self.base_article)
+        article.update({
             "headline": "‘Article Headline’",
-            "word_count": 2,
-            "body_html": "<p>“Article Body“</p>",
-        }
+            'body_html': "<p>“Article Body“</p>",
+            "abstract": "<p>“Article abstract“</p>",
+        })
+        article['body_html'] = "<p>“Article Body“</p>"
 
         seq, doc = self.formatter.format(article, {'_id': 1, 'name': 'Test Subscriber'})[0]
         expected = {"guid": "urn:newsml:localhost:2017-08-31T11:40:29.408059:fd448b37-f35d-4bb2-a565-2433dcf1c338",
@@ -158,106 +168,23 @@ class AAPNINJSFormatterTest(TestCase):
         self.assertEqual(expected, json.loads(doc))
 
     def test_link_expansion(self):
-        article = {
-            "_id": "urn:newsml:localhost:2017-08-31T11:40:29.408059:fd448b37-f35d-4bb2-a565-2433dcf1c338",
-            "dateline": {
-                "source": "AAP",
-                "text": "MILTON KEYNES, Aug 31 AAP -",
-                "date": "2017-08-31T01:40:29.000Z",
-                "located": {
-                    "tz": "Europe/London",
-                    "city_code": "Milton Keynes",
-                    "country": "United Kingdom",
-                    "city": "Milton Keynes",
-                    "dateline": "city",
-                    "state": "England",
-                    "alt_name": "",
-                    "country_code": "GB",
-                    "state_code": "GB.ENG"
-                }
-            },
-            "pubstatus": "usable",
-            "profile": "58cf62e01d41c8208dc20375",
-            "flags": {
-                "marked_archived_only": False,
-                "marked_for_sms": False,
-                "marked_for_not_publication": False,
-                "marked_for_legal": False
-            },
-            "version_creator": "57bcfc5d1d41c82e8401dcc0",
-            "version": 1,
-            "state": "in_progress",
-            "event_id": "tag:localhost:2017:39642f28-ebb6-4767-863e-58ac9e5810fd",
-            "unique_name": "#32467",
-            "operation": "update",
-            "versioncreated": "2017-08-31T01:44:24.000Z",
-            "_created": "2017-08-31T01:40:29.000Z",
-            "type": "text",
-            "format": "HTML",
-            "family_id": "urn:newsml:localhost:2017-08-31T11:40:29.408059:fd448b37-f35d-4bb2-a565-2433dcf1c338",
-            "_current_version": 2,
-            "sign_off": "MAR",
-            "priority": 6,
-            "firstcreated": "2017-08-31T01:40:29.000Z",
-            "source": "AAP",
-            "original_creator": "57bcfc5d1d41c82e8401dcc0",
-            "language": "en",
-            "unique_id": 32467,
-            "guid": "urn:newsml:localhost:2017-08-31T11:40:29.408059:fd448b37-f35d-4bb2-a565-2433dcf1c338",
-            "anpa_category": [
-                {
-                    "qcode": "i",
-                    "scheme": None,
-                    "name": "International News"
-                }
-            ],
-            "place": [
-                {
-                    "name": "NSW",
-                    "country": "Australia",
-                    "group": "Australia",
-                    "qcode": "NSW",
-                    "state": "New South Wales",
-                    "world_region": "Oceania"
-                }
-            ],
-            "urgency": 3,
-            "genre": [
-                {
-                    "qcode": "Article",
-                    "name": "Article"
-                }
-            ],
-            "slugline": "Article Slugline",
-            "anpa_take_key": "takekey",
-            "ednote": "Article ed note",
-            "byline": "Article Byline",
-            "subject": [
-                {
-                    "qcode": "01000000",
-                    "name": "arts, culture and entertainment",
-                }
-            ],
-            "abstract": "<p>Article abstract</p>",
-            "sms_message": "",
-            "headline": "Article Headline",
-            "word_count": 2,
-            "body_html": "<p>Article Body</p><p>Some text http://aap.com.au some more text</p><p>A bit more</p>"
-                         "<p>https://a.b.c/sjhfkjhf</p><p>yadda <a href=\"https://a.b.c/existing\">Existing link text"
-                         "</a> fkjhkjfhk</p>"
-                         "<p>This is a NSW local court decision&nbsp;https://www.caselaw.nsw.gov.au/decision/5d243010e"
-                         "4b08c5b85d8ac7f</p>"
-                         "<p><br></p><p> BEFORE http://127.0.0.1:9000/#/workspace/monitoring?assignment=5cb57b165f627d"
-                         "6b2c55a192&amp;item=urn:newsml:localhost:2019-07-10T14:24:14.653510:f7554544-88b1-4263-9d46"
-                         "-db4424541eff&amp;action=edit AFTER<br></p>"
-                         "<p>Instagram ( https://c212.net/c/link/?t=0&amp;l=en&amp;o=2519051-1&amp;h=802772405&amp;"
-                         "u=https%3A%2F%2Fc212.net%2Fc%2Flink%2F%3Ft%3D0%26l%3Den%26o%3D2434488-1%26h%3D341010156"
-                         "6%26u%3Dhttps%253A%252F%252Furldefense.proofpoint.com%252Fv2%252Furl%253Fu%253Dhttps-3A__"
-                         "www.instagram.com_automobilityla_%2526d%253DDwMGaQ%2526c%253D9wxE0DgWbPxd1HCzjwN8Eaww1--"
-                         "ViDajIU4RXCxgSXE%2526r%253DTsighQ5d9Vys_pgjwOXtbe-L7jq0CiKHyITp_PSm_7w%2526m%253D4NT5PB8"
-                         "zM8WgWXWL9xj-7rCog61nziXpkuqaIM3yrvM%2526s%253DDhXARHgccri7aqVjW4fNJ33toDz3OKMKBPQzLVKKlyM"
-                         "%2526e%253D%26a%3DInstagram&amp;a=Instagram )</p>",
-        }
+        article = deepcopy(self.base_article)
+        article['body_html'] = "<p>Article Body</p><p>Some text http://aap.com.au some more text</p><p>A bit more</p>" \
+            "<p>https://a.b.c/sjhfkjhf</p><p>yadda <a href=\"https://a.b.c/existing\">Existing link text" \
+            "</a> fkjhkjfhk</p>" \
+            "<p>This is a NSW local court decision&nbsp;https://www.caselaw.nsw.gov.au/decision/5d243010e" \
+            "4b08c5b85d8ac7f</p>" \
+            "<p><br></p><p> BEFORE http://127.0.0.1:9000/#/workspace/monitoring?assignment=5cb57b165f627d" \
+            "6b2c55a192&amp;item=urn:newsml:localhost:2019-07-10T14:24:14.653510:f7554544-88b1-4263-9d46" \
+            "-db4424541eff&amp;action=edit AFTER<br></p>" \
+            "<p>Instagram ( https://c212.net/c/link/?t=0&amp;l=en&amp;o=2519051-1&amp;h=802772405&amp;" \
+            "u=https%3A%2F%2Fc212.net%2Fc%2Flink%2F%3Ft%3D0%26l%3Den%26o%3D2434488-1%26h%3D341010156" \
+            "6%26u%3Dhttps%253A%252F%252Furldefense.proofpoint.com%252Fv2%252Furl%253Fu%253Dhttps-3A__" \
+            "www.instagram.com_automobilityla_%2526d%253DDwMGaQ%2526c%253D9wxE0DgWbPxd1HCzjwN8Eaww1--" \
+            "ViDajIU4RXCxgSXE%2526r%253DTsighQ5d9Vys_pgjwOXtbe-L7jq0CiKHyITp_PSm_7w%2526m%253D4NT5PB8" \
+            "zM8WgWXWL9xj-7rCog61nziXpkuqaIM3yrvM%2526s%253DDhXARHgccri7aqVjW4fNJ33toDz3OKMKBPQzLVKKlyM" \
+            "%2526e%253D%26a%3DInstagram&amp;a=Instagram )</p>"
+
         seq, doc = self.formatter.format(article, {'_id': 1, 'name': 'Test Subscriber'})[0]
         expected = {'body_html': '<p>Article Body</p><p>Some text <a '
                                  'href="http://aap.com.au" target="_blank">http://aap.com.au</a> some more '
@@ -317,5 +244,15 @@ class AAPNINJSFormatterTest(TestCase):
                     'version': '2',
                     'versioncreated': '2017-08-31T01:44:24.000Z',
                     'wordcount': 29}
-        # raise self.failureException(json.loads(doc))
         self.assertEqual(expected, json.loads(doc))
+
+    def test_fs_path_guid(self):
+        article = deepcopy(self.base_article)
+        article.update({
+            'ingest_id': '/mnt/content-fs/input/ASIANET_FTP/AsiaNet Press Release 80708'
+                         '.tst-123-456-789-0abc-defg12345678',
+            'auto_publish': True
+        })
+        seq, doc = self.formatter.format(article, {'_id': 1, 'name': 'Test Subscriber'})[0]
+        ninjs = json.loads(doc)
+        self.assertEqual(ninjs['guid'], article['family_id'])
