@@ -29,7 +29,7 @@ class ANPAFormatterTest(TestCase):
 
     article = {
         'source': 'AAP',
-        '_updated': datetime.strptime('2015-05-29 05:46', '%Y-%m-%d %H:%M'),
+        '_updated': datetime.strptime('2015-10-13 23:45', '%Y-%m-%d %H:%M'),
         'anpa_category': [{'qcode': 'a'}],
         'headline': 'This is a test headline',
         'slugline': 'slugline',
@@ -80,7 +80,7 @@ class ANPAFormatterTest(TestCase):
         self.assertEqual(line[:3], '')  # Skip the sequence
 
         line = lines.readline()
-        self.assertEqual(line[0:20], 'f a bc-slugline   ')  # skip the date
+        self.assertEqual(line, 'f a bc-slugline   10-14 0001\r\n')
 
         line = lines.readline()
         self.assertEqual(line.strip(), 'This is a test headline')

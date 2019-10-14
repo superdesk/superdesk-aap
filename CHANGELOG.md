@@ -1,5 +1,63 @@
 # Superdesk AAP Changelog
 
+## [1.30.1-rc1] Not released yet
+### AAP-Superdesk Change Log
+#### Features
+- None
+
+#### Improvements
+- None
+
+#### Fixes
+- fix(newsroom): GUIDs were published as the path to the file (#775)
+- [SDESK-4752] Correct the filing date timezone (#779)
+
+### Superdesk-Core Change Log (v1.30.1)
+#### Feature
+- None
+
+#### Improvements
+- None
+
+### Fixes
+- [SDESK-4728] Prevent out-of-sequence publishing of Updates (superdesk/superdesk-core#1681)
+
+### Superdesk-Client-Core Change Log (v1.30.4)
+#### Feature
+- None
+
+#### Improvements
+- None
+
+#### Fixes
+- Node sass update, list item fix (superdesk/superdesk-client-core#3041)
+- fix-e2e(1.30): Fix e2e tests webdriver updated (superdesk/superdesk-client-core#3133) (superdesk/superdesk-client-core#3148)
+- fix(kill): Item schema not loading when killing from archived (superdesk/superdesk-client-core#3149)
+
+### Superdesk Planning Change Log (v1.8.0-rc1)
+#### Features
+- [SDBELGA-101][SDBELGA-102][SDBELGA-103] Event templates (superdesk/superdesk-planning#1328)
+- [SDESK-4565] Independently sort Assignment lists (superdesk/superdesk-planning#1344)
+- [SDESK-4472] 'To be confirmed' feature (superdesk/superdesk-planning#1341)
+
+#### Improvements
+- [SDESK-4668] Introduce configuration for the main left hand side toolbar (superdesk/superdesk-planning#1336)
+- [SDESK-4701] Align collapse box close button left and next to three-dot button (superdesk/superdesk-planning#1348)
+- [SDBELGA-186] control via article template where generated content is inserted (superdesk/superdesk-planning#1354)
+
+#### Fixes
+- [SDESK-4514] reopen editor if required when item is added to featured stories (superdesk/superdesk-planning#1331)
+- [SDNTB-599] When duplicated event is rescheduled and posted, SD sends file with NTBID of orginal event (superdesk/superdesk-planning#1340)
+- [SDESK-4515] Close editor after cancelling event/planning-item (superdesk/superdesk-planning#1342)
+- [SDESK-4516] Event editor is blank when reducing repetitions if that event no longer exists (superdesk/superdesk-planning#1343)
+- [SDESK-4515] Cancelling planning item was keeping the item in editor still locked (superdesk/superdesk-planning#1347)
+- [SDESK-4663] The editor in 'Add To Planning' modal should close if the same Planning item is unlocked in another session (superdesk/superdesk-planning#1346)
+- [SDESK-4710] Error when assigning past date to coverage (superdesk/superdesk-planning#1350)
+- (fix) Place superdesk-core in peerDependencies and update Typescript version (superdesk/superdesk-planning#1351)
+- [SDNTB-589] (fix): Cannot perform reschedule or convert to recurring on events. (superdesk/superdesk-planning#1352)
+- fix duplicate by on slack notification (superdesk/superdesk-planning#1339)
+
+
 ## [1.30] 2019-09-20
 ### AAP-Superdesk Change Log
 #### Features

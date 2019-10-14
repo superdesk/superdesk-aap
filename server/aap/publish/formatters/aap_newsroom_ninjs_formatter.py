@@ -11,7 +11,7 @@
 from superdesk.publish.formatters.ninjs_newsroom_formatter import NewsroomNinjsFormatter
 from .unicodetoascii import clean_string
 import re
-from superdesk.metadata.item import FORMATS, FORMAT
+from superdesk.metadata.item import FORMATS, FORMAT, GUID_FIELD, FAMILY_ID
 import html
 
 
@@ -42,6 +42,14 @@ class AAPNewsroomNinjsFormatter(NewsroomNinjsFormatter):
 
     def _transform_to_ninjs(self, article, subscriber, recursive=True):
         ninjs = super()._transform_to_ninjs(article, subscriber, recursive)
+
+        # If the item was ingested and auto-published, the guid is set to the ingest_id
+        # which in FileFeeds will be the path to the file that was ingested
+        # [STTNHUB-58] - Auto published ingested items should preserve id
+        # (https://github.com/superdesk/superdesk-core/pull/1579)
+        # Change the guid back to using the family_id of the item
+        if (ninjs.get(GUID_FIELD) or '').startswith('/mnt/'):
+            ninjs[GUID_FIELD] = article.get(FAMILY_ID)
 
         if article.get(FORMAT) == FORMATS.HTML:
             ninjs['body_html'] = self._format_url_to_anchor_tag(ninjs.get('body_html', ''))

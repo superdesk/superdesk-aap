@@ -13,6 +13,7 @@ import superdesk
 from superdesk.publish.formatters.ninjs_newsroom_formatter import NewsroomNinjsFormatter
 from superdesk.utils import json_serialize_datetime_objectId
 from superdesk.errors import FormatterError
+from superdesk.metadata.item import GUID_FIELD, FAMILY_ID
 from copy import deepcopy
 from .unicodetoascii import clean_string
 
@@ -99,6 +100,14 @@ class MarketplaceNINJSFormatter(NewsroomNinjsFormatter):
 
             ninjs = self._transform_to_ninjs(self._merge_versions(article), subscriber)
             ninjs['extra'] = {'published_id': article.get('_id')}
+
+            # If the item was ingested and auto-published, the guid is set to the ingest_id
+            # which in FileFeeds will be the path to the file that was ingested
+            # [STTNHUB-58] - Auto published ingested items should preserve id
+            # (https://github.com/superdesk/superdesk-core/pull/1579)
+            # Change the guid back to using the family_id of the item
+            if (ninjs.get(GUID_FIELD) or '').startswith('/mnt/'):
+                ninjs[GUID_FIELD] = article.get(FAMILY_ID)
 
             return [(pub_seq_num, json.dumps(ninjs, default=json_serialize_datetime_objectId))]
         except Exception as ex:
