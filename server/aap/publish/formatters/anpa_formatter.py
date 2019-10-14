@@ -22,6 +22,7 @@ from .category_list_map import get_aap_category_list
 import re
 from superdesk.etree import parse_html, to_string, etree
 from superdesk.text_utils import get_text
+from superdesk.utc import utc_to_local
 
 
 class AAPAnpaFormatter(Formatter):
@@ -76,8 +77,8 @@ class AAPAnpaFormatter(Formatter):
                 anpa.append(b'\x20')
 
                 # filing date
-                anpa.append('{}-{}'.format(formatted_article['_updated'].strftime('%m'),
-                                           formatted_article['_updated'].strftime('%d')).encode('ascii'))
+                local_time = utc_to_local(config.DEFAULT_TIMEZONE or 'UTC', formatted_article['_updated'])
+                anpa.append('{}-{}'.format(local_time.strftime('%m'), local_time.strftime('%d')).encode('ascii'))
                 anpa.append(b'\x20')
 
                 # add the word count
