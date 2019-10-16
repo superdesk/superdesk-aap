@@ -1,12 +1,12 @@
 # Superdesk AAP Changelog
 
-## [1.30.1-rc2] Not released yet
+## [1.30.1] 2019-10-17
 ### AAP-Superdesk Change Log
 #### Features
 - None
 
 #### Improvements
-- None
+- [SDESK-4756] Use browser time for 'events courts' template (#781)
 
 #### Fixes
 - fix(newsroom): GUIDs were published as the path to the file (#775)
@@ -34,7 +34,7 @@
 - fix-e2e(1.30): Fix e2e tests webdriver updated (superdesk/superdesk-client-core#3133) (superdesk/superdesk-client-core#3148)
 - fix(kill): Item schema not loading when killing from archived (superdesk/superdesk-client-core#3149)
 
-### Superdesk Planning Change Log (v1.8.0-rc1)
+### Superdesk Planning Change Log (v1.8.0)
 #### Features
 - [SDBELGA-101][SDBELGA-102][SDBELGA-103] Event templates (superdesk/superdesk-planning#1328)
 - [SDESK-4565] Independently sort Assignment lists (superdesk/superdesk-planning#1344)
