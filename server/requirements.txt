@@ -14,9 +14,9 @@ oauth2client==4.1.3
 requests<2.22
 
 # Superdeks-Core 1.30 - https://github.com/superdesk/superdesk-core/commits/1.30
-git+git://github.com/superdesk/superdesk-core.git@45351be#egg=Superdesk-Core
+git+git://github.com/superdesk/superdesk-core.git@a150da5#egg=Superdesk-Core
 
-# Superdeks-Planning 1.8.0-rc1 - https://github.com/superdesk/superdesk-core/commits/1.8
-git+git://github.com/superdesk/superdesk-planning.git@3803e31#egg=superdesk-planning
+# Superdeks-Planning 1.8.0-rc2 - https://github.com/superdesk/superdesk-core/commits/1.8
+git+git://github.com/superdesk/superdesk-planning.git@fc397ec#egg=superdesk-planning
 
 git+git://github.com/superdesk/superdesk-analytics.git@69011cb#egg=superdesk-analytics

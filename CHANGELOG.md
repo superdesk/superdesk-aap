@@ -1,6 +1,6 @@
 # Superdesk AAP Changelog
 
-## [1.30.1-rc1] Not released yet
+## [1.30.1-rc2] Not released yet
 ### AAP-Superdesk Change Log
 #### Features
 - None
@@ -17,7 +17,7 @@
 - None
 
 #### Improvements
-- None
+- [SDESK-4708] Create filter condition on on existence of featuremedia (superdesk/superdesk-core#1691)
 
 ### Fixes
 - [SDESK-4728] Prevent out-of-sequence publishing of Updates (superdesk/superdesk-core#1681)
@@ -27,7 +27,7 @@
 - None
 
 #### Improvements
-- None
+- [SDESK-4708] Create filter condition on on existence of featuremedia (superdesk/superdesk-client-core#3152)
 
 #### Fixes
 - Node sass update, list item fix (superdesk/superdesk-client-core#3041)
@@ -44,6 +44,7 @@
 - [SDESK-4668] Introduce configuration for the main left hand side toolbar (superdesk/superdesk-planning#1336)
 - [SDESK-4701] Align collapse box close button left and next to three-dot button (superdesk/superdesk-planning#1348)
 - [SDBELGA-186] control via article template where generated content is inserted (superdesk/superdesk-planning#1354)
+- [SDESK-4756] Provide browser time accesibility to events download templates (superdesk/superdesk-planning#1357)
 
 #### Fixes
 - [SDESK-4514] reopen editor if required when item is added to featured stories (superdesk/superdesk-planning#1331)
@@ -56,6 +57,8 @@
 - (fix) Place superdesk-core in peerDependencies and update Typescript version (superdesk/superdesk-planning#1351)
 - [SDNTB-589] (fix): Cannot perform reschedule or convert to recurring on events. (superdesk/superdesk-planning#1352)
 - fix duplicate by on slack notification (superdesk/superdesk-planning#1339)
+- [SDESK-4757] 'Abstract' from news item was missing when planning item was exported as article (superdesk/superdesk-planning#1358)
+- [SDESK-4648] User asked for saving changes when an event is not edited (superdesk/superdesk-planning#1359)
 
 
 ## [1.30] 2019-09-20
