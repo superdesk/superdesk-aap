@@ -45,6 +45,8 @@ URL_PREFIX = server_url.path.lstrip('/') or ''
 if SERVER_NAME.endswith(':80'):
     SERVER_NAME = SERVER_NAME[:-3]
 
+DEFAULT_TIMEZONE = env('DEFAULT_TIMEZONE', 'Australia/Sydney')
+
 INSTALLED_APPS = [
     'apps.auth',
     'superdesk.roles',
@@ -254,19 +256,25 @@ AUTO_PUBLISH_CONTENT_PROFILE = False
 PLANNING_EXPIRY_MINUTES = int(env('PLANNING_EXPIRY_MINUTES', 4320))
 
 # Delete spiked events/plannings after their scheduled date
-PLANNING_DELETE_SPIKED_MINUTES = int(env('PLANNING_DELETE_SPIKED_MINUTES', 4320))
+PLANNING_DELETE_SPIKED_MINUTES = int(env('PLANNING_DELETE_SPIKED_MINUTES', 1440))
 
 #: The number of minutes before Publish Queue is purged
 PUBLISH_QUEUE_EXPIRY_MINUTES = int(env('PUBLISH_QUEUE_EXPIRY_MINUTES', 3 * 24 * 60))
 
 #: The number of minutes since the last update of the Mongo auth object after which it will be deleted
-SESSION_EXPIRY_MINUTES = int(env('SESSION_EXPIRY_MINUTES', 240))
+SESSION_EXPIRY_MINUTES = int(env('SESSION_EXPIRY_MINUTES', 740))
 
-#: The number of minutes before ingest items are purged
-INGEST_EXPIRY_MINUTES = int(env('INGEST_EXPIRY_MINUTES', 2 * 24 * 60))
+#: The number of minutes before ingest items are purged (3 days)
+INGEST_EXPIRY_MINUTES = int(env('INGEST_EXPIRY_MINUTES', 3 * 24 * 60))
 
 #: The number of minutes before audit content is purged
 AUDIT_EXPIRY_MINUTES = int(env('AUDIT_EXPIRY_MINUTES', 43200))
+
+#: The number records to be fetched for expiry.
+MAX_EXPIRY_QUERY_LIMIT = int(env('MAX_EXPIRY_QUERY_LIMIT', 1000))
+
+#: INGEST_ARTICLES_TTL
+DAYS_TO_KEEP = int(env('DAYS_TO_KEEP', '3'))
 
 with open(os.path.join(os.path.dirname(__file__), 'picture-profile.json')) as profile_json:
     picture_profile = json.load(profile_json)
@@ -338,7 +346,7 @@ VICTORIAN_TRANSPORT_SIGNATURE = env('VICTORIAN_TRANSPORT_SIGNATURE', '')
 
 QLD_TRAFFIC_API_KEY = env('QLD_TRAFFIC_API_KEY', '')
 
-PLANNING_AUTO_ASSIGN_TO_WORKFLOW = strtobool(env('PLANNING_AUTO_ASSIGN_TO_WORKFLOW', 'false'))
+PLANNING_AUTO_ASSIGN_TO_WORKFLOW = strtobool(env('PLANNING_AUTO_ASSIGN_TO_WORKFLOW', 'true'))
 
 LONG_EVENT_DURATION_THRESHOLD = int(env('LONG_EVENT_DURATION_THRESHOLD', 4))
 
@@ -348,12 +356,23 @@ PLANNING_LINK_UPDATES_TO_COVERAGES = strtobool(env('PLANNING_LINK_UPDATES_TO_COV
 
 PLANNING_FULFIL_ON_PUBLISH_FOR_DESKS = env(
     'PLANNING_FULFIL_ON_PUBLISH_FOR_DESKS',
-    '54e68fcd1024542de76d6643,54e691ca1024542de640fef1,54e6928d1024542de640fef5,5768dd55a5398f5efb985e19,5768ddc2a5398f5efa2cda65,57b0f07ea5398f41862b951e'  # noqa: E501
+    '54e68fcd1024542de76d6643,'  # News
+    '54e691ca1024542de640fef1,'  # Finance
+    '54e6928d1024542de640fef5,'  # Sport
+    '5768dd55a5398f5efb985e19,'  # World News
+    '5768ddc2a5398f5efa2cda65,'  # News Extra
+    '57b0f07ea5398f41862b951e'  # Court Production
 )
 
 PLANNING_EVENT_TEMPLATES_ENABLED = strtobool(env('PLANNING_EVENT_TEMPLATES_ENABLED', 'false'))
 
-WORLDVIEW_TARGET_SUBSCRIBERS = env('WORLDVIEW_TARGET_SUBSCRIBERS', '5c08aff98e64b91845e0dcdb,5becd97b66f3e17e4e3ae4cc') # noqa:
+WORLDVIEW_TARGET_SUBSCRIBERS = env(
+    'WORLDVIEW_TARGET_SUBSCRIBERS',
+    '5c08aff98e64b91845e0dcdb,'  # System - Newsroom - AAPX Content (Production)
+    '5becd97b66f3e17e4e3ae4cc'  # System - Marketplace Test (UAT)
+)
+
+PLANNING_ALLOW_SCHEDULED_UPDATES = strtobool(env('PLANNING_ALLOW_SCHEDULED_UPDATES', 'true'))
 
 try:
     from aap_settings import *  # noqa
