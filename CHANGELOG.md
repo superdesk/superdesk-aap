@@ -1,5 +1,38 @@
 # Superdesk AAP Changelog
 
+## [1.30.2-rc1] Not relased yet
+### AAP-Superdesk Changelog
+- [SDESK-4702] Update settings.py for base AAP settings (#784)
+- [SDESK-4765] Add relay feeding service for AP images (#785)
+- fix(abs macro) The ABS moved the token from the URL to the HTTP headers (#786)
+
+### Superdesk-Core Change Log (v1.30.1)
+- None
+
+### Superdesk-Client-Core Change Log (v1.30.4)
+- None
+
+### Superdesk Planning Change Log (v1.9.0-rc1)
+#### Features
+- [SDESK-4560] Cherry-picking scheduled_updates feature to master (superdesk/superdesk-planning#1366)
+  - [SDESK-4561] Coverage forward updates (superdesk/superdesk-planning#1293)
+  - [SDESK-4647] Item actions for Scheduled Updates (superdesk/superdesk-planning#1316)
+  - [SDESK-4562] Logically constrain the scheduling of planned updates to a coverage (superdesk/superdesk-planning#1324)
+  - [SDESK-4563][SDESK-4564] Scheduled updates linking and unlinking features (superdesk/superdesk-planning#1332)
+  - [SDESK-4727] Editor related bugs in Scheduled Updates creation (superdesk/superdesk-planning#1349)
+  - [SDESK-4730] Changes to scheduled_updates feature and merging information to newsroom (superdesk/superdesk-planning#1353)
+  - [SDESK-4758] Fixes to scheduled_updates feature (superdesk/superdesk-planning#1364)
+
+#### Improvements
+- feat(dropdown): Improved behaviour for dropdown, added groups (superdesk/superdesk-planning#1361)
+- [SDNTB-604] Move NTB related feed parser and formatter from planning to NTB repo (superdesk/superdesk-planning#1363)
+- [SDBELGA-148] implement add coverages advanced modal (superdesk/superdesk-planning#1370)
+
+#### Fixes
+- [SDESK-4745] Correct the label for news value in planning preview (superdesk/superdesk-planning#1365)
+- [SDESK-4771] Unable to change coverage schedule from 'To Be Confirmed' to default value (superdesk/superdesk-planning#1369)
+- [SDESK-4774] Event links getting a null value when editing (superdesk/superdesk-planning#1368)
+
 ## [1.30.1] 2019-10-17
 ### AAP-Superdesk Change Log
 #### Features

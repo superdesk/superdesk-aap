@@ -16,7 +16,7 @@ requests<2.22
 # Superdeks-Core 1.30 - https://github.com/superdesk/superdesk-core/commits/1.30
 git+git://github.com/superdesk/superdesk-core.git@a150da5#egg=Superdesk-Core
 
-# Superdeks-Planning 1.8.0 - https://github.com/superdesk/superdesk-core/commits/1.8
-git+git://github.com/superdesk/superdesk-planning.git@4a1eee8#egg=superdesk-planning
+# Superdeks-Planning 1.9.0-rc1 - https://github.com/superdesk/superdesk-core/commits/1.9
+git+git://github.com/superdesk/superdesk-planning.git@d4ace9a#egg=superdesk-planning
 
 git+git://github.com/superdesk/superdesk-analytics.git@69011cb#egg=superdesk-analytics
