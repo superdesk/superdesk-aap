@@ -42,7 +42,7 @@ logger = logging.getLogger(__name__)
 def expand_token(token, item, template_map):
     url_prefix = app.config.get('ABS_WEB_SERVICE_URL')
     abs_web_service_token = app.config.get('ABS_WEB_SERVICE_TOKEN')
-    url_suffix = '/all?dimensionAtObservation=allDimensions&detail=DataOnly&APIKey='
+    url_suffix = '/all?dimensionAtObservation=allDimensions&detail=DataOnly'
 
     # convert the token in the item to one that is jinja compliant
     jinja_token = re.sub('\\.|/|\\+|#', '_', token)
@@ -59,10 +59,11 @@ def expand_token(token, item, template_map):
         return
 
     data_identifier = token_map.get(token).split('#')[0] if '#' in token_map.get(token) else token_map.get(token)
-    # logger.info('ABS request : {}'.format(url_prefix + data_identifier + url_suffix + abs_web_service_token))
-    r = requests.get(url_prefix + data_identifier + url_suffix + abs_web_service_token, verify=False)
+    logger.info('ABS request : {}'.format(url_prefix + data_identifier + url_suffix))
+    r = requests.get(url_prefix + data_identifier + url_suffix, headers={'x-api-key': abs_web_service_token},
+                     verify=False)
     if r.status_code == 200:
-        # logger.info('Response Text [{}]'.format(r.text))
+        logger.info('Response Text [{}]'.format(r.text))
         try:
             response = json.loads(r.text)
         except:
