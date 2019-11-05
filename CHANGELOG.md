@@ -1,10 +1,11 @@
 # Superdesk AAP Changelog
 
-## [1.30.2-rc1] Not relased yet
+## [1.30.2-rc2] Not relased yet
 ### AAP-Superdesk Changelog
 - [SDESK-4702] Update settings.py for base AAP settings (#784)
 - [SDESK-4765] Add relay feeding service for AP images (#785)
 - fix(abs macro) The ABS moved the token from the URL to the HTTP headers (#786)
+- Revert "(fix): SMSReport tests failing due to Prague daylight savings" (#788)
 
 ### Superdesk-Core Change Log (v1.30.1)
 - None
@@ -12,7 +13,7 @@
 ### Superdesk-Client-Core Change Log (v1.30.4)
 - None
 
-### Superdesk Planning Change Log (v1.9.0-rc1)
+### Superdesk Planning Change Log (v1.9.0-rc2)
 #### Features
 - [SDESK-4560] Cherry-picking scheduled_updates feature to master (superdesk/superdesk-planning#1366)
   - [SDESK-4561] Coverage forward updates (superdesk/superdesk-planning#1293)
@@ -22,6 +23,7 @@
   - [SDESK-4727] Editor related bugs in Scheduled Updates creation (superdesk/superdesk-planning#1349)
   - [SDESK-4730] Changes to scheduled_updates feature and merging information to newsroom (superdesk/superdesk-planning#1353)
   - [SDESK-4758] Fixes to scheduled_updates feature (superdesk/superdesk-planning#1364)
+  - [SDESK-4793] Removing assignment in a scheduled update chain should remove all assignments (superdesk/superdesk-planning#1376)
 
 #### Improvements
 - feat(dropdown): Improved behaviour for dropdown, added groups (superdesk/superdesk-planning#1361)
@@ -32,6 +34,22 @@
 - [SDESK-4745] Correct the label for news value in planning preview (superdesk/superdesk-planning#1365)
 - [SDESK-4771] Unable to change coverage schedule from 'To Be Confirmed' to default value (superdesk/superdesk-planning#1369)
 - [SDESK-4774] Event links getting a null value when editing (superdesk/superdesk-planning#1368)
+- [SDESK-4760] Planning Export dialog is showing all Agendas (superdesk/superdesk-planning#1372)
+- [SDESK-4692] Posting a Planning item should post the entire series of Events (superdesk/superdesk-planning#1371)
+- [SDBELGA-148] fix coverage duplication in advanced mode (superdesk/superdesk-planning#1374)
+- [SDNTB-613] Fix buggy behaviour when trying to remove subjects from event and planning item (superdesk/superdesk-planning#1373)
+- [SDESK-4714] Always open preview when clicking in-app Assignment notification (superdesk/superdesk-planning#1375)
+- [SDESK-4692] (fix): Dont show PostEvent modal when saving Planning item (superdesk/superdesk-planning#1377)
+- [SDESK-4741] Scroll issue in the Manage Events & Planning Filters window (superdesk/superdesk-planning#1378)
+- [SDESK-4620] Display all affected Planning items when cancelling an Event (superdesk/superdesk-planning#1380)
+
+### Superdesk Analytics Change Log (v1.7.2)
+#### Improvements
+- [SDESK-4779] Add subject to publishing based reports (superdesk/superdesk-analytics#111)
+
+#### Fixes
+- Set cores to Superdesk v1.30 (superdesk/superdesk-analytics#108)
+- (fix): rewritten_by was not being cleared in stats (superdesk/superdesk-analytics#110)
 
 ## [1.30.1] 2019-10-17
 ### AAP-Superdesk Change Log
