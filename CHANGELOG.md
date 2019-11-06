@@ -1,6 +1,6 @@
 # Superdesk AAP Changelog
 
-## [1.30.2-rc2] Not relased yet
+## [1.30.2] 2019-11-06
 ### AAP-Superdesk Changelog
 - [SDESK-4702] Update settings.py for base AAP settings (#784)
 - [SDESK-4765] Add relay feeding service for AP images (#785)
@@ -11,9 +11,10 @@
 - None
 
 ### Superdesk-Client-Core Change Log (v1.30.4)
-- None
+#### Fixes
+- [SDESK-4798] 'Associated as update' not prompting to link to scheduled_update (superdesk/superdesk-client-core#3190)
 
-### Superdesk Planning Change Log (v1.9.0-rc2)
+### Superdesk Planning Change Log (v1.9.0)
 #### Features
 - [SDESK-4560] Cherry-picking scheduled_updates feature to master (superdesk/superdesk-planning#1366)
   - [SDESK-4561] Coverage forward updates (superdesk/superdesk-planning#1293)
