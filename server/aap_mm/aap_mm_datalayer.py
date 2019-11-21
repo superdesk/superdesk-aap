@@ -26,6 +26,7 @@ from superdesk.media.media_operations import process_file_from_stream, decode_me
 from superdesk.media.renditions import generate_renditions, delete_file_on_error, get_renditions_spec
 from superdesk.metadata.item import ITEM_TYPE, CONTENT_TYPE
 from superdesk.utc import utcnow
+from titlecase import titlecase
 
 urllib3.disable_warnings()
 
@@ -69,6 +70,21 @@ class AAPMMDatalayer(DataLayer):
         self._username = None
         self._password = None
         self._http = urllib3.PoolManager()
+
+    def _set_byline(self, out_doc, in_doc):
+        """
+        Set the byline for the image as follows :-
+        Photos that are credit AAP get the byline set to that real byline suffixed with AAP PHOTOS, for photos from
+        other sources just get the credit suffixed with PHOTO
+
+        :param out_doc:
+        :param in_doc:
+        :return:
+        """
+        if in_doc.get('Credit', '').upper().startswith('AAP'):
+            out_doc['byline'] = titlecase(in_doc.get('Byline', '')) + '/AAP PHOTOS'
+        else:
+            out_doc['byline'] = in_doc.get('Credit', '').upper() + ' PHOTO'
 
     def find(self, resource, req, lookup):
         """
@@ -188,7 +204,7 @@ class AAPMMDatalayer(DataLayer):
             }
 
         new_doc['slugline'] = doc['Title']
-        new_doc['byline'] = doc['Byline']
+        self._set_byline(new_doc, doc)
         new_doc['ednote'] = doc['SpecialInstructions']
         doc.clear()
         doc.update(new_doc)
