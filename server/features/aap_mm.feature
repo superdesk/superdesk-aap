@@ -33,7 +33,7 @@ Feature: AAP Multimedia Feature
       		  "ingest_id": "20150329001116807745",
       		  "operation": "fetch",
       		  "sign_off": "abc",
-      		  "byline": "JULIAN SMITH",
+      		  "byline": "Julian Smith/AAP PHOTOS",
       		  "firstcreated": "2015-03-29T08:49:44+0000"
       	  }
         ]}
