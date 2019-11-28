@@ -82,7 +82,8 @@
         "byline": {
             "order": 15,
             "sdWidth": "full",
-            "displayOnMediaEditor": true
+            "displayOnMediaEditor": true,
+            "required": true
         }
     },
     "schema": {
@@ -165,7 +166,6 @@
             "nullable": true
         },
         "headline": {
-            "required": false,
             "nullable": false,
             "type": "string",
             "required": true,
@@ -194,7 +194,7 @@
         },
         "byline": {
             "type": "string",
-            "required": false,
+            "required": true,
             "nullable": true
         },
         "renditions" : {
