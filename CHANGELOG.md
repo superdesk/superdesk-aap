@@ -1,5 +1,38 @@
 # Superdesk AAP Changelog
 
+## [1.30.3-rc1] Not released yet
+### AAP-Superdesk Changelog
+- [SDESK-4288] Format the image byline from DC (#792)
+- [SDESK-4845] Make byline mandatory for images (#793)
+- [SDESK-4848] Macro to retrieve weather data from the BOM (#794)
+
+### Superdesk-Core Change Log (v1.30.1)
+- [SDESK-4814] fix the feed query, request all versions, allow point in time recovery (superdesk/superdesk-core#1725)
+- [SDESK-4766] Add 'contact_type' to Contacts resource (superdesk/superdesk-core#1727)
+
+### Superdesk-Client-Core Change Log (v1.30.4)
+- [SDESK-4766] Allow a Contact to have a 'contact_type' (superdesk/superdesk-client-core#3212)
+
+### Superdesk Planning Change Log (v1.10.0-rc1)
+#### Features
+- [SDESK-4766] Assign coverages to assignable media contacts (superdesk/superdesk-planning#1389)
+
+#### Improvements
+- [SDESK-4734] Confirmation on completing event (superdesk/superdesk-planning#1382)
+- [SDESK-4721] Save location directly from location popup (superdesk/superdesk-planning#1386)
+- [SDBELGA-220] improvements for quick creation of coverages (superdesk/superdesk-planning#1388) 
+- [SDESK-4722] Add no result indication in location manager and set sort order on empty search (superdesk/superdesk-planning#1390)
+- [SDESK-4807] Event templates privilege (superdesk/superdesk-planning#1394)
+
+#### Fixes
+- [SDESK-4723] Improve stability when searching locations (superdesk/superdesk-planning#1384)
+- [SDNTB-589] Use default timezone for rescheduling events if there is no timezone in event (superdesk/superdesk-planning#1385)
+- [SDESK-4735] Infinite loading when unlocking an event thats being edited in popup (superdesk/superdesk-planning#1387)
+- [SDESK-4389] Remove repeated 'by' in planning history tab (superdesk/superdesk-planning#1391)
+- [SDESK-4772] Avoid planning lists' scroll position from jumping to start on item notifications (superdesk/superdesk-planning#1392)
+- [SDESK-4806] Event templates were not saving 'category' field (superdesk/superdesk-planning#1393)
+- [SDBELGA-220] validate coverage in add advanced modal (superdesk/superdesk-planning#1395)
+
 ## [1.30.2] 2019-11-06
 ### AAP-Superdesk Changelog
 - [SDESK-4702] Update settings.py for base AAP settings (#784)
