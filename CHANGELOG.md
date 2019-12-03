@@ -1,6 +1,6 @@
 # Superdesk AAP Changelog
 
-## [1.30.3-rc1] Not released yet
+## [1.30.3-rc2] Not released yet
 ### AAP-Superdesk Changelog
 - [SDESK-4288] Format the image byline from DC (#792)
 - [SDESK-4845] Make byline mandatory for images (#793)
@@ -12,8 +12,9 @@
 
 ### Superdesk-Client-Core Change Log (v1.30.4)
 - [SDESK-4766] Allow a Contact to have a 'contact_type' (superdesk/superdesk-client-core#3212)
+- [SDESK-4766][SDESK-4857] Fix validation with Media Contact email (superdesk/superdesk-client-core#3238)
 
-### Superdesk Planning Change Log (v1.10.0-rc1)
+### Superdesk Planning Change Log (v1.10.0-rc2)
 #### Features
 - [SDESK-4766] Assign coverages to assignable media contacts (superdesk/superdesk-planning#1389)
 
@@ -32,6 +33,7 @@
 - [SDESK-4772] Avoid planning lists' scroll position from jumping to start on item notifications (superdesk/superdesk-planning#1392)
 - [SDESK-4806] Event templates were not saving 'category' field (superdesk/superdesk-planning#1393)
 - [SDBELGA-220] validate coverage in add advanced modal (superdesk/superdesk-planning#1395)
+- [SDESK-4766] Remove 'Start Working' for external coverages (superdesk/superdesk-planning#1397)
 
 ## [1.30.2] 2019-11-06
 ### AAP-Superdesk Changelog
