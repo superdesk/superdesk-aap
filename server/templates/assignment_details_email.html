@@ -30,6 +30,12 @@
         <b><a href="https://www.google.com.au/maps/?q={{ event.location[0]|formatted_address(seperator='%20') }}">Location:</a></b><br>
         {{ event.location[0]|formatted_address(seperator='<br>') }}
     </p>
+        {% if event.location[0].details and event.location[0].details[0] %}
+            <p>
+            <i><strong><font color="red">i</font></strong></i>&nbsp;<b>Note:</b><br>
+            {{ event.location[0].details[0].replace('\n', '<br>') }}
+            </p>
+        {% endif %}
     {% if event.links %}
     <p>
         <b>Links:</b><br>
