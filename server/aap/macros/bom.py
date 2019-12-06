@@ -52,16 +52,30 @@ observation_files = {'NSW': 'IDN60920.xml',
                      'WA': 'IDW60920.xml'}
 
 
-def forecast_story(item, **kwargs):
+def _get_file(filename):
+    retries = 0
+    while True:
+        try:
+            raw = BytesIO()
+            with ftp_connect({'username': app.config.get('BOM_WEATHER_FTP_USERNAME', ''),
+                              'password': app.config.get('BOM_WEATHER_FTP_PASSWORD', ''),
+                              'host': 'ftp.bom.gov.au',
+                              'path': 'fwo'}) as ftp:
+                ftp.retrbinary('RETR ' + filename, raw.write)
+        except:
+            logger.exception('Failed to download on attempt {} file: {}'.format(retries, filename), exc_info=True)
+            retries += 1
+            if retries < 3:
+                continue
+            else:
+                logger.exception('Retries exceeded downloading {}'.format(filename))
+                raise
+        break
 
-    def _get_file(filename):
-        raw = BytesIO()
-        with ftp_connect({'username': app.config.get('BOM_WEATHER_FTP_USERNAME', ''),
-                          'password': app.config.get('BOM_WEATHER_FTP_PASSWORD', ''),
-                          'host': 'ftp.bom.gov.au',
-                          'path': 'fwo'}) as ftp:
-            ftp.retrbinary('RETR ' + filename, raw.write)
-        return raw.getvalue()
+    return raw.getvalue()
+
+
+def forecast_story(item, **kwargs):
 
     def _get_forecast(state):
         return _get_file(forecast_files.get(state))
