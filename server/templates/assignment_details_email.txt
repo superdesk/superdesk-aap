@@ -29,6 +29,10 @@ Slugline: {{ slugline }}
     
     Location:
     {{ event.location[0]|formatted_address(seperator='\n    ') }}
+    {% if event.location[0].details and event.location[0].details[0] %}
+        Note:
+            {{ event.location[0].details[0].replace('\n', '\n           ') }}
+    {% endif %}
     {% if event.links %}
     
         Links:
