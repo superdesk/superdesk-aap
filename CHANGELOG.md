@@ -1,6 +1,6 @@
 # Superdesk AAP Changelog
 
-## [1.30.3-rc2] Not released yet
+## [1.30.3-rc3] Not released yet
 ### AAP-Superdesk Changelog
 - [SDESK-4288] Format the image byline from DC (#792)
 - [SDESK-4845] Make byline mandatory for images (#793)
@@ -9,12 +9,13 @@
 ### Superdesk-Core Change Log (v1.30.1)
 - [SDESK-4814] fix the feed query, request all versions, allow point in time recovery (superdesk/superdesk-core#1725)
 - [SDESK-4766] Add 'contact_type' to Contacts resource (superdesk/superdesk-core#1727)
+- [SDESK-4766] Data update for ContentType/CoverageProvider CVs (superdesk/superdesk-core#1745)
 
 ### Superdesk-Client-Core Change Log (v1.30.4)
 - [SDESK-4766] Allow a Contact to have a 'contact_type' (superdesk/superdesk-client-core#3212)
 - [SDESK-4766][SDESK-4857] Fix validation with Media Contact email (superdesk/superdesk-client-core#3238)
 
-### Superdesk Planning Change Log (v1.10.0-rc2)
+### Superdesk Planning Change Log (v1.10.0-rc3)
 #### Features
 - [SDESK-4766] Assign coverages to assignable media contacts (superdesk/superdesk-planning#1389)
 
@@ -24,6 +25,7 @@
 - [SDBELGA-220] improvements for quick creation of coverages (superdesk/superdesk-planning#1388) 
 - [SDESK-4722] Add no result indication in location manager and set sort order on empty search (superdesk/superdesk-planning#1390)
 - [SDESK-4807] Event templates privilege (superdesk/superdesk-planning#1394)
+- [SDESK-4846] Add notes to locations (superdesk/superdesk-planning#1398)
 
 #### Fixes
 - [SDESK-4723] Improve stability when searching locations (superdesk/superdesk-planning#1384)
@@ -34,6 +36,8 @@
 - [SDESK-4806] Event templates were not saving 'category' field (superdesk/superdesk-planning#1393)
 - [SDBELGA-220] validate coverage in add advanced modal (superdesk/superdesk-planning#1395)
 - [SDESK-4766] Remove 'Start Working' for external coverages (superdesk/superdesk-planning#1397)
+- [SDESK-4846] Styling changes to location details (superdesk/superdesk-planning#1399)
+- [SDESK-4766] UX improvements for coverage provider contact (superdesk/superdesk-planning#1400)
 
 ## [1.30.2] 2019-11-06
 ### AAP-Superdesk Changelog
