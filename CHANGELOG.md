@@ -1,6 +1,6 @@
 # Superdesk AAP Changelog
 
-## [1.30.3-rc3] Not released yet
+## [1.30.3] 2019-12-12
 ### AAP-Superdesk Changelog
 - [SDESK-4288] Format the image byline from DC (#792)
 - [SDESK-4845] Make byline mandatory for images (#793)
@@ -15,7 +15,7 @@
 - [SDESK-4766] Allow a Contact to have a 'contact_type' (superdesk/superdesk-client-core#3212)
 - [SDESK-4766][SDESK-4857] Fix validation with Media Contact email (superdesk/superdesk-client-core#3238)
 
-### Superdesk Planning Change Log (v1.10.0-rc3)
+### Superdesk Planning Change Log (v1.10.0)
 #### Features
 - [SDESK-4766] Assign coverages to assignable media contacts (superdesk/superdesk-planning#1389)
 
