@@ -60,6 +60,9 @@ class AAPNewsroomNinjsFormatter(NewsroomNinjsFormatter):
             if article.get('type') == 'picture':
                 ninjs['description_text'] = article.get('description_text', '')
 
+        if article.get('anpa_take_key'):
+            ninjs['anpa_take_key'] = article['anpa_take_key']
+
         # Replace such things as smart quotes to ensure that the usage of quotes is consistent within the article
         for f in self.clean_fields:
             if ninjs.get(f):
