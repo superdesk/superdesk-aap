@@ -154,7 +154,7 @@ class AAPNINJSFormatterTest(TestCase):
         seq, doc = self.formatter.format(article, {'_id': 1, 'name': 'Test Subscriber'})[0]
         expected = {"guid": "urn:newsml:localhost:2017-08-31T11:40:29.408059:fd448b37-f35d-4bb2-a565-2433dcf1c338",
                     "headline": "'Article Headline'", "description_text": "\"Article abstract\"", "language": "en",
-                    "located": "Milton Keynes",
+                    "located": "Milton Keynes", "anpa_take_key": "takekey",
                     "ednote": "Article ed note", "source": "AAP", "firstcreated": "2017-08-31T01:40:29.000Z",
                     "description_html": "<p>\"Article abstract\"</p>", "byline": "Article Byline", "charcount": 14,
                     "body_html": "<p>\"Article Body\"</p>", "slugline": "Article Slugline",
@@ -243,7 +243,8 @@ class AAPNINJSFormatterTest(TestCase):
                     'urgency': 3,
                     'version': '2',
                     'versioncreated': '2017-08-31T01:44:24.000Z',
-                    'wordcount': 29}
+                    'wordcount': 29,
+                    "anpa_take_key": "takekey"}
         self.assertEqual(expected, json.loads(doc))
 
     def test_fs_path_guid(self):
