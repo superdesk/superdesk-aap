@@ -195,6 +195,9 @@ DEFAULT_URGENCY_VALUE_FOR_MANUAL_ARTICLES = int(env('DEFAULT_URGENCY_VALUE_FOR_M
 DEFAULT_GENRE_VALUE_FOR_MANUAL_ARTICLES = [{'qcode': 'Article', 'name': 'Article'}]
 RESET_PRIORITY_VALUE_FOR_UPDATE_ARTICLES = json.loads(env('RESET_PRIORITY_VALUE_FOR_UPDATE_ARTICLES', 'True').lower())
 
+#: Defines default qcodes (comma separated) for category for ingested and auto published articles
+DEFAULT_CATEGORY_QCODES_FOR_AUTO_PUBLISHED_ARTICLES = 'a'
+
 # This value gets injected into NewsML 1.2 and G2 output documents.
 NEWSML_PROVIDER_ID = 'aap.com.au'
 ORGANIZATION_NAME = 'Australian Associated Press'
