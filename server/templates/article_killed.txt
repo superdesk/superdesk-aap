@@ -9,6 +9,6 @@
     {{body | striptags}}
 
 Regards,
-Mike Osborne Editor
+Andrew Drummond, Editor
 
 
