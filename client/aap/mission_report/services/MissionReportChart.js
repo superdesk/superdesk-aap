@@ -151,6 +151,43 @@ export function MissionReportChart(_, gettext, moment, chartConfig, $q, metadata
         return chart.genConfig();
     };
 
+    this.genTableConfig = ({
+        id,
+        title,
+        items,
+        fields,
+    }) => {
+        const chart = new SDChart.Chart({
+            id: id,
+            title: title,
+            chartType: 'table',
+            defaultConfig: chartConfig.defaultConfig,
+        });
+
+        const axis = chart.addAxis()
+            .setOptions({
+                defaultChartType: 'table',
+                xTitle: 'Sent',
+                includeTotal: false,
+                categories: _.map(items, (item) => moment(
+                    _.get(item, 'versioncreated') ||
+                    _.get(item, '_updated')
+                ).format('DD/MM/YYYY HH:mm')),
+            });
+
+        fields.forEach((field) => {
+            axis.addSeries()
+                .setOptions({
+                    name: field[0],
+                    data: _.map(items, (item) => (
+                        _.get(item, field[1]) || ''
+                    )),
+                });
+        });
+
+        return chart.genConfig();
+    };
+
     /**
      * @ngdoc method
      * @name MissionReportChart#genCorrectionsChart
@@ -159,27 +196,16 @@ export function MissionReportChart(_, gettext, moment, chartConfig, $q, metadata
      * @description Generate the table displaying the corrections
      */
     this.genCorrectionsChart = (data) => {
-        const numCorrections = _.get(data, 'corrections.length') || 0;
+        const corrections = _.get(data, 'corrections') || [];
+        const numCorrections = corrections.length;
+        const title = `There were ${numCorrections} corrections issued`;
 
-        const rows = (_.get(data, 'corrections') || [])
-            .map((correction) => ([
-                moment(
-                    _.get(correction, 'versioncreated') ||
-                    _.get(correction, '_updated')
-                ).format('DD/MM/YYYY HH:mm'),
-                _.get(correction, 'slugline') || '',
-                _.get(correction, 'anpa_take_key') || '',
-                _.get(correction, 'ednote') || '',
-            ]));
-
-        return {
+        return this.genTableConfig({
             id: 'mission_report_corrections',
-            type: 'table',
-            chart: {type: 'column'},
-            headers: ['Sent', 'Slugline', 'TakeKey', 'Ednote'],
-            title: `There were ${numCorrections} corrections issued`,
-            rows: rows,
-        }
+            title: title,
+            items: corrections,
+            fields: [['Slugline', 'slugline'], ['TakeKey', 'anpa_take_key'], ['Ednote', 'ednote']]
+        });
     };
 
     /**
@@ -190,26 +216,16 @@ export function MissionReportChart(_, gettext, moment, chartConfig, $q, metadata
      * @description Generate the table displaying the kills
      */
     this.genKillsChart = (data) => {
-        const numKills = _.get(data, 'kills.length') || 0;
+        const kills = _.get(data, 'kills') || [];
+        const numKills = kills.length;
+        const title = `There were ${numKills} kills issued`;
 
-        const rows = (_.get(data, 'kills') || [])
-            .map((kill) => ([
-                moment(
-                    _.get(kill, 'versioncreated') ||
-                    _.get(kill, '_updated')
-                ).format('DD/MM/YYYY HH:mm'),
-                _.get(kill, 'slugline') || '',
-                _.get(kill, '_reasons') || '',
-            ]));
-
-        return {
+        return this.genTableConfig({
             id: 'mission_report_kills',
-            type: 'table',
-            chart: {type: 'column'},
-            headers: ['Sent', 'Slugline', 'Reasons'],
-            title: `There were ${numKills} kills issued`,
-            rows: rows,
-        }
+            title: title,
+            items: kills,
+            fields: [['Slugline', 'slugline'], ['Reasons', '_reasons']]
+        });
     };
 
     /**
@@ -220,26 +236,16 @@ export function MissionReportChart(_, gettext, moment, chartConfig, $q, metadata
      * @description Generate the table displaying the takedowns
      */
     this.genTakedownsChart = (data) => {
-        const numTakedowns = _.get(data, 'takedowns.length') || 0;
+        const takedowns = _.get(data, 'takedowns') || [];
+        const numTakedowns = takedowns.length;
+        const title = `There were ${numTakedowns} takedowns issued`;
 
-        const rows = (_.get(data, 'takedowns') || [])
-            .map((takedown) => ([
-                moment(
-                    _.get(takedown, 'versioncreated') ||
-                    _.get(takedown, '_updated')
-                ).format('DD/MM/YYYY HH:mm'),
-                _.get(takedown, 'slugline') || '',
-                _.get(takedown, '_reasons') || '',
-            ]));
-
-        return {
+        return this.genTableConfig({
             id: 'mission_report_takedowns',
-            type: 'table',
-            chart: {type: 'column'},
-            headers: ['Sent', 'Slugline', 'Reasons'],
-            title: `There were ${numTakedowns} takedowns issued`,
-            rows: rows,
-        }
+            title: title,
+            items: takedowns,
+            fields: [['Slugline', 'slugline'], ['Reasons', '_reasons']]
+        });
     };
 
     /**
