@@ -379,6 +379,16 @@ WORLDVIEW_TARGET_SUBSCRIBERS = env(
 )
 
 PLANNING_ALLOW_SCHEDULED_UPDATES = strtobool(env('PLANNING_ALLOW_SCHEDULED_UPDATES', 'true'))
+PLANNING_USE_XMP_FOR_PIC_ASSIGNMENTS = strtobool(env('PLANNING_USE_XMP_FOR_PIC_ASSIGNMENTS', 'true'))
+PLANNING_XMP_ASSIGNMENT_MAPPING = {
+    'xpath': '//x:xmpmeta/rdf:RDF/rdf:Description',
+    'namespaces': {
+        'x': 'adobe:ns:meta/',
+        'rdf': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
+        'photoshop': 'http://ns.adobe.com/photoshop/1.0/'
+    },
+    'atribute_key': '{http://ns.adobe.com/photoshop/1.0/}TransmissionReference'
+}
 
 try:
     from aap_settings import *  # noqa
