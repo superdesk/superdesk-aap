@@ -11,7 +11,7 @@
 from superdesk.metadata.item import FORMATS, FORMAT, CONTENT_STATE, ITEM_STATE, ITEM_TYPE, CONTENT_TYPE
 import logging
 from superdesk.etree import parse_html
-from superdesk.utc import utcnow
+from superdesk.utc import utcnow, get_date
 from copy import deepcopy
 from datetime import datetime
 from aap.utils import set_dateline
@@ -88,7 +88,19 @@ def process_victorian_harness_racing(item, **kwargs):
             if tag.text.startswith('VENUE: '):
                 venue = tag.text.replace('VENUE: ', '')
             elif tag.text.startswith('DATE: '):
-                meeting_date = datetime.strptime(tag.text.replace('DATE: ', '').strip(' '), '%d/%m/%y')
+                try:
+                    meeting_date = datetime.strptime(tag.text.replace('DATE: ', '').replace(' ', ''), '%d/%m/%y')
+                except Exception:
+                    logger.warning('Date format exception for {}'.format(tag.text.replace('DATE: ', '')))
+                    try:
+                        meeting_date = datetime.strptime(tag.text.replace('DATE: ', '').replace(' ', ''), '%d/%m/%Y')
+                    except Exception:
+                        logger.warning('Date format exception 2 for {}'.format(tag.text.replace('DATE: ', '')))
+                        try:
+                            meeting_date = get_date(tag.text.replace('DATE: ', '').replace(' ', ''))
+                        except Exception:
+                            logger.warning('Date format exception 3 for {}'.format(tag.text.replace('DATE: ', '')))
+                            meeting_date = utcnow()
 
                 comment_item['slugline'] = venue + ' Comment'
                 comment_item['anpa_take_key'] = meeting_date.strftime('%A')
@@ -107,7 +119,7 @@ def process_victorian_harness_racing(item, **kwargs):
                 selections_item['firstcreated'] = utcnow()
                 break
 
-    regex = r"Race ([1-9][1-9]|[1-9]):"
+    regex = r"Race ([1-9][0-9]|[1-9]):"
     for tag in parsed.xpath('/html/div/child::*'):
         if tag.tag == 'p':
             m = re.match(regex, tag.text)
@@ -121,16 +133,16 @@ def process_victorian_harness_racing(item, **kwargs):
 
     comment_item['body_html'] = ''
     overview = ''
-    regex = r"Race ([1-9][1-9]|[1-9]):"
+    regex = r"Race ([1-9][0-9]|[1-9]):"
     for tag in parsed.xpath('/html/div/child::*'):
         if tag.tag == 'p':
             m = re.match(regex, tag.text)
             if m:
                 comment_item['body_html'] += '<p>Race {}:</p>'.format(race_number_to_words(tag.text))
             if tag.text.startswith('EARLY SPEED: '):
-                comment_item['body_html'] += '<p>{}</p>'.format(overview)
+                comment_item['body_html'] += '<p>{}</p>'.format(overview.rstrip())
                 overview = ''
-                comment_item['body_html'] += '<p>{}</p>'.format(tag.text)
+                comment_item['body_html'] += '<p>{}</p>'.format(tag.text.rstrip())
             if tag.text.startswith('OVERVIEW: '):
                 overview = tag.text
             elif overview:
