@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dc_rest_node href="/rest/aap/archives/aapimage" html_href="/archives/aapimage/search/" xmlversion="1.0">
+	<html_search_href>/archives/aapimage/search/?search[form][fulltext]={searchTerms}</html_search_href>
+	<title>AAP Image Pool</title>
+	<remark>AAP Image Pool</remark>
+	<type>archive</type>
+	<has_docs>yes</has_docs>
+	<dc_rest_doc_schema href="/rest/aap/schemas/aapdefault"/>
+	<total_docs>584</total_docs>
+	<doc_count>1</doc_count>
+	<page>1</page>
+	<pagesize>500</pagesize>
+	<format>full</format>
+	<query>(ORIGINALTRANSMISSIONREFERENCE=5e17c05cb622e78f93f8eba7)&amp;(MODDATE&gt;20200108)</query>
+	<color></color>
+	<permissions create_doc="yes" copy_doc="yes" insert_doc="yes" read_doc="yes" update_doc="yes" delete_doc="yes" search_docs="yes" import_file="yes" read="yes" update="no" delete="no" insert_node="no" remove_node="no" remove_doc="no"/>
+	<dc_rest_docs>
+<dc_rest_doc href="/rest/aap/archives/aapimage/dossiers/1362610457" html_href="/archives/aapimage/view/1362610457" score="11" no="1">
+	<dc_rest_doc_schema href="/rest/aap/schemas/aapdefault"/>
+	<permissions read="yes" update="yes" delete="yes"/>
+	<actions>show_collections, sp_gateway</actions>
+<dcdossier archive="aapimage" id="1362610457"
+		guid="aapimage-78s2codh0g71d0c5q95c"
+		unique="8937257b50ed8b515f9f68033b576c57"
+		created="2020-01-10T11:09:18+11:00"
+		created_by="user1"
+		created_at="aapimage"
+		modified="2020-01-10T11:10:27+11:00"
+		modified_by="user1"
+		modified_at="aapimage"
+		version="2"
+		xmlversion="1.0">
+	<document schema="aapdefault">
+		<head>
+			<IMPORTDATE>20200110</IMPORTDATE>
+			<IMPORTTIME>110918</IMPORTTIME>
+			<ARCHIVE>aapimage</ARCHIVE>
+			<IMPORTSOURCE>aapfeed</IMPORTSOURCE>
+			<ISAAP>1</ISAAP>
+			<KEEPFLAG>1</KEEPFLAG>
+			<IMAGERESOLUTION>657x981</IMAGERESOLUTION>
+			<ORIENTATION>p</ORIENTATION>
+			<DATERECEIVED>20200110</DATERECEIVED>
+			<ORIGINALFILENAME>ingest_no_news_value_priority.JPG</ORIGINALFILENAME>
+			<INPUTSOURCENAME>aapfeed</INPUTSOURCENAME>
+			<FILETYPE>image</FILETYPE>
+			<ORIGINALFILEEXTENSION>JPG</ORIGINALFILEEXTENSION>
+			<OBJECTNAME>Testy McTest face</OBJECTNAME>
+			<ORIGINALTRANSMISSIONREFERENCE>5e17c05cb622e78f93f8eba7</ORIGINALTRANSMISSIONREFERENCE>
+			<DATECREATED>20200110</DATECREATED>
+			<TIMECREATED>110918</TIMECREATED>
+			<HISTORY>Edited 10/01/2020 11:10:am (user1)</HISTORY>
+			<SLUG>5e17c05cb622e78f93f8eba7 Testy McTest face</SLUG>
+			<MODDATE>20200110</MODDATE>
+			<MODTIME>111027</MODTIME>
+			<DCALL>1</DCALL>
+		</head>
+	</document>
+</dcdossier>
+</dc_rest_doc>
+	</dc_rest_docs>
+</dc_rest_node>

@@ -390,6 +390,15 @@ PLANNING_XMP_ASSIGNMENT_MAPPING = {
     'atribute_key': '{http://ns.adobe.com/photoshop/1.0/}TransmissionReference'
 }
 
+# Enable or disable the fulfill assignments task
+ENABLE_FULFILL_ASSIGNMENTS = strtobool(env('ENABLE_FULFILL_ASSIGNMENTS', 'true'))
+
+# DC credentials used by fulfill assignments task to determine the user that completed the assignment.
+DC_URL = env('DC_URL', '')
+DC_USERNAME = env('DC_USERNAME', '')
+DC_PASSWORD = env('DC_PASSWORD', '')
+DC_SEARCH_FIELD = env('DC_SEARCH_FIELD', 'ORIGINALTRANSMISSIONREFERENCE')
+
 try:
     from aap_settings import *  # noqa
 except:
