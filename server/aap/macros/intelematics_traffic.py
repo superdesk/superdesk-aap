@@ -16,7 +16,7 @@ from flask import render_template_string
 from datetime import timedelta
 from superdesk.utc import utcnow
 from copy import deepcopy
-from .intelematics_fuel import get_areas
+from .petrolspy_fuel import get_areas
 from superdesk.utils import config
 from superdesk.metadata.item import ITEM_STATE, CONTENT_STATE
 
