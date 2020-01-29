@@ -3689,7 +3689,7 @@
     },
     {
         "_id": "ap_category_map",
-        "description": "Map the AP category codes"
+        "description": "Map the AP category codes",
         "field_type": null,
         "unique_field": "ap_code",
         "type": "manageable",
