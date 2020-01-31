@@ -1,5 +1,48 @@
 # Superdesk AAP Changelog
 
+## [1.30.4-rc1] Not Released Yet
+### AAP-Superdesk Changelog
+- [SDESK-4847] Support downloading the MissionReport as CSV (#804)
+- [SDESK-4775] Settings to add and map XMP files to picture coverages (#806)
+- [SDESK-4776] Fulfill photo assignments from DC (#808)
+- fix(vocabs): Fix missing comma in vocabs json data file (#813)
+
+### Superdesk-Core Change Log (v1.30.1)
+- None
+
+### Superdesk-Client-Core Change Log (v1.30.4)
+- None
+
+### Superdesk Planning Change Log (v1.10.1-rc1)
+#### Features
+- [SDESK-4767] Feature to attach files to coverages (superdesk/superdesk-planning#1403)
+- [SDESK-4775] Attach .xmp file to picture assignments (superdesk/superdesk-planning#1405)
+
+#### Improvements
+- [SDESK-4797] Reduce vertical padding in PopupEditor on small screens (superdesk/superdesk-planning#1402)
+- fix: Automatically show contact popup when search text is empty (superdesk/superdesk-planning#1416)
+
+#### Fixes
+- [SDESK-4889] Bug while removing an agenda (superdesk/superdesk-planning#1401)
+- [SDESK-4929] Don't clear invalid date fields on autosave (superdesk/superdesk-planning#1406)
+- [SDNTB-616] FIX: Update time is not working for ingested events. (superdesk/superdesk-planning#1404)
+- [SDESK-4908] Paginate results in contacts selection in Event Form (superdesk/superdesk-planning#1407)
+- [SDNTB-616] fix: update time not working for ingested events. (superdesk/superdesk-planning#1409)
+- [sdesk-4776] Allow a user id to be passed to complete assignment (superdesk/superdesk-planning#1410)
+- [SDESK-4509] Port e2e tests from Protractor to Cypress (superdesk/superdesk-planning#1408)
+- [SDBELGA-262] EVENT FILES - Save additional file information. (superdesk/superdesk-planning#1412)
+- fix(e2e): Failing to click on Contacts Close button (superdesk/superdesk-planning#1418)
+- [SDESK-4888] Wrong history entry when creating a Planning item with a coverage (superdesk/superdesk-planning#1414)
+- [SDESK-4890] Multiple errors when canceling a coverage (superdesk/superdesk-planning#1413)
+- [SDESK-4976] Assignment notifications not having XMP file attachments (superdesk/superdesk-planning#1417)
+
+### Superdesk Analytics Change Log (v1.7.3)
+- [SDESK-4847] Implement CSV download for tables (superdesk/superdesk-analytics#113)
+- [SDESK-4695] Convert relative dates to absolute for date_histogram bounds (superdesk/superdesk-analytics#112)
+- [SDESK-4695] (fix): Histogram aggregations failing for relative dates (superdesk/superdesk-analytics#114)
+- fix(install): Fix installing mkdir for highcharts-export-server (superdesk/superdesk-analytics#115)
+- fix(packages): Update versions based on GitHub recommendations (superdesk/superdesk-analytics#116)
+
 ## [1.30.3] 2019-12-12
 ### AAP-Superdesk Changelog
 - [SDESK-4288] Format the image byline from DC (#792)
