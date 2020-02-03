@@ -24,9 +24,10 @@ from superdesk.errors import SuperdeskApiError
 from superdesk.io.iptc import subject_codes
 from superdesk.media.media_operations import process_file_from_stream, decode_metadata
 from superdesk.media.renditions import generate_renditions, delete_file_on_error, get_renditions_spec
-from superdesk.metadata.item import ITEM_TYPE, CONTENT_TYPE
+from superdesk.metadata.item import ITEM_TYPE, CONTENT_TYPE, PUB_STATUS
 from superdesk.utc import utcnow
 from titlecase import titlecase
+from superdesk import get_resource_service
 
 urllib3.disable_warnings()
 
@@ -174,6 +175,12 @@ class AAPMMDatalayer(DataLayer):
         hits = self._parse_hits(json.loads(r.data.decode('UTF-8')))
         return ElasticCursor(docs=hits['docs'], hits={'hits': hits, 'aggregations': self._parse_aggregations(hits)})
 
+    def _get_dimension(self, value):
+        try:
+            return int(value)
+        except ValueError:
+            return None
+
     def _parse_doc(self, doc):
         new_doc = {'_id': doc['AssetId'], 'guid': doc['AssetId'], 'headline': doc['Title'],
                    'description_text': doc['Description'], 'archive_description': doc['Description'],
@@ -196,13 +203,28 @@ class AAPMMDatalayer(DataLayer):
             purl += '/files/ipod&assetId={}&mimeType=video/mp4&dummy.mp4'.format(doc['AssetId'])
             new_doc['renditions'] = {'original': {'href': purl, 'mimetype': 'video/mp4'}}
         else:
+            height = self._get_dimension(doc.get('OriginalImageHeight'))
+            width = self._get_dimension(doc.get('OriginalImageWidth'))
+
             new_doc['renditions'] = {
                 'viewImage': {'href': doc.get('Preview', doc.get('Layout'))['Href']},
                 'thumbnail': {'href': doc.get('Thumbnail', doc.get('Layout'))['Href']},
                 'original': {'href': doc.get('Preview', doc.get('Layout'))['Href']},
                 'baseImage': {'href': doc.get('Preview', doc.get('Layout'))['Href']},
             }
-
+            new_doc['pubstatus'] = PUB_STATUS.USABLE
+            new_doc['state'] = 'draft'
+            if height and width:
+                new_doc['renditions']['original']['height'] = height
+                new_doc['renditions']['original']['width'] = width
+                # The resolution of the image needs to be at least as large as the biggest crop
+                crops = get_resource_service('vocabularies').find_one(req=None, _id='crop_sizes')
+                if crops:
+                    for crop in crops.get('items'):
+                        if height < crop.get('height') or width < crop.get('width'):
+                            new_doc['pubstatus'] = PUB_STATUS.HOLD
+                            new_doc['_fetchable'] = False
+                            break
         new_doc['slugline'] = doc['Title']
         self._set_byline(new_doc, doc)
         new_doc['ednote'] = doc['SpecialInstructions']
