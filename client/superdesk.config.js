@@ -134,6 +134,17 @@ module.exports = function() {
             ],
             'singleLineView': true
         },
+        gridViewFooterFields: {
+            left: [
+                'pubstatus',
+                'type',
+                'urgency',
+                'priority',
+            ],
+            right: [
+                'state',
+            ],
+        },
         langOverride: {
             'en': {
                 'Advanced Search': 'Advanced',
