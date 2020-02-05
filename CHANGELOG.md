@@ -1,19 +1,21 @@
 # Superdesk AAP Changelog
 
-## [1.30.4-rc1] Not Released Yet
+## [1.30.4-rc2] Not Released Yet
 ### AAP-Superdesk Changelog
 - [SDESK-4847] Support downloading the MissionReport as CSV (#804)
 - [SDESK-4775] Settings to add and map XMP files to picture coverages (#806)
 - [SDESK-4776] Fulfill photo assignments from DC (#808)
 - fix(vocabs): Fix missing comma in vocabs json data file (#813)
+- [SDESK-4869] Update existing users user names (#810)
+- [SDESK-4983] Indicate if a DC image has a high enough resolution to crop in Superdesk' (#815)
 
 ### Superdesk-Core Change Log (v1.30.1)
-- None
+- [SDESK-4869] Allow display_name to be formatted on ldap authentication (superdesk/superdesk-core#1782)
 
 ### Superdesk-Client-Core Change Log (v1.30.4)
-- None
+- [SDESK-4983] Make items with pubstatus withheld unfetchable (superdesk/superdesk-client-core#3325)
 
-### Superdesk Planning Change Log (v1.10.1-rc1)
+### Superdesk Planning Change Log (v1.10.1-rc2)
 #### Features
 - [SDESK-4767] Feature to attach files to coverages (superdesk/superdesk-planning#1403)
 - [SDESK-4775] Attach .xmp file to picture assignments (superdesk/superdesk-planning#1405)
@@ -30,11 +32,15 @@
 - [SDNTB-616] fix: update time not working for ingested events. (superdesk/superdesk-planning#1409)
 - [sdesk-4776] Allow a user id to be passed to complete assignment (superdesk/superdesk-planning#1410)
 - [SDESK-4509] Port e2e tests from Protractor to Cypress (superdesk/superdesk-planning#1408)
-- [SDBELGA-262] EVENT FILES - Save additional file information. (superdesk/superdesk-planning#1412)
+- [SDBELGA-262] (EVENT FILES) - Save additional file information. (superdesk/superdesk-planning#1412)
 - fix(e2e): Failing to click on Contacts Close button (superdesk/superdesk-planning#1418)
 - [SDESK-4888] Wrong history entry when creating a Planning item with a coverage (superdesk/superdesk-planning#1414)
 - [SDESK-4890] Multiple errors when canceling a coverage (superdesk/superdesk-planning#1413)
 - [SDESK-4976] Assignment notifications not having XMP file attachments (superdesk/superdesk-planning#1417)
+- [SDESK-4796] Bug around assignment XMP mapping when XMP is attached during assignment creation (superdesk/superdesk-planning#1419)
+- [SDNTB-622] (INGEST) NIFS event ingest parser error (superdesk/superdesk-planning#1415)
+- [SDESK-4993] Planning item with an XMP file was not getting published (superdesk/superdesk-planning#1422)
+- [SDESK-4977] Duplicating coverage or planning item should duplicate the XMP File too (superdesk/superdesk-planning#1423)
 
 ### Superdesk Analytics Change Log (v1.7.3)
 - [SDESK-4847] Implement CSV download for tables (superdesk/superdesk-analytics#113)
