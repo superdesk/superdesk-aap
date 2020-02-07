@@ -36,7 +36,7 @@ def init_app(app):
         if not app.config.get('CELERY_BEAT_SCHEDULE').get('planning:fulfill_assignments'):
             app.config['CELERY_BEAT_SCHEDULE']['planning:fulfill_assignments'] = {
                 'task': 'aap.commands.fulfill_assignments',
-                'schedule': timedelta(minutes=5)
+                'schedule': timedelta(minutes=1)
             }
 
 
