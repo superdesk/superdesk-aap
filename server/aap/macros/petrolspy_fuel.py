@@ -23,7 +23,6 @@ import re
 
 logger = logging.getLogger(__name__)
 
-
 # These are the markets (cities) that we expect that data is available for
 MARKETS = ["Perth", "Sydney", "Melbourne", "Brisbane", "Adelaide"]
 
@@ -58,7 +57,8 @@ def fuel_story(item, **kwargs):
                 "_id": "$fuel_type",
                 "avg": {"$avg": "$price"},
                 "min": {"$min": "$price"},
-                "max": {"$max": "$price"}
+                "max": {"$max": "$price"},
+                "std": {"$stdDevPop": "$price"}
             }
     }
 
@@ -78,13 +78,52 @@ def fuel_story(item, **kwargs):
             fuel_map[market.lower() + '_avg_' + i.get('_id').lower().replace('-', '')] = '%.1f' % i.get('avg')
             fuel_map[market.lower() + '_min_' + i.get('_id').lower().replace('-', '')] = '%.1f' % i.get('min')
             fuel_map[market.lower() + '_max_' + i.get('_id').lower().replace('-', '')] = '%.1f' % i.get('max')
+
+            # If the max is more that X times the std from the average fix it!
+            delta_avg_per_std = (i.get('max') - i.get('avg')) / i.get('std') \
+                if (i.get('max') - i.get('avg')) != 0 else 0
+            if delta_avg_per_std > 5:
+                max_limit = i.get('avg') + (5 * i.get('std'))
+                req = ParsedRequest()
+                req.max_results = 1
+                req.sort = '[("price", -1)]'
+                expensive = get_resource_service('fuel').get_from_mongo(req=req, lookup={'market': market,
+                                                                                         'sample_date': _get_today(),
+                                                                                         'fuel_type': i.get('_id'),
+                                                                                         'price': {'$lt': max_limit}})
+                if expensive.count() > 0:
+                    logger.warn('patch max {} to {} from {} for {}'.format(i.get('_id'), expensive[0].get('price'),
+                                                                           i.get('max'), market))
+
+                    fuel_map[market.lower() + '_max_' + i.get('_id').lower().replace('-', '')] = '%.1f' % expensive[
+                        0].get('price')
+
+            min_price = i.get('min')
+            delta_avg_per_std = (i.get('avg') - i.get('min')) / i.get('std') \
+                if (i.get('avg') - i.get('min')) != 0 else 0
+            if delta_avg_per_std > 5:
+                min_limit = i.get('avg') - (5 * i.get('std'))
+                req = ParsedRequest()
+                req.max_results = 1
+                req.sort = '[("price", 1)]'
+                lowest = get_resource_service('fuel').get_from_mongo(req=req, lookup={'market': market,
+                                                                                      'sample_date': _get_today(),
+                                                                                      'fuel_type': i.get('_id'),
+                                                                                      'price': {'$gt': min_limit}})
+                if lowest.count() > 0:
+                    logger.warn('patch min {} to {} from {} for {}'.format(i.get('_id'), lowest[0].get('price'),
+                                i.get('min'), market))
+                    fuel_map[market.lower() + '_min_' + i.get('_id').lower().replace('-', '')] = '%.1f' % lowest[0].get(
+                        'price')
+                    min_price = lowest[0].get('price')
+
             req = ParsedRequest()
             req.max_results = 3
             req.sort = '[("price", 1)]'
             cheapest = get_resource_service('fuel').get_from_mongo(req=req, lookup={'market': market,
                                                                                     'sample_date': _get_today(),
                                                                                     'fuel_type': i.get('_id'),
-                                                                                    'price': i.get('min')})
+                                                                                    'price': min_price})
             cheap_tag = market.lower() + '_cheap_' + i.get('_id').lower().replace('-', '')
             cheap_list = None
             for cheap in cheapest:
@@ -120,12 +159,52 @@ def fuel_story(item, **kwargs):
                 fuel_map[area_name.lower() + '_min_' + i.get('_id').lower().replace('-', '')] = '%.1f' % i.get('min')
                 fuel_map[area_name.lower() + '_max_' + i.get('_id').lower().replace('-', '')] = '%.1f' % i.get('max')
 
+                # If the max is more that X times the std from the average fix it!
+                delta_avg_per_std = (i.get('max') - i.get('avg')) / i.get('std') if (i.get('max') - i.get(
+                    'avg')) != 0 else 0
+                if delta_avg_per_std > 5:
+                    max_limit = i.get('avg') + (5 * i.get('std'))
+                    req = ParsedRequest()
+                    req.max_results = 1
+                    req.sort = '[("price", -1)]'
+                    lookup = pipeline[0].get('$match')
+                    lookup['fuel_type'] = i.get('_id')
+                    lookup['price'] = {'$lt': max_limit}
+
+                    expensive = get_resource_service('fuel').get_from_mongo(req=req, lookup=lookup)
+                    if expensive.count() > 0:
+                        logger.warn('patch max {} to {} from {} for {}'.format(i.get('_id'), expensive[0].get('price'),
+                                                                               i.get('max'), area_name))
+                        fuel_map[area_name.lower() + '_max_' + i.get('_id').lower().replace('-', '')] = '%.1f' % \
+                                                                                                        expensive[
+                                                                                                            0].get(
+                                                                                                            'price')
+                min_price = i.get('min')
+                delta_avg_per_std = (i.get('avg') - i.get('min')) / i.get('std')\
+                    if (i.get('avg') - i.get('min')) != 0 else 0
+                if delta_avg_per_std > 5:
+                    min_limit = i.get('avg') - (5 * i.get('std'))
+                    req = ParsedRequest()
+                    req.max_results = 1
+                    req.sort = '[("price", 1)]'
+                    lookup = pipeline[0].get('$match')
+                    lookup['fuel_type'] = i.get('_id')
+                    lookup['price'] = {'$gt': min_limit}
+                    lowest = get_resource_service('fuel').get_from_mongo(req=req, lookup=lookup)
+                    if lowest.count() > 0:
+                        logger.warn('patch min {} to {} from {} for {}'.format(i.get('_id'), lowest[0].get('price'),
+                                                                               i.get('min'), area_name))
+                        fuel_map[area_name.lower() + '_min_' + i.get('_id').lower().replace('-', '')] = '%.1f' % lowest[
+                            0].get(
+                            'price')
+                        min_price = lowest[0].get('price')
+
                 req = ParsedRequest()
                 req.max_results = 3
                 req.sort = '[("price", 1)]'
                 lookup = pipeline[0].get('$match')
                 lookup['fuel_type'] = i.get('_id')
-                lookup['price'] = i.get('min')
+                lookup['price'] = min_price
                 cheapest = get_resource_service('fuel').get_from_mongo(req=req, lookup=lookup)
                 cheap_tag = area_name.lower() + '_cheap_' + i.get('_id').lower().replace('-', '')
                 cheap_list = None
@@ -140,19 +219,15 @@ def fuel_story(item, **kwargs):
 
     item['body_html'] = render_template_string(item.get('body_html', ''), **fuel_map)
 
-    update = {'source': 'Intelematics'}
-    ingest_provider = get_resource_service('ingest_providers').find_one(req=None, source='Intelematics')
-    if ingest_provider:
-        update['ingest_provider'] = ingest_provider.get(config.ID_FIELD)
+    update = dict()
     update['body_html'] = item['body_html']
     get_resource_service('archive').system_update(item[config.ID_FIELD], update, item)
-    item['source'] = 'Intelematics'
 
     # If the macro is being executed by a scheduled template then publish the item as well
     if 'desk' in kwargs and 'stage' in kwargs:
         get_resource_service('archive_publish').patch(id=item[config.ID_FIELD],
                                                       updates={ITEM_STATE: CONTENT_STATE.PUBLISHED,
-                                                      'auto_publish': True})
+                                                               'auto_publish': True})
         return get_resource_service('archive').find_one(req=None, _id=item[config.ID_FIELD])
 
     return item

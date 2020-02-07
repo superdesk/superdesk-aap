@@ -9,7 +9,7 @@
 # at https://www.sourcefabric.org/superdesk/license
 
 from superdesk.tests import TestCase
-from .intelematics_fuel import fuel_story
+from .petrolspy_fuel import fuel_story
 from aap.fuel import init_app
 from datetime import datetime
 import os

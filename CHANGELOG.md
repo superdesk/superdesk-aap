@@ -1,6 +1,6 @@
 # Superdesk AAP Changelog
 
-## [1.30.4-rc2] Not Released Yet
+## [1.30.4-rc3] Not Released Yet
 ### AAP-Superdesk Changelog
 - [SDESK-4847] Support downloading the MissionReport as CSV (#804)
 - [SDESK-4775] Settings to add and map XMP files to picture coverages (#806)
@@ -8,14 +8,24 @@
 - fix(vocabs): Fix missing comma in vocabs json data file (#813)
 - [SDESK-4869] Update existing users user names (#810)
 - [SDESK-4983] Indicate if a DC image has a high enough resolution to crop in Superdesk' (#815)
+- [SDESK-4873] Ingest fuel prices from Petrol Spy (#800)
+- [SDESK-4883] Require a macro to remove line breaks/pars and create run-on-text (#802)
+- [SDESK-4867] Victorian harness racing macro (#805)
+- fix(macro) vic harness racing macro fixes (#807)
+- fix(racing macro) handle commas missing in selections (#812)
+- fix(fuel macro) detect outlier values and remove old source (#811)
+- [SDESK-4882] Collate golf results (#809)
+- fix(fulfill assignment) set the poll frequency to every minute for the fulfill assignment task (#817)
+- [SDESK-4903] Enable PLANNING_CHECK_FOR_ASSIGNMENT_ON_SEND setting (#818)
 
 ### Superdesk-Core Change Log (v1.30.1)
 - [SDESK-4869] Allow display_name to be formatted on ldap authentication (superdesk/superdesk-core#1782)
 
 ### Superdesk-Client-Core Change Log (v1.30.4)
 - [SDESK-4983] Make items with pubstatus withheld unfetchable (superdesk/superdesk-client-core#3325)
+- [SDESK-4903] (1.30) Add 'authoring:send' functionPoint (superdesk/superdesk-client-core#3337)
 
-### Superdesk Planning Change Log (v1.10.1-rc2)
+### Superdesk Planning Change Log (v1.10.1-rc3)
 #### Features
 - [SDESK-4767] Feature to attach files to coverages (superdesk/superdesk-planning#1403)
 - [SDESK-4775] Attach .xmp file to picture assignments (superdesk/superdesk-planning#1405)
@@ -23,6 +33,9 @@
 #### Improvements
 - [SDESK-4797] Reduce vertical padding in PopupEditor on small screens (superdesk/superdesk-planning#1402)
 - fix: Automatically show contact popup when search text is empty (superdesk/superdesk-planning#1416)
+- [SDESK-4979] Add coverage provider and assigned user names to coverages on posting the planning item (superdesk/superdesk-planning#1424)
+- [SDESK-5001] Coverage Icons for graphic, video_explainer and live_blog (superdesk/superdesk-planning#1428)
+- [SDESK-4903] (1.10) Show FulfilAssignment challenge on archive send (superdesk/superdesk-planning#1425)
 
 #### Fixes
 - [SDESK-4889] Bug while removing an agenda (superdesk/superdesk-planning#1401)
@@ -41,6 +54,9 @@
 - [SDNTB-622] (INGEST) NIFS event ingest parser error (superdesk/superdesk-planning#1415)
 - [SDESK-4993] Planning item with an XMP file was not getting published (superdesk/superdesk-planning#1422)
 - [SDESK-4977] Duplicating coverage or planning item should duplicate the XMP File too (superdesk/superdesk-planning#1423)
+- [SDESK-4980] Create two locations with same name (superdesk/superdesk-planning#1420)
+- [SDESK-4888] Wrong coverage history on creation (superdesk/superdesk-planning#1427)
+- [SDESK-5004] Turning on the 'NOT FOR PUBLICATION' toggle enables the 'SAVE & POST' button in the Planning editor (superdesk/superdesk-planning#1426)
 
 ### Superdesk Analytics Change Log (v1.7.3)
 - [SDESK-4847] Implement CSV download for tables (superdesk/superdesk-analytics#113)
