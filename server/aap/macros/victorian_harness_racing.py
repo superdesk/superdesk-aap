@@ -127,7 +127,11 @@ def process_victorian_harness_racing(item, **kwargs):
                 selections_item['body_html'] += '<p>{} '.format(tag.text)
             if tag.text.startswith('SELECTIONS: '):
                 sels = titlecase(tag.text.replace('SELECTIONS: ', ''))
+                # In some cases there is no comma between the selections, apparently there should be!
+                sels = sels.replace(') ', '), ')
                 sels = re.sub(r'\s\(.*?\)', '', sels)
+                # get rid of the trailing one
+                sels = re.sub(r'(, $|,$)', ' ', sels)
                 selections_item['body_html'] += '{}</p>'.format(sels)
     selections_item['body_html'] += '<p>AAP SELECTIONS</p>'
 
