@@ -158,7 +158,8 @@ def golf_collation(item, **kwargs):
             # If no match is found then it is assumed that a collated story of all regions is to be produced.
             collated_grouped = True
 
-    items = list(get_result_items(location, copytakers_desk.get('_id'), stage_ids, midnight_utc))
+    items = sorted(list(get_result_items(location, copytakers_desk.get('_id'), stage_ids, midnight_utc)),
+                   key=lambda s: s.get('slugline', '').lower())
     body = ''
     if collated_grouped:
         # keep a set of the golf links that have been include so as not to include them multiple times
