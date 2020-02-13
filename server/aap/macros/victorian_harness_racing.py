@@ -80,6 +80,9 @@ def process_victorian_harness_racing(item, **kwargs):
         ITEM_TYPE: CONTENT_TYPE.TEXT
     }
     selections_item = deepcopy(comment_item)
+    # copy the genre of the item that we are oprerting on
+    if 'genre' in item:
+        selections_item['genre'] = deepcopy(item['genre'])
 
     parsed = parse_html(content, content='html')
 
