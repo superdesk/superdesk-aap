@@ -14,10 +14,10 @@ oauth2client==4.1.3
 requests<2.22
 
 # Superdesk-Core 1.30 - https://github.com/superdesk/superdesk-core/commits/1.30
-git+git://github.com/superdesk/superdesk-core.git@e94768d#egg=Superdesk-Core
+git+git://github.com/superdesk/superdesk-core.git@31b2f62#egg=Superdesk-Core
 
-# Superdesk-Planning 1.10.1-rc2 - https://github.com/superdesk/superdesk-planning
-git+git://github.com/superdesk/superdesk-planning.git@1649f06#egg=superdesk-planning
+# Superdesk-Planning 1.10.1-rc4 - https://github.com/superdesk/superdesk-planning
+git+git://github.com/superdesk/superdesk-planning.git@6c29726#egg=superdesk-planning
 
 # Superdesk-Analytics 1.7.3 - https://github.com/superdesk/superdesk-analytics
 git+git://github.com/superdesk/superdesk-analytics.git@870d589#egg=superdesk-analytics
