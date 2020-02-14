@@ -1,6 +1,6 @@
 # Superdesk AAP Changelog
 
-## [1.30.4-rc3] Not Released Yet
+## [1.30.4-rc4] Not Released Yet
 ### AAP-Superdesk Changelog
 - [SDESK-4847] Support downloading the MissionReport as CSV (#804)
 - [SDESK-4775] Settings to add and map XMP files to picture coverages (#806)
@@ -17,15 +17,22 @@
 - [SDESK-4882] Collate golf results (#809)
 - fix(fulfill assignment) set the poll frequency to every minute for the fulfill assignment task (#817)
 - [SDESK-4903] Enable PLANNING_CHECK_FOR_ASSIGNMENT_ON_SEND setting (#818)
+- [SDESK-4846] Add location notes to assignment emails (#797)
+- fix(bom) retry download from BOM (#798)
 
 ### Superdesk-Core Change Log (v1.30.1)
 - [SDESK-4869] Allow display_name to be formatted on ldap authentication (superdesk/superdesk-core#1782)
+- [SDESK-4984] Empty error message on insufficient privileges to create a content template (superdesk/superdesk-core#1791)
+- [SDESK-4901] Add anpa_take_key as 'Take Key' to fields available for content filters (superdesk/superdesk-core#1779)
+- [SDESK-4368] In Newsroom, content item's publish schedule is not available (#1610)
 
 ### Superdesk-Client-Core Change Log (v1.30.4)
 - [SDESK-4983] Make items with pubstatus withheld unfetchable (superdesk/superdesk-client-core#3325)
 - [SDESK-4903] (1.30) Add 'authoring:send' functionPoint (superdesk/superdesk-client-core#3337)
+- [SDESK-4913] Add Contact Type to search parameters in Contacts (superdesk/superdesk-client-core#3292)
+- [SDESK-4984] Templates setings was accessible without content_templates privilege (superdesk/superdesk-client-core#3326)
 
-### Superdesk Planning Change Log (v1.10.1-rc3)
+### Superdesk Planning Change Log (v1.10.1-rc4)
 #### Features
 - [SDESK-4767] Feature to attach files to coverages (superdesk/superdesk-planning#1403)
 - [SDESK-4775] Attach .xmp file to picture assignments (superdesk/superdesk-planning#1405)
@@ -36,6 +43,7 @@
 - [SDESK-4979] Add coverage provider and assigned user names to coverages on posting the planning item (superdesk/superdesk-planning#1424)
 - [SDESK-5001] Coverage Icons for graphic, video_explainer and live_blog (superdesk/superdesk-planning#1428)
 - [SDESK-4903] (1.10) Show FulfilAssignment challenge on archive send (superdesk/superdesk-planning#1425)
+- [SDESK-5022] Remove whitespace from the beginning and end of the name and slugline when saving an Event or Planning item and Coverages (superdesk/superdesk-planning#1432)
 
 #### Fixes
 - [SDESK-4889] Bug while removing an agenda (superdesk/superdesk-planning#1401)
@@ -57,6 +65,10 @@
 - [SDESK-4980] Create two locations with same name (superdesk/superdesk-planning#1420)
 - [SDESK-4888] Wrong coverage history on creation (superdesk/superdesk-planning#1427)
 - [SDESK-5004] Turning on the 'NOT FOR PUBLICATION' toggle enables the 'SAVE & POST' button in the Planning editor (superdesk/superdesk-planning#1426)
+- [SDESK-5019] FIX: Add scrolling for coverage types list in add coverage advance mode. (superdesk/superdesk-planning#1430)
+- [SDESK-5025] Related planning item(s) not published when event is cancelled (superdesk/superdesk-planning#1431)
+- [SDESK-5030] Scheduled Update not in delivery record (superdesk/superdesk-planning#1433)
+- fix(behave): Add privilege error message in expected response (superdesk/superdesk-planning#1435)
 
 ### Superdesk Analytics Change Log (v1.7.3)
 - [SDESK-4847] Implement CSV download for tables (superdesk/superdesk-analytics#113)
