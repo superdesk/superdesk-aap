@@ -402,6 +402,7 @@ DC_URL = env('DC_URL', '')
 DC_USERNAME = env('DC_USERNAME', '')
 DC_PASSWORD = env('DC_PASSWORD', '')
 DC_SEARCH_FIELD = env('DC_SEARCH_FIELD', 'ORIGINALTRANSMISSIONREFERENCE')
+PLANNING_ACCEPT_ASSIGNMENT_EMAIL = env('PLANNING_ACCEPT_ASSIGNMENT_EMAIL', 'editorial@aap.com.au')
 
 try:
     from aap_settings import *  # noqa

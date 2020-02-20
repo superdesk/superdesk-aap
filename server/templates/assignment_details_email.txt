@@ -63,4 +63,3 @@ Slugline: {{ slugline }}
         
     {% endif %}
 {% endif %}
-Assignment ID: {{ assignment_id }}
