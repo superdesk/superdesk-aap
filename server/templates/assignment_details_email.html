@@ -67,6 +67,6 @@
 {% if recepient and system_reciepient %}
     {% set mail_addr = recepient.get('email') or recepient.get('contact_email')[0] %}
     {% set body = 'This email is being sent to an unmonitored (system) address. If you wish to discuss the details of the assignment further, you should contact a member of the team through other channels.
-%0D%0AAssignment {} has been accepted by {} {}.'.format(assignment_id, mail_addr, assignment.assigned_to.contact) %}
+%0D%0AAssignment {} has been accepted by {} {}.'.format(assignment_id, mail_addr, recepient._id) %}
     <a href="mailto:{{ system_reciepient }}?&subject={{ subject }}&body={{ body }}">Accept Assignment</a>
 {% endif %}
