@@ -12,7 +12,7 @@
 
 import os
 import json
-from superdesk.default_settings import strtobool
+from superdesk.default_settings import strtobool, _MAIL_FROM
 
 try:
     from urllib.parse import urlparse
@@ -413,6 +413,7 @@ DC_URL = env('DC_URL', '')
 DC_USERNAME = env('DC_USERNAME', '')
 DC_PASSWORD = env('DC_PASSWORD', '')
 DC_SEARCH_FIELD = env('DC_SEARCH_FIELD', 'ORIGINALTRANSMISSIONREFERENCE')
+PLANNING_ACCEPT_ASSIGNMENT_EMAIL = env('PLANNING_ACCEPT_ASSIGNMENT_EMAIL', _MAIL_FROM)
 
 try:
     from aap_settings import *  # noqa
