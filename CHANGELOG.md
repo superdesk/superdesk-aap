@@ -1,6 +1,25 @@
 # Superdesk AAP Changelog
 
-## [1.30.4-rc4] Not Released Yet
+## [1.30.5] Not Released Yet
+### AAP-Superdesk Changelog
+- [SDESK-5010] Update pictures assignments in progress in DC (#821)
+- [SDESK-4863] Implement an Assignment Email layout that allows 'acceptance' of assignments (#825)
+- [SDESK-5023] Use display name 'NBA' for iptc subject code 15008001 (#826)
+
+### Superdesk-Core Change Log (v1.30.1)
+- [SDESK-5021] Extend FTP transmit to push associations (superdesk/superdesk-core#1809)
+
+### Superdesk-Client-Core Change Log (v1.30.4)
+- [SDESK-5021] Extend FTP transmit to push associations (superdesk/superdesk-client-core#3362)
+
+### Superdesk Planning Change Log (v1.10.2-rc1)
+- [SDESK-4863] Implement an Assignment Email layout that allows 'acceptance' of assignments (superdesk/superdesk-planning#1437)
+- [SDESK-5010] Update allowed actions on pictures assignments in progress (superdesk/superdesk-planning#1429)
+
+### Superdesk Analytics Change Log (v1.7.3)
+- None
+
+## [1.30.4] 2020-01-31
 ### AAP-Superdesk Changelog
 - [SDESK-4847] Support downloading the MissionReport as CSV (#804)
 - [SDESK-4775] Settings to add and map XMP files to picture coverages (#806)
@@ -31,8 +50,9 @@
 - [SDESK-4903] (1.30) Add 'authoring:send' functionPoint (superdesk/superdesk-client-core#3337)
 - [SDESK-4913] Add Contact Type to search parameters in Contacts (superdesk/superdesk-client-core#3292)
 - [SDESK-4984] Templates setings was accessible without content_templates privilege (superdesk/superdesk-client-core#3326)
+- [SDESK-4697] Increase max results and sort ascending for 'Content Filter' dropdowns
 
-### Superdesk Planning Change Log (v1.10.1-rc4)
+### Superdesk Planning Change Log (v1.10.1)
 #### Features
 - [SDESK-4767] Feature to attach files to coverages (superdesk/superdesk-planning#1403)
 - [SDESK-4775] Attach .xmp file to picture assignments (superdesk/superdesk-planning#1405)
