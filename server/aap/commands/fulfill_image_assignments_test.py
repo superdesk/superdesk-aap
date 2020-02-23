@@ -75,10 +75,22 @@ class FullfillImageAssignmentsTest(AAPTestCase):
         self.script = FullfillImageAssignments()
 
     def setupMock(self, context):
-        context.mock = HTTMock(*[self.mock_dc])
+        context.mock = HTTMock(*[self.mock_dc, self.mock_imagearc_dc, self.mock_dc_login])
         context.mock.__enter__()
 
     @urlmatch(scheme='http', netloc='a.b.c', path='/rest/aap/archives/imagearc')
+    def mock_imagearc_dc(self, url, request):
+        dirname = os.path.dirname(os.path.realpath(__file__))
+        fixture = os.path.normpath(os.path.join(dirname, '../tests/io/fixtures', 'dc_response.xml'))
+        with open(fixture, 'r') as f:
+            xml_raw = f.read()
+        return {'status_code': 200, 'content': xml_raw}
+
+    @urlmatch(scheme='http', netloc='a.b.c', path='/rest/aap')
+    def mock_dc_login(self, url, request):
+        return {'status_code': 200, 'content': b'<dc_rest_application></dc_rest_application>'}
+
+    @urlmatch(scheme='http', netloc='a.b.c', path='/rest/aap/archives/aapimage')
     def mock_dc(self, url, request):
         dirname = os.path.dirname(os.path.realpath(__file__))
         fixture = os.path.normpath(os.path.join(dirname, '../tests/io/fixtures', 'dc_response.xml'))
@@ -97,6 +109,11 @@ class FullfillImageAssignmentsTest(AAPTestCase):
         hits = {'docs': [doc], 'total': 1}
         return ElasticCursor(docs=hits['docs'], hits={'hits': hits, 'aggregations': None})
 
+    def mock_find_progress(resource, req, lookup, p):
+        doc = {}
+        hits = {'docs': [doc], 'total': 0}
+        return ElasticCursor(docs=hits['docs'], hits={'hits': hits, 'aggregations': None})
+
     def test_check_complete(self):
         assignments = self.script._get_outstanding_photo_assignments()
         self.assertTrue(assignments.count() == 1)
@@ -106,3 +123,11 @@ class FullfillImageAssignmentsTest(AAPTestCase):
         self.script.run()
         assignments = self.app.data.find('assignments', None, None)
         self.assertEqual(assignments[0].get('assigned_to').get('state'), 'completed')
+        planning_history = self.app.data.find('planning_history', None, None)
+        self.assertEqual(planning_history[0].get('user_id'), ObjectId('57bcfc5d1d41c82e8401dcc0'))
+
+    @mock.patch('aap_mm.aap_mm_datalayer.AAPMMDatalayer.find', mock_find_progress)
+    def test_in_progress(self):
+        self.script.run()
+        assignments = self.app.data.find('assignments', None, None)
+        self.assertEqual(assignments[0].get('assigned_to').get('state'), 'in_progress')
