@@ -1,6 +1,6 @@
 # Superdesk AAP Changelog
 
-## [1.30.5] Not Released Yet
+## [1.30.5] 2020-02-25
 ### AAP-Superdesk Changelog
 - [SDESK-5010] Update pictures assignments in progress in DC (#821)
 - [SDESK-4863] Implement an Assignment Email layout that allows 'acceptance' of assignments (#825)

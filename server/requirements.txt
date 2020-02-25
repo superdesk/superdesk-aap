@@ -16,8 +16,8 @@ requests<2.22
 # Superdesk-Core 1.30 - https://github.com/superdesk/superdesk-core/commits/1.30
 git+git://github.com/superdesk/superdesk-core.git@8d7057d#egg=Superdesk-Core
 
-# Superdesk-Planning 1.10.2-rc1 - https://github.com/superdesk/superdesk-planning
-git+git://github.com/superdesk/superdesk-planning.git@b796a8b#egg=superdesk-planning
+# Superdesk-Planning 1.10.2 - https://github.com/superdesk/superdesk-planning
+git+git://github.com/superdesk/superdesk-planning.git@c8b725c#egg=superdesk-planning
 
 # Superdesk-Analytics 1.7.3 - https://github.com/superdesk/superdesk-analytics
 git+git://github.com/superdesk/superdesk-analytics.git@870d589#egg=superdesk-analytics
