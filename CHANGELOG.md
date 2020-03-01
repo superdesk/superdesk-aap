@@ -1,5 +1,10 @@
 # Superdesk AAP Changelog
 
+## [1.30.6] 2020-03-02
+### AAP-Superdesk Changelog
+- fix(golf macro) missing region and sort order (#822)
+- fix(racing macro) set the genre in the selections based on the genre of the original article (#823)
+
 ## [1.30.5] 2020-02-25
 ### AAP-Superdesk Changelog
 - [SDESK-5010] Update pictures assignments in progress in DC (#821)
