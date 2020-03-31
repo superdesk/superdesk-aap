@@ -148,6 +148,8 @@ class LocatorMapper(FieldMapper):
             feature = locators.get('{}000'.format(subject[:5])) or locators.get(subject)
             if feature:
                 return feature
+            else:
+                return 'SPO'
 
         # for now restricting to features category.
         if category != 'C':
