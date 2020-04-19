@@ -836,7 +836,7 @@ class AapIpNewsFormatterTest(TestCase):
         article = {
             '_id': '3',
             'source': 'AAP',
-            'anpa_category': [{'qcode': 's'}],
+            'anpa_category': [{'qcode': 'a'}],
             'headline': 'Arrested man ‘punched me in nose’: officer',
             'byline': 'joe',
             'slugline': 'slugline',
