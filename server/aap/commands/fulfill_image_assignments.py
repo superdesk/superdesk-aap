@@ -129,9 +129,11 @@ class FullfillImageAssignments(superdesk.Command):
                 'bool': {
                     'must': [
                         {
-                            'term': {
-                                'assigned_to.state':
-                                    ASSIGNMENT_WORKFLOW_STATE.ASSIGNED
+                            'terms': {
+                                'assigned_to.state': [
+                                    ASSIGNMENT_WORKFLOW_STATE.ASSIGNED,
+                                    ASSIGNMENT_WORKFLOW_STATE.IN_PROGRESS
+                                ]
                             }
                         },
                         {
@@ -234,7 +236,7 @@ class FullfillImageAssignments(superdesk.Command):
                 return user
         return None
 
-    def _check_in_progress(self, assignments):
+    def _check_in_progress(self, assignments, complete):
         """
         Check the AAP Image Pool for any assignments that may be in progress
         :param assignments:
@@ -243,6 +245,9 @@ class FullfillImageAssignments(superdesk.Command):
         in_progress_assignments = list()
         in_list = set()
         for assignment in assignments:
+            # If we have marked the assignment complete ignore it
+            if assignment.get('_id') in complete:
+                continue
             if assignment.get('assigned_to', {}).get('state') == ASSIGNMENT_WORKFLOW_STATE.ASSIGNED:
                 # look in the AAP Image pool
                 dc_images = self._get_dc_images_by_field('aapimage', assignment.get('_id'))
@@ -274,7 +279,7 @@ class FullfillImageAssignments(superdesk.Command):
         """
         service = superdesk.get_resource_service('assignments')
         for assignment in assignments:
-            logger.info('Marking assignment {} in progress'.format(assignment.get('assignment').get('_id')))
+            logger.warning('Marking assignment {} in progress'.format(assignment.get('assignment').get('_id')))
             assignment.get('assignment')[config.ID_FIELD] = ObjectId(assignment.get('assignment')[config.ID_FIELD])
             assigned_to = assignment.get('assignment').get('assigned_to')
             updates = {'assigned_to': deepcopy(assigned_to)}
@@ -300,7 +305,7 @@ class FullfillImageAssignments(superdesk.Command):
         for assignment in assignments:
             user = self._get_image_modifier(assignment)
             try:
-                logger.info('Marking assignment {} as complete'.format(assignment.get('assignment').get('_id')))
+                logger.warning('Marking assignment {} as complete'.format(assignment.get('assignment').get('_id')))
                 service.patch(ObjectId(assignment.get('assignment').get('_id')), user)
             except Exception as ex:
                 logger.exception(ex)
@@ -321,14 +326,10 @@ class FullfillImageAssignments(superdesk.Command):
 
         self._mark_as_complete(completed_assignments)
 
-        # remove any assignments marked as complete from the outstanding assignments
         complete = [c.get('assignment').get('_id') for c in completed_assignments]
-        for a in range(len(assignments)):
-            if assignments[a].get('_id') in complete:
-                del assignments[a]
 
         # check if any of the outstanding assignments are in either the picedit or aapimage pools
-        in_progress_assignments = self._check_in_progress(assignments)
+        in_progress_assignments = self._check_in_progress(assignments, complete)
 
         self._mark_as_in_progress(in_progress_assignments)
 

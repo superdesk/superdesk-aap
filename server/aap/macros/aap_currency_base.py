@@ -145,7 +145,7 @@ def format_output(original, converted, suffix, src_currency):
     if suffix:
         return '{} ({} {})'.format(original, converted, suffix)
     else:
-        return '{} ({})'.format(original, converted, suffix)
+        return '{} ({})'.format(original, converted)
 
 
 def do_conversion(item, rate, currency, search_param, match_index, value_index, suffix_index, src_currency=None):
