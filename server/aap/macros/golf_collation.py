@@ -166,15 +166,15 @@ def golf_collation(item, **kwargs):
         for region in state_region.get('regions'):
             body += '<p>' + region.get('name') + '</p>'
             for i in items:
-                for l in region.get('links'):
-                    if l.lower().startswith(i.get('slugline', '').lower()) and l not in include_links:
+                for link in region.get('links'):
+                    if link.lower().startswith(i.get('slugline', '').lower()) and link not in include_links:
                         body += i.get('body_html')
-                        include_links.add(l)
+                        include_links.add(link)
     else:
         for i in items:
             if links:
-                for l in links:
-                    if l.lower().startswith(i.get('slugline', '').lower()):
+                for link in links:
+                    if link.lower().startswith(i.get('slugline', '').lower()):
                         body += i.get('body_html')
             else:
                 body += i.get('body_html')
