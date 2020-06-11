@@ -30,7 +30,7 @@ class AAPNewsroomNinjsFormatter(NewsroomNinjsFormatter):
                 # so return the whole match.
                 return match_object.group(0)
             else:
-                return '<a href="{0}" target="_blank">{0}</a>'.format(html.unescape(url), url)
+                return '<a href="{0}" target="_blank">{1}</a>'.format(html.unescape(url), url)
 
         return re.sub(self.URL_REGEX, replacement, tag_text)
 

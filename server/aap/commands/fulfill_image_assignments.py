@@ -13,6 +13,7 @@ import superdesk
 from superdesk.utc import utcnow, utc_to_local
 from datetime import timedelta
 from planning.common import ASSIGNMENT_WORKFLOW_STATE
+from planning.assignments.assignments_history import ASSIGNMENT_HISTORY_ACTIONS
 from eve.utils import ParsedRequest
 from flask import json
 from flask import current_app as app
@@ -20,6 +21,9 @@ import requests
 from lxml import etree
 from superdesk.celery_task_utils import get_lock_id
 from superdesk.lock import lock, unlock
+from copy import deepcopy
+from eve.utils import config
+from bson import ObjectId
 
 logger = logging.getLogger(__name__)
 
@@ -110,8 +114,8 @@ class FullfillImageAssignments(superdesk.Command):
                     logger.error('DC login failed')
                 retries += 1
         if retries == 3:
+            logger.error('Failed to get image by field from DC {}'.format(id))
             return None
-        logger.error('Failed to get image by field from DC {}'.format(id))
         return etree.fromstring(response.content)
 
     def _get_outstanding_photo_assignments(self):
@@ -120,10 +124,43 @@ class FullfillImageAssignments(superdesk.Command):
         :return: The Id of any sheduled picure assignments
         """
         service = superdesk.get_resource_service('assignments')
-        assignments = service.find(where={"assigned_to.state": ASSIGNMENT_WORKFLOW_STATE.ASSIGNED,
-                                          "planning.g2_content_type": "picture",
-                                          "planning.scheduled": {"$gte": utcnow() - timedelta(days=2)},
-                                          "lock_user": None})
+        query = {
+            'query': {
+                'bool': {
+                    'must': [
+                        {
+                            'terms': {
+                                'assigned_to.state': [
+                                    ASSIGNMENT_WORKFLOW_STATE.ASSIGNED,
+                                    ASSIGNMENT_WORKFLOW_STATE.IN_PROGRESS
+                                ]
+                            }
+                        },
+                        {
+                            'term': {
+                                'planning.g2_content_type': 'picture'
+                            }
+                        },
+                        {
+                            'range': {
+                                'planning.scheduled': {
+                                    'gte': 'now-2d'
+                                }
+                            }
+                        }
+                    ],
+                    'must_not': {
+                        'exists': {
+                            'field': 'lock_user'
+                        }
+                    }
+                }
+            }
+        }
+        req = ParsedRequest()
+        req.args = {'source': json.dumps(query)}
+
+        assignments = service.get(req=req, lookup=None)
         if assignments.count() > 0:
             logger.warning('Found {} outstanding assignments in planning'.format(assignments.count()))
         else:
@@ -183,28 +220,80 @@ class FullfillImageAssignments(superdesk.Command):
         # return the assignor user or the assignor desk, if nothing else available
         return {'proxy_user': assigned_to.get('assignor_user', assigned_to.get('assignor_desk'))}
 
-    def _check_in_progress(self, assignments):
+    def _extract_user(self, image):
+        """
+        Given an image dossier extract the user that modified it
+        :param image:
+        :return:
+        """
+        dossier = image.find('./dc_rest_docs/dc_rest_doc/dcdossier')
+        if dossier is not None:
+            modified_by = dossier.attrib.get('modified_by')
+        if modified_by is not None and not modified_by == 'system':
+            user_service = superdesk.get_resource_service('users')
+            user = user_service.find_one(req=None, username=modified_by)
+            if user:
+                return user
+        return None
+
+    def _check_in_progress(self, assignments, complete):
         """
         Check the AAP Image Pool for any assignments that may be in progress
         :param assignments:
         :return:
         """
         in_progress_assignments = list()
+        in_list = set()
         for assignment in assignments:
-            # look in the AAP Image pool
-            dc_images = self._get_dc_images_by_field('aapimage', assignment.get('_id'))
-            if dc_images:
-                count = dc_images.find('./doc_count')
-                if count and int(count.text) > 0:
-                    in_progress_assignments.append(assignment)
+            # If we have marked the assignment complete ignore it
+            if assignment.get('_id') in complete:
+                continue
+            if assignment.get('assigned_to', {}).get('state') == ASSIGNMENT_WORKFLOW_STATE.ASSIGNED:
+                # look in the AAP Image pool
+                dc_images = self._get_dc_images_by_field('aapimage', assignment.get('_id'))
+                if dc_images is not None:
+                    count = dc_images.find('./doc_count')
+                    if count is not None and int(count.text) > 0:
+                        logger.info('Found in progress items in aapimage for {}'.format(assignment.get('_id')))
+                        user = self._extract_user(dc_images)
+                        in_list.add(assignment.get('_id'))
+                        in_progress_assignments.append({'assignment': assignment, 'user': user})
+                        continue
+                # look in the picedit pool
+                dc_images = self._get_dc_images_by_field('picedit', assignment.get('_id'))
+                if dc_images is not None:
+                    count = dc_images.find('./doc_count')
+                    if count is not None and int(count.text) > 0:
+                        logger.info('Found in progress items in picedit for {}'.format(assignment.get('_id')))
+                        user = self._extract_user(dc_images)
+                        if assignment.get('_id') not in in_list:
+                            in_list.add(assignment.get('_id'))
+                            in_progress_assignments.append({'assignment': assignment, 'user': user})
+        return in_progress_assignments
 
     def _mark_as_in_progress(self, assignments):
         """
-        TODO
+        Set the assignment state for that passed assignments to in progress
         :param assignments:
         :return:
         """
-        pass
+        service = superdesk.get_resource_service('assignments')
+        for assignment in assignments:
+            logger.warning('Marking assignment {} in progress'.format(assignment.get('assignment').get('_id')))
+            assignment.get('assignment')[config.ID_FIELD] = ObjectId(assignment.get('assignment')[config.ID_FIELD])
+            assigned_to = assignment.get('assignment').get('assigned_to')
+            updates = {'assigned_to': deepcopy(assigned_to)}
+            updates['assigned_to']['state'] = ASSIGNMENT_WORKFLOW_STATE.IN_PROGRESS
+            try:
+                service.patch(assignment.get('assignment')[config.ID_FIELD], updates)
+                if assignment.get('user') is None:
+                    updates['proxy_user'] = assigned_to.get('assignor_user', assigned_to.get('assignor_desk'))
+                else:
+                    updates['proxy_user'] = assignment.get('user').get(config.ID_FIELD)
+                superdesk.get_resource_service('assignments_history').on_item_updated(
+                    updates, assignment.get('assignment'), ASSIGNMENT_HISTORY_ACTIONS.START_WORKING)
+            except Exception as ex:
+                logger.exception(ex)
 
     def _mark_as_complete(self, assignments):
         """
@@ -216,8 +305,8 @@ class FullfillImageAssignments(superdesk.Command):
         for assignment in assignments:
             user = self._get_image_modifier(assignment)
             try:
-                logger.info('Marking assignment {} as complete'.format(assignment.get('assignment').get('_id')))
-                service.patch(assignment.get('assignment').get('_id'), user)
+                logger.warning('Marking assignment {} as complete'.format(assignment.get('assignment').get('_id')))
+                service.patch(ObjectId(assignment.get('assignment').get('_id')), user)
             except Exception as ex:
                 logger.exception(ex)
 
@@ -230,15 +319,19 @@ class FullfillImageAssignments(superdesk.Command):
             return
 
         # Get a list of the outstanding photo assignments
-        assignments = self._get_outstanding_photo_assignments()
+        assignments = list(self._get_outstanding_photo_assignments())
 
         # query for any images available from the image site API with those assigment id's
         completed_assignments = self._check_complete(assignments)
 
         self._mark_as_complete(completed_assignments)
 
-        # assignments.rewind()
-        # in_progress_assignments = self._check_in_progress(assignments)
+        complete = [c.get('assignment').get('_id') for c in completed_assignments]
+
+        # check if any of the outstanding assignments are in either the picedit or aapimage pools
+        in_progress_assignments = self._check_in_progress(assignments, complete)
+
+        self._mark_as_in_progress(in_progress_assignments)
 
         unlock(lock_name)
         logger.info('Finished fulfilling assignments')

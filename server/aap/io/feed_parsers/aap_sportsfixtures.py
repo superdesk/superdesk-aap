@@ -396,7 +396,7 @@ class AAPSportsFixturesParser(XMLFeedParser):
         location['original_source'] = 'AAP Sports Results'
         location['position'] = {'longitude': stadium.point.longitude, 'latitude': stadium.point.latitude,
                                 'altitude': stadium.point.altitude}
-        localities = [l for l in self.localityHierarchy if stadium.raw.get('address', {}).get(l)]
+        localities = [local for local in self.localityHierarchy if stadium.raw.get('address', {}).get(local)]
         areas = [a for a in self.areaHierarchy if stadium.raw.get('address', {}).get(a)]
         line = stadium.raw.get('address', {}).get('house_number', '')
         line = stadium.raw.get('address', {}).get('road', '') if line == '' else \
