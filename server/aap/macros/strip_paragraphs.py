@@ -30,7 +30,7 @@ def strip_paragraphs(item, **kwargs):
 
     parsed = parse_html(content, content='html')
 
-    for tag in parsed.xpath('/html/div/child::*'):
+    for tag in parsed.xpath('/div/child::*'):
         format_text_content(tag)
 
     item['body_html'] = '<p>{}</p>'.format(html.escape(''.join(parsed.itertext()))).replace('__##NBSP##__', '&nbsp;')
