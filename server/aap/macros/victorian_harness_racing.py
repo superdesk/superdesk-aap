@@ -83,7 +83,7 @@ def process_victorian_harness_racing(item, **kwargs):
 
     parsed = parse_html(content, content='html')
 
-    for tag in parsed.xpath('/html/div/child::*'):
+    for tag in parsed.xpath('/div/child::*'):
         if tag.tag == 'p':
             if tag.text.startswith('VENUE: '):
                 venue = tag.text.replace('VENUE: ', '')
@@ -120,7 +120,7 @@ def process_victorian_harness_racing(item, **kwargs):
                 break
 
     regex = r"Race ([1-9][0-9]|[1-9]):"
-    for tag in parsed.xpath('/html/div/child::*'):
+    for tag in parsed.xpath('/div/child::*'):
         if tag.tag == 'p':
             m = re.match(regex, tag.text)
             if m:
@@ -138,7 +138,7 @@ def process_victorian_harness_racing(item, **kwargs):
     comment_item['body_html'] = ''
     overview = ''
     regex = r"Race ([1-9][0-9]|[1-9]):"
-    for tag in parsed.xpath('/html/div/child::*'):
+    for tag in parsed.xpath('/div/child::*'):
         if tag.tag == 'p':
             m = re.match(regex, tag.text)
             if m:
