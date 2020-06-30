@@ -147,6 +147,7 @@ INSTALLED_APPS.extend([
     'aap.io.feed_parsers',
     'aap.data_consistency',
     'aap.io.iptc_extension',
+    'aap.io.media_topics_extension',
     'instrumentation',
     'planning',
     'aap.io.feeding_services',
