@@ -145,4 +145,4 @@ class TestGolfCollation(AAPTestCase):
         self.assertTrue(1)
         self.assertEqual(item.get('body_html'), '<p>Metropolitan</p><p>ECHUNGA: somebody something</p>'
                                                 '<p>GAWLER: somebody something</p><p>Country</p>'
-                                                '<p>Country</p>')
+                                                '<p>South East</p><p>PENOLA: somebody something</p>')

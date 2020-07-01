@@ -197,3 +197,20 @@ class SelectorcodeMapperTest(TestCase):
 
         self.assertEqual(self.locator_map.get_formatted_headline(article, 'R'),
                          'Townsville gallops selections Saturday')
+
+    def test_headline_prefix_missing_sport(self):
+        article = {
+            'headline': 'This is test headline',
+            'subject': [{'qcode': '15073000'}],
+            'place': [{
+                'name': 'NSW',
+                'state': '',
+                'world_region': 'Oceania',
+                'group': 'Australia',
+                'qcode': 'NSW',
+                'country': 'Australia'
+            }]
+        }
+
+        self.assertEqual(self.locator_map.get_formatted_headline(article, 'S'),
+                         'SPO:This is test headline')

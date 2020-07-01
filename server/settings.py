@@ -12,7 +12,7 @@
 
 import os
 import json
-from superdesk.default_settings import strtobool
+from superdesk.default_settings import strtobool, _MAIL_FROM
 
 try:
     from urllib.parse import urlparse
@@ -394,6 +394,17 @@ PLANNING_XMP_ASSIGNMENT_MAPPING = {
     'atribute_key': '{http://ns.adobe.com/photoshop/1.0/}TransmissionReference'
 }
 
+PLANNING_USE_XMP_FOR_PIC_SLUGLINE = strtobool(env('PLANNING_USE_XMP_FOR_PIC_SLUGLINE', 'true'))
+PLANNING_XMP_SLUGLINE_MAPPING = {
+    'xpath': '//x:xmpmeta/rdf:RDF/rdf:Description/dc:title/rdf:Alt/rdf:li',
+    'namespaces': {
+        'x': 'adobe:ns:meta/',
+        'rdf': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
+        'photoshop': 'http://ns.adobe.com/photoshop/1.0/',
+        'dc': 'http://purl.org/dc/elements/1.1/',
+    }
+}
+
 # Enable or disable the fulfill assignments task
 ENABLE_FULFILL_ASSIGNMENTS = strtobool(env('ENABLE_FULFILL_ASSIGNMENTS', 'true'))
 
@@ -402,6 +413,7 @@ DC_URL = env('DC_URL', '')
 DC_USERNAME = env('DC_USERNAME', '')
 DC_PASSWORD = env('DC_PASSWORD', '')
 DC_SEARCH_FIELD = env('DC_SEARCH_FIELD', 'ORIGINALTRANSMISSIONREFERENCE')
+PLANNING_ACCEPT_ASSIGNMENT_EMAIL = env('PLANNING_ACCEPT_ASSIGNMENT_EMAIL', _MAIL_FROM)
 
 try:
     from aap_settings import *  # noqa

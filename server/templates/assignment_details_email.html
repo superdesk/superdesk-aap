@@ -64,6 +64,9 @@
         </p>
     {% endif %}
 {% endif %}
-<b>Assignment ID: </b>{{ assignment_id }}<br>
-<b>Details: </b><a href="{{ client_url }}/#/workspace/assignments?assignment={{ assignment_id }}">Click to see Assignment
-    Details</a> (Internal only)<br>
+{% if recepient and system_reciepient %}
+    {% set mail_addr = recepient.get('email') or recepient.get('contact_email')[0] %}
+    {% set body = 'This email is being sent to an unmonitored (system) address. If you wish to discuss the details of the assignment further, you should contact a member of the team through other channels.
+%0D%0AAssignment {} has been accepted by {} {}.'.format(assignment_id, mail_addr, recepient._id) %}
+    <a href="mailto:{{ system_reciepient }}?&subject={{ subject.replace(' ', '%20') }}&body={{ body.replace(' ', '%20') }}">Accept Assignment</a>
+{% endif %}
