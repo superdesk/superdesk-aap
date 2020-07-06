@@ -2,19 +2,18 @@ import {getErrorMessage, getUtcOffsetInMinutes} from 'superdesk-analytics/client
 import {DATE_FILTERS} from 'superdesk-analytics/client/search/common';
 import {CHART_FIELDS, CHART_TYPES} from 'superdesk-analytics/client/charts/directives/ChartOptions';
 import {SDChart} from 'superdesk-analytics/client/charts/SDChart';
+import {searchReportService} from 'superdesk-analytics/client/search/services/SearchReport';
+import {appConfig} from 'superdesk-core/scripts/appConfig';
 
 SMSReportController.$inject = [
     '$scope',
     'savedReports',
     'chartConfig',
     'lodash',
-    'searchReport',
     'moment',
     'notify',
     'gettext',
     '$q',
-    'config',
-    'deployConfig',
     'reportConfigs',
 ];
 
@@ -24,13 +23,10 @@ export function SMSReportController(
     savedReports,
     chartConfig,
     _,
-    searchReport,
     moment,
     notify,
     gettext,
     $q,
-    config,
-    deployConfig,
     reportConfigs
 ) {
     const reportName = 'sms_report';
@@ -57,7 +53,7 @@ export function SMSReportController(
     };
 
     this.initDefaultParams = () => {
-        $scope.item_states = searchReport.filterItemStates(
+        $scope.item_states = searchReportService.filterItemStates(
             ['published', 'killed', 'corrected', 'recalled']
         );
 
@@ -79,8 +75,8 @@ export function SMSReportController(
                     filter: DATE_FILTERS.RANGE,
                     start: moment()
                         .subtract(30, 'days')
-                        .format(config.model.dateformat),
-                    end: moment().format(config.model.dateformat),
+                        .format(appConfig.model.dateformat),
+                    end: moment().format(appConfig.model.dateformat),
                 },
                 must: {},
                 must_not: {},
@@ -206,8 +202,7 @@ export function SMSReportController(
         // Any data after the daylight savings change will be 1 hour out
         const utcOffset = getUtcOffsetInMinutes(
             report['start'],
-            config.defaultTimezone,
-            moment
+            appConfig.defaultTimezone
         );
 
         const chart = new SDChart.Chart({
@@ -215,7 +210,7 @@ export function SMSReportController(
             chartType: 'highcharts',
             title: $scope.generateTitle(),
             subtitle: $scope.generateSubtitle(),
-            startOfWeek: deployConfig.getSync('start_of_week', 0),
+            startOfWeek: appConfig.start_of_week || appConfig.startingDay || 0,
             timezoneOffset: utcOffset,
             useUTC: false,
             fullHeight: true,
