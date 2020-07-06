@@ -5,7 +5,6 @@ MissionReportController.$inject = [
     'savedReports',
     'notify',
     'lodash',
-    'searchReport',
     '$q',
     'missionReportChart',
     'reportConfigs',
@@ -19,7 +18,6 @@ MissionReportController.$inject = [
  * @requires savedReports
  * @requires notify
  * @requires lodash
- * @requires searchReport
  * @requires $q
  * @requires missionReportChart
  * @requires reportConfigs
@@ -30,7 +28,6 @@ export function MissionReportController(
     savedReports,
     notify,
     _,
-    searchReport,
     $q,
     missionReportChart,
     reportConfigs
