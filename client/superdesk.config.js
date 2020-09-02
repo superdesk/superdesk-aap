@@ -45,6 +45,11 @@ module.exports = function() {
             editorInlineComments: false,
             editorSuggestions: false,
             validatePointOfInterestForImages: true,
+            customAuthoringTopbar: {
+                toDesk: false,
+                publish: true,
+                publishAndContinue: false,
+            }
         },
 
         activity: {
