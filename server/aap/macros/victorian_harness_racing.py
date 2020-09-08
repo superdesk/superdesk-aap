@@ -50,7 +50,7 @@ def process_victorian_harness_racing(item, **kwargs):
             except KeyError:
                 return str(n)
 
-    content = item.get('body_html', '')
+    content = item.get('body_html', '').replace('&nbsp;', ' ')
     comment_item = {
         "anpa_category": [
             {
@@ -88,9 +88,9 @@ def process_victorian_harness_racing(item, **kwargs):
 
     for tag in parsed.xpath('/div/child::*'):
         if tag.tag == 'p':
-            if tag.text.startswith('VENUE: '):
+            if tag.text and tag.text.startswith('VENUE: '):
                 venue = tag.text.replace('VENUE: ', '')
-            elif tag.text.startswith('DATE: '):
+            elif tag.text and tag.text.startswith('DATE: '):
                 try:
                     meeting_date = datetime.strptime(tag.text.replace('DATE: ', '').replace(' ', ''), '%d/%m/%y')
                 except Exception:
@@ -109,13 +109,13 @@ def process_victorian_harness_racing(item, **kwargs):
                 comment_item['anpa_take_key'] = meeting_date.strftime('%A')
                 comment_item['headline'] = venue + ' Trot Comment ' + meeting_date.strftime('%A')
                 comment_item['firstcreated'] = utcnow()
-                set_dateline(comment_item, 'Melbourne', 'AAP')
+                set_dateline(comment_item, 'Melbourne', '')
 
                 selections_item['slugline'] = venue + ' Selections'
                 selections_item['anpa_take_key'] = meeting_date.strftime('%A')
                 selections_item['headline'] = venue + ' Trot Selections ' + meeting_date.strftime('%A')
                 selections_item['firstcreated'] = utcnow()
-                set_dateline(selections_item, 'Melbourne', 'AAP')
+                set_dateline(selections_item, 'Melbourne', '')
                 selections_item['body_html'] = '<p>{} Selections for {}\'s {} trots.-</p>'.format(
                     selections_item.get('dateline').get('text'),
                     meeting_date.strftime('%A'), venue)
@@ -124,7 +124,7 @@ def process_victorian_harness_racing(item, **kwargs):
 
     regex = r"Race ([1-9][0-9]|[1-9]):"
     for tag in parsed.xpath('/div/child::*'):
-        if tag.tag == 'p':
+        if tag.tag == 'p' and tag.text:
             m = re.match(regex, tag.text)
             if m:
                 selections_item['body_html'] += '<p>{} '.format(tag.text)
@@ -136,13 +136,13 @@ def process_victorian_harness_racing(item, **kwargs):
                 # get rid of the trailing one
                 sels = re.sub(r'(, $|,$)', ' ', sels)
                 selections_item['body_html'] += '{}</p>'.format(sels)
-    selections_item['body_html'] += '<p>AAP SELECTIONS</p>'
+    selections_item['body_html'] += '<p>MEDIALITY RACING SELECTIONS</p>'
 
     comment_item['body_html'] = ''
     overview = ''
     regex = r"Race ([1-9][0-9]|[1-9]):"
     for tag in parsed.xpath('/div/child::*'):
-        if tag.tag == 'p':
+        if tag.tag == 'p' and tag.text:
             m = re.match(regex, tag.text)
             if m:
                 comment_item['body_html'] += '<p>Race {}:</p>'.format(race_number_to_words(tag.text))
@@ -157,7 +157,7 @@ def process_victorian_harness_racing(item, **kwargs):
 
     for i, j in substitution_map.items():
         comment_item['body_html'] = comment_item['body_html'].replace(i, j)
-    comment_item['body_html'] += '<p>AAP COMMENT</p>'
+    comment_item['body_html'] += '<p>MEDIALITY RACING COMMENT</p>'
 
     service = get_resource_service('archive')
     selections_item['task'] = item.get('task')
