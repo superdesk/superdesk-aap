@@ -15,4 +15,4 @@ requests<2.22
 
 git+git://github.com/superdesk/superdesk-core.git@v1.33.5#egg=Superdesk-Core
 git+git://github.com/superdesk/superdesk-planning.git@1.33.0#egg=superdesk-planning
-git+git://github.com/superdesk/superdesk-analytics.git@1.33.3#egg=superdesk-analytics
+git+git://github.com/superdesk/superdesk-analytics.git@release/1.33.4#egg=superdesk-analytics

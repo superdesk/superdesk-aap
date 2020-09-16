@@ -4,6 +4,6 @@
     "dependencies": {
         "superdesk-core": "1.33.3",
         "superdesk-planning": "1.33.0",
-        "superdesk-analytics": "1.33.3"
+        "superdesk-analytics": "github:superdesk/superdesk-analytics#release/1.33.4"
     }
 }
