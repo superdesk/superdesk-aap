@@ -92,7 +92,7 @@ class AapBulletinBuilderFormatterTest(TestCase):
                           '<table><tr><td>test</td></tr></table>')
         }
 
-        body_text = ('The story body line 1 Line 2\r\n\r\n'
+        body_text = ('The story body line 1\r\n\r\nLine 2\r\n\r\n'
                      'abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi'
                      ' abcdefghi abcdefghi abcdefghi more\r\n\r\n'
                      'test\r\n\r\n')
@@ -120,7 +120,7 @@ class AapBulletinBuilderFormatterTest(TestCase):
                           '<table><tr><td>test</td></tr></table>')
         }
 
-        body_text = ('The story body line 1 Line 2\r\n\r\n'
+        body_text = ('The story body line 1\r\n\r\nLine 2\r\n\r\n'
                      'abcdefghi abcdefghi abcdefghi abcdefghi abcdefghi'
                      ' abcdefghi abcdefghi abcdefghi more\r\n\r\n'
                      'test\r\n\r\n')
@@ -143,7 +143,7 @@ class AapBulletinBuilderFormatterTest(TestCase):
                           '<p>This is test.</p><br/><p><br/></p>')
         }
 
-        body_text = ('This is third take.\r\n\r\n'
+        body_text = ('This is third\r\n\r\ntake.\r\n\r\n'
                      'Correction in the third take.\r\n\r\n'
                      'This is test.\r\n\r\n')
 
@@ -165,8 +165,8 @@ class AapBulletinBuilderFormatterTest(TestCase):
                           '<p>This is test.</p><br/><p><br/></p>')
         }
 
-        body_text = ('This is third take.\r\n\r\n'
-                     'Correction in the third take.\r\n\r\n'
+        body_text = ('This is\r\n\r\nthird\r\n\r\ntake.\r\n\r\n'
+                     'Correction\r\n\r\nin the third take.\r\n\r\n'
                      'This is test.\r\n\r\n')
 
         subscriber = self.app.data.find('subscribers', None, None)[0]
