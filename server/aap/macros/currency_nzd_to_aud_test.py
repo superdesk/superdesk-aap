@@ -9,7 +9,7 @@
 # at https://www.sourcefabric.org/superdesk/license
 
 from .currency_nzd_to_aud import nzd_to_aud
-from .currency_test_base import CurrencyTestClass
+from .currency_test_base_test import CurrencyTestClass
 
 
 class CurrencyTestCase(CurrencyTestClass):

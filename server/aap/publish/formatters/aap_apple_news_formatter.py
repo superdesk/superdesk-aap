@@ -540,7 +540,7 @@ class AAPAppleNewsFormatter(Formatter):
         references_found = False
         statement_elements = []
 
-        for top_level_tag in parsed_content.xpath('/html/div/child::*'):
+        for top_level_tag in parsed_content.xpath('/div/child::*'):
             tag_text = format_text_content(top_level_tag).strip()
             if not tag_text:
                 continue

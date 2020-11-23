@@ -116,6 +116,18 @@ class TestGolfCollation(AAPTestCase):
                 "state": "submitted",
                 "versioncreated": utcnow() - timedelta(hours=25),
                 "body_html": "<p>LINKS A: somebody something</p>"
+            },
+            {"place": [{"qcode": "SA"}],
+             "task": {
+                 "desk": ObjectId("5e1e9474d70421b46535ebe6"),
+                 "stage": ObjectId("5e1e9474d70421b46535ebe4")
+            },
+                "headline": "Exclude duplicate",
+                "slugline": "Echung",
+                "subject": [{"qcode": "15027000"}],
+                "state": "submitted",
+                "versioncreated": utcnow() - timedelta(hours=5),
+                "body_html": "<p>ECHUNGA: somebody something</p>"
             }
         ])
         self.app.data.insert('desks', [

@@ -162,25 +162,17 @@ def golf_collation(item, **kwargs):
                    key=lambda s: s.get('slugline', '').lower())
     body = ''
     if collated_grouped:
-        # keep a set of the golf links that have been include so as not to include them multiple times
-        include_links = set()
         for region in state_region.get('regions'):
             body += '<p>' + region.get('name') + '</p>'
             for i in items:
-                for link in region.get('links'):
-                    if link.lower().startswith(i.get('slugline', '').lower())\
-                            and i.get('slugline', '').lower() not in include_links:
-                        body += i.get('body_html')
-                        include_links.add(i.get('slugline', '').lower())
+                if len(list(filter(lambda x: x.lower().startswith(i.get('slugline', '').lower()),
+                                   region.get('links')))) > 0:
+                    body += i.get('body_html')
     else:
-        include_links = set()
         for i in items:
             if links:
-                for link in links:
-                    if link.lower().startswith(i.get('slugline', '').lower())\
-                            and i.get('slugline', '').lower() not in include_links:
-                        body += i.get('body_html')
-                        include_links.add(i.get('slugline', '').lower())
+                if len(list(filter(lambda x: x.lower().startswith(i.get('slugline', '').lower()), links))) > 0:
+                    body += i.get('body_html')
             else:
                 body += i.get('body_html')
 
@@ -194,8 +186,8 @@ def golf_collation(item, **kwargs):
     return item
 
 
-name = 'Golf collation'
-label = 'Golf collation'
+name = 'Golf collation V2'
+label = 'Golf collation V2'
 callback = golf_collation
 access_type = 'frontend'
 action_type = 'direct'

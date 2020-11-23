@@ -137,7 +137,7 @@ class IRESSNITFFormatter(NITFFormatter):
             br.tail = '\r\n' + br.tail if br.tail else '\r\n'
         etree.strip_elements(parsed, 'br', with_tail=False)
 
-        for tag in parsed.xpath('/html/div/child::*'):
+        for tag in parsed.xpath('/div/child::*'):
             if tag.tag != 'br' and tag.text is not None and tag.text.strip() != '':
                 tag.text = self.line_prefix + re.sub(' +', ' ', re.sub('(?<!\r)\n+', ' ', tag.text))
                 tag.tail = '\r\n' + tag.tail if tag.tail else '\r\n'

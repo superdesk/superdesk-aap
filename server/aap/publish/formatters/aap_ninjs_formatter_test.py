@@ -388,7 +388,6 @@ class AAPNINJSFormatterTest(TestCase):
                                     "CropBottom": 3712,
                                     "mimetype": "image/jpeg",
                                     "CropRight": 5568,
-                                    "CropTop": 0,
                                     "height": 600,
                                     "CropLeft": 636,
                                     "width": 800,
@@ -427,9 +426,7 @@ class AAPNINJSFormatterTest(TestCase):
                                     "CropBottom": 3143,
                                     "mimetype": "image/jpeg",
                                     "CropRight": 5568,
-                                    "CropTop": 0,
                                     "height": 720,
-                                    "CropLeft": 0,
                                     "width": 1280,
                                     "media": "59a769f81d41c88f16818b2c",
                                     "poi": {

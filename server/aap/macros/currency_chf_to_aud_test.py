@@ -9,7 +9,7 @@
 # at https://www.sourcefabric.org/superdesk/license
 
 from .currency_chf_to_aud import chf_to_aud
-from .currency_test_base import CurrencyTestClass
+from .currency_test_base_test import CurrencyTestClass
 
 
 class CurrencyTestCase(CurrencyTestClass):

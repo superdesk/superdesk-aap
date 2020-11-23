@@ -1,7 +1,7 @@
-module.exports = function() {
+module.exports = function(grunt) {
     return {
         apps: ['superdesk-planning', 'superdesk.analytics', 'aap.apps'],
-        importApps: ['superdesk-planning', 'superdesk-analytics', '../aap'],
+        importApps: ['superdesk-planning', 'superdesk-analytics', '../index.js'],
         defaultRoute: '/workspace',
         workspace: {
             ingest: 1,
@@ -17,15 +17,6 @@ module.exports = function() {
 
         item_profile: {
             change_profile: 1
-        },
-
-        editor: {
-            toolbar: false,
-            embeds: false,
-            paste: {
-                forcePlainText: true,
-                cleanPastedHTML: false
-            }
         },
 
         features: {
@@ -45,6 +36,11 @@ module.exports = function() {
             editorInlineComments: false,
             editorSuggestions: false,
             validatePointOfInterestForImages: true,
+            customAuthoringTopbar: {
+                toDesk: false,
+                publish: false,
+                publishAndContinue: false,
+            }
         },
 
         activity: {

@@ -287,6 +287,12 @@ with open(os.path.join(os.path.dirname(__file__), 'picture-profile.json')) as pr
 
 EDITOR = {
     "picture": picture_profile['editor'],
+    "embeds": False,
+    "toolbar": False,
+    "paste": {
+        "forcePlainText": True,
+        "cleanPastedHTML": False
+    }
 }
 
 SCHEMA = {
@@ -417,5 +423,5 @@ PLANNING_ACCEPT_ASSIGNMENT_EMAIL = env('PLANNING_ACCEPT_ASSIGNMENT_EMAIL', _MAIL
 
 try:
     from aap_settings import *  # noqa
-except:
+except Exception:
     pass

@@ -23,6 +23,7 @@ from .unicodetoascii import to_ascii
 from copy import deepcopy
 import json
 from superdesk.etree import parse_html, etree
+from superdesk.macros.extract_html import extract_html_macro
 
 
 class AAPBulletinBuilderFormatter(Formatter):
@@ -40,6 +41,8 @@ class AAPBulletinBuilderFormatter(Formatter):
         """
         try:
             formatted_article = deepcopy(article)
+
+            formatted_article = extract_html_macro(formatted_article)
 
             pub_seq_num = superdesk.get_resource_service('subscribers').generate_sequence_number(subscriber)
             body_html = to_ascii(self.append_body_footer(formatted_article)).strip('\r\n')
@@ -123,7 +126,7 @@ class AAPBulletinBuilderFormatter(Formatter):
         etree.strip_elements(parsed, 'br', with_tail=False)
 
         text = ''
-        for top_level_tag in parsed.xpath('/html/div/child::*'):
+        for top_level_tag in parsed.xpath('/div/child::*'):
             text += self.format_text_content(top_level_tag)
 
         return re.sub(' +', ' ', text)
@@ -179,7 +182,7 @@ class AAPBulletinBuilderFormatter(Formatter):
         if not item.get(ASSOCIATIONS):
             return
 
-        for assoc, value in item.get(ASSOCIATIONS).items():
+        for _assoc, value in item.get(ASSOCIATIONS).items():
             if not value or value.get(ITEM_TYPE) not in {CONTENT_TYPE.AUDIO, CONTENT_TYPE.VIDEO,
                                                          CONTENT_TYPE.GRAPHIC, CONTENT_TYPE.PICTURE}:
                 continue

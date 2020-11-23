@@ -8,7 +8,7 @@
 # AUTHORS and LICENSE files distributed with this source code, or
 # at https://www.sourcefabric.org/superdesk/license
 
-from .currency_test_base import CurrencyTestClass
+from .currency_test_base_test import CurrencyTestClass
 from .currency_euro_to_aud import euro_to_aud
 
 
