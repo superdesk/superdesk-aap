@@ -51,6 +51,13 @@ class AAPNewsroomNinjsFormatter(NewsroomNinjsFormatter):
         if (ninjs.get(GUID_FIELD) or '').startswith('/mnt/'):
             ninjs[GUID_FIELD] = article.get(FAMILY_ID)
 
+        # Detect if the picture was sourced from DC switch the GUID
+        DC_ID_REGEX = r'^[0-9]{20}$'
+        dc_match = re.search(DC_ID_REGEX, article.get('ingest_id', ''))
+        if article.get('type') == 'picture' and article.get('ingest_id') and article.get(
+                'ingest_provider') and dc_match:
+            ninjs[GUID_FIELD] = article.get('ingest_id')
+
         if article.get(FORMAT) == FORMATS.HTML:
             ninjs['body_html'] = self._format_url_to_anchor_tag(ninjs.get('body_html', ''))
 
