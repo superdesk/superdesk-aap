@@ -13,41 +13,23 @@ import superdesk
 from superdesk.publish.formatters.ninjs_formatter import NINJSFormatter
 from superdesk.utils import json_serialize_datetime_objectId
 from superdesk.errors import FormatterError
+from superdesk.metadata.item import GUID_FIELD
 
 
 class AAPNINJSFormatter(NINJSFormatter):
-    rendition_properties = ('href', 'width', 'height', 'mimetype', 'poi', 'media', 'CropTop', 'CropBottom',
-                            'CropRight', 'CropLeft')
-    vidible_fields = {field: field for field in rendition_properties}
-    vidible_fields.update({
-        'url': 'href',
-        'duration': 'duration',
-        'mimeType': 'mimetype',
-        'size': 'size',
-    })
 
     def __init__(self):
-        self.format_type = 'aap ninjs'
+        super().__init__()
         self.can_preview = False
         self.can_export = False
-        self.internal_renditions = ['original', 'viewImage', 'baseImage']
+        self.format_type = 'aap ninjs'
 
     def format(self, article, subscriber, codes=None):
         try:
             pub_seq_num = superdesk.get_resource_service('subscribers').generate_sequence_number(subscriber)
 
             ninjs = self._transform_to_ninjs(article, subscriber)
-
-            # if the article has an abstract then the description text has been over written by the abstract
-            if article.get('abstract'):
-                # if it is a picture then put it back
-                if article.get('type') == 'picture':
-                    ninjs['description_text'] = article.get('description_text', '')
-
-            media = article.get('associations', {}).get('featuremedia')
-            ninjs_media = article.get('associations', {}).get('featuremedia')
-            if media and media.get('type') == 'picture':
-                ninjs_media['description_text'] = media.get('description_text')
+            ninjs['original_item'] = article.get('family_id', article.get(GUID_FIELD, article.get('uri')))
 
             return [(pub_seq_num, json.dumps(ninjs, default=json_serialize_datetime_objectId))]
         except Exception as ex:
