@@ -18,5 +18,15 @@
         },
         "label" : "Courts",
         "download" : true
+    },
+    {
+        "_id" : "event_courts_nightly_download",
+        "name" : "event_courts_nightly_download",
+        "type" : "event",
+        "data" : {
+            "template_file" : "event_courts_nightly_download.html"
+        },
+        "label" : "Nightly Courts List",
+        "download" : true
     }
 ]
