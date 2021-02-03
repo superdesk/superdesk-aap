@@ -1,1 +1,1 @@
-{% for item in items %}{{ item['browser_start'].strftime('%H%M') }} - {{ item['definition_short'] or item['name']  }}.{% if (item.get('location') or [])|length > 0 %}{% for l in item.location %} {{ l.name }}{% endfor %}{% endif %}{{"\r\n"}}{% endfor %}
+{% for item in items %}{{ item['browser_start'].strftime('%H%M') }} - {% if item['reference']%}{{item['reference']}} {% endif %}{{ item['name'] or item['definition_short'] }}.{% if (item.get('location') or [])|length > 0 %}{% for l in item.location %} {{ l.name }}{% endfor %}{% endif %}{{ "\r\n" }}{% endfor %}
