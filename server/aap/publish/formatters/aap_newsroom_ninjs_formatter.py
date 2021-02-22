@@ -30,7 +30,7 @@ class AAPNewsroomNinjsFormatter(NewsroomNinjsFormatter):
                 # so return the whole match.
                 return match_object.group(0)
             else:
-                return '<a href="{0}" target="_blank">{0}</a>'.format(html.unescape(url), url)
+                return '<a href="{0}" target="_blank">{1}</a>'.format(html.unescape(url), url)
 
         return re.sub(self.URL_REGEX, replacement, tag_text)
 
@@ -58,7 +58,7 @@ class AAPNewsroomNinjsFormatter(NewsroomNinjsFormatter):
                 'ingest_provider') and dc_match:
             ninjs[GUID_FIELD] = article.get('ingest_id')
 
-        if article.get(FORMAT) == FORMATS.HTML:
+        if article.get(FORMAT) == FORMATS.HTML and 'fields_meta' not in article:
             ninjs['body_html'] = self._format_url_to_anchor_tag(ninjs.get('body_html', ''))
 
         # if the article has an abstract then the description text has been over written by the abstract
