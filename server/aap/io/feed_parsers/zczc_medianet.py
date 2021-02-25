@@ -76,17 +76,17 @@ class ZCZCMedianetParser(ZCZCFeedParser):
             if item[FORMAT] == FORMATS.PRESERVED:
                 if InvestorRelease:
                     ptag.text = '{} '.format(
-                        'Investor Relations news release distributed by AAP Medianet. \r\n\r\n\r\n') \
+                        'Investor Relations news release distributed by Medianet. \r\n\r\n\r\n') \
                         + ptag.text
                 else:
-                    ptag.text = '{} '.format('Media release distributed by AAP Medianet. \r\n\r\n\r\n') + ptag.text
+                    ptag.text = '{} '.format('Media release distributed by Medianet. \r\n\r\n\r\n') + ptag.text
                 item['body_html'] = to_string(body_html_elem)
             else:
                 body = ''
                 if InvestorRelease:
-                    body = '<p>Investor Relations news release distributed by AAP Medianet.<br><br></p>'
+                    body = '<p>Investor Relations news release distributed by Medianet.<br><br></p>'
                 else:
-                    body = '<p>Media release distributed by AAP Medianet.<br><br></p>'
+                    body = '<p>Media release distributed by Medianet.<br><br></p>'
                 pars = ptag.text.split('\n\n')
                 for p in pars:
                     body = body + '<p>' + p.replace('\n', '<br>') + '</p>'
