@@ -101,7 +101,7 @@ class AsiaNetFeedParser(FileFeedParser):
         # Clean up the header entries
         item['anpa_take_key'] = item['anpa_take_key'][8:].replace('\n', '').strip()
         item['headline'] = 'Media Release: ' + item.get('anpa_take_key', '')
-        item['slugline'] = 'AAP Medianet'
+        item['slugline'] = 'Medianet'
         self._truncate_headers(item)
 
 
