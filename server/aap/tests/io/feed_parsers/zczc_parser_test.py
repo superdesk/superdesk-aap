@@ -134,7 +134,7 @@ class ZCZCTestCase(TestCase):
         fixture = os.path.normpath(os.path.join(dirname, '../fixtures', filename))
         self.provider['source'] = 'MNET'
         self.items = ZCZCMedianetParser().parse(fixture, self.provider)
-        self.assertTrue(self.items.get('body_html').startswith('<pre>Media release distributed by AAP Medianet.'))
+        self.assertTrue(self.items.get('body_html').startswith('<pre>Media release distributed by Medianet.'))
         self.assertTrue(self.items.get('body_html').find('                    Dividend     Total Winners     '
                                                          'Total Prizes Payable') != -1)
 
