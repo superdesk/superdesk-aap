@@ -7,6 +7,9 @@ setTimeout(() => {
             {
                 id: 'planning-extension',
                 load: () => import('superdesk-planning/client/planning-extension'),
+                configuration: {
+                    assignmentsTopBarWidget: true,
+                },
             },
         ],
         {},
