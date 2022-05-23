@@ -25,6 +25,7 @@ class SMSReportResource(Resource):
     item_methods = ['GET']
     resource_methods = ['GET']
     privileges = {'GET': 'sms_report'}
+    projection = False
 
 
 class SMSReportService(BaseReportService):
