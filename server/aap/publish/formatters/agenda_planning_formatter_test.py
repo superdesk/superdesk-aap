@@ -572,7 +572,7 @@ class AgendaPlanningFormatterTest(TestCase):
         doc = self.formatter.format(event, {'name': 'Test Subscriber'})[0]
         item = json.loads(doc[1])
         events = self.app.data.find('events', None, None)
-        self.assertEqual(events[0]['unique_id'], '1234')
+        self.assertEqual(events[0][0]['unique_id'], '1234')
         self.assertEqual(item.get('Title'), 'Superdesk Planning')
         self.assertEqual(len(item.get('Coverages')), 1)
         self.assertEqual(item.get('Type'), 'event')

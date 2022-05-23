@@ -39,7 +39,7 @@ class RemoteSyncTest(RemoteSuncBaseTest):
         cmd = RemoteSyncCommand()
         cmd.run('https://superdesk.com.au/api', 'test', 'test')
         published = self.app.data.find('published', None, None)
-        self.assertEqual(published.count(), 1)
+        self.assertEqual(published[0].count(), 1)
 
     def setupRemoteSyncMock(self, context):
         context.mock = HTTMock(*[self.login_request, self.search_request])
@@ -68,7 +68,7 @@ class RemoteSyncTakeStory(RemoteSuncBaseTest):
         cmd = RemoteSyncCommand()
         cmd.run('https://superdesk.com.au/api', 'test', 'test')
         published = self.app.data.find("published", None, None)
-        self.assertEqual(published.count(), 2)
+        self.assertEqual(published[0].count(), 2)
 
     def setupRemoteSyncMock(self, context):
         context.mock = HTTMock(*[self.login_request, self.search_request, self.archive_request])
@@ -394,8 +394,8 @@ class RemoteSyncUpdatedStory(RemoteSuncBaseTest):
         cmd = RemoteSyncCommand()
         cmd.run('https://superdesk.com.au/api', 'test', 'test')
         published = self.app.data.find("published", None, None)
-        self.assertEqual(published.count(), 1)
-        for item in published:
+        self.assertEqual(published[0].count(), 1)
+        for item in published[0]:
             self.assertEqual(item['body_html'], '<p>Update second published</p>')
 
     def setupRemoteSyncMock(self, context):

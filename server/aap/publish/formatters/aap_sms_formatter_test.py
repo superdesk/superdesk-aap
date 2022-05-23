@@ -95,7 +95,7 @@ class AapSMSFormatterTest(TestCase):
         self.assertFalse(f.can_format("AAP SMS", self.article3))
 
     def test_sms_formatter(self):
-        subscriber = self.app.data.find('subscribers', None, None)[0]
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
 
         f = AAPSMSFormatter()
         seq, item = f.format(self.article1, subscriber)[0]
@@ -108,7 +108,7 @@ class AapSMSFormatterTest(TestCase):
                                         'The story bodycall helpline 999 if you are planning to quit smoking'})
 
     def test_test_sms_formatter(self):
-        subscriber = self.app.data.find('subscribers', None, None)[0]
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
         self.app.config['TEST_SMS_OUTPUT'] = True
 
         f = AAPSMSFormatter()
@@ -122,7 +122,7 @@ class AapSMSFormatterTest(TestCase):
                                         'The story bodycall helpline 999 if you are planning to quit smoking'})
 
     def test_sms_formatter_with_sms_message(self):
-        subscriber = self.app.data.find('subscribers', None, None)[0]
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
 
         f = AAPSMSFormatter()
         seq, item = f.format(self.article2, subscriber)[0]
@@ -135,7 +135,7 @@ class AapSMSFormatterTest(TestCase):
                                         'The story bodycall helpline 999 if you are planning to quit smoking'})
 
     def test_html_message(self):
-        subscriber = self.app.data.find('subscribers', None, None)[0]
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
 
         f = AAPSMSFormatter()
         seq, item = f.format(self.article4, subscriber)[0]
@@ -143,7 +143,7 @@ class AapSMSFormatterTest(TestCase):
         self.assertEqual(item['Headline'], 'not marked up string')
 
     def test_non_ascii_characters(self):
-        subscriber = self.app.data.find('subscribers', None, None)[0]
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
 
         f = AAPSMSFormatter()
         seq, item = f.format(self.article5, subscriber)[0]

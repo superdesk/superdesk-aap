@@ -80,7 +80,7 @@ class NznIpNewsFormatterTest(TestCase):
         self.assertEqual(mapped_cats[0]['qcode'], 'T')
 
     def testIPNewsFormatterAAPtoNZN(self):
-        subscriber = self.app.data.find('subscribers', None, None)[0]
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
 
         f = NznIpNewsFormatter()
         seq, item = f.format(self.article, subscriber)[0]

@@ -61,7 +61,7 @@ class NZNANPAFormatterTest(TestCase):
         init_app(self.app)
 
     def testNZNANPAFormatter(self):
-        subscriber = self.app.data.find('subscribers', None, None)[0]
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
 
         f = NZNAnpaFormatter()
         resp = f.format(self.article.copy(), subscriber, ['axx'])[0]

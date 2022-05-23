@@ -60,7 +60,7 @@ class AapNewscentreFormatterTest(TestCase):
         init_app(self.app)
 
     def testNewscentreFormatterWithNoSelector(self):
-        subscriber = self.app.data.find('subscribers', None, None)[0]
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
 
         f = AAPNewscentreFormatter()
         seq, item = f.format(self.article, subscriber)[0]
@@ -96,7 +96,7 @@ class AapNewscentreFormatterTest(TestCase):
             'priority': 1
         }
 
-        subscriber = self.app.data.find('subscribers', None, None)[0]
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
 
         f = AAPNewscentreFormatter()
         seq, item = f.format(article, subscriber)[0]
@@ -126,7 +126,7 @@ class AapNewscentreFormatterTest(TestCase):
             'place': [{'qcode': 'VIC', 'name': 'VIC'}]
         }
 
-        subscriber = self.app.data.find('subscribers', None, None)[0]
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
 
         f = AAPNewscentreFormatter()
         docs = f.format(article, subscriber, ['Aaa', 'Bbb', 'Ccc'])
@@ -163,7 +163,7 @@ class AapNewscentreFormatterTest(TestCase):
             'urgency': 1,
             'place': [{'qcode': 'VIC', 'name': 'VIC'}]
         }
-        subscriber = self.app.data.find('subscribers', None, None)[0]
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
 
         f = AAPNewscentreFormatter()
         seq, doc = f.format(article, subscriber)[0]
@@ -195,7 +195,7 @@ class AapNewscentreFormatterTest(TestCase):
         self.assertEqual(doc['headline'], 'This is a test headline')
 
     def test_aap_newscentre_formatter_with_body_footer(self):
-        subscriber = self.app.data.find('subscribers', None, None)[0]
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
         doc = self.article.copy()
         doc['body_footer'] = '<p>call helpline 999 if you are planning to quit smoking</p>'
 

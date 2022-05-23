@@ -12,6 +12,7 @@ from superdesk.tests import TestCase
 from .victorian_harness_racing import process_victorian_harness_racing
 from apps.publish import init_app
 from bson.objectid import ObjectId
+from eve.utils import ParsedRequest
 
 
 class RacingServiceTestCase(TestCase):
@@ -179,6 +180,9 @@ class RacingServiceTestCase(TestCase):
     def test_stories(self):
         doc = process_victorian_harness_racing(self.article)
         self.assertTrue(doc.get('body_html').startswith('<p>Race One:</p>'))
-        selections = self.app.data.find('archive', None, None)
+        req = ParsedRequest()
+        req.args = {}
+
+        selections = self.app.data.find('archive', req, None)
         self.assertTrue('Selections for Wednesday\'s Mildura trots.-</p><p>Race 1: She Said Yes, '
-                        'Saint Houdini, Stylish Gem, Johns Grin </p>' in selections[0].get('body_html'))
+                        'Saint Houdini, Stylish Gem, Johns Grin </p>' in selections[0].docs[0].get('body_html'))

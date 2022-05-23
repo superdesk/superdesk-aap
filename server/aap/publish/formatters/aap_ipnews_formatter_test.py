@@ -62,7 +62,7 @@ class AapIpNewsFormatterTest(TestCase):
         init_app(self.app)
 
     def testIPNewsFormatterWithNoSelector(self):
-        subscriber = self.app.data.find('subscribers', None, None)[0]
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
 
         f = AAPIpNewsFormatter()
         seq, item = f.format(self.article, subscriber)[0]
@@ -106,7 +106,7 @@ class AapIpNewsFormatterTest(TestCase):
             ],
         }
 
-        subscriber = self.app.data.find('subscribers', None, None)[0]
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
 
         f = AAPIpNewsFormatter()
         seq, item = f.format(article, subscriber)[0]
@@ -141,7 +141,7 @@ class AapIpNewsFormatterTest(TestCase):
             ],
         }
 
-        subscriber = self.app.data.find('subscribers', None, None)[0]
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
 
         f = AAPIpNewsFormatter()
         seq, item = f.format(article, subscriber)[0]
@@ -181,7 +181,7 @@ class AapIpNewsFormatterTest(TestCase):
                 }
             ],
         }
-        subscriber = self.app.data.find('subscribers', None, None)[0]
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
 
         f = AAPIpNewsFormatter()
         seq, item = f.format(article, subscriber)[0]
@@ -250,7 +250,7 @@ class AapIpNewsFormatterTest(TestCase):
                 }
             ],
         }
-        subscriber = self.app.data.find('subscribers', None, None)[0]
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
 
         f = AAPIpNewsFormatter()
         seq, item = f.format(article, subscriber)[0]
@@ -284,7 +284,7 @@ class AapIpNewsFormatterTest(TestCase):
                 }
             ],
         }
-        subscriber = self.app.data.find('subscribers', None, None)[0]
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
 
         f = AAPIpNewsFormatter()
         seq, item = f.format(article, subscriber)[0]
@@ -314,7 +314,7 @@ class AapIpNewsFormatterTest(TestCase):
                 }
             ],
         }
-        subscriber = self.app.data.find('subscribers', None, None)[0]
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
 
         f = AAPIpNewsFormatter()
         seq, item = f.format(article, subscriber)[0]
@@ -344,7 +344,7 @@ class AapIpNewsFormatterTest(TestCase):
                 }
             ],
         }
-        subscriber = self.app.data.find('subscribers', None, None)[0]
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
 
         f = AAPIpNewsFormatter()
         seq, item = f.format(article, subscriber)[0]
@@ -373,7 +373,7 @@ class AapIpNewsFormatterTest(TestCase):
                 }
             ],
         }
-        subscriber = self.app.data.find('subscribers', None, None)[0]
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
 
         f = AAPIpNewsFormatter()
         seq, item = f.format(article, subscriber)[0]
@@ -403,7 +403,7 @@ class AapIpNewsFormatterTest(TestCase):
                 }
             ],
         }
-        subscriber = self.app.data.find('subscribers', None, None)[0]
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
 
         f = AAPIpNewsFormatter()
         seq, item = f.format(article, subscriber)[0]
@@ -433,7 +433,7 @@ class AapIpNewsFormatterTest(TestCase):
                 }
             ],
         }
-        subscriber = self.app.data.find('subscribers', None, None)[0]
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
 
         f = AAPIpNewsFormatter()
         seq, item = f.format(article, subscriber)[0]
@@ -461,7 +461,7 @@ class AapIpNewsFormatterTest(TestCase):
             'place': [{'qcode': 'VIC', 'name': 'VIC'}]
         }
 
-        subscriber = self.app.data.find('subscribers', None, None)[0]
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
 
         f = AAPIpNewsFormatter()
         docs = f.format(article, subscriber, ['Aaa', 'Bbb', 'Ccc'])
@@ -499,7 +499,7 @@ class AapIpNewsFormatterTest(TestCase):
             'place': [{'qcode': 'VIC', 'name': 'VIC'}]
         }
 
-        subscriber = self.app.data.find('subscribers', None, None)[0]
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
 
         f = AAPIpNewsFormatter()
         codes = ['an5', 'an4', 'an7', 'an6', 'ax5', 'an3', 'ax6', 'ax7', '0hw']
@@ -528,7 +528,7 @@ class AapIpNewsFormatterTest(TestCase):
             'urgency': 1,
             'place': [{'qcode': 'VIC', 'name': 'VIC'}]
         }
-        subscriber = self.app.data.find('subscribers', None, None)[0]
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
 
         f = AAPIpNewsFormatter()
         seq, doc = f.format(article, subscriber)[0]
@@ -641,7 +641,7 @@ class AapIpNewsFormatterTest(TestCase):
             ],
             "rewritten_by": None
         }
-        subscriber = self.app.data.find('subscribers', None, None)[0]
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
 
         f = AAPIpNewsFormatter()
         seq, doc = f.format(article, subscriber)[0]
@@ -649,7 +649,7 @@ class AapIpNewsFormatterTest(TestCase):
         self.assertEqual(doc['headline'], 'FED:Finance Highlights')
 
     def test_aap_ipnews_formatter_with_body_footer(self):
-        subscriber = self.app.data.find('subscribers', None, None)[0]
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
         doc = self.article.copy()
         doc['body_footer'] = '<p>call helpline 999 if you are planning to quit smoking</p>'
 
@@ -675,7 +675,7 @@ class AapIpNewsFormatterTest(TestCase):
                               'genre': 'Current', 'keyword': 'slugline', 'author': 'joe'})
 
     def test_aap_ipnews_formatter_with_body_formatted(self):
-        subscriber = self.app.data.find('subscribers', None, None)[0]
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
         doc = copy.deepcopy(self.article)
         doc['body_footer'] = '<p>call helpline 999 if you are planning to quit smoking</p>'
         doc['body_html'] = ('<pre>  The story\n body\r\n</pre>'
@@ -725,7 +725,7 @@ class AapIpNewsFormatterTest(TestCase):
                 }
             ],
         }
-        subscriber = self.app.data.find('subscribers', None, None)[0]
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
         f = AAPIpNewsFormatter()
         seq, item = f.format(article, subscriber)[0]
         item = json.loads(item)
@@ -755,7 +755,7 @@ class AapIpNewsFormatterTest(TestCase):
                 }
             ],
         }
-        subscriber = self.app.data.find('subscribers', None, None)[0]
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
 
         f = AAPIpNewsFormatter()
         seq, item = f.format(article, subscriber)[0]
@@ -778,7 +778,7 @@ class AapIpNewsFormatterTest(TestCase):
             'word_count': 150,
             'priority': 1,
         }
-        subscriber = self.app.data.find('subscribers', None, None)[0]
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
 
         f = AAPIpNewsFormatter()
         seq, item = f.format(article, subscriber)[0]
@@ -801,7 +801,7 @@ class AapIpNewsFormatterTest(TestCase):
             'word_count': 150,
             'priority': 1,
         }
-        subscriber = self.app.data.find('subscribers', None, None)[0]
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
 
         f = AAPIpNewsFormatter()
         seq, item = f.format(article, subscriber)[0]
@@ -825,7 +825,7 @@ class AapIpNewsFormatterTest(TestCase):
             'word_count': 150,
             'priority': 1,
         }
-        subscriber = self.app.data.find('subscribers', None, None)[0]
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
 
         f = AAPIpNewsFormatter()
         seq, item = f.format(article, subscriber)[0]
@@ -848,7 +848,7 @@ class AapIpNewsFormatterTest(TestCase):
             'word_count': 150,
             'priority': 1,
         }
-        subscriber = self.app.data.find('subscribers', None, None)[0]
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
 
         f = AAPIpNewsFormatter()
         seq, item = f.format(article, subscriber)[0]
@@ -872,7 +872,7 @@ class AapIpNewsFormatterTest(TestCase):
             'priority': 1,
             'format': 'preserved'
         }
-        subscriber = self.app.data.find('subscribers', None, None)[0]
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
 
         f = AAPIpNewsFormatter()
         seq, item = f.format(article, subscriber)[0]

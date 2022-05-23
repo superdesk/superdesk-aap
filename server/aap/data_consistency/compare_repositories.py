@@ -30,7 +30,7 @@ class CompareRepositories(superdesk.Command):
     def get_mongo_items(self, consistency_record):
         # get the records from mongo in chunks
         projection = dict(superdesk.resources[self.resource_name].endpoint_schema['datasource']['projection'])
-        superdesk.resources[self.resource_name].endpoint_schema['datasource']['projection'] = None
+        #superdesk.resources[self.resource_name].endpoint_schema['datasource']['projection'] = None
         service = superdesk.get_resource_service(self.resource_name)
         cursor = service.get_from_mongo(None, {})
         count = cursor.count()
@@ -68,9 +68,9 @@ class CompareRepositories(superdesk.Command):
 
     def get_elastic_items(self, elasticsearch_index, elasticsearch_url):
         # get the all hits from elastic
-        post_data = {'fields': ['_etag']}
-        response = requests.get('{}/{}/{}'.format(elasticsearch_url,
-                                                  elasticsearch_index, '_search?size=5000&q=*:*'), params=post_data)
+        post_data = {"fields": ["_etag"]}
+        response = requests.post('{}/{}/{}'.format(elasticsearch_url,
+                                                  elasticsearch_index, '_search?size=5000&q=*:*'), json=post_data)
 
         elastic_results = response.json()["hits"]['hits']
         elastic_items = [(elastic_item['_id'], elastic_item["fields"]['_etag'][0])

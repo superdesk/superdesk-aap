@@ -44,7 +44,7 @@ def broadcast_auto_publish(item, **kwargs):
 
                 new_body_html.append('<p>{}</p>'.format(para))
                 word_count = get_text_word_count(''.join(new_body_html))
-                if word_count > max_word_count:
+                if word_count >= max_word_count:
                     if len(new_body_html):
                         item['body_html'] = ''.join(new_body_html)
                         item['word_count'] = word_count
