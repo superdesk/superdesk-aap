@@ -62,7 +62,7 @@ class NznNewscentreFormatterTest(TestCase):
         init_app(self.app)
 
     def testNewscentreNZN(self):
-        subscriber = self.app.data.find('subscribers', None, None)[0]
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
 
         f = NznNewscentreFormatter()
         seq, item = f.format(self.article, subscriber)[0]

@@ -62,7 +62,7 @@ class ANPAFormatterTest(TestCase):
         init_app(self.app)
 
     def testANPAFormatter(self):
-        subscriber = self.app.data.find('subscribers', None, None)[0]
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
 
         f = AAPAnpaFormatter()
         resp = f.format(self.article.copy(), subscriber, ['axx'])[0]
@@ -102,7 +102,7 @@ class ANPAFormatterTest(TestCase):
         self.assertEqual(line.strip(), 'AAP')
 
     def testANPAWithNoSelectorsFormatter(self):
-        subscriber = self.app.data.find('subscribers', None, None)[0]
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
         subscriber['name'] = 'not notes'
 
         f = AAPAnpaFormatter()
@@ -140,7 +140,7 @@ class ANPAFormatterTest(TestCase):
         self.assertEqual(line.strip(), 'AAP')
 
     def testANPAWithBylineFormatter(self):
-        subscriber = self.app.data.find('subscribers', None, None)[0]
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
         subscriber['name'] = 'not notes'
         byline_article = dict(self.article.copy())
         byline_article['byline'] = '<p>Joe Blogs</p>'
@@ -183,7 +183,7 @@ class ANPAFormatterTest(TestCase):
         self.assertEqual(line.strip(), 'AAP')
 
     def testServiceLevelFormatter(self):
-        subscriber = self.app.data.find('subscribers', None, None)[0]
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
         subscriber['name'] = 'not notes'
         service_level_article = dict(self.article.copy())
         service_level_article['genre'] = [{'qcode': 'Results (sport)'}]
@@ -204,7 +204,7 @@ class ANPAFormatterTest(TestCase):
         self.assertEqual(line[0:20], 'f s bc-slugline   ')  # skip the date
 
     def testMultipleCategoryFormatter(self):
-        subscriber = self.app.data.find('subscribers', None, None)[0]
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
         multi_article = dict(self.article.copy())
         multi_article.pop('anpa_category')
         multi_article['anpa_category'] = [{'qcode': 'a'}, {'qcode': 'b'}]
@@ -282,7 +282,7 @@ class ANPAFormatterTest(TestCase):
 
     def test_dateline_with_empty_text(self):
         f = AAPAnpaFormatter()
-        subscriber = self.app.data.find('subscribers', None, None)[0]
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
         item = self.article.copy()
         item.update({'dateline': {'text': None}})
         resp = f.format(item, subscriber)[0]
@@ -290,7 +290,7 @@ class ANPAFormatterTest(TestCase):
 
     def test_dateline_injection(self):
         f = AAPAnpaFormatter()
-        subscriber = self.app.data.find('subscribers', None, None)[0]
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
         item = self.article.copy()
         item.update({'dateline': {'text': 'SYDNEY, June 27 AAP -'}})
         resp = f.format(item, subscriber)[0]
@@ -300,7 +300,7 @@ class ANPAFormatterTest(TestCase):
 
     def test_ednote_injection(self):
         f = AAPAnpaFormatter()
-        subscriber = self.app.data.find('subscribers', None, None)[0]
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
         item = self.article.copy()
         item.update({'ednote': 'Note this'})
         resp = f.format(item, subscriber)[0]
@@ -310,7 +310,7 @@ class ANPAFormatterTest(TestCase):
 
     def test_div_body(self):
         f = AAPAnpaFormatter()
-        subscriber = self.app.data.find('subscribers', None, None)[0]
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
         item = self.article.copy()
         item.update({
             'body_html': '<div>Kathmandu Holdings has lodged a claim in the New Zealand High'
@@ -330,7 +330,7 @@ class ANPAFormatterTest(TestCase):
 
     def test_span_body(self):
         f = AAPAnpaFormatter()
-        subscriber = self.app.data.find('subscribers', None, None)[0]
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
         item = self.article.copy()
         item.update({
             'body_html': '<p>Dental materials maker and marketer SDI has boosted its shares after reporting a lift in'
@@ -347,7 +347,7 @@ class ANPAFormatterTest(TestCase):
 
     def test_br_body(self):
         f = AAPAnpaFormatter()
-        subscriber = self.app.data.find('subscribers', None, None)[0]
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
         item = self.article.copy()
         item.update({
             'body_html': '<p>Dental materials maker and marketer SDI<br> has boosted its shares after '
@@ -367,7 +367,7 @@ class ANPAFormatterTest(TestCase):
 
     def test_none_body(self):
         f = AAPAnpaFormatter()
-        subscriber = self.app.data.find('subscribers', None, None)[0]
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
         item = self.article.copy()
         item.update({
             'anpa_take_key': None, 'byline': None, 'abstract': None})
@@ -376,7 +376,7 @@ class ANPAFormatterTest(TestCase):
 
     def test_preformated(self):
         f = AAPAnpaFormatter()
-        subscriber = self.app.data.find('subscribers', None, None)[0]
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
         item = self.article.copy()
         item.update({
             'body_html': '<pre>Test line 1\rTest line 2</pre>',

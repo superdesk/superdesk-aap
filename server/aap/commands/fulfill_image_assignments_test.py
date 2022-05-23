@@ -104,5 +104,5 @@ class FullfillImageAssignmentsTest(AAPTestCase):
     @mock.patch('aap_mm.aap_mm_datalayer.AAPMMDatalayer.find', mock_find)
     def test_run(self):
         self.script.run()
-        assignments = self.app.data.find('assignments', None, None)
+        assignments = self.app.data.find('assignments', None, None)[0]
         self.assertEqual(assignments[0].get('assigned_to').get('state'), 'completed')

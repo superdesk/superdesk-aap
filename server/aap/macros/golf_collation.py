@@ -138,7 +138,7 @@ def golf_collation(item, **kwargs):
 
     # Get the local midnight in UTC
     midnight_utc = datetime.now(pytz.timezone(app.config['DEFAULT_TIMEZONE']))\
-        .replace(hour=0, minute=0, second=0, microsecond=0).astimezone(pytz.utc).isoformat()[:19] + 'z'
+        .replace(hour=0, minute=0, second=0, microsecond=0).astimezone(pytz.utc).isoformat()[:19]
 
     # List of golf courses to include, if grouping by region
     links = None

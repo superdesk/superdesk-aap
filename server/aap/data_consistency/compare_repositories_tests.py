@@ -15,9 +15,15 @@ from superdesk import get_resource_service
 from aap.data_consistency.compare_repositories import CompareRepositories
 from aap.data_consistency import init_app as consistency_init
 from eve.methods.common import resolve_document_etag
+from bson.objectid import ObjectId
 
 
 class CompareRepositoriesTestCase(TestCase):
+    def setUp(self):
+        self.app.data.insert('desks', [{
+            '_id': ObjectId('123456789abcdef123456789'),
+            'name': 'COMMISSION'
+        }])
 
     def test_compare_repos(self):
         with self.app.app_context():
@@ -25,7 +31,8 @@ class CompareRepositoriesTestCase(TestCase):
             req.args = {}
             req.max_results = 25
 
-            data = [{'headline': 'test {}'.format(i), 'slugline': 'rebuild {}'.format(i),
+            data = [{'headline': 'test {}'.format(i), 'slugline': 'rebuild {}'.format(i), 'state': 'in_progress',
+                     'task': {'desk': ObjectId('123456789abcdef123456789')},
                      'type': 'text' if (i % 2 == 0) else 'picture'} for i in range(1, 100)]
             resolve_document_etag(data, 'archive')
             superdesk.app.data._search_backend('archive').bulk_insert('archive', data)
@@ -33,7 +40,7 @@ class CompareRepositoriesTestCase(TestCase):
             consistency_init(self.app)
 
             items = get_resource_service('archive').get(req, {})
-            self.assertEquals(99, items.count())
+            self.assertEquals(198, items.count())
 
             consistency_record = CompareRepositories().run('archive',
                                                            self.app.config['ELASTICSEARCH_URL'],

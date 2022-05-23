@@ -60,7 +60,7 @@ class AapBulletinBuilderFormatterTest(TestCase):
             'lock_user': ObjectId()
         }
 
-        subscriber = self.app.data.find('subscribers', None, None)[0]
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
         seq, item = self._formatter.format(article, subscriber)[0]
         item = json.loads(item)
         self.assertGreater(int(seq), 0)
@@ -97,7 +97,7 @@ class AapBulletinBuilderFormatterTest(TestCase):
                      ' abcdefghi abcdefghi abcdefghi more\r\n\r\n'
                      'test\r\n\r\n')
 
-        subscriber = self.app.data.find('subscribers', None, None)[0]
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
         seq, item = self._formatter.format(article, subscriber)[0]
         item = json.loads(item)
         self.assertGreater(int(seq), 0)
@@ -125,7 +125,7 @@ class AapBulletinBuilderFormatterTest(TestCase):
                      ' abcdefghi abcdefghi abcdefghi more\r\n\r\n'
                      'test\r\n\r\n')
 
-        subscriber = self.app.data.find('subscribers', None, None)[0]
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
         seq, item = self._formatter.format(article, subscriber)[0]
         item = json.loads(item)
         self.assertGreater(int(seq), 0)
@@ -147,7 +147,7 @@ class AapBulletinBuilderFormatterTest(TestCase):
                      'Correction in the third take.\r\n\r\n'
                      'This is test.\r\n\r\n')
 
-        subscriber = self.app.data.find('subscribers', None, None)[0]
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
         seq, item = self._formatter.format(article, subscriber)[0]
         item = json.loads(item)
         self.assertGreater(int(seq), 0)
@@ -169,7 +169,7 @@ class AapBulletinBuilderFormatterTest(TestCase):
                      'Correction\r\n\r\nin the third take.\r\n\r\n'
                      'This is test.\r\n\r\n')
 
-        subscriber = self.app.data.find('subscribers', None, None)[0]
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
         seq, item = self._formatter.format(article, subscriber)[0]
         item = json.loads(item)
         self.assertGreater(int(seq), 0)
@@ -196,7 +196,7 @@ class AapBulletinBuilderFormatterTest(TestCase):
             'place': [{'qcode': 'VIC', 'name': 'VIC'}]
         }
 
-        subscriber = self.app.data.find('subscribers', None, None)[0]
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
         seq, item = self._formatter.format(article, subscriber)[0]
         item = json.loads(item)
         self.assertGreater(int(seq), 0)
@@ -235,7 +235,7 @@ class AapBulletinBuilderFormatterTest(TestCase):
             'keywords': ['test', 'Fed']
         }
 
-        subscriber = self.app.data.find('subscribers', None, None)[0]
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
         seq, item = self._formatter.format(article, subscriber)[0]
         item = json.loads(item)
         self.assertGreater(int(seq), 0)
@@ -276,7 +276,7 @@ class AapBulletinBuilderFormatterTest(TestCase):
             'body_footer': '<p>call helpline 999 if you are planning to quit smoking</p>'
         }
 
-        subscriber = self.app.data.find('subscribers', None, None)[0]
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
         seq, item = self._formatter.format(article, subscriber)[0]
         item = json.loads(item)
 
@@ -323,7 +323,7 @@ class AapBulletinBuilderFormatterTest(TestCase):
             'abstract': None,
             'body_html': ('<p>Hi</p>')
         }
-        subscriber = self.app.data.find('subscribers', None, None)[0]
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
         seq, item = self._formatter.format(article, subscriber)[0]
         item = json.loads(item)
         self.assertGreater(int(seq), 0)
@@ -354,7 +354,7 @@ class AapBulletinBuilderFormatterTest(TestCase):
             }
         }
 
-        subscriber = self.app.data.find('subscribers', None, None)[0]
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
         seq, item = self._formatter.format(article, subscriber)[0]
         item = json.loads(item)
         self.assertGreater(int(seq), 0)
@@ -384,7 +384,7 @@ class AapBulletinBuilderFormatterTest(TestCase):
             }
         }
 
-        subscriber = self.app.data.find('subscribers', None, None)[0]
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
         seq, item = self._formatter.format(article, subscriber)[0]
         item = json.loads(item)
         self.assertGreater(int(seq), 0)
@@ -414,7 +414,7 @@ class AapBulletinBuilderFormatterTest(TestCase):
             }
         }
 
-        subscriber = self.app.data.find('subscribers', None, None)[0]
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
         seq, item = self._formatter.format(article, subscriber)[0]
         item = json.loads(item)
         self.assertGreater(int(seq), 0)
@@ -444,7 +444,7 @@ class AapBulletinBuilderFormatterTest(TestCase):
             }
         }
 
-        subscriber = self.app.data.find('subscribers', None, None)[0]
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
         seq, item = self._formatter.format(article, subscriber)[0]
         item = json.loads(item)
         self.assertGreater(int(seq), 0)
@@ -474,7 +474,7 @@ class AapBulletinBuilderFormatterTest(TestCase):
             }
         }
 
-        subscriber = self.app.data.find('subscribers', None, None)[0]
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
         seq, item = self._formatter.format(article, subscriber)[0]
         item = json.loads(item)
         self.assertGreater(int(seq), 0)
@@ -508,7 +508,7 @@ class AapBulletinBuilderFormatterTest(TestCase):
             }
         }
 
-        subscriber = self.app.data.find('subscribers', None, None)[0]
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
         seq, item = self._formatter.format(article, subscriber)[0]
         item = json.loads(item)
         self.assertGreater(int(seq), 0)
@@ -543,7 +543,7 @@ class AapBulletinBuilderFormatterTest(TestCase):
             }
         }
 
-        subscriber = self.app.data.find('subscribers', None, None)[0]
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
         seq, item = self._formatter.format(article, subscriber)[0]
         item = json.loads(item)
         self.assertGreater(int(seq), 0)
@@ -575,7 +575,7 @@ class AapBulletinBuilderFormatterTest(TestCase):
             }
         }
 
-        subscriber = self.app.data.find('subscribers', None, None)[0]
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
         seq, item = self._formatter.format(article, subscriber)[0]
         item = json.loads(item)
         self.assertGreater(int(seq), 0)
@@ -608,7 +608,7 @@ class AapBulletinBuilderFormatterTest(TestCase):
             }
         }
 
-        subscriber = self.app.data.find('subscribers', None, None)[0]
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
         seq, item = self._formatter.format(article, subscriber)[0]
         item = json.loads(item)
         self.assertGreater(int(seq), 0)
@@ -642,7 +642,7 @@ class AapBulletinBuilderFormatterTest(TestCase):
             }
         }
 
-        subscriber = self.app.data.find('subscribers', None, None)[0]
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
         seq, item = self._formatter.format(article, subscriber)[0]
         item = json.loads(item)
         self.assertGreater(int(seq), 0)
@@ -686,7 +686,7 @@ class AapBulletinBuilderFormatterTest(TestCase):
             }
         }
 
-        subscriber = self.app.data.find('subscribers', None, None)[0]
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
         seq, item = self._formatter.format(article, subscriber)[0]
         item = json.loads(item)
         self.assertGreater(int(seq), 0)
