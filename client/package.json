@@ -3,12 +3,12 @@
     "name": "superdesk",
     "license": "GPL-3.0",
     "dependencies": {
-        "superdesk-analytics": "superdesk/superdesk-analytics#develop",
-        "superdesk-core": "superdesk/superdesk-client-core#hotfix/2.3.4",
-        "superdesk-planning": "superdesk/superdesk-planning#hotfix/2.3.2"
+        "superdesk-core": "github:superdesk/superdesk-client-core#develop",
+        "superdesk-planning": "github:superdesk/superdesk-planning#develop",
+        "superdesk-analytics": "github:superdesk/superdesk-analytics#develop"
     },
     "devDependencies": {
-        "@superdesk/build-tools": "^1.0.14"
+        "@superdesk/build-tools": "^1.0.18"
     },
     "scripts": {
         "build": "npx @superdesk/build-tools build-root-repo ./"
