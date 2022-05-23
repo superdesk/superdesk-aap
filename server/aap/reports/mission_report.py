@@ -15,6 +15,7 @@ from superdesk.utc import utc_to_local
 
 from analytics.chart_config import ChartConfig, SDChart
 from analytics.stats.stats_report_service import StatsReportService
+from analytics.common import MAX_TERMS_SIZE
 
 from flask import current_app as app
 from copy import deepcopy
@@ -50,6 +51,7 @@ class MissionReportResource(Resource):
     item_methods = ['GET']
     resource_methods = ['GET']
     privileges = {'GET': 'mission_report'}
+    projection = False
 
 
 class MissionReportService(StatsReportService):
@@ -198,15 +200,14 @@ class MissionReportService(StatsReportService):
                         }
                     }
                 ],
-                'size': 0
+                'size': MAX_TERMS_SIZE
             }
 
             if reports.get(REPORT_TYPES.CATEGORIES, True):
                 es_query['aggs'] = {
                     'categories': {
                         'terms': {
-                            'field': 'anpa_category.qcode',
-                            'size': 0
+                            'field': 'anpa_category.qcode'
                         }
                     }
                 }
@@ -241,7 +242,7 @@ class MissionReportService(StatsReportService):
                     }
                 }],
                 'minimum_should_match': 1,
-                'size': 0
+                'size': MAX_TERMS_SIZE
             })
             docs['sports'] = StatsReportService.run_query(self, query, args)
 
@@ -254,6 +255,7 @@ class MissionReportService(StatsReportService):
                 '_source': {
                     'include': [
                         '_id',
+                        '_resource',
                         'slugline',
                         'anpa_take_key',
                         'ednote',
@@ -264,33 +266,36 @@ class MissionReportService(StatsReportService):
                 },
                 'must': [{
                     'terms': {
-                        'state': {
+                        'state': [
                             'corrected',
                             'killed',
                             'recalled'
-                        }
+                        ]
                     }
                 }],
                 "size": 500
             })
-            docs[REPORT_TYPES.KILLS] = StatsReportService.run_query(self, query, args)
+            try:
+                docs[REPORT_TYPES.KILLS] = StatsReportService.run_query(self, query, args)
+            except:
+                pass
 
         # Get Update Counts
         if reports.get(REPORT_TYPES.SUMMARY, True) or reports.get(REPORT_TYPES.UPDATES, True):
             query = self.add_query_clause(deepcopy(params), {
                 'must': [{
                     'terms': {
-                        'state': {
+                        'state': [
                             'published',
                             'corrected',
                             'killed',
                             'recalled'
-                        }
+                        ]
                     }
                 }, {
                     'exists': {'field': 'rewrite_of'}
                 }],
-                'size': 0
+                'size': MAX_TERMS_SIZE
             })
             docs[REPORT_TYPES.UPDATES] = StatsReportService.run_query(self, query, args)
 
@@ -316,7 +321,6 @@ class MissionReportService(StatsReportService):
                             'operations': {
                                 'terms': {
                                     'field': 'stats.timeline.operation',
-                                    'size': 0,
                                     'include': [
                                         'publish',
                                         'correct',
@@ -328,14 +332,14 @@ class MissionReportService(StatsReportService):
                         }
                     }
                 },
-                'size': 0
+                'size': MAX_TERMS_SIZE
             })
             docs[REPORT_TYPES.SMS_ALERTS] = StatsReportService.run_query(self, query, args)
 
         return docs
 
     def _get_total_hits(self, doc):
-        return (doc.hits.get('hits') or {}).get('total') or 0
+        return (doc.hits.get('hits') or {}).get('total' or {}).get('value') or 0
 
     def _get_aggs(self, doc, name):
         return ((doc.hits.get('aggregations') or {}).get(name) or {}).get('buckets') or []
