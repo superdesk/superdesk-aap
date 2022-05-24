@@ -421,6 +421,22 @@ DC_PASSWORD = env('DC_PASSWORD', '')
 DC_SEARCH_FIELD = env('DC_SEARCH_FIELD', 'ORIGINALTRANSMISSIONREFERENCE')
 PLANNING_ACCEPT_ASSIGNMENT_EMAIL = env('PLANNING_ACCEPT_ASSIGNMENT_EMAIL', _MAIL_FROM)
 
+STATISTICS_ELASTIC_SETTINGS = {
+    "settings": {
+        "analysis": {
+            "char_filter": {"html_strip_filter": {"type": "html_strip"}},
+            "analyzer": {
+                "html_field_analyzer": {
+                    "type": "custom",
+                    "filter": ["lowercase"],
+                    "tokenizer": "standard",
+                    "char_filter": ["html_strip_filter"],
+                }
+            },
+        }
+    }
+}
+
 try:
     from aap_settings import *  # noqa
 except Exception:
