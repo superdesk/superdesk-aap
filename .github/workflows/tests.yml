@@ -31,6 +31,7 @@ jobs:
           python -m pip install --upgrade pip wheel setuptools
           pip install -r dev-requirements.txt
       - run: python manage.py app:initialize_data
+      - run: python manage.py app:rebuild_elastic_index
       - run: python manage.py users:create -u test -p test -e test@localhost --admin
       - run: nosetests
       - run: behave ./features/ --format progress2 --logging-level ERROR
