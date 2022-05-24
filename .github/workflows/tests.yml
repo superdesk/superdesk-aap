@@ -18,7 +18,7 @@ jobs:
       - run: |
           sudo apt-get update
           sudo apt-get -y install libxml2-dev libxmlsec1-dev libxmlsec1-openssl libexempi-dev unixodbc unixodbc-dev
-      - run: docker-compose -f ../docker-compose.yml up -d
+      - run: docker-compose -f ../.github/docker-compose.yml up -d
       - name: Cache pip
         uses: actions/cache@v2
         with:
