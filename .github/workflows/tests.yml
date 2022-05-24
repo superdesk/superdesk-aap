@@ -30,10 +30,10 @@ jobs:
       - run: |
           python -m pip install --upgrade pip wheel setuptools
           pip install -r dev-requirements.txt
-      - run: nosetests
-      - run: behave ./features/ --format progress2 --logging-level ERROR
       - run: python manage.py app:initialize_data
       - run: python manage.py users:create -u test -p test -e test@localhost --admin
+      - run: nosetests
+      - run: behave ./features/ --format progress2 --logging-level ERROR
 
   client:
     runs-on: ubuntu-latest
