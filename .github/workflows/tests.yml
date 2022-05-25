@@ -53,5 +53,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-npm
             ${{ runner.os }}-
+      - run: git config --global url."https://git@".insteadOf git://
       - run: npm install --no-audit
       - run: npm run build
