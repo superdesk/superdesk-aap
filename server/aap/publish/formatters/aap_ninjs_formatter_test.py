@@ -390,12 +390,9 @@ class AAPNINJSFormatterTest(TestCase):
                                     "CropRight": 5568,
                                     "height": 600,
                                     "CropLeft": 636,
+                                    "CropTop": 0,
                                     "width": 800,
                                     "media": "59a769f61d41c88f16818b29",
-                                    "poi": {
-                                        "x": 2760,
-                                        "y": 1484
-                                    },
                                     "href": "http://localhost:5000/api/upload-raw/59a769f61d41c88f16818b29.jpg"
                                 },
                                 "baseImage": {
@@ -403,10 +400,6 @@ class AAPNINJSFormatterTest(TestCase):
                                     "mimetype": "image/jpeg",
                                     "href": "http://localhost:5000/api/upload-raw/"
                                             "59a769ba1d41c88f16818b23?_schema=http",
-                                    "poi": {
-                                        "x": 854,
-                                        "y": 373
-                                    },
                                     "height": 933,
                                     "media": "59a769ba1d41c88f16818b23"
                                 },
@@ -415,10 +408,6 @@ class AAPNINJSFormatterTest(TestCase):
                                     "mimetype": "image/jpeg",
                                     "href": "http://localhost:5000/api/upload-raw/"
                                             "59a769b91d41c88f16818b21?_schema=http",
-                                    "poi": {
-                                        "x": 390,
-                                        "y": 170
-                                    },
                                     "height": 426,
                                     "media": "59a769b91d41c88f16818b21"
                                 },
@@ -426,13 +415,11 @@ class AAPNINJSFormatterTest(TestCase):
                                     "CropBottom": 3143,
                                     "mimetype": "image/jpeg",
                                     "CropRight": 5568,
+                                    "CropLeft": 0,
+                                    "CropTop": 0,
                                     "height": 720,
                                     "width": 1280,
                                     "media": "59a769f81d41c88f16818b2c",
-                                    "poi": {
-                                        "x": 3396,
-                                        "y": 1484
-                                    },
                                     "href": "http://localhost:5000/api/upload-raw/59a769f81d41c88f16818b2c.jpg"
                                 }
                             },

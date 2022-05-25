@@ -12,7 +12,7 @@ import pytz
 from datetime import datetime
 from superdesk.tests import TestCase
 from .aap_apple_news_formatter import AAPAppleNewsFormatter
-from mock import patch, MagicMock
+from unittest.mock import patch, MagicMock
 
 
 def get_data(resource):

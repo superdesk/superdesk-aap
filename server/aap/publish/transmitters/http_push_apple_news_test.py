@@ -12,7 +12,7 @@ import json
 import hmac
 import base64
 from httmock import all_requests, HTTMock
-from mock import patch, Mock, MagicMock
+from unittest.mock import patch, Mock, MagicMock
 from superdesk.tests import TestCase
 from datetime import datetime
 from .http_push_apple_news import HTTPAppleNewsPush

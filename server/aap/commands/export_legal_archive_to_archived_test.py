@@ -88,8 +88,8 @@ class ExportLegalArchiveToArchivedTest(TestCase):
     def test_run(self):
         self.script.run()
         archived_service = get_resource_service('archived')
-        archived_items = list(archived_service.get(req=None, lookup=None))
+        archived_items = list(archived_service.get_from_mongo(req=None, lookup={}))
 
         self.assertEqual(len(archived_items), 2)
-        self.assertEqual(archived_items[0]['task']['desk'], '123456789abcdef123456789')
-        self.assertEqual(archived_items[1]['task']['desk'], '123456789abcdef123456789')
+        self.assertEqual(archived_items[0]['task']['desk'], ObjectId('123456789abcdef123456789'))
+        self.assertEqual(archived_items[1]['task']['desk'], ObjectId('123456789abcdef123456789'))

@@ -8,7 +8,7 @@
 # AUTHORS and LICENSE files distributed with this source code, or
 # at https://www.sourcefabric.org/superdesk/license
 
-from mock import patch
+from unittest.mock import patch
 from copy import deepcopy
 from unittests import AAPTestCase
 from .broadcast_auto_publish import broadcast_auto_publish
