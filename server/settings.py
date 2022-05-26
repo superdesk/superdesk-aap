@@ -47,97 +47,13 @@ if SERVER_NAME.endswith(':80'):
 
 DEFAULT_TIMEZONE = env('DEFAULT_TIMEZONE', 'Australia/Sydney')
 
-INSTALLED_APPS = [
-    'apps.auth',
-    'superdesk.roles',
-]
-
 # LDAP settings
-LDAP_SERVER = env('LDAP_SERVER', '')  # Ex: ldap://sourcefabric.org
-LDAP_SERVER_PORT = env('LDAP_SERVER_PORT', 389)
-
-# Fully Qualified Domain Name. Ex: sourcefabric.org
-LDAP_FQDN = env('LDAP_FQDN', '')
-
-# LDAP_BASE_FILTER limit the base filter to the security group. Ex: OU=Superdesk Users,dc=sourcefabric,dc=org
-LDAP_BASE_FILTER = env('LDAP_BASE_FILTER', '')
-
-# change the user depending on the LDAP directory structure
-LDAP_USER_FILTER = env('LDAP_USER_FILTER', "(&(objectCategory=user)(objectClass=user)(sAMAccountName={}))")
-
-# LDAP User Attributes to fetch. Keys would be LDAP Attribute Name and Value would be Supderdesk Model Attribute Name
-LDAP_USER_ATTRIBUTES = json.loads(env('LDAP_USER_ATTRIBUTES',
-                                      '{"givenName": "first_name", "sn": "last_name", '
-                                      '"displayName": "display_name", "mail": "email"}'))
-
 #: Enable the ability for the display name of the user to be overridden with Superdesk user attributes
 LDAP_SET_DISPLAY_NAME = strtobool(env('LDAP_SET_DISPLAY_NAME', 'True'))
 
-if LDAP_SERVER:
-    INSTALLED_APPS.append('apps.ldap')
-else:
-    INSTALLED_APPS.append('superdesk.users')
-    INSTALLED_APPS.append('apps.auth.db')
 
-
-INSTALLED_APPS.extend([
-    'superdesk.upload',
-    'superdesk.download',
-    'superdesk.sequences',
-    'superdesk.notification',
-    'superdesk.data_updates',
-    'superdesk.activity',
-    'superdesk.vocabularies',
-    'superdesk.backend_meta',
-    'apps.comments',
-
-    'superdesk.io',
-    'superdesk.io.feeding_services',
-    'superdesk.io.feed_parsers',
-    'superdesk.io.subjectcodes',
-    'superdesk.io.iptc',
-    'apps.io',
-    'apps.io.feeding_services',
-    'superdesk.publish',
-    'superdesk.commands',
-    'superdesk.locators',
-
-    'apps.auth',
-    'apps.archive',
-    'apps.stages',
-    'apps.desks',
-    'apps.tasks',
-    'apps.preferences',
-    'apps.spikes',
-    'apps.prepopulate',
-    'apps.legal_archive',
-    'apps.search',
-    'apps.saved_searches',
-    'apps.privilege',
-    'apps.rules',
-    'apps.highlights',
-    'apps.products',
-    'apps.publish',
-    'apps.publish.enqueue',
-    'apps.publish.formatters',
+INSTALLED_APPS = [
     'aap.publish.transmitters',
-    'apps.content_filters',
-    'apps.content_types',
-    'apps.dictionaries',
-    'apps.duplication',
-    'apps.spellcheck',
-    'apps.templates',
-    'apps.archived',
-    'apps.validators',
-    'apps.validate',
-    'apps.workspace',
-    'apps.macros',
-    'apps.export',
-    'apps.archive_broadcast',
-    'apps.search_providers',
-    'apps.feature_preview',
-    'apps.workqueue',
-
     'aap.commands',
     'aap.data_consistency',
     'aap.macros',
@@ -156,7 +72,7 @@ INSTALLED_APPS.extend([
     'aap.fuel',
     'aap.traffic_incidents',
     'aap.subscriber_transmit_references',
-])
+]
 
 RENDITIONS = {
     'picture': {
