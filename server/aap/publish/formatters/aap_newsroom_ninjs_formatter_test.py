@@ -258,3 +258,14 @@ class AAPNINJSFormatterTest(TestCase):
         seq, doc = self.formatter.format(article, {'_id': 1, 'name': 'Test Subscriber'})[0]
         ninjs = json.loads(doc)
         self.assertEqual(ninjs['guid'], article['family_id'])
+
+    def test_dc_id_swap(self):
+        article = deepcopy(self.base_article)
+        article.update({
+            'type': 'picture',
+            'ingest_id': '20200313001456376045',
+            'ingest_provider': '123456789'
+        })
+        seq, doc = self.formatter.format(article, {'_id': 1, 'name': 'Test Subscriber'})[0]
+        ninjs = json.loads(doc)
+        self.assertEqual(ninjs['guid'], '20200313001456376045')
