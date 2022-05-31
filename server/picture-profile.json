@@ -89,7 +89,7 @@
     "schema": {
         "slugline": {
             "type": "string",
-            "required": true,
+            "required": false,
             "nullable": true
         },
         "genre" : {
@@ -127,20 +127,20 @@
             "default" : 6
         },
         "urgency" : {
-            "required" : true,
+            "required" : false,
             "minlength" : 1,
             "type" : "integer",
-            "nullable" : false,
+            "nullable" : true,
             "default" : 3
         },
         "anpa_category" : {
-            "required" : true,
+            "required" : false,
             "minlength" : 1,
             "type" : "list",
             "nullable" : false
         },
         "subject" : {
-            "required" : true,
+            "required" : false,
             "type" : "list",
             "minlength" : 1,
             "schema" : {
