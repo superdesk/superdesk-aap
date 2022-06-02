@@ -3,6 +3,7 @@
         "_id": "publish_text",
         "act": "publish",
         "type": "text",
+        "init_version": 1,
         "schema": {
             "headline": {
                 "type": "string",
@@ -23,7 +24,7 @@
             },
             "type": {
                 "type": "string",
-                "required": "true",
+                "required": true,
                 "allowed": ["text"]
             },
             "anpa_category": {
@@ -88,6 +89,7 @@
         "_id": "correct_text",
         "act": "correct",
         "type": "text",
+        "init_version": 1,
         "schema": {
             "headline": {
                 "type": "string",
@@ -108,7 +110,7 @@
             },
             "type": {
                 "type": "string",
-                "required": "true",
+                "required": true,
                 "allowed": ["text"]
             },
             "anpa_category": {
@@ -173,6 +175,7 @@
         "_id": "kill_text",
         "act": "kill",
         "type": "text",
+        "init_version": 1,
         "schema": {
             "headline": {
                 "type": "string",
@@ -188,7 +191,7 @@
             },
             "type": {
                 "type": "string",
-                "required": "true",
+                "required": true,
                 "allowed": ["text"]
             },
             "anpa_category": {
@@ -243,6 +246,7 @@
         "_id": "publish_picture",
         "act": "publish",
         "type": "picture",
+        "init_version": 1,
         "schema": {
             "headline": {
                 "type": "string",
@@ -258,7 +262,7 @@
             },
             "type": {
                 "type": "string",
-                "required": "true",
+                "required": true,
                 "allowed": ["picture"]
             },
             "anpa_category": {
@@ -335,6 +339,7 @@
         "_id": "correct_picture",
         "act": "correct",
         "type": "picture",
+        "init_version": 1,
         "schema": {
             "headline": {
                 "type": "string",
@@ -350,7 +355,7 @@
             },
             "type": {
                 "type": "string",
-                "required": "true",
+                "required": true,
                 "allowed": ["picture"]
             },
             "anpa_category": {
@@ -427,6 +432,7 @@
         "_id": "kill_picture",
         "act": "kill",
         "type": "picture",
+        "init_version": 1,
         "schema": {
             "headline": {
                 "type": "string",
@@ -442,7 +448,7 @@
             },
             "type": {
                 "type": "string",
-                "required": "true",
+                "required": true,
                 "allowed": ["picture"]
             },
             "anpa_category": {
@@ -511,6 +517,7 @@
         "_id": "publish_video",
         "act": "publish",
         "type": "video",
+        "init_version": 1,
         "schema": {
             "headline": {
                 "type": "string",
@@ -526,7 +533,7 @@
             },
             "type": {
                 "type": "string",
-                "required": "true",
+                "required": true,
                 "allowed": ["video"]
             },
             "anpa_category": {
@@ -587,6 +594,7 @@
         "_id": "correct_video",
         "act": "correct",
         "type": "video",
+        "init_version": 1,
         "schema": {
             "headline": {
                 "type": "string",
@@ -602,7 +610,7 @@
             },
             "type": {
                 "type": "string",
-                "required": "true",
+                "required": true,
                 "allowed": ["video"]
             },
             "anpa_category": {
@@ -663,6 +671,7 @@
         "_id": "kill_video",
         "act": "kill",
         "type": "video",
+        "init_version": 1,
         "schema": {
             "headline": {
                 "type": "string",
@@ -678,7 +687,7 @@
             },
             "type": {
                 "type": "string",
-                "required": "true",
+                "required": true,
                 "allowed": ["video"]
             },
             "anpa_category": {
@@ -739,6 +748,7 @@
         "_id": "publish_audio",
         "act": "publish",
         "type": "audio",
+        "init_version": 1,
         "schema": {
             "headline": {
                 "type": "string",
@@ -754,7 +764,7 @@
             },
             "type": {
                 "type": "string",
-                "required": "true",
+                "required": true,
                 "allowed": ["audio"]
             },
             "anpa_category": {
@@ -815,6 +825,7 @@
         "_id": "correct_audio",
         "act": "correct",
         "type": "audio",
+        "init_version": 1,
         "schema": {
             "headline": {
                 "type": "string",
@@ -830,7 +841,7 @@
             },
             "type": {
                 "type": "string",
-                "required": "true",
+                "required": true,
                 "allowed": ["audio"]
             },
             "anpa_category": {
@@ -891,6 +902,7 @@
         "_id": "kill_audio",
         "act": "kill",
         "type": "audio",
+        "init_version": 1,
         "schema": {
             "headline": {
                 "type": "string",
@@ -906,7 +918,7 @@
             },
             "type": {
                 "type": "string",
-                "required": "true",
+                "required": true,
                 "allowed": ["audio"]
             },
             "anpa_category": {
@@ -967,6 +979,7 @@
         "_id": "publish_composite",
         "act": "publish",
         "type": "composite",
+        "init_version": 1,
         "schema": {
             "headline": {
                 "type": "string",
@@ -977,7 +990,7 @@
             },
             "type": {
                 "type": "string",
-                "required": "true",
+                "required": true,
                 "allowed": ["composite"]
             },
             "anpa_category": {
@@ -1022,6 +1035,7 @@
         "_id": "correct_composite",
         "act": "correct",
         "type": "composite",
+        "init_version": 1,
         "schema": {
             "headline": {
                 "type": "string",
@@ -1032,7 +1046,7 @@
             },
             "type": {
                 "type": "string",
-                "required": "true",
+                "required": true,
                 "allowed": ["composite"]
             },
             "anpa_category": {
@@ -1077,6 +1091,7 @@
         "_id": "kill_composite",
         "act": "kill",
         "type": "composite",
+        "init_version": 1,
         "schema": {
             "headline": {
                 "type": "string",
@@ -1087,7 +1102,7 @@
             },
             "type": {
                 "type": "string",
-                "required": "true",
+                "required": true,
                 "allowed": ["composite"]
             },
             "anpa_category": {
@@ -1132,10 +1147,11 @@
         "_id": "publish_graphic",
         "act": "publish",
         "type": "graphic",
+        "init_version": 1,
         "schema": {
             "type": {
                 "type": "string",
-                "required": "true",
+                "required": true,
                 "allowed": ["graphic"]
             },
             "anpa_category": {
@@ -1159,10 +1175,11 @@
         "_id": "correct_graphic",
         "act": "correct",
         "type": "graphic",
+        "init_version": 1,
         "schema": {
             "type": {
                 "type": "string",
-                "required": "true",
+                "required": true,
                 "allowed": ["graphic"]
             },
             "anpa_category": {
@@ -1186,10 +1203,11 @@
         "_id": "kill_graphic",
         "act": "kill",
         "type": "graphic",
+        "init_version": 1,
         "schema": {
             "type": {
                 "type": "string",
-                "required": "true",
+                "required": true,
                 "allowed": ["graphic"]
             },
             "anpa_category": {
