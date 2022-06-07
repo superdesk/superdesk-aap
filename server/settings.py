@@ -53,6 +53,7 @@ LDAP_SET_DISPLAY_NAME = strtobool(env('LDAP_SET_DISPLAY_NAME', 'True'))
 
 
 INSTALLED_APPS = [
+    'superdesk.macros.imperial',
     'aap.publish.transmitters',
     'aap.commands',
     'aap.data_consistency',
