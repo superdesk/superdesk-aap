@@ -19,4 +19,4 @@ oauth2client==4.1.3
 
 -e git+https://github.com/superdesk/superdesk-core.git@develop#egg=superdesk-core
 git+https://github.com/superdesk/superdesk-planning.git@develop#egg=superdesk-planning
--e git+https://github.com/superdesk/superdesk-analytics.git@develop#egg=superdesk-analytics
+-e git+https://github.com/MarkLark86/superdesk-analytics.git@SDESK-6490-2#egg=superdesk-analytics
