@@ -17,6 +17,6 @@ protobuf>=2.3.0,<=3.20.1
 gspread==3.1.0
 oauth2client==4.1.3
 
--e git+https://github.com/superdesk/superdesk-core.git@develop#egg=superdesk-core
-git+https://github.com/superdesk/superdesk-planning.git@develop#egg=superdesk-planning
--e git+https://github.com/superdesk/superdesk-analytics.git@develop#egg=superdesk-analytics
+-e git+https://github.com/superdesk/superdesk-core.git@release/2.5#egg=superdesk-core
+git+https://github.com/superdesk/superdesk-planning.git@release/2.5#egg=superdesk-planning
+-e git+https://github.com/superdesk/superdesk-analytics.git@release/2.5#egg=superdesk-analytics
