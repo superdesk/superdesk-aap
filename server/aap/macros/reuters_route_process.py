@@ -12,6 +12,8 @@ import logging
 from .remove_place_with_no_qcode import remove_place_with_no_qcode
 from .reuters_derive_dateline import reuters_derive_dateline
 from .remove_subjects import remove_subjects
+from .reuters_remove_text_link import reuters_remove_text_link
+from .remove_anchors import remove_anchors
 
 logger = logging.getLogger(__name__)
 
@@ -23,10 +25,12 @@ def reuters_route_process(item, **kwargs):
             remove_subjects(item)
             remove_place_with_no_qcode(item)
             reuters_derive_dateline(item)
+            reuters_remove_text_link(item)
 
             # set the category as international news
             item['anpa_category'] = [{'name': 'International News', 'qcode': 'i'}]
-
+        elif item.get('source', '').upper() == 'AP' and item.get('state').upper() == 'INGESTED':
+            remove_anchors(item)
         return item
     except:
         logger.warning('Exception caught in macro: reuters route process')
