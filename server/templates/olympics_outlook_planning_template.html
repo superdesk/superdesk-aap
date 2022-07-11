@@ -1,0 +1,38 @@
+{% for item in items %}
+    {% if item['published_archive_items']|length == 0 and item['text_assignees']|length == 0 %}
+        <p>{% if item.get('description_text') %}
+            {% set description_list = item.description_text.split(' - ') %}
+            {% set subject = description_list|first %}
+            {% if item.get('subject')|upper == subject|upper %}
+                {{ item.subject[0].name|upper }}
+            {% else %}
+                {{ subject|upper }}
+            {% endif %}<br />
+            {{ description_list|reject('equalto', subject)|join(' - ') }}
+        {% endif %}
+        {% if (item.get('event') or {}).get('location') %}
+            {{ item.event.location[0].name }}
+        {% endif %}</p>
+    {% endif %}
+    {% for i in item['published_archive_items'] %}<p>
+        {{ i['archive_text'] }}
+        ({{ i['archive_slugline'] }}){% if not item.get('event') and item['text_assignees']|length > 0 %} TO COME (
+        {{ item.slugline }}) - {{ item.get('text_assignees')|join(', ') }}{% endif %}</p>
+    {% endfor %}
+    {% if item['text_assignees']|length > 0 and ((item['event']) or item['published_archive_items']|length == 0) %}
+        <p>{% if item.get('description_text') %}
+            {% set description_list = item.description_text.split(' - ') %}
+            {% set subject = description_list|first %}
+            {% if item.get('subject')|upper == subject|upper %}
+                {{ item.subject[0].name|upper }}
+            {% else %}
+                {{ subject|upper }}
+            {% endif %}<br />
+            {{ description_list|reject('equalto', subject)|join(' - ') }}
+        {% endif %}
+        {% if (item.get('event') or {}).get('location') %}
+            {{ item.event.location[0].name }}
+        {% endif %}
+            - {{ item.get('text_assignees')|join(', ') }}</p>
+    {% endif %}
+{% endfor %}
