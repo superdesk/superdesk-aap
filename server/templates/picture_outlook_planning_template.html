@@ -1,0 +1,15 @@
+{% for item in items %}
+    {% if item['internal_coverages']|length > 0 %}
+        {% set assignees = [] %}
+        {% for coverage in item['internal_coverages'] %}
+            {% if coverage['type'] == "Picture" %}
+                {% if coverage.get('user') %}{{ assignees.append(coverage.user.display_name) }}{% endif %}
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+    <p><b>{{ item.slugline }}</b>{% if assignees|length > 0 %} - {{ assignees|unique|join(', ') }}{% endif %}<br />
+    {% if item.get('description_text') %}{{ item.description_text }}<br />{% endif %}
+    Location: {% if (item.get('event') or {}).get('location') %}{{ item.event.location[0].name }}{% else %}TBC{% endif %}<br />
+    Time: {% if item.get('schedule') %}{{ item.schedule }}{% else %}TBC{% endif %}
+    {% if item.get('internal_note') %}<br /><i>({{ item.internal_note }})</i>{% endif %}</p>
+{% endfor %}

@@ -1,0 +1,16 @@
+<p>Aussies in action on Day ?? of the 2022 Beijing Winter Olympics:</p>
+{% for item in items %}<p>
+    {% if item.get('description_text') %}
+        {% set description_list = item.description_text.split(' - ') %}
+        {% set subject = description_list|first %}
+        {% if item.get('subject')|upper == subject|upper %}
+            {{ item.subject[0].name|upper }}
+        {% else %}
+            {{ subject|upper }}
+        {% endif %}<br />
+        {{ description_list|reject('equalto', subject)|join(' - ') }}
+    {% endif %}
+    {% if (item.get('event') or {}).get('location') %}
+        {{ item.event.location[0].name }}
+    {% endif %}</p>
+{% endfor %}
