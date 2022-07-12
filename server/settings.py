@@ -111,7 +111,7 @@ DEFAULT_SOURCE_VALUE_FOR_MANUAL_ARTICLES = 'AAP'
 DEFAULT_PRIORITY_VALUE_FOR_MANUAL_ARTICLES = int(env('DEFAULT_PRIORITY_VALUE_FOR_MANUAL_ARTICLES', 6))
 
 # Defines default value for Urgency to be set for manually created articles
-DEFAULT_URGENCY_VALUE_FOR_MANUAL_ARTICLES = int(env('DEFAULT_URGENCY_VALUE_FOR_MANUAL_ARTICLES', 3))
+DEFAULT_URGENCY_VALUE_FOR_MANUAL_ARTICLES = int(env('DEFAULT_URGENCY_VALUE_FOR_MANUAL_ARTICLES', 0))
 DEFAULT_GENRE_VALUE_FOR_MANUAL_ARTICLES = [{'qcode': 'Article', 'name': 'Article'}]
 RESET_PRIORITY_VALUE_FOR_UPDATE_ARTICLES = json.loads(env('RESET_PRIORITY_VALUE_FOR_UPDATE_ARTICLES', 'True').lower())
 
@@ -202,6 +202,9 @@ DAYS_TO_KEEP = int(env('DAYS_TO_KEEP', '3'))
 with open(os.path.join(os.path.dirname(__file__), 'picture-profile.json')) as profile_json:
     picture_profile = json.load(profile_json)
 
+with open(os.path.join(os.path.dirname(__file__), 'composite-profile.json')) as profile_json:
+    composite_profile = json.load(profile_json)
+
 EDITOR = {
     "picture": picture_profile['editor'],
     "embeds": False,
@@ -209,11 +212,13 @@ EDITOR = {
     "paste": {
         "forcePlainText": True,
         "cleanPastedHTML": False
-    }
+    },
+    "composite": composite_profile['editor']
 }
 
 SCHEMA = {
     "picture": picture_profile['schema'],
+    "composite": composite_profile['schema']
 }
 
 VALIDATOR_MEDIA_METADATA = {
