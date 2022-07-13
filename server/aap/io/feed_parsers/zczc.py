@@ -96,7 +96,7 @@ class ZCZCFeedParser(FileFeedParser):
                             if self.header_map[line[0]]:
                                 item[self.header_map[line[0]]] = line[1:-1]
                             continue
-                        if line[0] == self.CATEGORY:
+                        if line[0] == self.CATEGORY and self.ITEM_ANPA_CATEGORY not in item:
                             item[self.ITEM_ANPA_CATEGORY] = [{'qcode': line[1]}]
                             continue
                         if line[0] == self.FORMAT:
