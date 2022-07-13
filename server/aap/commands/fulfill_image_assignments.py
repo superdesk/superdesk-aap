@@ -159,6 +159,7 @@ class FullfillImageAssignments(superdesk.Command):
         }
         req = ParsedRequest()
         req.args = {'source': json.dumps(query)}
+        req.max_results = 500
 
         assignments = service.get(req=req, lookup=None)
         if assignments.count() > 0:
