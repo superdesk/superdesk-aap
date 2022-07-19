@@ -73,6 +73,7 @@ INSTALLED_APPS = [
     'aap.fuel',
     'aap.traffic_incidents',
     'aap.subscriber_transmit_references',
+    'apps.languages',
 ]
 
 RENDITIONS = {
