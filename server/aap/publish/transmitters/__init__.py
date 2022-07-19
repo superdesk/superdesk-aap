@@ -10,3 +10,4 @@
 
 import aap.publish.transmitters.http_push_agenda  # NOQA
 import aap.publish.transmitters.http_push_apple_news  # NOQA
+import aap.publish.transmitters.notes_transmitter  # NOQA
