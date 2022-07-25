@@ -1,0 +1,10 @@
+
+{{ title }}
+{% if warning %}
+{{warning}}
+{% endif %}
+CISION has deleted the release {{ release_id }}
+
+
+    {{summary}}
+

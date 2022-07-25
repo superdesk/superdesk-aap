@@ -14,3 +14,4 @@ from .feeding_services.intelematics_fuel_service import IntelematicsFuelHTTPFeed
 from .feeding_services.intelematics_incidents_service import IntelematicsIncidentHTTPFeedingService  # noqa
 from .feeding_services.ap_media_relay import APMediaRelayFeedingService  # noqa
 from .feeding_services.petrol_spy_fuel_service import PetrolSpyFuelHTTPFeedingService  # noqa
+from .feeding_services.cision import CisionFeedingService  # noqa
