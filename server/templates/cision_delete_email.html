@@ -1,0 +1,8 @@
+
+<h1>{{ title | safe }}</h1>
+{% if warning %}
+<b>{{ warning | safe }}</b>
+{% endif %}
+<p>CISION has deleted the release {{ release_id }}</p>
+
+    {{summary | safe}}

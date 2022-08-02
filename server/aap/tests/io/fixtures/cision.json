@@ -1,0 +1,44 @@
+{
+    "data": {
+        "body": "\n\n<p><span class=\"xn-location\">DALLAS</span>, <span class=\"xn-chron\">Aug. 28, 2020</span> /PRNewswire/ -- ACME, LLC (NYSE: ACME) (ACME) reported today that storm-related impacts from Hurricane Laura on ACME's assets, finances and operations are not expected to be significant, and, most importantly all employees are safe and accounted for.</p>",
+        "company": [
+            "ACME, LLC"
+        ],
+        "date": "20200828T204500+0000",
+        "geography": [
+            "TXS",
+            "UWS",
+            "USA",
+            "NAM"
+        ],
+        "industry": [
+            "OIL",
+            "UTI",
+            "GAS"
+        ],
+        "language": "en-US",
+        "multimedia": [
+            {
+                "caption": "ACME Logo (PRNewsFoto/ACME)",
+                "seq": "1",
+                "thumbnailurl": "https://mma.prnewswire.com/media/386369/ACME_midstream_logo.jpg?p=thumbnail",
+                "type": "photo",
+                "url": "https://mma.prnewswire.com/media/386369/ACME_midstream_logo.jpg?p=publish"
+            }
+        ],
+        "release_id": "20200828DA09914",
+        "source_company": "ACME, LLC",
+        "style": "\n/* Style Definitions */\nspan.prnews_span\n{\nfont-size:8pt;\nfont-family:\"Arial\";\ncolor:black;\n}\na.prnews_a\n{\ncolor:blue;\n}\nli.prnews_li\n{\nfont-size:8pt;\nfont-family:\"Arial\";\ncolor:black;\n}\np.prnews_p\n{\nfont-size:0.62em;\nfont-family:\"Arial\";\ncolor:black;\nmargin:0in;\n}\n",
+        "sub_title": [],
+        "subject": [
+            "NAT"
+        ],
+        "ticker": [
+            "NYSE:ACME"
+        ],
+        "title": "ACME Provides Business Update on Hurricane Laura Impact",
+        "websiteurl": [
+            "https://www.ACME.com"
+        ]
+    }
+}

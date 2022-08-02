@@ -1237,12 +1237,12 @@
                 "required": true,
                 "nullable": false,
                 "empty": false,
-                "maxlength": 42
+                "maxlength": 255
             },
             "abstract": {
                 "type": "string",
                 "required": false,
-                "maxlength": 160
+                "maxlength": 500
             },
             "type": {
                 "type": "string",
@@ -1257,7 +1257,8 @@
             "pubstatus": {
                 "type": "string",
                 "required": true,
-                "allowed": ["usable"]
+                "allowed": ["usable",
+                "canceled"]
             },
             "slugline": {
                 "type": "string",
