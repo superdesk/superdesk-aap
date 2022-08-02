@@ -18,7 +18,6 @@ from aap.io.feed_parsers.zczc import ZCZCFeedParser
 from aap.io.feed_parsers.zczc_bob import ZCZCBOBParser
 from aap.io.feed_parsers.zczc_pmf import ZCZCPMFParser
 from aap.io.feed_parsers.zczc_medianet import ZCZCMedianetParser
-from aap.io.feed_parsers.zczc_racing import ZCZCRacingParser
 from aap.io.feed_parsers.zczc_sportsresults import ZCZCSportsResultsParser
 
 
@@ -150,53 +149,6 @@ class ZCZCTestCase(TestCase):
         self.assertEqual(self.items.get('subject')[0]['qcode'], '15082000')
         self.assertEqual(self.items.get('genre')[0]['name'], 'Racing Data')
 
-    def test_racing_format(self):
-        filename = 'viflda004_7257.tst'
-        dirname = os.path.dirname(os.path.realpath(__file__))
-        fixture = os.path.normpath(os.path.join(dirname, '../fixtures', filename))
-        self.provider['source'] = 'BRA'
-        self.items = ZCZCRacingParser().parse(fixture, self.provider)
-        self.assertEqual(self.items.get('headline'), ' Racing.Com Park FIELDS Thursday')
-        self.assertEqual(self.items.get('slugline'), ' Racing.Com Park FIELDS Thursday')
-        self.assertEqual(self.items.get('anpa_category')[0]['qcode'], 'r')
-        self.assertEqual(self.items.get('subject')[0]['qcode'], '15030001')
-
-    def test_racing_format_2(self):
-        filename = 'vifrc7_5254.tst'
-        dirname = os.path.dirname(os.path.realpath(__file__))
-        fixture = os.path.normpath(os.path.join(dirname, '../fixtures', filename))
-        self.provider['source'] = 'BRA'
-        self.items = ZCZCRacingParser().parse(fixture, self.provider)
-        self.assertEqual(self.items.get('headline'), 'Wodonga Gallop Comment Saturday races 1-6')
-        self.assertEqual(self.items.get('slugline'), 'Wodonga Comment')
-        self.assertEqual(self.items.get('anpa_take_key'), 'Saturday races 1-6')
-        self.assertEqual(self.items.get('anpa_category')[0]['qcode'], 'r')
-        self.assertEqual(self.items.get('subject')[0]['qcode'], '15030001')
-        self.assertEqual(self.items.get('format'), 'HTML')
-        self.assertTrue(
-            self.items.get('body_html').startswith('<p>   Race One - Telstra Business Centre Mdn 1400m</p>'))
-
-    def test_racing_format_3(self):
-        filename = 'vicomb004_8511.tst'
-        dirname = os.path.dirname(os.path.realpath(__file__))
-        fixture = os.path.normpath(os.path.join(dirname, '../fixtures', filename))
-        self.provider['source'] = 'BRA'
-        self.items = ZCZCRacingParser().parse(fixture, self.provider)
-        self.assertEqual(self.items.get('headline'), 'Eagle Farm MARKET DAY')
-        self.assertEqual(self.items.get('slugline'), 'Eagle Farm MARKET DAY')
-        self.assertEqual(self.items.get('anpa_category')[0]['qcode'], 'r')
-        self.assertEqual(self.items.get('subject')[0]['qcode'], '15030001')
-
-    def test_racing_format_4(self):
-        filename = 'vinzce004_14.tst'
-        dirname = os.path.dirname(os.path.realpath(__file__))
-        fixture = os.path.normpath(os.path.join(dirname, '../fixtures', filename))
-        self.provider['source'] = 'BRA'
-        self.items = ZCZCRacingParser().parse(fixture, self.provider)
-        self.assertEqual(self.items.get('subject')[0]['qcode'], '15030001')
-        self.assertEqual(self.items.get('keywords')[0], 'RFG')
-        self.assertEqual(self.items.get('anpa_category')[0]['qcode'], 'h')
-
     def test_trot_tab_divs(self):
         filename = 'Wagga Trot VIC TAB DIVS 1-4 Friday.tst'
         dirname = os.path.dirname(os.path.realpath(__file__))
@@ -208,29 +160,6 @@ class ZCZCTestCase(TestCase):
         self.assertEqual(self.items.get('anpa_category')[0]['qcode'], 'r')
         self.assertEqual(self.items.get('subject')[0]['qcode'], '15030003')
         self.assertEqual(self.items.get('genre')[0]['name'], 'Results (sport)')
-
-    def test_leading_jockeys(self):
-        filename = 'premierships.txt'
-        dirname = os.path.dirname(os.path.realpath(__file__))
-        fixture = os.path.normpath(os.path.join(dirname, '../fixtures', filename))
-        self.provider['source'] = 'BRA'
-        self.items = ZCZCRacingParser().parse(fixture, self.provider)
-        self.assertEqual(self.items.get('anpa_category')[0]['qcode'], 'r')
-        self.assertEqual(self.items.get('headline'), 'Premierships National gallop Trainer and Jockeys 2017-2018')
-        self.assertEqual(self.items.get('slugline'), 'Premierships National')
-        self.assertEqual(self.items.get('anpa_take_key'), ' gallop Trainer and Jockeys 2017-2018')
-        self.assertEqual(self.items.get('subject')[0]['qcode'], '15030001')
-
-    def test_weights(self):
-        filename = 'viwhtn01_8594.tst'
-        dirname = os.path.dirname(os.path.realpath(__file__))
-        fixture = os.path.normpath(os.path.join(dirname, '../fixtures', filename))
-        self.provider['source'] = 'BRA'
-        self.items = ZCZCRacingParser().parse(fixture, self.provider)
-        self.assertEqual(self.items.get('headline'), 'STRADBROKE HANDICAP 1400M .=!')
-        self.assertEqual(self.items.get('slugline'), 'STRADBROKE HANDICAP 1400M .=!')
-        self.assertEqual(self.items.get('anpa_category')[0]['qcode'], 'r')
-        self.assertEqual(self.items.get('subject')[0]['qcode'], '15030001')
 
     def test_bob(self):
         filename = '1487e8f1-f7f5-40f5-8c0f-0eba3c2e162d.tst'
@@ -314,11 +243,3 @@ class ZCZCTestCase(TestCase):
         self.items = parser.parse(fixture, self.provider)
         parser.post_process_item(self.items, self.provider)
         self.assertEqual(self.items.get('slugline'), 'National Top Ten By Volume at ')
-
-    def test_category_for_aust_fields(self):
-        filename = 'vinzhj007_7831.tst'
-        dirname = os.path.dirname(os.path.realpath(__file__))
-        fixture = os.path.normpath(os.path.join(dirname, '../fixtures', filename))
-        self.provider['source'] = 'BRA'
-        self.items = ZCZCRacingParser().parse(fixture, self.provider)
-        self.assertEqual(self.items.get('anpa_category')[0]['qcode'], 'h')
