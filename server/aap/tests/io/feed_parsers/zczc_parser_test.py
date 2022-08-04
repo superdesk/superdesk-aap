@@ -16,9 +16,7 @@ from datetime import datetime
 from superdesk.tests import TestCase
 from aap.io.feed_parsers.zczc import ZCZCFeedParser
 from aap.io.feed_parsers.zczc_bob import ZCZCBOBParser
-from aap.io.feed_parsers.zczc_pmf import ZCZCPMFParser
 from aap.io.feed_parsers.zczc_medianet import ZCZCMedianetParser
-from aap.io.feed_parsers.zczc_sportsresults import ZCZCSportsResultsParser
 
 
 class ZCZCTestCase(TestCase):
@@ -85,29 +83,6 @@ class ZCZCTestCase(TestCase):
         self.assertEqual(self.items.get('subject')[0]['qcode'], '15039001')
         self.assertIn('versioncreated', self.items)
 
-    def test_sports_results_format(self):
-        filename = 'Standings__2014_14_635535729050675896.tst'
-        dirname = os.path.dirname(os.path.realpath(__file__))
-        fixture = os.path.normpath(os.path.join(dirname, '../fixtures', filename))
-        self.provider['source'] = 'SOMETHING'
-        self.items = ZCZCSportsResultsParser().parse(fixture, self.provider)
-        self.assertEqual(self.items.get('headline'), 'MOTOR:  Collated results/standings after Sydney NRMA 500')
-        self.assertEqual(self.items.get('anpa_category')[0]['qcode'], 'T')
-        self.assertEqual(self.items.get('subject')[0]['qcode'], '15039001')
-        self.assertEqual(self.items.get('genre')[0]['qcode'], 'Results (sport)')
-        self.assertIn('versioncreated', self.items)
-
-    def test_sports_results_preview_format(self):
-        filename = 'AFL_FormGuide__636241349261119029.tst'
-        dirname = os.path.dirname(os.path.realpath(__file__))
-        fixture = os.path.normpath(os.path.join(dirname, '../fixtures', filename))
-        self.provider['source'] = 'SOMETHING'
-        self.items = ZCZCSportsResultsParser().parse(fixture, self.provider)
-        self.assertEqual(self.items.get('headline'), 'AFL: AFL Round 23 preview panel')
-        self.assertTrue(self.items.get('body_html').startswith('<p>MELBOURNE, March 3 AAP - Preview of '
-                                                               'AFL Round 23 matches (all times AEDT):</p>'))
-        self.assertTrue('<br>Tip:' in self.items.get('body_html'))
-
     def test_medianet_format(self):
         filename = 'ED_841066_2_1.tst'
         dirname = os.path.dirname(os.path.realpath(__file__))
@@ -136,30 +111,6 @@ class ZCZCTestCase(TestCase):
         self.assertTrue(self.items.get('body_html').startswith('<pre>Media release distributed by Medianet.'))
         self.assertTrue(self.items.get('body_html').find('                    Dividend     Total Winners     '
                                                          'Total Prizes Payable') != -1)
-
-    def test_pagemasters_format(self):
-        filename = 'Darwin GR - Greys - Sun 11 Oct, 2015.tst'
-        dirname = os.path.dirname(os.path.realpath(__file__))
-        fixture = os.path.normpath(os.path.join(dirname, '../fixtures', filename))
-        self.provider['source'] = 'PMF'
-        self.items = ZCZCPMFParser().parse(fixture, self.provider)
-        self.assertEqual(self.items.get('headline'), 'Darwin Greyhound Fields Sunday')
-        self.assertEqual(self.items.get('slugline'), 'Darwin Grey')
-        self.assertEqual(self.items.get('anpa_category')[0]['qcode'], 'r')
-        self.assertEqual(self.items.get('subject')[0]['qcode'], '15082000')
-        self.assertEqual(self.items.get('genre')[0]['name'], 'Racing Data')
-
-    def test_trot_tab_divs(self):
-        filename = 'Wagga Trot VIC TAB DIVS 1-4 Friday.tst'
-        dirname = os.path.dirname(os.path.realpath(__file__))
-        fixture = os.path.normpath(os.path.join(dirname, '../fixtures', filename))
-        self.provider['source'] = 'PMF'
-        self.items = ZCZCPMFParser().parse(fixture, self.provider)
-        self.assertEqual(self.items.get('headline'), 'Wagga Trot VIC TAB DIVS 1-4 Friday')
-        self.assertEqual(self.items.get('slugline'), 'Wagga Trot')
-        self.assertEqual(self.items.get('anpa_category')[0]['qcode'], 'r')
-        self.assertEqual(self.items.get('subject')[0]['qcode'], '15030003')
-        self.assertEqual(self.items.get('genre')[0]['name'], 'Results (sport)')
 
     def test_bob(self):
         filename = '1487e8f1-f7f5-40f5-8c0f-0eba3c2e162d.tst'
@@ -210,36 +161,3 @@ class ZCZCTestCase(TestCase):
                                                                'longer needs to wear'))
         self.assertEqual(self.items.get('place')[0].get('state'), 'Victoria')
         self.assertEqual(self.items.get('genre')[0].get('name'), 'Broadcast Script')
-
-    def test_greyhound_divs(self):
-        filename = 'Warragul Greyhound NSW TAB DIVS 1-11 Thursday.tst'
-        dirname = os.path.dirname(os.path.realpath(__file__))
-        fixture = os.path.normpath(os.path.join(dirname, '../fixtures', filename))
-        self.provider['source'] = 'PMF'
-        self.items = ZCZCPMFParser().parse(fixture, self.provider)
-        self.assertEqual(self.items.get('headline'), 'Warragul Greyhound NSW TAB DIVS 1-11 Thursday')
-        self.assertEqual(self.items.get('slugline'), 'Warragul Greys')
-        self.assertEqual(self.items.get('anpa_take_key'), 'NSW TAB DIVS 1-11')
-        self.assertEqual(self.items.get('genre')[0]['name'], 'Results (sport)')
-
-    def test_pagemasters_market(self):
-        filename = 'Caulfield RA - Betting - Sat 11 Feb, 2017.tst'
-        dirname = os.path.dirname(os.path.realpath(__file__))
-        fixture = os.path.normpath(os.path.join(dirname, '../fixtures', filename))
-        self.provider['source'] = 'PMF'
-        parser = ZCZCPMFParser()
-        self.items = parser.parse(fixture, self.provider)
-        parser.post_process_item(self.items, self.provider)
-        self.assertEqual(self.items.get('slugline'), 'Caulfield Market')
-        self.assertEqual(self.items.get('anpa_take_key'), 'Saturday')
-        self.assertEqual(self.items.get('headline'), 'Caulfield Market Saturday')
-
-    def test_truncate_pagemasters_slugline(self):
-        filename = 'National Top Ten By Volume at Close - March 13.tst'
-        dirname = os.path.dirname(os.path.realpath(__file__))
-        fixture = os.path.normpath(os.path.join(dirname, '../fixtures', filename))
-        self.provider['source'] = 'PMF'
-        parser = ZCZCPMFParser()
-        self.items = parser.parse(fixture, self.provider)
-        parser.post_process_item(self.items, self.provider)
-        self.assertEqual(self.items.get('slugline'), 'National Top Ten By Volume at ')
