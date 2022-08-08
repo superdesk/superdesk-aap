@@ -79,8 +79,13 @@ class ThreeSixtyNinjs(NINJSFeedParser):
                     associated_item.pop('renditions', None)
 
         if ninjs.get('type') == 'text':
+
             # add marketplace keyword
-            item.setdefault('keywords', ['marketplace'])
+            if item.get('keywords'):
+                item['keywords'].append('marketplace')
+            else:
+                item.setdefault('keywords', ['marketplace'])
+
             # All features
             item['anpa_category'] = [{'qcode': 'c'}]
 
