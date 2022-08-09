@@ -9,9 +9,5 @@
 # at https://www.sourcefabric.org/superdesk/license
 
 import aap.io.iptc_extension  # noqa
-from .feeding_services.aap_sports_service import AAPSportsHTTPFeedingService  # noqa
-from .feeding_services.intelematics_fuel_service import IntelematicsFuelHTTPFeedingService  # noqa
-from .feeding_services.intelematics_incidents_service import IntelematicsIncidentHTTPFeedingService  # noqa
 from .feeding_services.ap_media_relay import APMediaRelayFeedingService  # noqa
-from .feeding_services.petrol_spy_fuel_service import PetrolSpyFuelHTTPFeedingService  # noqa
 from .feeding_services.cision import CisionFeedingService  # noqa

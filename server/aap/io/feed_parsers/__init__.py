@@ -10,16 +10,10 @@
 
 import aap.io.feed_parsers.text_file  # NOQA
 import aap.io.feed_parsers.zczc  # NOQA
-import aap.io.feed_parsers.news_bites  # NOQA
 import aap.io.feed_parsers.zczc_bob  # NOQA
-import aap.io.feed_parsers.zczc_pmf  # NOQA
 import aap.io.feed_parsers.zczc_medianet  # NOQA
-import aap.io.feed_parsers.zczc_sportsresults  # NOQA
-import aap.io.feed_parsers.pdaresults  # NOQA
 import aap.io.feed_parsers.asianet  # NOQA
 import aap.io.feed_parsers.bom  # NOQA
 import aap.io.feed_parsers.ReutersNewsMLTwoFeedParser  # NOQA
-import aap.io.feed_parsers.ticker_parser  # NOQA
-import aap.io.feed_parsers.aap_sportsfixtures  # NOQA
 import aap.io.feed_parsers.abs_calendar_csv  # NOQA
 import aap.io.feed_parsers.three_sixty_ninjs  # NOQA
