@@ -43,7 +43,8 @@ class GlobeNewsWireNITF(NITFFeedParser):
             "version": {"xpath": "head/meta[@name='article-revision']/@content"},
             "headline": self.get_headline,
             "abstract": self.get_abstract,
-            "copyrightholder": {"xpath": "head/docdata/doc.copyright/@holder"}
+            "copyrightholder": {"xpath": "head/docdata/doc.copyright/@holder"},
+            "extra": self.get_thumbnail,
         }
 
         super().__init__()
@@ -91,6 +92,19 @@ class GlobeNewsWireNITF(NITFFeedParser):
     def set_guid(self, xml):
         return 'globenewswire{}:{}'.format(xml.find("head/docdata/doc-id").attrib['id-string'],
                                            xml.find("head/meta[@name='article-revision']").attrib["content"])
+
+    def get_thumbnail(self, xml):
+        if xml.find("body/body.content/p/a/img[@alt='Primary Logo']") is not None:
+            img = xml.find("body/body.content/p/a/img[@alt='Primary Logo']")
+            return {"multimedia": [
+                {
+                    "caption": "Primary Logo",
+                    "seq": "1",
+                    "thumbnailurl": img.attrib["src"],
+                    "type": "photo",
+                    "url": img.attrib["src"],
+                }
+            ]}
 
     def parse(self, xml, provider=None):
         item = super().parse(xml, provider)
