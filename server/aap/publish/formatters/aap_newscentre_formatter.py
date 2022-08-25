@@ -21,6 +21,11 @@ from superdesk.text_utils import get_text
 
 
 class AAPNewscentreFormatter(Formatter, AAPODBCFormatter):
+
+    name = "AAP NEWSCENTRE"
+
+    type = "AAP NEWSCENTRE"
+
     def format(self, article, subscriber, codes=None):
         """
         Constructs a dictionary that represents the parameters passed to the IPNews InsertNews stored procedure

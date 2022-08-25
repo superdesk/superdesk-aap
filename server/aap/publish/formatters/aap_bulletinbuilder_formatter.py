@@ -31,6 +31,10 @@ class AAPBulletinBuilderFormatter(Formatter):
     Bulletin Builder Formatter
     """
 
+    name = "AAP Bulletin Builder"
+
+    type = "AAP BULLETIN BUILDER"
+
     def format(self, article, subscriber, codes=None):
         """
         Formats the article as require by the subscriber

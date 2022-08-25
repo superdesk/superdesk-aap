@@ -14,6 +14,10 @@ from superdesk.metadata.item import ITEM_TYPE, CONTENT_TYPE
 
 class NZNAnpaFormatter(AAPAnpaFormatter):
 
+    name = "NZN ANPA"
+
+    type = "NZN ANPA"
+
     def _get_category_list(self, category_list):
         return get_nzn_category_list(category_list)
 

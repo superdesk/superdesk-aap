@@ -19,6 +19,11 @@ from .unicodetoascii import to_ascii
 
 
 class AAPSMSFormatter(Formatter):
+
+    name = "AAP SMS"
+
+    type = "AAP SMS"
+
     def format(self, article, subscriber, codes=None):
         """
         Constructs a dictionary that represents the parameters passed to the SMS InsertAlerts stored procedure

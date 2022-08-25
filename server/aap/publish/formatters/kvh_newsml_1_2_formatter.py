@@ -15,6 +15,10 @@ from superdesk.metadata.item import ITEM_TYPE, CONTENT_TYPE
 
 class KVHNewsML12Formatter(NewsML12Formatter):
 
+    name = "KVH newsml 1.2"
+
+    type = "kvh_newsml12"
+
     def _format_descriptive_metadata(self, article, main_news_component):
         """
         Add take key to the  Descriptive_metadata element if available

@@ -20,6 +20,10 @@ class TickerFormatter(Formatter):
     """Generate the format required by the ticker, See the document MONO SIMPLE SIGN DATA PROTOCOL Revision 1.4c
     """
 
+    name = "AAP Ticker"
+
+    type = 'aap ticker'
+
     STX = b'\x02'  # Start of text, Start of message
     PASS = b'\x81'  # Password character
     SPEED = b'\xB0'  # Scroll speed set to slowest

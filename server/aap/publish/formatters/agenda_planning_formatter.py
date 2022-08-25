@@ -17,6 +17,11 @@ from copy import deepcopy
 
 
 class AgendaPlanningFormatter(Formatter):
+
+    name = "Agenda"
+
+    type = "agenda_planning"
+
     def __init__(self):
         self.can_preview = False
         self.can_export = False

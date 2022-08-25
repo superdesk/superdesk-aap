@@ -19,6 +19,10 @@ from superdesk.metadata.packages import RESIDREF, GROUP_ID, GROUPS, ROOT_GROUP, 
 
 class PhoenixNINJSFormatter(NINJSFormatter):
 
+    name = "Phoenix Ninjs"
+
+    type = 'aap phoenix'
+
     def __init__(self):
         super().__init__()
         self.can_preview = False
