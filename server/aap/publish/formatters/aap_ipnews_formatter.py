@@ -26,6 +26,11 @@ from superdesk.text_utils import get_text
 
 
 class AAPIpNewsFormatter(Formatter, AAPODBCFormatter):
+
+    name = 'AAP IPNews'
+
+    type = 'AAP IPNEWS'
+
     def __init__(self):
         self.format_type = 'AAP IPNEWS'
         self.output_field = 'article_text'

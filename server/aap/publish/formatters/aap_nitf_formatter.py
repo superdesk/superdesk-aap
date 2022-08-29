@@ -21,6 +21,10 @@ from superdesk.text_utils import get_text
 
 class AAPNITFFormatter(NITFFormatter):
 
+    name = "AAP NITF"
+
+    type = "aap_nitf"
+
     def format(self, article, subscriber, codes=None):
         try:
             pub_seq_num = superdesk.get_resource_service('subscribers').generate_sequence_number(subscriber)

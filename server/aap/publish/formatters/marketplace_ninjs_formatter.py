@@ -24,6 +24,10 @@ class MarketplaceNINJSFormatter(NewsroomNinjsFormatter):
 
     """
 
+    name = "Market Place NINJS"
+
+    type = "marketplace ninjs"
+
     clean_fields = ('body_html', 'headline', 'description_text', 'description_html')
 
     def __init__(self):

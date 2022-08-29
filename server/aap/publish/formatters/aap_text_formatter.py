@@ -18,6 +18,11 @@ from superdesk.text_utils import get_text
 
 
 class AAPTextFormatter(AAPIpNewsFormatter):
+
+    name = "AAP TEXT"
+
+    type = "AAP TEXT"
+
     def __init__(self):
         self.can_preview = True
         self.can_export = True

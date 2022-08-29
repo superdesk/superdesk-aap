@@ -26,6 +26,10 @@ from superdesk.utc import utc_to_local
 
 
 class AAPAnpaFormatter(Formatter):
+
+    name = "AAP ANPA Formatter"
+    type = "AAP ANPA"
+
     def format(self, article, subscriber, codes=None):
         try:
             docs = []

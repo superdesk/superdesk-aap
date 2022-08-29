@@ -26,6 +26,11 @@ from aap.publish.formatters.unicodetoascii import to_ascii
 
 
 class IRESSNITFFormatter(NITFFormatter):
+
+    name = "IRESS NITF"
+
+    type = "iress_nitf"
+
     line_ender = b'\x19\x0D\x0A'.decode()
     line_feed = b'\x0D\x0A'.decode()
     line_prefix = '   '

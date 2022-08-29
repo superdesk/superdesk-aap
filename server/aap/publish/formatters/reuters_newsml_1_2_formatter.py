@@ -27,6 +27,11 @@ from html import escape
 
 
 class ReutersNewsML12Formatter(NewsML12Formatter):
+
+    name = 'REUTERS NEWSML'
+
+    type = 'reuters_newsml'
+
     XML_ROOT = '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE NewsML SYSTEM "NewsML-xhtml.dtd">'
 
     def format(self, article, subscriber, codes=None):

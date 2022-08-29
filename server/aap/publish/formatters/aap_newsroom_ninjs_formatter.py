@@ -17,6 +17,10 @@ import html
 
 class AAPNewsroomNinjsFormatter(NewsroomNinjsFormatter):
 
+    name = "AAP Newsroom NINJS"
+
+    type = 'aap newsroom ninjs'
+
     clean_fields = ('body_html', 'headline', 'description_text', 'description_html')
 
     PATTERN = r'((?:<a href[^>]+>)|(?:<a href=\"))?((?:(?:https|http)://)[\w/\-?=%.]+\.[\w/\-?=&;%#@.\+:]+)'

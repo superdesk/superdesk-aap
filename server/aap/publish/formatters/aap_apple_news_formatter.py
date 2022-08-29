@@ -30,6 +30,11 @@ logger = logging.getLogger(__name__)
 
 
 class AAPAppleNewsFormatter(Formatter):
+
+    name = 'AAP Apple News'
+
+    type = 'AAP Apple News'
+
     APPLE_NEWS_VERSION = '1.8'
     URL_REGEX = re.compile(r'(?:(?:https|http)://)[\w/\-?=%.]+\.[\w/\-?=%#@.\+:]+', re.IGNORECASE)
 

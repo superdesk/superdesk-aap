@@ -16,6 +16,11 @@ from .category_list_map import get_nzn_category_list
 
 
 class NznIpNewsFormatter(AAPIpNewsFormatter):
+
+    name = "NZN IPNEWS"
+
+    type = "NZN IPNEWS"
+
     def __init__(self):
         self.can_preview = False
         self.can_export = False

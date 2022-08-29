@@ -15,6 +15,10 @@ from superdesk.errors import FormatterError
 
 class NotesAnpaFormatter(AAPAnpaFormatter):
 
+    name = 'Notes ANPA'
+
+    type = 'NOTES ANPA'
+
     def format(self, article, subscriber, codes=None):
         try:
             docs = []

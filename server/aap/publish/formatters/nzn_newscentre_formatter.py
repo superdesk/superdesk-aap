@@ -14,6 +14,11 @@ from superdesk.metadata.item import ITEM_TYPE, CONTENT_TYPE
 
 
 class NznNewscentreFormatter(AAPNewscentreFormatter):
+
+    name = "NZN NEWSCENTRE"
+
+    type = "NZN NEWSCENTRE"
+
     def format(self, article, subscriber, codes=None):
         """
         Constructs a dictionary that represents the parameters passed to the IPNews InsertNews stored procedure
