@@ -40,6 +40,12 @@ class ReutersRouteProcessTests(TestCase):
                     "name": "United States"
                 }
             ],
+            "signal": [
+                {
+                    "name": "prodId:TXT",
+                    "qcode": "prodId:TXT"
+                }
+            ],
             'body_html': '<p>DETROIT (Reuters) - General Motors Co <GM.N> Chief Financial Officer Chuck Stevens \
             said on Wednesday the macroeconomic challenges in Brazil will remain in the near term but the company \
             has \"huge upside leverage once the macro situation changes\" in South America\'s largest \
@@ -55,6 +61,7 @@ class ReutersRouteProcessTests(TestCase):
         self.assertEqual(item['place'], [])
         self.assertEqual(item['dateline']['located']['city'], 'Detroit')
         self.assertEqual(item['anpa_category'], [{'name': 'International News', 'qcode': 'i'}])
+        self.assertNotIn('signal', item)
 
     def test_aap_ingested_story(self):
         firstcreated = datetime.datetime(2015, 10, 26, 11, 45, 19, 0)
