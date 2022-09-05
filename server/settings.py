@@ -317,6 +317,10 @@ PLANNING_XMP_SLUGLINE_MAPPING = {
     }
 }
 
+# If true planning a notification will be sent to a user who creates and assignment assigned to themselves
+PLANNING_SEND_NOTIFICATION_FOR_SELF_ASSIGNMENT = strtobool(
+    env('PLANNING_SEND_NOTIFICATION_FOR_SELF_ASSIGNMENT', 'true'))
+
 # Enable or disable the fulfill assignments task
 ENABLE_FULFILL_ASSIGNMENTS = strtobool(env('ENABLE_FULFILL_ASSIGNMENTS', 'true'))
 
