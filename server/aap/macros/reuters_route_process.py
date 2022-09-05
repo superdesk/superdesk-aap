@@ -27,6 +27,9 @@ def reuters_route_process(item, **kwargs):
             reuters_derive_dateline(item)
             reuters_remove_text_link(item)
 
+            # remove signal from Reuters content
+            item.pop('signal', None)
+
             # set the category as international news
             item['anpa_category'] = [{'name': 'International News', 'qcode': 'i'}]
         elif item.get('source', '').upper() == 'AP' and item.get('state').upper() == 'INGESTED':
