@@ -91,7 +91,8 @@ class AAPODBCFormatter():
                 and odbc_item['subject_reference'] != '00000000':
             odbc_item['subject'] = subject_codes[odbc_item['subject_reference'][:2] + '000000']
             if odbc_item['subject_reference'][2:5] != '000':
-                odbc_item['subject_matter'] = subject_codes[odbc_item['subject_reference'][:5] + '000']
+                odbc_item['subject_matter'] = \
+                    subject_codes[odbc_item['subject_reference'][:5] + '000'].replace('\'', '\'\'')
             else:
                 odbc_item['subject_matter'] = ''
             if not odbc_item['subject_reference'].endswith('000'):
