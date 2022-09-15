@@ -559,6 +559,32 @@ class AapIpNewsFormatterTest(TestCase):
         self.assertEqual(doc['subject_reference'], '00000000')
         self.assertEqual(doc['headline'], 'This is a test headline')
 
+    def testIpNewsFormatterCoupDetaEscape(self):
+        article = {
+            'source': 'AAP',
+            'anpa_category': [{'qcode': 'a'}],
+            'headline': 'This is a test headline',
+            'byline': 'joe',
+            'slugline': 'slugline',
+            'subject': [{'qcode': '16004000'}],
+            'anpa_take_key': 'take_key',
+            'unique_id': '1',
+            'type': 'text',
+            'body_html': 'body',
+            'word_count': '1',
+            'priority': 1,
+            'task': {'desk': 1},
+            'urgency': 1,
+            'place': [{'qcode': 'VIC', 'name': 'VIC'}]
+        }
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
+
+        f = AAPIpNewsFormatter()
+        seq, doc = f.format(article, subscriber)[0]
+        doc = json.loads(doc)
+        self.assertEqual(doc['subject_reference'], '16004000')
+        self.assertEqual(doc['subject_matter'], 'coup d\'\'etat')
+
     def testIpNewsFormatterNoByline(self):
         article = {
             "_id": "urn:newsml:localhost:2016-07-15T12:48:23.630571:fcdf4e61-541c-4cc7-86c7-8e15314b5e71",
