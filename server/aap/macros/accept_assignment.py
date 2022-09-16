@@ -31,8 +31,8 @@ def accept_assignment(item, **kwargs):
         assignment = found.group(1)
         assignee = found.group(3)
 
-    assignment_service = superdesk.get_resource_service('assignments')
-    assignment_service.accept_assignment(assignment, assignee)
+        assignment_service = superdesk.get_resource_service('assignments')
+        assignment_service.accept_assignment(assignment, assignee)
 
     return item
 
