@@ -243,6 +243,9 @@ VALIDATOR_MEDIA_METADATA = {
     },
 }
 
+GOOGLE_LOGIN = strtobool(env('GOOGLE_LOGIN', 'false'))
+
+
 # max multi day event duration in days
 MAX_MULTI_DAY_EVENT_DURATION = int(env('MAX_MULTI_DAY_EVENT_DURATION', 7))
 
