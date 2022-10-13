@@ -22,7 +22,7 @@ import pytz
 
 from superdesk.errors import SuperdeskApiError
 from superdesk.io.iptc import subject_codes
-from superdesk.media.media_operations import process_file_from_stream, decode_metadata
+from superdesk.media.media_operations import process_file_from_stream
 from superdesk.media.renditions import generate_renditions, delete_file_on_error, get_renditions_spec
 from superdesk.metadata.item import ITEM_TYPE, CONTENT_TYPE, PUB_STATUS
 from superdesk.utc import utcnow
@@ -153,6 +153,8 @@ class AAPMMDatalayer(DataLayer):
         # restricting only to image for initial implementation.
         if not fields.get('MediaTypes'):
             fields.update({'MediaTypes': self._app.config['AAP_MM_SEARCH_MEDIA_TYPES']})
+        if req.get('sort') and len(req.get('sort')) and list(req.get('sort')[0].items())[0][0] == 'firstcreated':
+            fields.update({'SortBy': list(req.get('sort')[0].items())[0][1]})
 
         size = int(req.get('size', '25')) if int(req.get('size', '25')) > 0 else 25
         query = {'Query': query_keywords, 'pageSize': str(size),
@@ -364,7 +366,7 @@ class AAPMMDatalayer(DataLayer):
             out.seek(0)
             file_id = self._app.media.put(out, filename=file_name, content_type=content_type, metadata=None)
             doc['mimetype'] = content_type
-            doc['filemeta'] = decode_metadata(metadata)
+            # doc['filemeta'] = decode_metadata(metadata)
             # set the version created to now to bring it to the top of the desk, images can be quite old
             doc['versioncreated'] = utcnow()
             inserted = [file_id]
