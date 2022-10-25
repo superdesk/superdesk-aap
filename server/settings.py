@@ -13,6 +13,7 @@
 import os
 import json
 from superdesk.default_settings import strtobool, _MAIL_FROM
+from aap.download import aap_download # noqa
 
 try:
     from urllib.parse import urlparse

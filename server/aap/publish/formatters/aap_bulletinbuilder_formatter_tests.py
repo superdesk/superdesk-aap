@@ -681,7 +681,24 @@ class AapBulletinBuilderFormatterTest(TestCase):
                     'headline': '<div>Hello&nbsp;world</div>',
                     'alt_text': '<div>Hello&nbsp;world</div>',
                     'byline': '<div>Hello&nbsp;world</div>',
-                    'slugline': '<div>Hello&nbsp;world</div>'
+                    'slugline': '<div>Hello&nbsp;world</div>',
+                    'renditions': {
+                        '16-9': {
+                            'CropLeft': 0,
+                            'CropTop': 86,
+                            'CropRight': 4928,
+                            'CropBottom': 2867,
+                            'width': 1280,
+                            'height': 720,
+                            'href': 'http://something.com/api/upload-raw/63573a92f99850d20d510512.jpg',
+                            'media': '63573a92f99850d20d510512',
+                            'mimetype': 'image/jpeg',
+                            'poi': {
+                                'x': 3301,
+                                'y': 1390
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -696,3 +713,5 @@ class AapBulletinBuilderFormatterTest(TestCase):
         self.assertEqual(test_article['associations']['featuremedia']['alt_text'], 'Hello world')
         self.assertEqual(test_article['associations']['featuremedia']['slugline'], 'Hello world')
         self.assertEqual(test_article['associations']['featuremedia']['byline'], 'Hello world')
+        self.assertEqual(test_article['associations']['featuremedia']['renditions']['16-9']['href'],
+                         'http://something.com/api/aap-download/63573a92f99850d20d510512.jpg')
