@@ -24,6 +24,7 @@ from copy import deepcopy
 import json
 from superdesk.etree import parse_html, etree
 from superdesk.macros.extract_html import extract_html_macro
+from aap.download import AAP_DOWNLOAD_PATH
 
 
 class AAPBulletinBuilderFormatter(Formatter):
@@ -196,6 +197,12 @@ class AAPBulletinBuilderFormatter(Formatter):
             value['slugline'] = to_ascii(self.get_text_content(value.get('slugline'))).strip()
             value['alt_text'] = to_ascii(self.get_text_content(value.get('alt_text'))).strip()
             value['byline'] = to_ascii(self.get_text_content(value.get('byline'))).strip()
+            # Update the image references to allow internal access
+            renditions = value.get('renditions')
+            if renditions:
+                for _name, rendition in renditions.items():
+                    if rendition.get('href'):
+                        rendition['href'] = rendition.get('href').replace('upload-raw', AAP_DOWNLOAD_PATH)
 
     def format_keywords(self, item, original):
         """Add the place keyword to the formatted article
