@@ -65,18 +65,18 @@ class ThreeSixtyNinjs(NINJSFeedParser):
         for _key, associated_item in item.get('associations', {}).items():
             if associated_item:
                 if associated_item.get('type') == 'picture':
-
-                    # fix to pass validation
-                    associated_item['headline'] = associated_item.get('headline', '')[:42] if len(
-                        associated_item.get('headline', '')) > 42 else associated_item.get('headline', 'No Headline')
-                    if associated_item['headline'] == '':
-                        associated_item['headline'] = 'No Headline'
-                    associated_item['alt_text'] = associated_item['headline']
-                    associated_item['description_text'] = associated_item.get('description_text', '')[:100] if len(
-                        associated_item.get('description_text', '')) > 100 else associated_item.get('description_text',
-                                                                                                    'No Caption')
                     # renditions will be set from the ingested image
                     associated_item.pop('renditions', None)
+
+        if ninjs.get('type') == 'picture':
+            # fix to pass validation
+            item['headline'] = ninjs.get('headline', '')[:42]
+            if not item['headline']:
+                item['headline'] = 'No Headline'
+            item['alt_text'] = item['headline']
+            item['description_text'] = ninjs.get('description_text', '')[:100]
+            if not item['description_text']:
+                item['description_text'] = 'No Caption'
 
         if ninjs.get('type') == 'text':
 
