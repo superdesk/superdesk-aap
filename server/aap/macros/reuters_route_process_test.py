@@ -20,6 +20,7 @@ class ReutersRouteProcessTests(TestCase):
             "source": "Reuters",
             "state": "ingested",
             "_id": "tag:localhost:2017:77b03a97-df04-446e-a112-94941f1bb12c",
+            "type": "text",
             "firstcreated": firstcreated,
             "subject": [
                 {
@@ -175,6 +176,7 @@ class ReutersRouteProcessTests(TestCase):
             "source": "Reuters",
             "state": "ingested",
             "_id": "tag:localhost:2017:77b03a97-df04-446e-a112-94941f1bb12c",
+            "type": "text",
             "anpa_category": [
                 {
                     "name": "Finance",
