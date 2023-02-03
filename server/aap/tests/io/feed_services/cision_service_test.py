@@ -99,7 +99,9 @@ class cisionTestCase(AAPTestCase):
         self.app.data.insert('vocabularies', VOCABULARIES)
         self.app.data.insert('archive', [{'_id': "123456789", "ingest_id": "cision20200706C2855",
                                           "state": "published", "type": "text", "_current_version": 1,
-                                          "unique_name": "1234"}])
+                                          "unique_name": "1234", "pubstatus": "usable"}])
+        self.app.data.insert('ingest', [{'_id': "123456789", "guid": "cision20221115AE36825:1"}])
+        self.app.data.insert('ingest_providers', [PROVIDER])
         self._calls = 0
 
     def setupMock(self, context):
@@ -130,7 +132,7 @@ class cisionTestCase(AAPTestCase):
                    '"<p>We are advised by ACME that journalists and other readers should disregard the news ' \
                    'release, ACME Got it wrong and will pretend it never happened,' \
                    ' issued <span class=\\"xn-chron\\">July 19, 2022</span> over PR Newswire.</p><p></p>' \
-                   '<p>SOURCE  ACME</p>",' \
+                   '<p>SOURCE  ACME</p>","date": "20200706T154100+0000",' \
                    '"title": "/DISREGARD RELEASE: ACME/",' \
                    '"url": null}]}'
         return {'status_code': 200, 'content': data}
@@ -144,6 +146,15 @@ class cisionTestCase(AAPTestCase):
                 service.provider = provider
                 items = service._update(provider, {})[0]
                 self.assertEqual(items[0]['headline'], 'ACME Provides Business Update on Hurricane Laura Impact')
-                service._update(provider, {})[0]
+                items = service._update(provider, {})[0]
+                self.assertEqual(len(items), 0)
                 self.assertEqual(len(outbox), 1)
                 self.assertEqual(outbox[0].subject, 'CISION: /DISREGARD RELEASE: ACME/')
+                outbox = []
+                items = service._update(provider, {})[0]
+                self.assertEqual(len(outbox), 0)
+                self.assertEqual(len(items), 0)
+                provider['config']['last_deleted_release_id'] = ''
+                items = service._update(provider, {})[0]
+                self.assertEqual(len(outbox), 0)
+                self.assertEqual(len(items), 0)
