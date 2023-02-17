@@ -96,7 +96,7 @@ class AAPODBCFormatter():
             else:
                 odbc_item['subject_matter'] = ''
             if not odbc_item['subject_reference'].endswith('000'):
-                odbc_item['subject_detail'] = subject_codes[odbc_item['subject_reference']]
+                odbc_item['subject_detail'] = subject_codes[odbc_item['subject_reference']].replace('\'', '\'\'')
             else:
                 odbc_item['subject_detail'] = ''
         else:
