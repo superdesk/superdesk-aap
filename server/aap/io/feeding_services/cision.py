@@ -53,7 +53,11 @@ class CisionFeedingService(HTTPFeedingServiceBase):
         },
         {"id": "token", "type": "text", "label": "token", "readonly": True},
         {"id": "token_expiry", "type": "text", "label": "token expiry", "readonly": True},
-        {"id": "kill_email", "type": "text", "label": "Kill notification email"}
+        {"id": "kill_email", "type": "text", "label": "Kill notification email"},
+        {"id": "last_deleted_release_id", "type": "text",
+         "label": "Id of the last processed deleted release", "readonly": True},
+        {"id": "last_release_id", "type": "text", "label": "Id of the last processed release", "readonly": True}
+
     ]
 
     session = None
@@ -239,20 +243,28 @@ class CisionFeedingService(HTTPFeedingServiceBase):
 
         releases = json.loads(r.text)
         items = []
-        for entry in releases.get("data", []):
+        # sort the entries so most recent is last and we ingest them in order
+        entrys = sorted(releases.get("data", []), key=lambda d: d['date'])
+        for entry in entrys:
             # Set version in suffix and version in item, it will be preserved in the ninjs output.
             item = {ITEM_TYPE: CONTENT_TYPE.TEXT, "guid": "cision{}:1".format(entry.get("release_id")), "version": "1"}
-
             try:
                 if entry.get("status") == "DELETED":
+                    # We've seen this delete before
+                    if provider.get("config", {}).get("last_deleted_release_id") == entry.get("release_id"):
+                        continue
+
                     kill_item = superdesk.get_resource_service('archive').find_one(req=None,
                                                                                    ingest_id="cision{}".format(
                                                                                        entry.get("release_id")))
                     if kill_item:
-                        updates = {"auto_publish": True, "headline": entry.get("title", ""),
-                                   "body_html": entry.get("summary", ""), "abstract": entry.get("title", "")}
-                        superdesk.get_resource_service('archive_unpublish').patch(id=kill_item[config.ID_FIELD],
-                                                                                  updates=updates)
+                        if kill_item.get("pubstatus") == 'usable':
+                            updates = {"auto_publish": True, "headline": entry.get("title", ""),
+                                       "body_html": entry.get("summary", ""), "abstract": entry.get("title", "")}
+                            superdesk.get_resource_service('archive_unpublish').patch(id=kill_item[config.ID_FIELD],
+                                                                                      updates=updates)
+                        else:
+                            continue
                     else:
                         logger.warning("Failed to locate {} to kill it".format(entry.get("release_id")))
                     if provider["config"].get("kill_email"):
@@ -268,9 +280,20 @@ class CisionFeedingService(HTTPFeedingServiceBase):
                                    html_body=html_body,
                                    text_body=text_body
                                    )
+                    # Save the id of the delete so we can avoid processing it again
+                    provider["config"]["last_deleted_release_id"] = entry.get("release_id")
+                    superdesk.get_resource_service('ingest_providers').system_update(provider[config.ID_FIELD],
+                                                                                     updates={
+                                                                                         'config': provider["config"]},
+                                                                                     original=provider)
+
                     continue
             except Exception as exc:
                 logger.exception(exc)
+                continue
+
+            # ignore it if we got it last time
+            if provider.get("config", {}).get("last_release_id") == entry.get("release_id"):
                 continue
 
             logger.info("Requesting {}".format(entry.get("url")))
@@ -333,6 +356,13 @@ class CisionFeedingService(HTTPFeedingServiceBase):
 
         if self .session:
             self.session.close()
+
+        if len(entrys) and provider.get("config", {}).get("last_release_id") != entrys[-1].get("release_id"):
+            provider["config"]["last_release_id"] = entrys[-1].get("release_id")
+            superdesk.get_resource_service('ingest_providers').system_update(provider[config.ID_FIELD],
+                                                                             updates={
+                                                                                 'config': provider["config"]},
+                                                                             original=provider)
 
         return [items]
 
