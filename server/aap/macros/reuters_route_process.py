@@ -19,6 +19,9 @@ logger = logging.getLogger(__name__)
 
 
 def reuters_route_process(item, **kwargs):
+    # only operate on text items
+    if item.get('type') != 'text':
+        return item
     try:
         if (item.get('source', '').upper() == 'REUTERS' or item.get('source', '').upper() == 'RAW') and \
                 item.get('state').upper() == 'INGESTED':
@@ -35,7 +38,7 @@ def reuters_route_process(item, **kwargs):
         elif item.get('source', '').upper() == 'AP' and item.get('state').upper() == 'INGESTED':
             remove_anchors(item)
         return item
-    except:
+    except Exception:
         logger.warning('Exception caught in macro: reuters route process')
         return item
 

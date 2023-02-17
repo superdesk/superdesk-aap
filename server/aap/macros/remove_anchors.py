@@ -36,7 +36,8 @@ def remove_anchors(item, **kwargs):
         root = cleaner.clean_html(root)
         return sd_etree.to_string(root, method="html")
 
-    item['body_html'] = clean_html(item.get('body_html', ''))
+    if item.get('body_html'):
+        item['body_html'] = clean_html(item.get('body_html', ''))
 
     return item
 
