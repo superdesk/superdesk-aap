@@ -20,7 +20,7 @@ def rename_genre_value(**kwargs):
     service = superdesk.get_resource_service(repo)
     counter = 0
 
-    for items in IndexFromMongo().get_mongo_items(repo, 500, None):
+    for items in IndexFromMongo().get_mongo_items(repo, 500, None, False):
         print('Processing items from {} to {}'.format(counter * 500, counter * 500 + len(items)))
 
         for item in items:
