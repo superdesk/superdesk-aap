@@ -2,7 +2,7 @@ gunicorn==20.0.4
 honcho==1.0.1
 pyodbc==4.0.32
 unidecode==0.04.21
-newrelic>=2.66,<2.67
+newrelic==8.7.0
 titlecase==0.8.2
 pyasn1==0.4.8
 geopy==1.11.0
