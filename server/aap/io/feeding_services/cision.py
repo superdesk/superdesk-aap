@@ -197,7 +197,8 @@ class CisionFeedingService(HTTPFeedingServiceBase):
             comments=True,
             add_nofollow=True,
             kill_tags=["style", "script"],
-            safe_attrs=["alt", "src", "rel", "href", "target", "title"],
+            safe_attrs=["alt", "src", "rel", "href", "target", "title",
+                        "height", "width", "frameborder", "scrolling", "loading"],
         )
 
         if not self.session:
