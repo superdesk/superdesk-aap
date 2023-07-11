@@ -23,6 +23,7 @@ class NotesAnpaFormatter(AAPAnpaFormatter):
         try:
             docs = []
             formatted_article = deepcopy(article)
+            self.remove_all_embeds(formatted_article)
             for category in self._get_category_list(formatted_article.get('anpa_category')):
                 mapped_source = self._get_mapped_source(formatted_article)
                 formatted_article[config.ID_FIELD] = formatted_article.get('item_id',

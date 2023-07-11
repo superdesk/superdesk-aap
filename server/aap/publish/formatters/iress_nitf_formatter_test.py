@@ -14,6 +14,7 @@ from datetime import datetime
 import xml.etree.ElementTree as etree
 from superdesk.publish import init_app
 from superdesk.publish.formatters import Formatter
+from superdesk.utc import utcnow
 from unittests import AAPTestCase
 from .iress_nitf_formatter import IRESSNITFFormatter
 
@@ -457,3 +458,63 @@ class IRESSNITFFormatterTest(AAPTestCase):
         nitf_xml = etree.fromstring(item)
         self.assertEqual(nitf_xml.find('body/body.content/pre').text, '   "Why is society being so childish." and '
                                                                       'the Yen Y=ZZZZYYYY\n   AAPZZZZYYYY\n')
+
+    def test_embeded(self):
+        article = {
+            'source': 'AAP',
+            'anpa_category': [{'qcode': 'c'}],
+            'headline': 'This is a test headline',
+            'auto_publish': True,
+            'byline': 'joe',
+            'slugline': 'slugline',
+            'subject': [{'qcode': '15017000'}],
+            'anpa_take_key': 'take_key',
+            'unique_id': '1',
+            'type': 'text',
+            'format': 'HTML',
+            'body_html': "<p>pre amble</p>\n<!-- EMBED START Audio {id: \"editor_0\"} -->\n<figure>"
+                         "    <audio controls src=\"http://localhost:5000/api/upload-raw/64081e26b7c313e2fbbd21ae.mp3\""
+                         "alt=\"Minns\" width=\"100%\" height=\"100%\" />"
+                         "    <figcaption>Minns</figcaption>\n</figure>"
+                         "<!-- EMBED END Audio {id: \"editor_0\"} -->\n<p>post amble</p>",
+            "fields_meta": {
+                "body_html": {}
+            },
+            'word_count': '1',
+            'priority': '1',
+            'firstcreated': utcnow(),
+            'versioncreated': utcnow(),
+            'associations': {
+                'featuremedia': {
+                    'type': 'picture',
+                    'description_text': '<div>Hello&nbsp;world</div>',
+                    'headline': '<div>Hello&nbsp;world</div>',
+                    'alt_text': '<div>Hello&nbsp;world</div>',
+                    'byline': '<div>Hello&nbsp;world</div>',
+                    'slugline': '<div>Hello&nbsp;world</div>',
+                    'renditions': {
+                        '16-9': {
+                            'CropLeft': 0,
+                            'CropTop': 86,
+                            'CropRight': 4928,
+                            'CropBottom': 2867,
+                            'width': 1280,
+                            'height': 720,
+                            'href': 'http://something.com/api/upload-raw/63573a92f99850d20d510512.jpg',
+                            'media': '63573a92f99850d20d510512',
+                            'mimetype': 'image/jpeg',
+                            'poi': {
+                                'x': 3301,
+                                'y': 1390
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        resp = self.formatter.format(article, {'name': 'Test Subscriber'})[0]
+        nitf_xml = etree.fromstring(resp['formatted_item'].replace(self.line_ender, self.line_feed))
+        print(resp['formatted_item'])
+        self.assertEqual(nitf_xml.findall("body/body.content/pre")[0].text, "   joeZZZZYYYY\n   pre ambleZZZZYYYY\n   "
+                                                                            "post ambleZZZZYYYY\n   AAPZZZZYYYY\n")

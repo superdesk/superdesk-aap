@@ -23,6 +23,7 @@ from .unicodetoascii import to_ascii
 from copy import deepcopy
 import json
 from superdesk.etree import parse_html, etree
+from superdesk.editor_utils import remove_all_embeds
 from superdesk.macros.extract_html import extract_html_macro
 from aap.download import AAP_DOWNLOAD_PATH
 
@@ -47,6 +48,7 @@ class AAPBulletinBuilderFormatter(Formatter):
         try:
             formatted_article = deepcopy(article)
 
+            remove_all_embeds(formatted_article)
             formatted_article = extract_html_macro(formatted_article)
 
             pub_seq_num = superdesk.get_resource_service('subscribers').generate_sequence_number(subscriber)

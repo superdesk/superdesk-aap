@@ -466,7 +466,7 @@ class AapIpNewsFormatterTest(TestCase):
         f = AAPIpNewsFormatter()
         docs = f.format(article, subscriber, ['Aaa', 'Bbb', 'Ccc'])
         self.assertEqual(len(docs), 2)
-        for seq, doc in docs:
+        for _seq, doc in docs:
             doc = json.loads(doc)
             if doc['category'] == 'S':
                 self.assertEqual(doc['subject_reference'], '15011002')
@@ -904,6 +904,41 @@ class AapIpNewsFormatterTest(TestCase):
         seq, item = f.format(article, subscriber)[0]
         item = json.loads(item)
         self.assertEqual(item['article_text'], '\x19   By joe\x19\r\na&b\r\nAAP')
+
+    def testEmbedsinBody(self):
+        article = {
+            '_id': '3',
+            'source': 'AAP',
+            'anpa_category': [{'qcode': 's'}],
+            'headline': 'test',
+            'byline': 'joe',
+            'slugline': 'slugline',
+            'subject': [{'qcode': '02011001'}],
+            'anpa_take_key': 'take_key',
+            'unique_id': '1',
+            'type': 'text',
+            'body_html': '<p>pre amble</p>'
+                         '<!-- EMBED START Image {id: \"editor_0\"} -->'
+                         '<figure>'
+                         '    <img src=\"http://localhost:5000/api/upload-raw/64535be6aff6f0ecc83f5212.jpg\"'
+                         ' alt=\"BUDGET23 JIM CHALMERS PORTRAIT\" />'
+                         '    <figcaption>Australian Treasurer Jim Chalmers poses for </figcaption>'
+                         '</figure>'
+                         '<!-- EMBED END Image {id: \"editor_0\"} -->'
+                         '<p>post amble</p>',
+            "fields_meta": {
+                "body_html": {}
+            },
+            'word_count': 150,
+            'priority': 1,
+            'format': 'HTML'
+        }
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
+
+        f = AAPIpNewsFormatter()
+        seq, item = f.format(article, subscriber)[0]
+        item = json.loads(item)
+        self.assertEqual(item['article_text'], '\x19   By joe\x19\r\n   pre amble\x19\r\n   post amble\x19\r\n\r\nAAP')
 
 
 class DefaultSubjectTest(TestCase):

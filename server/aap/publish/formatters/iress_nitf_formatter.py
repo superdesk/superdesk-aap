@@ -14,6 +14,7 @@ from superdesk.publish.formatters.nitf_formatter import NITFFormatter
 from superdesk.errors import FormatterError
 from superdesk.utc import utcnow, utc_to_local
 from superdesk.metadata.item import ITEM_TYPE, CONTENT_TYPE, FORMATS, FORMAT, BYLINE
+from superdesk.editor_utils import remove_all_embeds
 from .aap_formatter_common import get_service_level, get_first_anpa_category, \
     get_first_anpa_category_code, get_copyrights_info
 from lxml import etree as etree
@@ -23,6 +24,7 @@ from superdesk.text_utils import get_text
 from .field_mappers.locator_mapper import LocatorMapper
 from .field_mappers.slugline_mapper import SluglineMapper
 from aap.publish.formatters.unicodetoascii import to_ascii
+from copy import deepcopy
 
 
 class IRESSNITFFormatter(NITFFormatter):
@@ -38,8 +40,10 @@ class IRESSNITFFormatter(NITFFormatter):
 
     def format(self, article, subscriber, codes=None):
         try:
+            formatted_article = deepcopy(article)
+            remove_all_embeds(formatted_article)
             pub_seq_num = superdesk.get_resource_service('subscribers').generate_sequence_number(subscriber)
-            nitf = self.get_nitf(article, subscriber, pub_seq_num)
+            nitf = self.get_nitf(formatted_article, subscriber, pub_seq_num)
             strip_elements(nitf, 'body.end')
             nitf_string = etree.tostring(nitf, encoding='utf-8').decode()
             headers = ['<?xml version=\"1.0\" encoding=\"UTF-8\"?>',

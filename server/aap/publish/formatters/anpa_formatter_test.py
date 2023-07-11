@@ -387,3 +387,139 @@ class ANPAFormatterTest(TestCase):
         lines = io.StringIO(out.decode())
         self.assertTrue(lines.getvalue().split('\r')[3].lstrip(), 'Test line 1')
         self.assertTrue(lines.getvalue().split('\r')[4], 'Test line 2')
+
+    def test_embed_in_body_body(self):
+        f = AAPAnpaFormatter()
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
+        item = self.article.copy()
+        item.update({
+            "associations": {
+                "editor_0": {
+                    "_id": "urn:newsml:localhost:2023-03-08T16:33:26.413814:8b4458f7-6952-444f-b6d0-2494140b382b",
+                    "media": "64081e26b7c313e2fbbd21ae"
+                }
+            },
+            "refs": [
+                {
+                    "key": "editor_0",
+                    "_id": "urn:newsml:localhost:2023-03-08T16:33:26.413814:8b4458f7-6952-444f-b6d0-2494140b382b",
+                    "uri": None,
+                    "guid": "urn:newsml:localhost:2023-03-08T16:33:26.413814:8b4458f7-6952-444f-b6d0-2494140b382b",
+                    "type": "audio",
+                    "source": "AAP"
+                },
+                {
+                    "key": "featuremedia",
+                    "_id": "tag:localhost:2023:b33349dd-9ca0-485f-9783-ab7e14644172",
+                    "uri": "20230504001794146907",
+                    "guid": "tag:localhost:2023:b33349dd-9ca0-485f-9783-ab7e14644172",
+                    "type": "picture",
+                    "source": "AAP Image"
+                }
+            ],
+            'body_html':
+                '<p>&nbsp;</p>'
+                '<p>pre amble</p>'
+                '<!-- EMBED START Image {id: \"editor_0\"} -->'
+                '<figure>'
+                '    <img src="http://localhost:5000/api/upload-raw/64535be6aff6f0ecc83f5212.jpg"'
+                'alt="BUDGET23 JIM CHALMERS PORTRAIT" />'
+                '    <figcaption>Australian Treasurer Jim Chalmers poses for </figcaption>'
+                '</figure>'
+                '<!-- EMBED END Image {id: \"editor_0\"} -->'
+                '<p>post amble</p>',
+            "fields_meta": {
+                "body_html": {
+                    "draftjsState": [
+                        {
+                            "blocks": [
+                                {
+                                    "key": "77gu7",
+                                    "text": " ",
+                                    "type": "unstyled",
+                                    "depth": 0,
+                                    "inlineStyleRanges": [],
+                                    "entityRanges": [],
+                                    "data": {
+                                        "MULTIPLE_HIGHLIGHTS": {}
+                                    }
+                                },
+                                {
+                                    "key": "6km5k",
+                                    "text": "pre amble",
+                                    "type": "unstyled",
+                                    "depth": 0,
+                                    "inlineStyleRanges": [],
+                                    "entityRanges": [],
+                                    "data": {
+                                        "MULTIPLE_HIGHLIGHTS": {}
+                                    }
+                                },
+                                {
+                                    "key": "evl7j",
+                                    "text": " ",
+                                    "type": "atomic",
+                                    "depth": 0,
+                                    "inlineStyleRanges": [],
+                                    "entityRanges": [
+                                        {
+                                            "offset": 0,
+                                            "length": 1,
+                                            "key": 0
+                                        }
+                                    ],
+                                    "data": {}
+                                },
+                                {
+                                    "key": "68kr9",
+                                    "text": "post amble",
+                                    "type": "unstyled",
+                                    "depth": 0,
+                                    "inlineStyleRanges": [],
+                                    "entityRanges": [],
+                                    "data": {}
+                                }
+                            ],
+                            "entityMap": {
+                                "0": {
+                                    "type": "MEDIA",
+                                    "mutability": "MUTABLE",
+                                    "data": {
+                                        "media": {
+                                            "_id": "tag:localhost:2023:b33349dd-9ca0-485f-9783-ab7e14644172",
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    ]
+                },
+                "headline": {
+                    "draftjsState": [
+                        {
+                            "blocks": [
+                                {
+                                    "key": "e87io",
+                                    "text": "Budget with a pic",
+                                    "type": "unstyled",
+                                    "depth": 0,
+                                    "inlineStyleRanges": [],
+                                    "entityRanges": [],
+                                    "data": {
+                                        "MULTIPLE_HIGHLIGHTS": {}
+                                    }
+                                }
+                            ],
+                            "entityMap": {}
+                        }
+                    ]
+                }
+            }
+        })
+        resp = f.format(item, subscriber)[0]
+        out = resp['encoded_item']
+
+        lines = io.StringIO(out.decode())
+        print(lines.getvalue())
+        self.assertTrue(lines.getvalue().split('\n')[4].find('   pre amble') == 0)
+        self.assertTrue(lines.getvalue().split('\n')[6].find('   post amble') == 0)
