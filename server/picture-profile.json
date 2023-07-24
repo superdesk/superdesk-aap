@@ -4,7 +4,7 @@
             "order": 1,
             "sdWidth": "full",
             "required": true,
-            "displayOnMediaEditor": false
+            "displayOnMediaEditor": true
         },
         "genre": {
             "order": 2,
@@ -89,7 +89,7 @@
     "schema": {
         "slugline": {
             "type": "string",
-            "required": false,
+            "required": true,
             "nullable": true
         },
         "genre" : {
@@ -169,7 +169,7 @@
             "nullable": false,
             "type": "string",
             "required": true,
-            "maxlength" : 42,
+            "maxlength" : 55,
             "minlength" : 0
         },
         "description_text": {
