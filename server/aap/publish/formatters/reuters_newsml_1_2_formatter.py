@@ -22,6 +22,7 @@ from apps.prepopulate.app_initialize import get_filepath
 from superdesk import etree as sd_etree
 from copy import deepcopy
 from superdesk.utc import utcnow
+from superdesk.editor_utils import remove_all_embeds
 from datetime import date
 from html import escape
 
@@ -47,6 +48,7 @@ class ReutersNewsML12Formatter(NewsML12Formatter):
         """
         try:
             formatted_article = deepcopy(article)
+            remove_all_embeds(formatted_article)
             pub_seq_num = superdesk.get_resource_service('subscribers').generate_sequence_number(subscriber)
             self.now = utcnow()
             self.string_now = self.now.strftime('%Y%m%dT%H%M%S+0000')
@@ -241,7 +243,8 @@ class ReutersNewsML12Formatter(NewsML12Formatter):
             if formatted_article.get('byline'):
                 body.append(etree.fromstring('<p>' + formatted_article.get('byline', '') + '</p>'))
 
-            root = sd_etree.parse_html(self.append_body_footer(formatted_article), content='html')
+            content = self.append_body_footer(formatted_article)
+            root = sd_etree.parse_html(content, content='html')
             if formatted_article.get('dateline', {}).get('text') and not formatted_article.get('auto_publish', False):
                 ptag = root.find('.//p')
                 if ptag is not None:

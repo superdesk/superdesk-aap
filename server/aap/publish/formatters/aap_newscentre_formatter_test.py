@@ -131,7 +131,7 @@ class AapNewscentreFormatterTest(TestCase):
         f = AAPNewscentreFormatter()
         docs = f.format(article, subscriber, ['Aaa', 'Bbb', 'Ccc'])
         self.assertEqual(len(docs), 2)
-        for seq, doc in docs:
+        for _seq, doc in docs:
             doc = json.loads(doc)
             if doc['category'] == 'S':
                 self.assertEqual(doc['subject_reference'], '15011002')
@@ -214,6 +214,43 @@ class AapNewscentreFormatterTest(TestCase):
                               'article_text': '   By joe\r\n\r\nThe story body\r\ncall helpline 999 if you are '
                               'planning '
                               'to quit smoking\r\nAAP',
+                              'usn': '1',
+                              'subject_matter': 'international law', 'news_item_type': 'News',
+                              'subject_reference': '02011001', 'subject': 'crime, law and justice',
+                              'subject_detail': 'international court or tribunal',
+                              'selector_codes': 'AXX',
+                              'genre': 'Current', 'keyword': 'slugline', 'author': 'joe'})
+
+    def test_aap_newscentre_formatter_with_embed(self):
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
+        doc = self.article.copy()
+        doc['format'] = 'HTML'
+        doc['body_footer'] = '<p>call helpline 999 if you are planning to quit smoking</p>'
+        doc['body_html'] = '<p>pre amble</p>' \
+                           '<!-- EMBED START Image {id: \"editor_0\"} -->' \
+                           '<figure>' \
+                           '    <img src=\"http://localhost:5000/api/upload-raw/64535be6aff6f0ecc83f5212.jpg\"' \
+                           ' alt=\"BUDGET23 JIM CHALMERS PORTRAIT\" />' \
+                           '    <figcaption>Australian Treasurer Jim Chalmers poses for </figcaption>' \
+                           '</figure>' \
+                           '<!-- EMBED END Image {id: \"editor_0\"} -->' \
+                           '<p>post amble</p>'
+        doc["fields_meta"] = {"body_html": {}}
+        f = AAPNewscentreFormatter()
+        seq, item = f.format(doc, subscriber, ['Axx'])[0]
+        item = json.loads(item)
+
+        self.assertGreater(int(seq), 0)
+        self.assertEqual(seq, item['sequence'])
+        item.pop('sequence')
+        print(item['article_text'])
+        self.maxDiff = None
+        self.assertDictEqual(item,
+                             {'category': 'A', 'fullStory': 1, 'ident': '0',
+                              'headline': 'VIC:This is a test headline', 'originator': 'AAP',
+                              'take_key': 'take_key',
+                              'article_text': '   By joe\r\n\r\n   pre amble\r\n\r\n   post amble\r\n\r\n'
+                              '   call helpline 999 if you are planning to quit smoking\r\n\r\n\r\nAAP',
                               'usn': '1',
                               'subject_matter': 'international law', 'news_item_type': 'News',
                               'subject_reference': '02011001', 'subject': 'crime, law and justice',

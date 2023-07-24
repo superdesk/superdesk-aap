@@ -9,6 +9,7 @@
 # at https://www.sourcefabric.org/superdesk/license
 import json
 import superdesk
+from copy import deepcopy
 from eve.utils import ParsedRequest
 from superdesk.publish.formatters import Formatter
 from .aap_formatter_common import map_priority
@@ -30,6 +31,7 @@ class AAPSMSFormatter(Formatter):
         :return: returns the sequence number of the subscriber and the constructed parameter dictionary
         """
         try:
+            formatted_article = deepcopy(article)
             pub_seq_num = superdesk.get_resource_service('subscribers').generate_sequence_number(subscriber)
             sms_message = article.get('sms_message', article.get('abstract', ''))
 
@@ -41,7 +43,7 @@ class AAPSMSFormatter(Formatter):
                          'Headline': to_ascii(get_text(sms_message, content='html')).replace('\'', '\'\''),
                          'Priority': map_priority(article.get('priority'))}
 
-            body = self.append_body_footer(article)
+            body = self.append_body_footer(formatted_article)
 
             if article[ITEM_TYPE] == CONTENT_TYPE.TEXT:
                 body = get_text(body, content='html')

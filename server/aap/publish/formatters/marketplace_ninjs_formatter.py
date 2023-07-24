@@ -31,6 +31,7 @@ class MarketplaceNINJSFormatter(NewsroomNinjsFormatter):
     clean_fields = ('body_html', 'headline', 'description_text', 'description_html')
 
     def __init__(self):
+        super().__init__()
         self.format_type = 'marketplace ninjs'
         self.can_preview = False
         self.can_export = False
@@ -92,7 +93,7 @@ class MarketplaceNINJSFormatter(NewsroomNinjsFormatter):
                                                                             '$regex': '^((?!Ld-Writethru).)*$',
                                                                             '$options': 'i'}})
             if prev.count() == 1:
-                original = prev.next()
+                original = prev[0]
                 new_article = deepcopy(article)
                 new_article['guid'] = original.get('guid')
                 return new_article

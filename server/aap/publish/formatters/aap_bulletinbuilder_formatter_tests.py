@@ -715,3 +715,74 @@ class AapBulletinBuilderFormatterTest(TestCase):
         self.assertEqual(test_article['associations']['featuremedia']['byline'], 'Hello world')
         self.assertEqual(test_article['associations']['featuremedia']['renditions']['16-9']['href'],
                          'http://something.com/api/aap-download/63573a92f99850d20d510512.jpg')
+
+    def test_embedded_item(self):
+        article = {
+            'source': 'AAP',
+            'anpa_category': [{'qcode': 'c'}],
+            'headline': 'This is a test headline',
+            'auto_publish': True,
+            'byline': 'joe',
+            'slugline': 'slugline',
+            'subject': [{'qcode': '15017000'}],
+            'anpa_take_key': 'take_key',
+            'unique_id': '1',
+            'type': 'text',
+            'format': 'HTML',
+            'body_html': '<p>&nbsp;</p>'
+                         '<!-- EMBED START Image {id: \"editor_0\"} -->'
+                         '<figure>'
+                         '    <img src=\"http://localhost:5000/api/upload-raw/64535be6aff6f0ecc83f5212.jpg\"'
+                         ' alt=\"BUDGET23 JIM CHALMERS PORTRAIT\" />'
+                         '    <figcaption>Australian Treasurer Jim Chalmers poses for </figcaption>'
+                         '</figure>'
+                         '<!-- EMBED END Image {id: \"editor_0\"} -->'
+                         '<p>pre amble</p>'
+                         '<p><br></p>'
+                         '<p>post amble</p>',
+            "fields_meta": {
+                "body_html": {}
+            },
+            'word_count': '1',
+            'priority': '1',
+            'firstcreated': utcnow(),
+            'versioncreated': utcnow(),
+            'lock_user': ObjectId(),
+            'task': {
+                'desk': self.desks[0][config.ID_FIELD]
+            },
+            'associations': {
+                'featuremedia': {
+                    'type': 'picture',
+                    'description_text': '<div>Hello&nbsp;world</div>',
+                    'headline': '<div>Hello&nbsp;world</div>',
+                    'alt_text': '<div>Hello&nbsp;world</div>',
+                    'byline': '<div>Hello&nbsp;world</div>',
+                    'slugline': '<div>Hello&nbsp;world</div>',
+                    'renditions': {
+                        '16-9': {
+                            'CropLeft': 0,
+                            'CropTop': 86,
+                            'CropRight': 4928,
+                            'CropBottom': 2867,
+                            'width': 1280,
+                            'height': 720,
+                            'href': 'http://something.com/api/upload-raw/63573a92f99850d20d510512.jpg',
+                            'media': '63573a92f99850d20d510512',
+                            'mimetype': 'image/jpeg',
+                            'poi': {
+                                'x': 3301,
+                                'y': 1390
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
+        seq, item = self._formatter.format(article, subscriber)[0]
+        item = json.loads(item)
+        self.assertGreater(int(seq), 0)
+        test_article = json.loads(item.get('data'))
+        self.assertEqual(test_article['body_html'], '<p>pre amble</p><p>post amble</p>')

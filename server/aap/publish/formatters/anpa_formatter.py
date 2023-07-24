@@ -23,6 +23,7 @@ import re
 from superdesk.etree import parse_html, to_string, etree
 from superdesk.text_utils import get_text
 from superdesk.utc import utc_to_local
+from superdesk.editor_utils import remove_all_embeds
 
 
 class AAPAnpaFormatter(Formatter):
@@ -34,6 +35,8 @@ class AAPAnpaFormatter(Formatter):
         try:
             docs = []
             formatted_article = deepcopy(article)
+            remove_all_embeds(formatted_article)
+
             for category in self._get_category_list(formatted_article.get('anpa_category')):
                 mapped_source = self._get_mapped_source(formatted_article)
                 formatted_article[config.ID_FIELD] = formatted_article.get('item_id',

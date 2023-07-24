@@ -15,6 +15,8 @@ from superdesk.metadata.item import ITEM_TYPE, CONTENT_TYPE, FORMAT, FORMATS
 import json
 from .unicodetoascii import to_ascii
 from superdesk.text_utils import get_text
+from copy import deepcopy
+from superdesk.editor_utils import remove_all_embeds
 
 
 class AAPTextFormatter(AAPIpNewsFormatter):
@@ -31,21 +33,23 @@ class AAPTextFormatter(AAPIpNewsFormatter):
 
     def format(self, article, subscriber, codes=None):
         try:
+            article_copy = deepcopy(article)
+            remove_all_embeds(article_copy)
             formatted_doc = {}
-            formatted_doc['headline'] = get_text(article.get('headline', ''), content='html')
+            formatted_doc['headline'] = get_text(article_copy.get('headline', ''), content='html')
             formatted_doc['headline'] = formatted_doc['headline'].replace('\'', '\'\'').replace('\xA0', ' ')
-            formatted_doc['keyword'] = article.get('slugline', '').replace('\'', '\'\'')
+            formatted_doc['keyword'] = article_copy.get('slugline', '').replace('\'', '\'\'')
 
             # body formatting
-            if article.get(FORMAT) == FORMATS.PRESERVED:
-                body = get_text(self.append_body_footer(article), content='html')
+            if article_copy.get(FORMAT) == FORMATS.PRESERVED:
+                body = get_text(self.append_body_footer(article_copy), content='html')
                 formatted_doc['article_text'] = body.replace('\'', '\'\'')
-            elif article.get(FORMAT, FORMATS.HTML) == FORMATS.HTML:
+            elif article_copy.get(FORMAT, FORMATS.HTML) == FORMATS.HTML:
                 body = self.get_wrapped_text_content(
-                    to_ascii(self.append_body_footer(article))).replace('\'', '\'\'')
+                    to_ascii(self.append_body_footer(article_copy))).replace('\'', '\'\'')
                 formatted_doc['article_text'] = body
 
-            self.refine_article_body(formatted_doc, article)
+            self.refine_article_body(formatted_doc, article_copy)
 
             # Frame the text output according to AAP requirement
             formatted_output = 'KEYWORD: ' + formatted_doc.get('keyword', '') + '\r\n'

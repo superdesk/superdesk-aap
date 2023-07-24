@@ -23,6 +23,7 @@ import re
 import textwrap
 from superdesk.etree import parse_html, etree
 from superdesk.text_utils import get_text
+from superdesk.editor_utils import remove_all_embeds
 
 
 class AAPIpNewsFormatter(Formatter, AAPODBCFormatter):
@@ -39,6 +40,8 @@ class AAPIpNewsFormatter(Formatter, AAPODBCFormatter):
 
     def format(self, article, subscriber, codes=None):
         formatted_article = deepcopy(article)
+        remove_all_embeds(formatted_article)
+
         # Anyhting sourced as NZN is passed off as AAP
         mapped_source = formatted_article.get('source', '') if formatted_article.get('source', '') != 'NZN' else 'AAP'
 

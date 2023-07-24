@@ -8,6 +8,7 @@
 # AUTHORS and LICENSE files distributed with this source code, or
 # at https://www.sourcefabric.org/superdesk/license
 import superdesk
+from copy import deepcopy
 from superdesk.publish.formatters.nitf_formatter import NITFFormatter
 from superdesk.errors import FormatterError
 from superdesk.metadata.item import ITEM_TYPE, CONTENT_TYPE, SIGN_OFF
@@ -17,6 +18,7 @@ import re
 from .unicodetoascii import to_ascii
 from superdesk.etree import parse_html, to_string
 from superdesk.text_utils import get_text
+from superdesk.editor_utils import remove_all_embeds
 
 
 class AAPNITFFormatter(NITFFormatter):
@@ -28,8 +30,9 @@ class AAPNITFFormatter(NITFFormatter):
     def format(self, article, subscriber, codes=None):
         try:
             pub_seq_num = superdesk.get_resource_service('subscribers').generate_sequence_number(subscriber)
-
-            nitf = self.get_nitf(article, subscriber, pub_seq_num)
+            formatted_article = deepcopy(article)
+            remove_all_embeds(formatted_article)
+            nitf = self.get_nitf(formatted_article, subscriber, pub_seq_num)
             return [{'published_seq_num': pub_seq_num,
                      'formatted_item': etree.tostring(nitf, encoding='ascii').decode('ascii'),
                     'item_encoding': 'ascii'}]

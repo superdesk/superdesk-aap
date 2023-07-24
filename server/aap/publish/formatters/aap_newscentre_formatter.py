@@ -18,6 +18,7 @@ from copy import deepcopy
 from .category_list_map import get_aap_category_list
 from superdesk.etree import parse_html, etree
 from superdesk.text_utils import get_text
+from superdesk.editor_utils import remove_all_embeds
 
 
 class AAPNewscentreFormatter(Formatter, AAPODBCFormatter):
@@ -32,6 +33,7 @@ class AAPNewscentreFormatter(Formatter, AAPODBCFormatter):
         :return: returns the sequence number of the subscriber and the constructed parameter dictionary
         """
         formatted_article = deepcopy(article)
+        remove_all_embeds(formatted_article)
         mapped_source = formatted_article.get('source', '') if formatted_article.get('source', '') != 'NZN' else 'AAP'
 
         return self.format_for_source(formatted_article, subscriber, mapped_source, codes)

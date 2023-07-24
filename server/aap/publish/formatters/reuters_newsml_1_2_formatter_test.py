@@ -206,3 +206,34 @@ class ReutersNitfFormatterTest(TestCase):
         newsml = etree.fromstring(doc.encode('utf-8'), parser=utf8_parser)
         self.assertEqual(newsml.find('./NewsItem/NewsComponent/TopicSet/Topic[@Duid="T0003"]/FormalName').
                          text, 'BOMB')
+
+    def test_embeded(self):
+        now = datetime.datetime(2015, 6, 13, 11, 45, 19, 0)
+        self.article['firstcreated'] = now
+        self.article['versioncreated'] = now
+        item = self.article.copy()
+        item.update({
+            'body_html':
+                '<p>pre amble</p>'
+                '<!-- EMBED START Image {id: \"editor_0\"} -->'
+                '<figure>'
+                '    <img src=\"http://localhost:5000/api/upload-raw/64535be6aff6f0ecc83f5212.jpg\"'
+                ' alt=\"BUDGET23 JIM CHALMERS PORTRAIT\" />'
+                '    <figcaption>Australian Treasurer Jim Chalmers poses for </figcaption>'
+                '</figure>'
+                '<!-- EMBED END Image {id: \"editor_0\"} -->'
+                '<p>post amble</p>',
+            'format': 'HTML',
+            "fields_meta": {
+                "body_html": {
+                }
+            }
+        })
+
+        seq, doc = self.formatter.format(item, {'name': 'Test Subscriber'})[0]
+        utf8_parser = etree.XMLParser(encoding='utf-8')
+        newsml = etree.fromstring(doc.encode('utf-8'), parser=utf8_parser)
+        self.assertNotIn('Chalmers',
+                         etree.tostring(newsml.find('./NewsItem/NewsComponent/NewsComponent/ContentItem/DataContent/'
+                                                    '{http://www.w3.org/1999/xhtml}html/'
+                                                    '{http://www.w3.org/1999/xhtml}body')).decode('utf-8'))
