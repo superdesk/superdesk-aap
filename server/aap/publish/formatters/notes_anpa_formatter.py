@@ -11,6 +11,7 @@ from superdesk.text_utils import get_text
 from superdesk.utc import utc_to_local
 from aap.publish.formatters.anpa_formatter import AAPAnpaFormatter
 from superdesk.errors import FormatterError
+from superdesk.editor_utils import remove_all_embeds
 
 
 class NotesAnpaFormatter(AAPAnpaFormatter):
@@ -23,7 +24,7 @@ class NotesAnpaFormatter(AAPAnpaFormatter):
         try:
             docs = []
             formatted_article = deepcopy(article)
-            self.remove_all_embeds(formatted_article)
+            remove_all_embeds(formatted_article)
             for category in self._get_category_list(formatted_article.get('anpa_category')):
                 mapped_source = self._get_mapped_source(formatted_article)
                 formatted_article[config.ID_FIELD] = formatted_article.get('item_id',
