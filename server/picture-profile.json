@@ -84,6 +84,12 @@
             "sdWidth": "full",
             "displayOnMediaEditor": true,
             "required": true
+        },
+        "source": {
+            "order": 16,
+            "sdWidth": "full",
+            "displayOnMediaEditor": true,
+            "required": true
         }
     },
     "schema": {
@@ -195,6 +201,11 @@
         "byline": {
             "type": "string",
             "required": true,
+            "nullable": true
+        },
+        "source": {
+            "type": "string",
+            "required" : false,
             "nullable": true
         },
         "renditions" : {
