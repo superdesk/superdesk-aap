@@ -1,0 +1,11 @@
+{% for item in items %}
+{% if item['published_archive_items']|length == 0 and item['text_assignees']|length == 0 %}
+<p>{% if item.get('place') %}{{ item.get('place')|join(', ') }} - {% endif %}{% if item.get('description_text') %}{{ item.description_text }} {% endif %}{% if (item.get('event') or {}).get('location') %}{{ item.event.location[0].name }}, {% endif %}{% if item.get('schedule') %}{{ item.schedule }}{% endif %} TO COME ({{ item.slugline }})</p>
+{% endif %}
+{% for i in item['published_archive_items'] %}
+<p>{% if item.get('place') %}{{ item.get('place')|join(', ') }} - {% endif %}{{ i['archive_text'] }} PUBLISHED ({{ i['archive_slugline'] }}){% if not item.get('event') and item['text_assignees']|length > 0 %} TO COME {{ item.get('text_assignees')|join(', ') }}{% endif %}</p>
+{% endfor %}
+{% if item['text_assignees']|length > 0 and ((item['event']) or item['published_archive_items']|length == 0) %}
+<p>{% if item.get('place') %}{{ item.get('place')|join(', ') }} - {% endif %}{% if item.get('description_text') %}{{ item.description_text }} {% endif %}{% if (item.get('event') or {}).get('location') %}{{ item.event.location[0].name }}, {% endif %}{% if item.get('schedule') %}{{ item.schedule }}{% endif %} TO COME {{ item.get('text_assignees')|join(', ') }}</p>
+{% endif %}
+{% endfor %}
