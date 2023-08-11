@@ -226,7 +226,7 @@ SCHEMA = {
 VALIDATOR_MEDIA_METADATA = {
     "headline": {
         "required": True,
-        "maxlength": 42
+        "maxlength": 55
     },
     "alt_text": {
         "required": True,
