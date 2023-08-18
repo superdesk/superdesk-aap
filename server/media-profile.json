@@ -67,12 +67,6 @@
             "displayOnMediaEditor": true,
             "display_name": "Caption"
         },
-        "archive_description": {
-            "order": 13,
-            "sdWidth": "full",
-            "textarea": true,
-            "displayOnMediaEditor": true
-        },
         "alt_text": {
             "order": 14,
             "sdWidth": "full",
@@ -208,11 +202,7 @@
         },
         "renditions" : {
             "schema" : {
-                "16-9" : {
-                    "required" : true,
-                    "type" : "dict"
-                },
-                "4-3" : {
+                "original" : {
                     "required" : true,
                     "type" : "dict"
                 }

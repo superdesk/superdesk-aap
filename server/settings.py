@@ -204,6 +204,9 @@ DAYS_TO_KEEP = int(env('DAYS_TO_KEEP', '3'))
 with open(os.path.join(os.path.dirname(__file__), 'picture-profile.json')) as profile_json:
     picture_profile = json.load(profile_json)
 
+with open(os.path.join(os.path.dirname(__file__), 'media-profile.json')) as profile_json:
+    media_profile = json.load(profile_json)
+
 with open(os.path.join(os.path.dirname(__file__), 'composite-profile.json')) as profile_json:
     composite_profile = json.load(profile_json)
 
@@ -215,12 +218,16 @@ EDITOR = {
         "forcePlainText": True,
         "cleanPastedHTML": False
     },
-    "composite": composite_profile['editor']
+    "composite": composite_profile['editor'],
+    "video": media_profile['editor'],
+    "audio": media_profile['editor']
 }
 
 SCHEMA = {
     "picture": picture_profile['schema'],
-    "composite": composite_profile['schema']
+    "composite": composite_profile['schema'],
+    "video": media_profile['schema'],
+    "audio": media_profile['schema'],
 }
 
 VALIDATOR_MEDIA_METADATA = {
