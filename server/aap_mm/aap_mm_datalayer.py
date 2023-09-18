@@ -83,7 +83,10 @@ class AAPMMDatalayer(DataLayer):
         :return:
         """
         if in_doc.get('Credit', '').upper().startswith('AAP'):
-            out_doc['byline'] = titlecase(in_doc.get('Byline', '')) + '/AAP PHOTOS'
+            out_doc['byline'] = titlecase(in_doc.get('Byline', '')) + '/AAP PHOTOS' if in_doc.get(
+                'Byline') else 'AAP PHOTOS'
+        elif in_doc.get('Credit', '').upper().startswith('PR HANDOUT'):
+            out_doc['byline'] = 'HANDOUT/' + in_doc.get('Source', '')
         else:
             out_doc['byline'] = in_doc.get('Credit', '').upper() + ' PHOTO'
 
@@ -302,7 +305,7 @@ class AAPMMDatalayer(DataLayer):
         try:
             dt = datetime.datetime.strptime(string[0:19] + string[19:25].replace(':', ''),
                                             '%Y-%m-%dT%H:%M:%S%z').astimezone(pytz.utc)
-        except:
+        except BaseException:
             dt = utcnow()
         return dt
 
