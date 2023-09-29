@@ -173,7 +173,7 @@
             "nullable": false,
             "type": "string",
             "required": true,
-            "maxlength" : 55,
+            "maxlength" : 42,
             "minlength" : 0
         },
         "description_text": {
