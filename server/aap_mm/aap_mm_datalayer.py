@@ -105,7 +105,7 @@ class AAPMMDatalayer(DataLayer):
                 raise SuperdeskApiError.internalError("Unable to log into the image archive")
 
         url = self._app.config['AAP_MM_SEARCH_URL'] + '/Assets/search'
-        query_keywords = '*:*'
+        query_keywords = '*'
         if 'query' in req['query']['filtered']:
             query_keywords = req['query']['filtered']['query']['query_string']['query']
             query_keywords = query_keywords.replace('slugline:', 'objectname:')
@@ -391,7 +391,7 @@ class AAPMMDatalayer(DataLayer):
 
     def url_for_media(self, media_id, mimetype=None):
         return url_for('upload_raw.get_upload_as_data_uri', media_id=media_id,
-                       _external=True, _schema=self._app.config['URL_PROTOCOL'])
+                       _external=True, _scheme=self._app.config['URL_PROTOCOL'])
 
     def find_list_of_ids(self, resource, ids, client_projection=None):
         raise NotImplementedError()
