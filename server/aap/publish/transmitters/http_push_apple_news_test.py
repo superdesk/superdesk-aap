@@ -110,10 +110,8 @@ class HttpAppleNewsPushTestCase(TestCase):
         with patch('aap.publish.transmitters.http_push_apple_news.get_resource_service', mocked_service):
             with HTTMock(self.new_item_response):
                 self.http_push._push_item(queue_item)
-                find_one.assert_called_once()
-                find_one.assert_called_with(req=None,
-                                            item_id=queue_item.get('item_id'),
-                                            _current_version=queue_item.get('item_version'))
+                find_one.assert_called()
+                find_one.assert_called_with(req=None, _id='1')
                 get_subscriber_reference.assert_called_once()
                 get_subscriber_reference.assert_called_with('1', 'foo bar')
 
@@ -140,10 +138,9 @@ class HttpAppleNewsPushTestCase(TestCase):
         with patch('aap.publish.transmitters.http_push_apple_news.get_resource_service', mocked_service):
             with HTTMock(self.existing_item_response):
                 self.http_push._push_item(queue_item)
-                find_one.assert_called_once()
+                find_one.assert_called()
                 find_one.assert_called_with(req=None,
-                                            item_id=queue_item.get('item_id'),
-                                            _current_version=queue_item.get('item_version'))
+                                            _id='1')
                 get_subscriber_reference.assert_called_once()
                 get_subscriber_reference.assert_called_with('1', 'foo bar')
 
@@ -170,10 +167,8 @@ class HttpAppleNewsPushTestCase(TestCase):
         with patch('aap.publish.transmitters.http_push_apple_news.get_resource_service', mocked_service):
             with HTTMock(self.delete_item_response):
                 self.http_push._push_item(queue_item)
-                find_one.assert_called_once()
-                find_one.assert_called_with(req=None,
-                                            item_id=queue_item.get('item_id'),
-                                            _current_version=queue_item.get('item_version'))
+                find_one.assert_called()
+                find_one.assert_called_with(req=None, _id='1')
                 get_subscriber_reference.assert_called_once()
                 get_subscriber_reference.assert_called_with('1', 'foo bar')
 

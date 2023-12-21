@@ -12,25 +12,6 @@ import pytz
 from datetime import datetime
 from superdesk.tests import TestCase
 from .aap_apple_news_formatter import AAPAppleNewsFormatter
-from unittest.mock import patch, MagicMock
-
-
-def get_data(resource):
-    service_mock = MagicMock()
-    service_mock.get = MagicMock()
-    service_mock.get.return_value = [
-        {
-            'state': 'published',
-            'firstpublished': datetime(year=2018, month=2, day=15, hour=12, minute=30, second=0, tzinfo=pytz.UTC),
-            'item_id': '1'
-        },
-        {
-            'state': 'corrected',
-            'versioncreated': datetime(year=2018, month=2, day=15, hour=13, minute=45, second=0, tzinfo=pytz.UTC),
-            'item_id': '1'
-        }
-    ]
-    return service_mock
 
 
 class AAPAppleNewsFormatterTest(TestCase):
@@ -43,13 +24,23 @@ class AAPAppleNewsFormatterTest(TestCase):
     def _get_article(self):
         return {
             'type': 'text',
-            'genre': [{'qcode': 'Fact Check'}],
+            'genre': [{'qcode': 'Article'}],
             'format': 'HTML',
             'item_id': '1',
             'firstcreated': datetime(year=2018, month=2, day=15, hour=11, minute=30, second=0, tzinfo=pytz.UTC),
             'firstpublished': datetime(year=2018, month=2, day=15, hour=12, minute=30, second=0, tzinfo=pytz.UTC),
             'versioncreated': datetime(year=2018, month=2, day=15, hour=13, minute=45, second=0, tzinfo=pytz.UTC),
             'abstract': 'This is abstract',
+            'headline': 'Headline of the story',
+            'byline': 'John Doe',
+            'dateline': {
+                "source": "AAP",
+                "located": {
+                    "city": "Sydney",
+                    "dateline": "city",
+                    "city_code": "Sydney",
+                }
+            },
             'body_html': '<p>The Statement</p>'
                          '<p>This is statement first line</p>'
                          '<p>This is statement second line</p>'
@@ -73,19 +64,8 @@ class AAPAppleNewsFormatterTest(TestCase):
 
         }
 
-    def test_can_format_fact_check(self):
+    def test_can_format_check(self):
         self.assertTrue(
-            self.formatter.can_format(
-                self.formatter.format_type,
-                {
-                    'type': 'text',
-                    'genre': [{'qcode': 'Fact Check'}],
-                    'format': 'HTML'
-                }
-            )
-        )
-
-        self.assertFalse(
             self.formatter.can_format(
                 self.formatter.format_type,
                 {
@@ -96,330 +76,413 @@ class AAPAppleNewsFormatterTest(TestCase):
             )
         )
 
-    def test_parse_statement(self):
-        article = self._get_article()
-        self.formatter._parse_content(article)
-        self.assertEqual(article.get('_statement'), 'This is statement first line')
-        self.assertEqual(article.get('_statement_attribution'), 'This is statement second line')
-        self.assertEqual(
-            article.get('_analysis'),
-            '<p>This is analysis first line</p>'
-            '<p>This is analysis second line</p>'
-        )
-        self.assertEqual(
-            article.get('_verdict1'),
-            '<p>This is verdict 1 first line</p>'
-            '<p>This is verdict 1 second line</p>'
-        )
-
-        self.assertEqual(
-            article.get('_verdict2'),
-            '<p>This is verdict 2 first line</p>'
-            '<p>This is verdict 2 second line</p>'
-        )
-
-        self.assertEqual(
-            article.get('_references'),
-            '<ol><li>This is references <a href="http://test.com">http://test.com</a></li>'
-            '<li>This is references second line</li></ol>'
-        )
-        self.assertEqual(article.get('_revision_history'), '')
-
-    @patch('aap.publish.formatters.aap_apple_news_formatter.get_resource_service', get_data)
-    def test_revision_history(self):
-        article = self._get_article()
-        self.formatter._set_revision_history(article)
-        self.assertEqual(
-            article.get('_revision_history'),
-            '<ul><li>First published Feb 15, 2018 23:30 AEDT</li>'
-            '<li>Revision published Feb 16, 2018 00:45 AEDT</li></ul>'
-        )
-
-    def test_format_article_raises_exception_if_abstract_missing(self):
-        article = self._get_article()
-        article['abstract'] = ''
-        with self.assertRaises(Exception) as ex_context:
-            self.formatter._format(article)
-            self.assertIn('Cannot format the article for Apple News', ex_context.exception)
-
-    def test_format_article_raises_exception_if_statement_missing(self):
-        article = self._get_article()
-        article['body_html'] = '<p>The Statement</p>'\
-                               '<p>This is statement first line</p>' \
-                               '<p></p>' \
-                               '<p>The Verdict</p>' \
-                               '<p>This is verdict first line</p>' \
-                               '<p>This is verdict second line</p>' \
-                               '<p></p>' \
-                               '<p>The Analysis</p>'\
-                               '<p>This is analysis first line</p>'\
-                               '<p>This is analysis second line</p>'\
-                               '<p></p>'\
-                               '<p>The Verdict</p>'\
-                               '<p>This is verdict first line</p>'\
-                               '<p>This is verdict second line</p>'\
-                               '<p></p>'\
-                               '<p>The References</p>'\
-                               '<p>1. This is references http://test.com</p>'\
-                               '<p>2. This is references second line</p>'\
-                               '<p></p>'
-        with self.assertRaises(Exception) as ex_context:
-            self.formatter._format(article)
-            self.assertIn('Cannot format the article for Apple News', ex_context.exception)
-
-    def test_format_article_raises_exception_if_analysis_missing(self):
-        article = self._get_article()
-        article['body_html'] = '<p>The Statement</p>'\
-                               '<p>This is statement first line</p>'\
-                               '<p></p>'\
-                               '<p>The Verdict</p>'\
-                               '<p>This is verdict first line</p>'\
-                               '<p>This is verdict second line</p>'\
-                               '<p></p>'\
-                               '<p>The References</p>'\
-                               '<p>1. This is references http://test.com</p>'\
-                               '<p>2. This is references second line</p>'\
-                               '<p></p>'
-        with self.assertRaises(Exception) as ex_context:
-            self.formatter._format(article)
-            self.assertIn('Cannot format the article for Apple News', ex_context.exception)
-
-    def test_format_article_raises_exception_if_verdict_missing(self):
-        article = self._get_article()
-        article['body_html'] = '<p>The Statement</p>'\
-                               '<p>This is statement first line</p>' \
-                               '<p>This is statement second line</p>' \
-                               '<p></p>'\
-                               '<p>The Analysis</p>'\
-                               '<p>This is analysis first line</p>'\
-                               '<p>This is analysis second line</p>'\
-                               '<p></p>'\
-                               '<p>The References</p>'\
-                               '<p>1. This is references http://test.com</p>'\
-                               '<p>2. This is references second line</p>'\
-                               '<p></p>'
-        with self.assertRaises(Exception) as ex_context:
-            self.formatter._format(article)
-            self.assertIn('Cannot format the article for Apple News', ex_context.exception)
-
-    def test_format_article_raises_exception_if_references_missing(self):
-        article = self._get_article()
-        article['body_html'] = '<p>The Statement</p>'\
-                               '<p>This is statement first line</p>' \
-                               '<p>This is statement second line</p>' \
-                               '<p></p>'\
-                               '<p>The Analysis</p>'\
-                               '<p>This is analysis first line</p>'\
-                               '<p>This is analysis second line</p>'\
-                               '<p></p>'\
-                               '<p>The Verdict</p>'\
-                               '<p>This is verdict first line</p>'\
-                               '<p>This is verdict second line</p>'\
-                               '<p></p>'
-        with self.assertRaises(Exception) as ex_context:
-            self.formatter._format(article)
-            self.assertIn('Cannot format the article for Apple News', ex_context.exception)
-
     def test_format_title(self):
         article = self._get_article()
         apple_news = self.formatter._format(article)
         self.assertEqual(apple_news.get('identifier'), '1')
-        self.assertEqual(apple_news.get('title'), 'This is abstract')
-        self.assertEqual(apple_news.get('subtitle'), 'This is analysis first line')
-        self.assertEqual(apple_news.get('components'),
-                         [
-                             {
-                                 'behaviour': {
-                                     'type': 'background_parallax'
-                                 },
-                                 'components': [{
-                                     'anchor': {
-                                         'originAnchorPosition': 'bottom',
-                                         'targetAnchorPosition': 'bottom'
-                                     },
-                                     'components': [{
-                                         'layout': 'titleLayout',
-                                         'role': 'title',
-                                         'text': 'This is abstract',
-                                         'textStyle': 'titleStyle'
-                                     }],
-                                     'layout': 'fixed_image_header_section',
-                                     'role': 'section',
-                                     'style': {
-                                         'fill': {
-                                             'angle': 180,
-                                             'colorStops': [
-                                                 {'color': '#00000000'},
-                                                 {'color': '#063c7f'}
-                                             ],
-                                             'type': 'linear_gradient'
-                                         }
-                                     }
-                                 }],
-                                 'layout': 'fixed_image_header_container',
-                                 'role': 'container'
-                             },
-                             {
-                                 'layout': 'subHeaderLayout',
-                                 'role': 'heading',
-                                 'text': 'The Statement',
-                                 'textStyle': 'subHeaderStyle'
-                             },
-                             {
-                                 'layout': 'statementLayout',
-                                 'role': 'body',
-                                 'style': {
-                                     'backgroundColor': '#063c7f'
-                                 },
-                                 'text': 'This is statement first line',
-                                 'textStyle': 'statementStyle'
-                             },
-                             {
-                                 'layout': 'statementAttributionLayout',
-                                 'role': 'body',
-                                 'text': 'This is statement second line',
-                                 'textStyle': 'statementAttributionStyle'
-                             },
-                             {
-                                 'layout': {
-                                     'horizontalContentAlignment': 'right',
-                                     'margin': {
-                                         'bottom': 5
-                                     },
-                                     'maximumContentWidth': 180
-                                 },
-                                 'role': 'divider',
-                                 'stroke': {
-                                     'color': '#063c7f',
-                                     'style': 'dashed',
-                                     'width': 1
-                                 }
-                             },
-                             {
-                                 'animation': {
-                                     'preferredStartingPosition': 'left',
-                                     'type': 'move_in'
-                                 },
-                                 'components': [
-                                     {
-                                         'layout': 'subHeaderLayout',
-                                         'role': 'heading',
-                                         'text': 'The Verdict',
-                                         'textStyle': 'subHeaderStyle'
-                                     },
-                                     {
-                                         'format': 'html',
-                                         'layout': 'verdictLayout',
-                                         'role': 'body',
-                                         'text': '<p>This is verdict 1 first line</p>'
-                                                 '<p>This is verdict 1 second line</p>',
-                                         'textStyle': 'verdictStyle'
-                                     }
-                                 ],
-                                 'layout': 'verdictContainerLayout',
-                                 'role': 'container',
-                                 'style': {
-                                     'backgroundColor': '#e7ebf1'
-                                 }
-                             },
-                             {
-                                 'layout': 'subHeaderLayout',
-                                 'role': 'heading',
-                                 'text': 'The Analysis',
-                                 'textStyle': 'subHeaderStyle'
-                             },
-                             {
-                                 'format': 'html',
-                                 'layout': 'bodyLayout',
-                                 'role': 'body',
-                                 'text': '<p>This is analysis first line</p>'
-                                         '<p>This is analysis second line</p>',
-                                 'textStyle': 'bodyStyle'
-                             },
-                             {
-                                 'animation': {
-                                     'preferredStartingPosition': 'left',
-                                     'type': 'move_in'
-                                 },
-                                 'components': [
-                                     {
-                                         'layout': 'subHeaderLayout',
-                                         'role': 'heading',
-                                         'text': 'The Verdict',
-                                         'textStyle': 'subHeaderStyle'
-                                     },
-                                     {
-                                         'format': 'html',
-                                         'layout': 'verdictLayout',
-                                         'role': 'body',
-                                         'text': '<p>This is verdict 2 first line</p>'
-                                                 '<p>This is verdict 2 second line</p>',
-                                         'textStyle': 'verdictStyle'
-                                     }
-                                 ],
-                                 'layout': 'verdictContainerLayout',
-                                 'role': 'container',
-                                 'style': {
-                                     'backgroundColor': '#e7ebf1'
-                                 }
-                             },
-                             {
-                                 'layout': 'subHeaderLayout',
-                                 'role': 'heading',
-                                 'text': 'The References',
-                                 'textStyle': 'subHeaderStyle'
-                             },
-                             {
-                                 'format': 'html',
-                                 'layout': 'bodyLayout',
-                                 'role': 'body',
-                                 'text': '<ol><li>This is references <a href="http://test.com">http://test.com</a>'
-                                         '</li><li>This is references second line</li></ol>',
-                                 'textStyle': 'bodyStyle'
-                             }]
-                         )
+        self.assertEqual(apple_news.get('title'), 'Headline of the story')
+        self.assertEqual(apple_news.get('components'), [{"layout": "titleLayout",
+                                                         "role": "title", "text": "Headline of the story",
+                                                         "textStyle": "titleStyle",
+                                                         "format": "html"},
+                                                        {"role": "divider",
+                                                         "layout": {"columnStart": 2, "columnSpan": 3,
+                                                                    "margin": {"top": 5, "bottom": 5}},
+                                                         "stroke": {"color": "#063c7f", "style": "solid", "width": 1}},
+                                                        {"role": "byline", "text": "By John Doe",
+                                                         "layout": "bylineLayout",
+                                                         "textStyle": "bylineStyle"},
+                                                        {"role": "byline", "text": "SYDNEY, Feb 16 at 12:45AM",
+                                                         "layout": "dateLineLayout", "textStyle": "dateLineStyle"},
+                                                        {"format": "html", "layout": "bodyLayout", "role": "body",
+                                                         "text": "<p>The Statement</p>"
+                                                                 "<p>This is statement first line</p>"
+                                                                 "<p>This is statement second line</p>"
+                                                                 "<p><br></p><p>The Verdict</p>"
+                                                                 "<p>This is verdict 1 first line</p>"
+                                                                 "<p>This is verdict 1 second line</p>"
+                                                                 "<p><br></p><p>The Analysis</p>"
+                                                                 "<p>This is analysis first line</p>"
+                                                                 "<p>This is analysis second line</p>"
+                                                                 "<p><br></p><p>The Verdict</p>"
+                                                                 "<p>This is verdict 2 first line</p>"
+                                                                 "<p>This is verdict 2 second line</p>"
+                                                                 "<p><br></p><p>The References</p>"
+                                                                 "<p>1. This is references http://test.com</p>"
+                                                                 "<p>2. This is references second line</p><p><br></p>",
+                                                         "textStyle": "bodyStyle"}])
 
-    def test_format_killed_article(self):
+    def test_format_article_with_embeds(self):
         article = self._get_article()
-        article['state'] = 'killed'
+        article['associations'] = {'featuremedia': {'description_text': 'Protesters participate in a Halloween themed '
+                                                                        'Extinction Rebellion rally in Sydney, '
+                                                                        'Thursday, October 31, 2019.'},
+                                   'editor_0': {'type': 'video'},
+                                   'editor_1': {'type': 'picture'}}
+        article['fields_meta'] = {
+            "body_html": {
+                "draftjsState": [
+                    {
+                        "blocks": [
+                            {
+                                "key": "f8mk1",
+                                "text": "First paragraph",
+                                "type": "unstyled",
+                                "depth": 0,
+                                "inlineStyleRanges": [],
+                                "entityRanges": [],
+                                "data": {
+                                    "MULTIPLE_HIGHLIGHTS": {}
+                                }
+                            },
+                            {
+                                "key": "97qeo",
+                                "text": " ",
+                                "type": "atomic",
+                                "depth": 0,
+                                "inlineStyleRanges": [],
+                                "entityRanges": [
+                                    {
+                                        "offset": 0,
+                                        "length": 1,
+                                        "key": 0
+                                    }
+                                ],
+                                "data": {}
+                            },
+                            {
+                                "key": "bu6bt",
+                                "text": "Second paragraph",
+                                "type": "unstyled",
+                                "depth": 0,
+                                "inlineStyleRanges": [],
+                                "entityRanges": [],
+                                "data": {}
+                            },
+                            {
+                                "key": "66lpo",
+                                "text": "Third paragraph",
+                                "type": "unstyled",
+                                "depth": 0,
+                                "inlineStyleRanges": [],
+                                "entityRanges": [],
+                                "data": {}
+                            },
+                            {
+                                "key": "4sgtb",
+                                "text": " ",
+                                "type": "atomic",
+                                "depth": 0,
+                                "inlineStyleRanges": [],
+                                "entityRanges": [
+                                    {
+                                        "offset": 0,
+                                        "length": 1,
+                                        "key": 1
+                                    }
+                                ],
+                                "data": {}
+                            },
+                            {
+                                "key": "9n4jj",
+                                "text": "Fourth paragraph",
+                                "type": "unstyled",
+                                "depth": 0,
+                                "inlineStyleRanges": [],
+                                "entityRanges": [],
+                                "data": {}
+                            },
+                            {
+                                "key": "1trdb",
+                                "text": "Fifth paragraph",
+                                "type": "unstyled",
+                                "depth": 0,
+                                "inlineStyleRanges": [],
+                                "entityRanges": [],
+                                "data": {}
+                            },
+                            {
+                                "key": "2jrhi",
+                                "text": " ",
+                                "type": "atomic",
+                                "depth": 0,
+                                "inlineStyleRanges": [],
+                                "entityRanges": [
+                                    {
+                                        "offset": 0,
+                                        "length": 1,
+                                        "key": 2
+                                    }
+                                ],
+                                "data": {}
+                            },
+                            {
+                                "key": "d51og",
+                                "text": "Sixth paragraph",
+                                "type": "unstyled",
+                                "depth": 0,
+                                "inlineStyleRanges": [],
+                                "entityRanges": [],
+                                "data": {}
+                            }
+                        ],
+                        "entityMap": {
+                            "0": {
+                                "type": "MEDIA",
+                                "mutability": "MUTABLE",
+                                "data": {
+                                }
+                            },
+                            "1": {
+                                "type": "MEDIA",
+                                "mutability": "MUTABLE",
+                                "data": {
+                                    "media": {
+                                        "headline": "POLESTAR ELECTRIC VEHICLE",
+                                        "alt_text": "Alt Text",
+                                        "description_text": "Description text or caption",
+                                        "source": "PR Handout Image",
+                                        "byline": "PR Handout Image/POLESTAR",
+                                        "type": "picture",
+                                        "format": "HTML",
+                                    }
+                                }
+                            },
+                            "2": {
+                                "type": "EMBED",
+                                "mutability": "MUTABLE",
+                                "data": {
+                                    "data": {
+                                        "html": "<blockquote class=\"twitter-tweet\"><p lang=\"en\" dir=\"ltr\">"
+                                                "&quot;This is actually my first time to ever enter a competition"
+                                                ".&quot;<br><br>Photographer Jialing Cai went diving in the dark to "
+                                                "capture her award-winning image of a female paper nautilus, a type "
+                                                "of octopus that can grow its own shell.<br><br>Via "
+                                                "<a href=\"https://twitter.com/liz?ref_src=twsrc%5Etfw\">"
+                                                "@liz</a>: <a href=\"https://t.co/u1rGHr1heD\">"
+                                                "https://t.co/u1rGHr1heD</a> <a href=\"https://t.co/SIBTwJfisP\">"
+                                                "pic.twitter.com/SIBTwJfisP</a></p>&mdash; "
+                                                "Australian Associated Press (AAP) (@AAPNewswire) "
+                                                "<a href=\"https://twitter.com/AAPNewswire/status/1\">"
+                                                "November 16, 2023</a></blockquote> <script async "
+                                                "src=\"https://platform.twitter.com/widgets.js\" charset=\"utf-8\">"
+                                                "</script>"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                ]
+            }}
         apple_news = self.formatter._format(article)
-        self.assertEqual(apple_news.get('title'), 'This article has been removed.')
-        self.assertEqual(apple_news.get('subtitle'), 'This article has been removed.')
+        self.assertEqual(apple_news['components'][7]['URL'], 'bundle://editor_1')
+        self.assertEqual(apple_news['components'][0]['style']['fill']['URL'], 'bundle://featuremedia')
+        self.assertEqual(apple_news['components'][10]['URL'], 'https://twitter.com/AAPNewswire/status/1')
 
-    def test_format_url_to_anchor_tag(self):
-        inputs = [
-            'this is http://test.com',
-            'this is second line',
-            'Australian politics live with Amy Remeikis, by Amy Remeikis.'
-            'The Guardian.May 3, 2019: https://www.theguardian.com/australia-news/live/2019/'
-            'may/03/federal-election-2019-liberals-to-dump-another-candidate-politics-live?'
-            'page=with:block-5ccb88c18f086f179813a12b',
-            '7121.0 - Agricultural Commodities Australia 2017 - 18. Australian Bureau of Statistics:'
-            ' https://www.abs.gov.au/AUSSTATS/abs@.nsf/Lookup/7121.0Main+Features12017-18?OpenDocument',
-            'Explanatory Notes.7121.0 - Agricultural Commodities, Australia, 2017 - 18. Australian'
-            ' Bureau of Statistics: https://www.abs.gov.au/AUSSTATS/abs@.nsf/Lookup/7121.0'
-            'Explanatory%20Notes12017-18?OpenDocument'
-        ]
+    def test_format_article_with_instagram(self):
+        article = self._get_article()
+        article['fields_meta'] = {
+            "body_html": {
+                "draftjsState": [
+                    {
+                        "blocks": [
+                            {
+                                "key": "bkf9p",
+                                "text": "instagram",
+                                "type": "unstyled",
+                                "depth": 0,
+                                "inlineStyleRanges": [],
+                                "entityRanges": [],
+                                "data": {
+                                    "MULTIPLE_HIGHLIGHTS": {}
+                                }
+                            },
+                            {
+                                "key": "ed90t",
+                                "text": " ",
+                                "type": "atomic",
+                                "depth": 0,
+                                "inlineStyleRanges": [],
+                                "entityRanges": [
+                                    {
+                                        "offset": 0,
+                                        "length": 1,
+                                        "key": 0
+                                    }
+                                ],
+                                "data": {}
+                            },
+                            {
+                                "key": "30a8e",
+                                "text": "",
+                                "type": "unstyled",
+                                "depth": 0,
+                                "inlineStyleRanges": [],
+                                "entityRanges": [],
+                                "data": {}
+                            }
+                        ],
+                        "entityMap": {
+                            "0": {
+                                "type": "EMBED",
+                                "mutability": "MUTABLE",
+                                "data": {
+                                    "data": {
+                                        "html": "<blockquote class=\"instagram-media\" data-instgrm-captioned "
+                                                "data-instgrm-permalink=\"https://www.instagram.com/reel/C\" "
+                                                "data-instgrm-version=\"14\" style=\" background:#FFF; border:0; "
+                                                "border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 "
+                                                "rgba(0,0,0,0.15); margin: 1px; max-width:540px; min-width:326px; "
+                                                "padding:0; width:99.375%; width:-webkit-calc(100% - 2px); "
+                                                "width:calc(100% - 2px);\"></blockquote> "
+                                    },
+                                    "description": "Test Instagram post"
+                                }
+                            }
+                        }
+                    }
+                ]
+            }
+        }
+        apple_news = self.formatter._format(article)
+        self.assertEqual(apple_news['components'][5]['URL'], "https://www.instagram.com/reel/C")
 
-        outputs = [
-            'this is <a href="http://test.com">http://test.com</a>',
-            'this is second line',
-            'Australian politics live with Amy Remeikis, by Amy Remeikis.'
-            'The Guardian.May 3, 2019: <a href="https://www.theguardian.com/australia-news/live/2019/'
-            'may/03/federal-election-2019-liberals-to-dump-another-candidate-politics-live?'
-            'page=with:block-5ccb88c18f086f179813a12b">https://www.theguardian.com/australia-news/live/2019/'
-            'may/03/federal-election-2019-liberals-to-dump-another-candidate-politics-live?'
-            'page=with:block-5ccb88c18f086f179813a12b</a>',
-            '7121.0 - Agricultural Commodities Australia 2017 - 18. Australian Bureau of Statistics:'
-            ' <a href="https://www.abs.gov.au/AUSSTATS/abs@.nsf/Lookup/7121.0Main+Features12017-18?OpenDocument">'
-            'https://www.abs.gov.au/AUSSTATS/abs@.nsf/Lookup/7121.0Main+Features12017-18?OpenDocument</a>',
-            'Explanatory Notes.7121.0 - Agricultural Commodities, Australia, 2017 - 18. Australian'
-            ' Bureau of Statistics: <a href="https://www.abs.gov.au/AUSSTATS/abs@.nsf/Lookup/7121.0'
-            'Explanatory%20Notes12017-18?OpenDocument">https://www.abs.gov.au/AUSSTATS/abs@.nsf/Lookup/7121.0'
-            'Explanatory%20Notes12017-18?OpenDocument</a>'
+    def test_format_article_with_facebook(self):
+        article = self._get_article()
+        article['fields_meta'] = {
+            "body_html": {
+                "draftjsState": [
+                    {
+                        "blocks": [
+                            {
+                                "key": "tqgt",
+                                "text": "Facebook post",
+                                "type": "unstyled",
+                                "depth": 0,
+                                "inlineStyleRanges": [],
+                                "entityRanges": [],
+                                "data": {
+                                    "MULTIPLE_HIGHLIGHTS": {}
+                                }
+                            },
+                            {
+                                "key": "b0nn5",
+                                "text": " ",
+                                "type": "atomic",
+                                "depth": 0,
+                                "inlineStyleRanges": [],
+                                "entityRanges": [
+                                    {
+                                        "offset": 0,
+                                        "length": 1,
+                                        "key": 0
+                                    }
+                                ],
+                                "data": {}
+                            },
+                            {
+                                "key": "1loq9",
+                                "text": "Following text",
+                                "type": "unstyled",
+                                "depth": 0,
+                                "inlineStyleRanges": [],
+                                "entityRanges": [],
+                                "data": {}
+                            }
+                        ],
+                        "entityMap": {
+                            "0": {
+                                "type": "EMBED",
+                                "mutability": "MUTABLE",
+                                "data": {
+                                    "data": {
+                                        "html": "<iframe src=\"https://www.facebook.com/plugins/post.php?"
+                                                "href=https%3A%2F%2Fwww.facebook.com%2Faapnewswire%2Fposts%2Fpfbid\" "
+                                                "width=\"500\" height=\"508\" style=\"border:none;overflow:hidden\" "
+                                                "scrolling=\"no\" frameborder=\"0\" allowfullscreen=\"true\" "
+                                                "allow=\"autoplay; clipboard-write; encrypted-media; "
+                                                "picture-in-picture; web-share\"></iframe>"
+                                    },
+                                    "description": "Embed description"
+                                }
+                            }
+                        }
+                    }
+                ]
+            }
+        }
+        apple_news = self.formatter._format(article)
+        self.assertEqual(apple_news['components'][5]['URL'], 'https://www.facebook.com/aapnewswire/posts/pfbid')
 
-        ]
-
-        for i in range(len(inputs)):
-            text = self.formatter._format_url_to_anchor_tag(inputs[i])
-            self.assertEqual(outputs[i], text)
+    def test_format_article_with_tik_tok(self):
+        article = self._get_article()
+        article['fields_meta'] = {
+            "body_html": {
+                "draftjsState": [
+                    {
+                        "blocks": [
+                            {
+                                "key": "36ias",
+                                "text": "Tcik Tock Test",
+                                "type": "unstyled",
+                                "depth": 0,
+                                "inlineStyleRanges": [],
+                                "entityRanges": [],
+                                "data": {
+                                    "MULTIPLE_HIGHLIGHTS": {}
+                                }
+                            },
+                            {
+                                "key": "cshfs",
+                                "text": " ",
+                                "type": "atomic",
+                                "depth": 0,
+                                "inlineStyleRanges": [],
+                                "entityRanges": [
+                                    {
+                                        "offset": 0,
+                                        "length": 1,
+                                        "key": 0
+                                    }
+                                ],
+                                "data": {}
+                            },
+                            {
+                                "key": "7n6o7",
+                                "text": "Following text",
+                                "type": "unstyled",
+                                "depth": 0,
+                                "inlineStyleRanges": [],
+                                "entityRanges": [],
+                                "data": {}
+                            },
+                            {
+                                "key": "bsq3s",
+                                "text": "",
+                                "type": "unstyled",
+                                "depth": 0,
+                                "inlineStyleRanges": [],
+                                "entityRanges": [],
+                                "data": {}
+                            }
+                        ],
+                        "entityMap": {
+                            "0": {
+                                "type": "EMBED",
+                                "mutability": "MUTABLE",
+                                "data": {
+                                    "data": {
+                                        "html": "<blockquote class=\"tiktok-embed\" "
+                                                "cite=\"https://www.tiktok.com/@dic/video/7\" data-video-id=\"7\" "
+                                                "style=\"max-width: 605px;min-width: 325px;\" ></blockquote>"
+                                    },
+                                    "description": "Tik Toc Test description"
+                                }
+                            }
+                        }
+                    }
+                ]
+            }
+        }
+        apple_news = self.formatter._format(article)
+        self.assertEqual(apple_news['components'][5]['URL'], 'https://www.tiktok.com/@dic/video/7')

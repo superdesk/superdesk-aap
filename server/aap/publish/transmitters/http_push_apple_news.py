@@ -59,11 +59,22 @@ class HTTPAppleNewsPush(PublishService):
             _current_version=queue_item.get('item_version')
         )
 
+    def _get_original_guid(self, item):
+        guid = item.get('rewrite_of', item.get('guid', item.get('item_id', None)))
+        for i in range(item.get('rewrite_sequence', 1)):
+            prev = get_resource_service('archive').find_one(
+                req=None, _id=guid
+            )
+            if not prev or not prev.get('rewrite_of'):
+                break
+            guid = prev['rewrite_of']
+        return guid
+
     def _push_item(self, queue_item):
         data = json.loads(queue_item['formatted_item'])
+        associations = data.pop('associations', None)
         destination = queue_item.get('destination', {})
         item = self._get_item(queue_item)
-        service = get_resource_service('subscriber_transmit_references')
         if not item:
             raise Exception('Could not find the item to publish.')
 
@@ -71,8 +82,11 @@ class HTTPAppleNewsPush(PublishService):
         channel = self._get_channel(destination)
         current_date = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
         method = 'POST' if item.get(ITEM_STATE) not in {CONTENT_STATE.RECALLED, CONTENT_STATE.KILLED} else 'DELETE'
+
+        original_id = self._get_original_guid(item)
+        service = get_resource_service('subscriber_transmit_references')
         subscriber_reference = service.get_subscriber_reference(
-            item.get('item_id'),
+            original_id,
             queue_item.get('subscriber_id')
         )
         metadata = {}
@@ -98,9 +112,12 @@ class HTTPAppleNewsPush(PublishService):
             payload = json.dumps(data)
             parts.append(self._part('article.json', payload, len(payload), 'application/json'))
 
-            binary = self._get_media(self._get_header_image_rendition(destination), item)
-            if binary:
-                parts.append(self._part('header.jpg', binary.read(), binary.length, 'image/jpeg'))
+            for association, details in (associations or {}).items():
+                binary = self._get_media(association, self._get_header_image_rendition(destination), item)
+                if binary:
+                    parts.append(
+                        self._part(association, binary.read(), binary.length, details.get('mimetype', 'image/jpeg')))
+
             body, content_type = encode_multipart_formdata(parts)
             canonical_request = self._get_canonical_request(method, url, current_date, content_type, body)
         else:
@@ -125,7 +142,7 @@ class HTTPAppleNewsPush(PublishService):
                 # response status_code is 204 for delete
                 apple_article = json.loads(response.text)
                 service.insert_update_reference(
-                    item.get('item_id'),
+                    original_id,
                     queue_item.get('subscriber_id'),
                     apple_article,
                     apple_article.get('data').get('id')
@@ -149,8 +166,8 @@ class HTTPAppleNewsPush(PublishService):
         part.headers['Content-Type'] = content_type
         return part
 
-    def _get_media(self, rendition_name, item):
-        featuremedia = (item.get('associations') or {}).get('featuremedia')
+    def _get_media(self, name, rendition_name, item):
+        featuremedia = (item.get('associations') or {}).get(name)
         if not featuremedia:
             return None
 
