@@ -70,7 +70,7 @@ class AAPBulletinBuilderFormatter(Formatter):
             formatted_article['abstract'] = self.get_text_content(
                 to_ascii(formatted_article.get('abstract', '') or '')).strip()
             formatted_article['headline'] = self.get_text_content(
-                to_ascii(formatted_article.get('headline', ''))).strip()
+                to_ascii(formatted_article.get('headline', '')), space_on_elements=False).strip()
             formatted_article['byline'] = self.get_text_content(
                 to_ascii(formatted_article.get('byline', '') or '')).strip()
 
@@ -116,7 +116,7 @@ class AAPBulletinBuilderFormatter(Formatter):
     def can_format(self, format_type, article):
         return format_type == 'AAP BULLETIN BUILDER'
 
-    def get_text_content(self, content):
+    def get_text_content(self, content, space_on_elements=True):
         content = content.replace('<br>', '<br/>').replace('</br>', '')
         # remove control chars except \n
         content = re.sub('[\x00-\x09\x0b-\x1f]', '', content)
@@ -125,7 +125,7 @@ class AAPBulletinBuilderFormatter(Formatter):
         if content == '':
             return ''
 
-        parsed = parse_html(content, content='html', space_on_elements=True)
+        parsed = parse_html(content, content='html', space_on_elements=space_on_elements)
 
         # breaks are replaced with spaces
         for br in parsed.xpath('//br'):
