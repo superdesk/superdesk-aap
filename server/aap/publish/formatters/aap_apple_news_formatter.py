@@ -93,7 +93,7 @@ class AAPAppleNewsFormatter(Formatter):
 
         for key in remove_keys:
             article.get("associations", {}).pop(key, None)
-            if "refs" in article:
+            if article.get("refs") is not None:
                 article["refs"] = [r for r in article.get("refs", []) if r["key"] != key]
 
     def _remove_unwanted_embeds(self, article):
@@ -105,7 +105,7 @@ class AAPAppleNewsFormatter(Formatter):
         remove_keys = []
 
         # can only handle pictures at the moment
-        for key, item in article.get("associations", {}).items():
+        for key, item in (article.get("associations") or {}).items():
             if key.startswith("editor_") and item.get("type") != 'picture':
                 remove_keys.append(key)
 

@@ -60,11 +60,17 @@ class HTTPAppleNewsPush(PublishService):
         )
 
     def _get_original_guid(self, item):
+        """
+        Chase up the rewrite list until we get to the orignal in either the archive or legal archive (if the item has
+        expired from production
+        :param item:
+        :return:
+        """
         guid = item.get('rewrite_of', item.get('guid', item.get('item_id', None)))
-        for i in range(item.get('rewrite_sequence', 1)):
-            prev = get_resource_service('archive').find_one(
-                req=None, _id=guid
-            )
+        for _i in range(item.get('rewrite_sequence', 1)):
+            prev = get_resource_service('archive').find_one(req=None, _id=guid)
+            if not prev:
+                prev = get_resource_service('legal_archive').find_one(req=None, _id=guid)
             if not prev or not prev.get('rewrite_of'):
                 break
             guid = prev['rewrite_of']
