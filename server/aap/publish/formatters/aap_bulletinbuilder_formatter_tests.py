@@ -786,3 +786,59 @@ class AapBulletinBuilderFormatterTest(TestCase):
         self.assertGreater(int(seq), 0)
         test_article = json.loads(item.get('data'))
         self.assertEqual(test_article['body_html'], '<p>pre amble</p><p>post amble</p>')
+
+    def test_clean_headline_html(self):
+        article = {
+            config.ID_FIELD: '123',
+            config.VERSION: 2,
+            'source': 'AAP',
+            'headline': '1234567890123456789012345123456789012345678901234567890',
+            'slugline': 'slugline',
+            'abstract': '<p>abstract</p>',
+            'type': 'text',
+            'anpa_category': [{'qcode': 'a', 'name': 'Australian General News'}],
+            'flags': {
+                'marked_for_legal': True
+            },
+            'body_html': ('<p>The story<p>'),
+            "fields_meta": {
+                "headline": {
+                    "draftjsState": [
+                        {
+                            "blocks": [
+                                {
+                                    "key": "2fvvl",
+                                    "text": "1234567890123456789012345123456789012345678901234567890",
+                                    "type": "unstyled",
+                                    "depth": 0,
+                                    "inlineStyleRanges": [
+                                        {
+                                            "offset": 0,
+                                            "length": 55,
+                                            "style": "BOLD"
+                                        },
+                                        {
+                                            "offset": 54,
+                                            "length": 1,
+                                            "style": "LIMIT_CHARACTERS_OVERFLOW"
+                                        }
+                                    ],
+                                    "entityRanges": [],
+                                    "data": {
+                                        "MULTIPLE_HIGHLIGHTS": {}
+                                    }
+                                }
+                            ],
+                            "entityMap": {}
+                        }
+                    ]
+                }
+            }
+        }
+
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
+        seq, item = self._formatter.format(article, subscriber)[0]
+        item = json.loads(item)
+        self.assertGreater(int(seq), 0)
+        test_article = json.loads(item.get('data'))
+        self.assertEqual(test_article['headline'], '1234567890123456789012345123456789012345678901234567890')
