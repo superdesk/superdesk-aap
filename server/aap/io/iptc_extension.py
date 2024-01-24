@@ -24,4 +24,7 @@ aap_subject_codes = load_codes(data_subject_codes)
 def init_app(app):
     last_modified = datetime(2016, 7, 28)
     app.subjects.register(aap_subject_codes, last_modified)
+    # The subject code for illegal immigrants is removed
+    app.subjects.subjects.pop('14003003', None)
     subject_codes.update(aap_subject_codes)
+    subject_codes.pop('14003003', None)
