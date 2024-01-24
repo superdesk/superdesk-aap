@@ -10,33 +10,33 @@
 
 import logging
 import json
-import re
 from datetime import datetime
+from pytz import timezone
+from superdesk.utc import get_date
 from copy import deepcopy
-from eve.utils import ParsedRequest, config
+from eve.utils import config
+import lxml.html as lxml_html
+from draftjs_exporter.dom import DOM
+from textwrap import dedent
+from urllib.parse import urlparse, unquote
 from superdesk.publish.formatters import Formatter
-from superdesk.metadata.item import FORMAT, FORMATS, ITEM_STATE, CONTENT_STATE
+from superdesk.metadata.item import FORMAT, FORMATS
 from superdesk import get_resource_service
 from superdesk.utils import json_serialize_datetime_objectId
 from superdesk.utc import utc_to_local
-from superdesk.etree import parse_html, to_string
 from superdesk.text_utils import get_text
-from aap.text_utils import format_text_content
-from aap.utils import is_fact_check
+from superdesk.editor_utils import get_content_state_fields, Editor3Content, DraftJSHTMLExporter, render_fragment
 from aap.errors import AppleNewsError
-
 
 logger = logging.getLogger(__name__)
 
 
 class AAPAppleNewsFormatter(Formatter):
-
     name = 'AAP Apple News'
 
     type = 'AAP Apple News'
 
     APPLE_NEWS_VERSION = '1.8'
-    URL_REGEX = re.compile(r'(?:(?:https|http)://)[\w/\-?=%.]+\.[\w/\-?=%#@.\+:]+', re.IGNORECASE)
 
     def __init__(self):
         self.format_type = 'AAP Apple News'
@@ -52,44 +52,123 @@ class AAPAppleNewsFormatter(Formatter):
         except Exception as ex:
             raise AppleNewsError.AppleNewsFormatter(exception=ex)
 
+    def _filter_blocks(self, item, field, bfilter, remove):
+        """
+        Function to filter the embed blocks for video and audio and also will regenerate the html in a more friendly
+        form using the AppleExporter class
+        :param item: The article
+        :param field: the field to operate on
+        :param bfilter: Filter function to determine if the block is to be kept
+        :param remove: list of keys to remove
+        :return:
+        """
+        editor = Editor3Content(item, field, True)
+        exporter = AppleExporter(editor)
+        editor.html_exporter = exporter
+        blocks = []
+        for block in editor.blocks:
+            if bfilter(block, remove):
+                blocks.append(block)
+        editor.set_blocks(blocks)
+        editor.update_item()
+
+    def _not_embed(self, block, remove):
+        if block.type.lower() == "atomic":
+            bk = [e.key for e in block.entities if e.key in remove]
+            if bk:
+                return False
+        return True
+
+    def _remove_embeds(self, article, remove_keys):
+        """
+        Removes the nominated embeds from the draftjs state and regenerates the HTML.
+        :param article:
+        :param remove_keys
+        :return:
+        """
+        to_remove = [k.lstrip("editor_") for k in remove_keys]
+        fields = get_content_state_fields(article)
+        for field in fields:
+            self._filter_blocks(article, field, self._not_embed, to_remove)
+
+        for key in remove_keys:
+            article.get("associations", {}).pop(key, None)
+            if article.get("refs") is not None:
+                article["refs"] = [r for r in article.get("refs", []) if r["key"] != key]
+
+    def _remove_unwanted_embeds(self, article):
+        """
+        Removes all embeds that are not images/pictures
+        :param article:
+        :return:
+        """
+        remove_keys = []
+
+        # can only handle pictures at the moment
+        for key, item in (article.get("associations") or {}).items():
+            if key.startswith("editor_") and item.get("type") != 'picture':
+                remove_keys.append(key)
+
+        self._remove_embeds(article, remove_keys)
+
+    def format_dateline(self, located, current_timestamp):
+        """
+        Formats dateline to "Location, Month Date Source -"
+
+        :return: formatted dateline string
+        """
+
+        dateline_location = "{city_code}"
+        dateline_location_format_fields = located.get("dateline", "city")
+        dateline_location_format_fields = dateline_location_format_fields.split(",")
+        if "country" in dateline_location_format_fields and "state" in dateline_location_format_fields:
+            dateline_location = "{city_code}, {state_code}, {country_code}"
+        elif "state" in dateline_location_format_fields:
+            dateline_location = "{city_code}, {state_code}"
+        elif "country" in dateline_location_format_fields:
+            dateline_location = "{city_code}, {country_code}"
+        dateline_location = dateline_location.format(**located)
+
+        if located.get("tz") and located["tz"] != "UTC":
+            current_timestamp = datetime.fromtimestamp(current_timestamp.timestamp(), tz=timezone(located["tz"]))
+        else:
+            current_timestamp = utc_to_local(config.DEFAULT_TIMEZONE, current_timestamp)
+        if current_timestamp.month == 9:
+            formatted_date = "Sept {}".format(current_timestamp.strftime("%-d"))
+        elif 3 <= current_timestamp.month <= 7:
+            formatted_date = current_timestamp.strftime("%B %-d")
+        else:
+            formatted_date = current_timestamp.strftime("%b %-d")
+
+        return "{location}, {mmmdd} at {hhmmpa}".format(
+            location=dateline_location.upper(), mmmdd=formatted_date, hhmmpa=current_timestamp.strftime('%I:%M%p')
+        )
+
     def _format(self, article):
+        # Remove any video or audio  embeds since for apple news they must be externally hosted
+        self._remove_unwanted_embeds(article)
+
         apple_news = {}
-        self._parse_content(article)
-        if not article.get('_title') or not article.get('_analysis_first_line') or not article.get('_analysis') \
-            or not article.get('_statement') or not article.get('_statement_attribution') or \
-                not article.get('_verdict1') or not article.get('_verdict2') or not article.get('_references'):
-            missing_fields = {
-                'title': True if article.get('_title') else False,
-                'subtitle': True if article.get('_analysis_first_line') else False,
-                'analysis': True if article.get('_analysis') else False,
-                'statement': True if article.get('_statement') else False,
-                'statement_attribution': True if article.get('_statement_attribution') else False,
-                'verdict1': True if article.get('_verdict1') else False,
-                'verdict2': True if article.get('_verdict2') else False,
-                'references': True if article.get('_references') else False,
-            }
-
-            logger.warning('Failed to parse title for item: {}. '
-                           'missing fields: {}'.format(article.get('item_id'), missing_fields))
-
-            raise Exception('Cannot format the article for Apple News. '
-                            'Failed to parse the item: {}.'.format(article.get('item_id')))
         self._set_article_document(apple_news, article)
+
+        # Set the associations for the transmitter to be able to get the binaries
+        apple_news['associations'] = article.get('associations', {})
         return apple_news
 
     def can_format(self, format_type, article):
         """Can format text article that are not preformatted"""
-        return format_type == self.format_type and is_fact_check(article) \
-            and article.get(FORMAT) == FORMATS.HTML
+        return format_type == self.format_type and article.get(FORMAT) == FORMATS.HTML
 
     def _set_advertising_settings(self, apple_news):
-        """Function to set the adversiting settings"""
-        apple_news['advertisingSettings'] = {
-            'frequency': 5,
-            'layout': {
-                'margin': {
-                    'bottom': 15,
-                    'top': 15
+        """Function to set the advertising settings"""
+        apple_news['autoplacement'] = {
+            "advertisement": {
+                "enabled": True,
+                "bannerType": "any",
+                "distanceFromMedia": "10vh",
+                "frequency": 10,
+                "layout": {
+                    "margin": 10
                 }
             }
         }
@@ -100,7 +179,7 @@ class AAPAppleNewsFormatter(Formatter):
 
     def _set_language(self, apple_news, article):
         """Set language"""
-        apple_news['language'] = article.get('language') or 'en'
+        apple_news['language'] = 'en-AU' if article.get('language') == 'en' else article.get('language', 'en-AU')
 
     def _set_document_style(self, apple_news):
         """Set document style"""
@@ -111,9 +190,8 @@ class AAPAppleNewsFormatter(Formatter):
         self._set_language(apple_news, article)
         self._set_metadata(apple_news, article)
         apple_news['identifier'] = article['item_id']
-        apple_news['title'] = article.get('_title')
+        apple_news['title'] = article.get('headline')
         apple_news['version'] = self.APPLE_NEWS_VERSION
-        apple_news['subtitle'] = article.get('_analysis_first_line')
         self._set_layout(apple_news)
         self._set_advertising_settings(apple_news)
         self._set_component_layouts(apple_news)
@@ -126,13 +204,19 @@ class AAPAppleNewsFormatter(Formatter):
             'dateCreated': self._format_datetime(article.get('firstcreated')),
             'datePublished': self._format_datetime(article.get('firstpublished')),
             'dateModified': self._format_datetime(article.get('versioncreated')),
-            'excerpt': article.get('_title')
+            'excerpt': get_text(article.get('abstract', ''), content='html').strip()
         }
+        if article.get('byline'):
+            apple_news['metadata']['authors'] = [article.get('byline')]
         if self._is_featuremedia_exists(article):
-            apple_news['metadata']['thumbnailURL'] = 'bundle://header.jpg'
+            apple_news['metadata']['thumbnailURL'] = 'bundle://featuremedia'
 
-    def _format_datetime(self, article_date, date_format='%Y-%m-%dT%H:%M:%S%z'):
-        return datetime.strftime(utc_to_local(config.DEFAULT_TIMEZONE, article_date), date_format)
+    def _format_datetime(self, article_date, date_format=None):
+        if date_format is None:
+            aware_dt = article_date.astimezone()
+            return aware_dt.isoformat(timespec='seconds')
+        else:
+            return datetime.strftime(utc_to_local(config.DEFAULT_TIMEZONE, article_date), date_format)
 
     def _set_layout(self, apple_news):
         """Set Layout"""
@@ -146,16 +230,12 @@ class AAPAppleNewsFormatter(Formatter):
     def _set_component_layouts(self, apple_news):
         apple_news['componentLayouts'] = {
             "bodyLayout": {
-                "columnSpan": 6,
+                "columnSpan": 7,
                 "columnStart": 0,
                 "margin": {
                     "bottom": 15,
                     "top": 15
                 }
-            },
-            "claimTagLayout": {
-                "columnSpan": 7,
-                "columnStart": 0
             },
             "fixed_image_header_container": {
                 "columnSpan": 7,
@@ -163,54 +243,47 @@ class AAPAppleNewsFormatter(Formatter):
                 "ignoreDocumentMargin": True,
                 "minimumHeight": "45vh"
             },
-            "fixed_image_header_section": {
-                "ignoreDocumentMargin": True,
-                "margin": {
-                    "bottom": 0,
-                    "top": 40
-                }
-            },
-            "header-top-spacer": {
-                "minimumHeight": 30
-            },
-            "statementAttributionLayout": {
-                "margin": {
-                    "bottom": 10
-                }
-            },
-            "statementLayout": {
-                "contentInset": True,
-                "margin": {
-                    "bottom": 10,
-                    "top": 10
-                }
-            },
-            "subHeaderLayout": {
-                "horizontalContentAlignment": "left",
-                "margin": {
-                    "bottom": 10,
-                    "top": 15
-                }
-            },
             "titleLayout": {
+                "horizontalContentAlignment": "center",
+                "columnSpan": 5,
+                "columnStart": 1,
+                "margin": {
+                    "bottom": 5,
+                    "top": 5
+                }
+            },
+            "captionLayout": {
+                "horizontalContentAlignment": "left",
                 "columnSpan": 7,
                 "columnStart": 0,
                 "margin": {
-                    "bottom": 15,
+                    "bottom": 5,
                     "top": 5
                 }
             },
-            "verdictContainerLayout": {
-                "contentInset": True,
-                "ignoreDocumentMargin": True,
+            "BodyCaptionLayout": {
+                "horizontalContentAlignment": "left",
+                "columnSpan": 5,
+                "columnStart": 1,
                 "margin": {
-                    "bottom": 15,
+                    "bottom": 5,
                     "top": 5
                 }
             },
-            "verdictLayout": {
+            "bylineLayout": {
+                "columnSpan": 5,
+                "columnStart": 1,
                 "margin": {
-                    "bottom": 20
+                    "bottom": 2,
+                    "top": 5
+                }
+            },
+            "dateLineLayout": {
+                "columnSpan": 5,
+                "columnStart": 1,
+                "margin": {
+                    "bottom": 5,
+                    "top": 2
                 }
             }
         }
@@ -223,7 +296,7 @@ class AAPAppleNewsFormatter(Formatter):
         }
         apple_news['componentTextStyles'] = {
             "bodyStyle": {
-                "fontName": "Merriweather-Regular",
+                "fontName": "HelveticaNeue",
                 "fontSize": 16,
                 "lineHeight": 26,
                 "linkStyle": {
@@ -235,55 +308,32 @@ class AAPAppleNewsFormatter(Formatter):
                 "textAlignment": "left",
                 "textColor": "#000"
             },
-            "claimTagStyle": {
-                "fontName": "Merriweather-Bold",
+            "bylineStyle": {
+                "fontName": "HelveticaNeue-Bold",
                 "fontSize": 18,
-                "lineHeight": 17,
-                "textAlignment": "left",
-                "textColor": "#FFF",
-                "textShadow": {
-                    "color": "#000",
-                    "offset": {
-                        "x": 1,
-                        "y": 1
-                    },
-                    "opacity": 0.5,
-                    "radius": 2
-                }
-            },
-            "statementAttributionStyle": {
-                "fontName": "Merriweather-Italic",
-                "fontSize": 14,
-                "hyphenation": False,
-                "lineHeight": 22,
-                "textAlignment": "right",
+                "lineHeight": 18,
+                "textAlignment": "center",
                 "textColor": "#000"
             },
-            "statementStyle": {
-                "fontName": "Merriweather-BoldItalic",
+            "dateLineStyle": {
+                "fontName": "HelveticaNeue-Bold",
                 "fontSize": 18,
-                "hyphenation": False,
-                "lineHeight": 26,
-                "textColor": "#FFF"
-            },
-            "subHeaderStyle": {
-                "fontName": "FiraSans-Bold",
-                "fontSize": 30,
-                "hyphenation": False,
-                "lineHeight": 40,
-                "textColor": "#063c7f"
+                "lineHeight": 18,
+                "textAlignment": "center",
+                "textColor": "#000"
             },
             "titleStyle": {
-                "fontName": "Merriweather-Black",
+                "fontName": "HelveticaNeue-CondensedBlack",
                 "fontSize": 40,
                 "lineHeight": 50,
-                "textAlignment": "left",
-                "textColor": "#FFF"
+                "textAlignment": "center",
+                "textColor": "#000"
             },
-            "verdictStyle": {
-                "fontName": "Merriweather-Regular",
-                "fontSize": 18,
-                "lineHeight": 26,
+            "captionStyle": {
+                "fontName": "HelveticaNeue-Italic",
+                "fontSize": 12,
+                "hyphenation": False,
+                "lineHeight": 15,
                 "textAlignment": "left",
                 "textColor": "#000"
             }
@@ -291,400 +341,224 @@ class AAPAppleNewsFormatter(Formatter):
 
     def _set_component(self, apple_news, article):
         components = []
+        components.extend(self._set_header_component(article))
+        components.extend(self._set_story_component(article))
         apple_news['components'] = components
-        components.append(self._set_header_component(article))
-        components.extend(self._set_statement_component(article))
-        components.append({
-            'layout': {
-                'horizontalContentAlignment': 'right',
-                'margin': {
-                    'bottom': 5
-                },
-                'maximumContentWidth': 180
-            },
-            'role': 'divider',
-            'stroke': {
-                'color': '#063c7f',
-                'style': 'dashed',
-                'width': 1
-            }
-        })
-        components.extend(self._set_verdict_component(article, '_verdict1'))
-        components.extend(self._set_analysis_component(article))
-        components.extend(self._set_verdict_component(article, '_verdict2'))
-        components.extend(self._set_references_component(article))
-        components.extend(self._set_revision_history_component(article))
 
     def _set_header_component(self, article):
-        header = {
+        header = [{
             'behaviour': {'type': 'background_parallax'},
             'layout': 'fixed_image_header_container',
             'role': 'container',
             'style': {
                 'fill': {
-                    'URL': 'bundle://header.jpg',
+                    'URL': 'bundle://featuremedia',
                     'type': 'image'
                 }
-            },
-            'components': [
-                {
-                    'anchor': {
-                        'originAnchorPosition': 'bottom',
-                        'targetAnchorPosition': 'bottom'
-                    },
-                    'components': [
-                        {
-                            "layout": "titleLayout",
-                            "role": "title",
-                            "text": article.get('_title'),
-                            "textStyle": "titleStyle"
-                        }
-                    ],
-                    'layout': 'fixed_image_header_section',
-                    'role': 'section',
-                    'style': {
-                        'fill': {
-                            'angle': 180,
-                            'colorStops': [
-                                {'color': '#00000000'},
-                                {'color': '#063c7f'}
-                            ],
-                            'type': 'linear_gradient'
-                        }
-                    }
-                }
-            ]
+            }
+        },
+            {
+                "layout": "captionLayout",
+                "role": "caption",
+                "text": "{} - {}".format(
+                    article.get('associations', {}).get('featuremedia', {}).get('description_text', ''),
+                    article.get('associations', {}).get('featuremedia', {}).get('byline', '')),
+                "textStyle": 'captionStyle'
         }
+        ]
 
         if not self._is_featuremedia_exists(article):
-            header.pop('style', None)
+            return []
 
         return header
 
-    def _set_statement_component(self, article):
-        """Set the statement component
-
-        :param dict article:
+    def _add_pieces(self, body, pieces, role, embed_url):
         """
-        if not article.get('_statement'):
-            return []
-
-        return [
-            {
-                'layout': 'subHeaderLayout',
-                'role': 'heading',
-                'text': 'The Statement',
-                'textStyle': 'subHeaderStyle'
-            },
-            {
-                'layout': 'statementLayout',
-                'role': 'body',
-                'style': {
-                    'backgroundColor': '#063c7f'
-                },
-                'text': article.get('_statement'),
-                'textStyle': 'statementStyle'
-            },
-            {
-                'layout': 'statementAttributionLayout',
-                'role': 'body',
-                'text': article.get('_statement_attribution'),
-                'textStyle': 'statementAttributionStyle'
-            }
-        ]
-
-    def _set_analysis_component(self, article):
-        """Set the analysis component
-
-        :param dict article:
+        Adds the content so far to the body content, then adds the embed, and clears the pieces
+        :param body: the body built so far
+        :param pieces: the pieces accumulated
+        :param role:
+        :param embed_url:
+        :return:
         """
-        if not article.get('_analysis'):
-            return []
+        body.extend([{
+            'format': 'html',
+            'layout': 'bodyLayout',
+            'role': 'body',
+            'text': ''.join(pieces),
+            'textStyle': 'bodyStyle'
+        }, {
+            "role": role,
+            "layout": "bodyLayout",
+            "URL": embed_url
+        }])
+        pieces.clear()
+        return
 
-        return [
-            {
-                'layout': 'subHeaderLayout',
-                'role': 'heading',
-                'text': 'The Analysis',
-                'textStyle': 'subHeaderStyle'
-            },
-            {
+    def generate_article_content(self, article):
+
+        fragments = lxml_html.fragments_fromstring(article.get('body_html', '<p></p>'))
+        par_pieces = []
+        body_content = []
+
+        for elem in fragments:
+            if elem.tag == 'figure':
+                key = elem.find('./img').attrib['id']
+                body_content.extend([
+                    {
+                        'format': 'html',
+                        'layout': 'bodyLayout',
+                        'role': 'body',
+                        'text': ''.join(par_pieces),
+                        'textStyle': 'bodyStyle'
+                    },
+                    {
+                        'role': 'figure',
+                        'URL': 'bundle://{}'.format(key),
+                        'identifier': key,
+                        'accessibilityCaption': elem.find('./img').attrib['alt'],
+                        'caption': elem.find('./figcaption').text,
+                        'layout': 'bodyLayout'
+                    },
+                    {
+                        "layout": "BodyCaptionLayout",
+                        "role": "caption",
+                        "text": elem.find('./figcaption').text,
+                        "textStyle": 'captionStyle'
+                    }
+                ])
+                par_pieces.clear()
+            elif elem.tag == 'div' and 'embed-block' in elem.attrib.get('class', ''):
+                bq = elem.find('./blockquote')
+                if bq is not None:
+                    if bq.attrib.get('class') == 'twitter-tweet':
+                        tweet = bq.find('./a').attrib.get('href', '')
+                        if 'twitter' in tweet:
+                            self._add_pieces(body_content, par_pieces, "tweet", tweet)
+                    elif bq.attrib.get('class') == 'instagram-media':
+                        insta_link = bq.attrib.get('data-instgrm-permalink')
+                        if insta_link:
+                            self._add_pieces(body_content, par_pieces, "instagram", insta_link)
+                    elif bq.attrib.get('class') == 'tiktok-embed':
+                        tiktok = bq.attrib.get('cite')
+                        if tiktok:
+                            self._add_pieces(body_content, par_pieces, "tiktok", tiktok)
+                else:
+                    iframe = elem.find("./iframe")
+                    if iframe is not None:
+                        src = iframe.attrib.get('src')
+                        if src:
+                            url = urlparse(src)
+                            query = unquote(url.query)
+                            if query.startswith('href='):
+                                fburl = query[len('href='):]
+                                self._add_pieces(body_content, par_pieces, 'facebook_post', fburl)
+            else:
+                par_pieces.append(render_fragment(elem))
+        # Add what is left over
+        body_content.append({
+            'format': 'html',
+            'layout': 'bodyLayout',
+            'role': 'body',
+            'text': ''.join(par_pieces),
+            'textStyle': 'bodyStyle'
+        })
+
+        if article.get('body_footer', '') != '':
+            body_content.append({
                 'format': 'html',
                 'layout': 'bodyLayout',
                 'role': 'body',
-                'text': article.get('_analysis'),
-                'textStyle': 'bodyStyle'
-            }
-        ]
-
-    def _set_verdict_component(self, article, field_name):
-        """Set the verdict component
-
-        :param dict article:
-        """
-        if not article.get(field_name):
-            return []
-
-        return [
-            {
-                'components': [
-                    {
-                        'layout': 'subHeaderLayout',
-                        'role': 'heading',
-                        'text': 'The Verdict',
-                        'textStyle': 'subHeaderStyle'
-                    },
-                    {
-                        'format': 'html',
-                        'layout': 'verdictLayout',
-                        'role': 'body',
-                        'text': article.get(field_name),
-                        'textStyle': 'verdictStyle'
-                    }
-                ],
-                'layout': 'verdictContainerLayout',
-                'role': 'container',
-                'animation': {
-                    'type': 'move_in',
-                    'preferredStartingPosition': 'left'
-                },
-                'style': {
-                    'backgroundColor': '#e7ebf1'
-                }
-            }
-        ]
-
-    def _set_references_component(self, article):
-        """Set the references component
-
-        :param dict article:
-        """
-        if not article.get('_references'):
-            return []
-
-        return [
-            {
-                "layout": "subHeaderLayout",
-                "role": "heading",
-                "text": "The References",
-                "textStyle": "subHeaderStyle"
-            },
-            {
-                "format": "html",
-                "layout": "bodyLayout",
-                "role": "body",
-                "text": article.get('_references'),
-                "textStyle": "bodyStyle"
-            }
-        ]
-
-    def _set_revision_history_component(self, article):
-        """Set the revision history component
-
-        :param dict article:
-        """
-        if not article.get('_revision_history'):
-            return []
-
-        return [
-            {
-                "layout": "subHeaderLayout",
-                "role": "heading",
-                "text": "Revision History",
-                "textStyle": "subHeaderStyle"
-            },
-            {
-                "format": "html",
-                "layout": "bodyLayout",
-                "role": "body",
-                "text": article.get('_revision_history'),
-                "textStyle": "bodyStyle"
-            }
-        ]
-
-    def _parse_content(self, article):
-        """Parse body_html and mapping to fields required for apple news format
-
-        :param article:
-        """
-        statement_regex = re.compile(r'^The Statement$', re.IGNORECASE)
-        analysis_regex = re.compile(r'^The Analysis$', re.IGNORECASE)
-        verdict_regex = re.compile(r'^The Verdict$', re.IGNORECASE)
-        references_regex = re.compile(r'^The References$', re.IGNORECASE)
-        abstract = get_text(article.get('abstract'), content='html').strip()
-
-        article['_title'] = abstract
-        body_html = article.get('body_html')
-        article['_analysis_first_line'] = ''
-        article['_analysis'] = ''
-        article['_statement'] = ''
-        article['_statement_attribution'] = ''
-        article['_verdict1'] = ''
-        article['_verdict2'] = ''
-        article['_references'] = ''
-        article['_revision_history'] = ''
-
-        if article.get(ITEM_STATE) == CONTENT_STATE.KILLED or article.get(ITEM_STATE) == CONTENT_STATE.RECALLED:
-            article['_title'] = 'This article has been removed.'
-            article['_analysis_first_line'] = 'This article has been removed.'
-            article['_analysis'] = 'This article has been removed.'
-            article['_statement'] = 'This article has been removed.'
-            article['_statement_attribution'] = 'This article has been removed.'
-            article['_verdict1'] = 'This article has been removed.'
-            article['_verdict2'] = 'This article has been removed.'
-            article['_references'] = 'This article has been removed.'
-            self._set_revision_history(article)
-            return
-
-        parsed_content = parse_html(body_html, content='html')
-        statement_found = False
-        analysis_found = False
-        analysis_first_line = False
-        verdict1_found = False
-        verdict2_found = False
-        references_found = False
-        statement_elements = []
-
-        for top_level_tag in parsed_content.xpath('/div/child::*'):
-            tag_text = format_text_content(top_level_tag).strip()
-            if not tag_text:
-                continue
-
-            if not verdict1_found:
-                if not statement_found:
-                    match = statement_regex.search(tag_text)
-                    if match:
-                        statement_found = True
-                    continue
-                else:
-                    # statement found
-                    match = verdict_regex.search(tag_text)
-                    if match:
-                        verdict1_found = True
-                        if len(statement_elements) > 1:
-                            statement_length = len(statement_elements) - 1
-                            for i in range(statement_length):
-                                article['_statement'] += get_text(
-                                    to_string(statement_elements[i], remove_root_div=False),
-                                    content='html'
-                                ).strip()
-                                if statement_length > 1 and i != statement_length - 1:
-                                    article['_statement'] += '\r\n'
-
-                            article['_statement_attribution'] = get_text(
-                                to_string(statement_elements[-1:][0], remove_root_div=False),
-                                content='html'
-                            ).strip()
-                        elif len(statement_elements) == 1:
-                            article['_statement'] = to_string(
-                                statement_elements[0],
-                                remove_root_div=False
-                            )
-                        continue
-
-                    statement_elements.append(top_level_tag)
-                    continue
-
-            if verdict1_found and not analysis_found:
-                match = analysis_regex.search(tag_text)
-                if match:
-                    analysis_found = True
-                else:
-                    article['_verdict1'] += to_string(top_level_tag, remove_root_div=False)
-                continue
-
-            if analysis_found and not verdict2_found:
-                if not analysis_first_line:
-                    article['_analysis_first_line'] = tag_text
-                    analysis_first_line = True
-
-                match = verdict_regex.search(tag_text)
-                if match:
-                    verdict2_found = True
-                else:
-                    article['_analysis'] += to_string(top_level_tag, remove_root_div=False)
-                continue
-
-            if verdict2_found and not references_found:
-                match = references_regex.search(tag_text)
-                if match:
-                    references_found = True
-                else:
-                    article['_verdict2'] += to_string(top_level_tag, remove_root_div=False)
-                continue
-
-            if references_found:
-                tag_text = re.sub(r'^\d*\s*[.):]?', '', tag_text).strip()
-
-                article['_references'] += '<li>{}</li>'.format(
-                    self._format_url_to_anchor_tag(tag_text)
-                )
-
-        if len(article['_references']):
-            article['_references'] = '<ol>{}</ol>'.format(article['_references'])
-
-        if not article.get('_statement') and article.get('_statement_attribution'):
-            # if statement is not as per the format
-            article['_statement'] = article.get('_statement_attribution')
-            article['_statement_attribution'] = ''
-
-        self._set_revision_history(article)
-
-        # append footer to the analysis section
-        if article.get('_analysis') and article.get('body_footer'):
-            article['_analysis'] += article.get('body_footer')
-
-    def _format_url_to_anchor_tag(self, tag_text):
-        def replacement(match_object):
-            value = match_object.group(0)
-            if value:
-                return '<a href="{0}">{0}</a>'.format(value)
-            return ''
-
-        return re.sub(self.URL_REGEX, replacement, tag_text)
-
-    def _set_revision_history(self, article):
-        """Get revision history of published article
-
-        :param dict article:
-        """
-        query = {
-            'query': {
-                'filtered': {
-                    'filter': {
-                        'bool': {
-                            'must': {
-                                'term': {'item_id': article.get('item_id')}
-                            }
-                        }
-                    }
-                }
-            },
-            'sort': [
-                {'versioncreated': {'order': 'asc'}}
-            ]
-        }
-
-        req = ParsedRequest()
-        repos = 'published,archived'
-        req.args = {'source': json.dumps(query), 'repo': repos, 'aggregations': 0}
-        revisions = list(get_resource_service('search').get(req=req, lookup=None))
-        revisions_tag = []
-
-        for rev in revisions:
-            local_date = utc_to_local(
-                config.DEFAULT_TIMEZONE,
-                rev.get('firstpublished') if rev.get(ITEM_STATE) == CONTENT_STATE.PUBLISHED
-                else rev.get('versioncreated')
+                'text': article.get('body_footer', ''),
+                'textStyle': 'bodyStyle'}
             )
-            date_string = datetime.strftime(local_date, '%b XXX, %Y %H:%M %Z').replace('XXX', str(local_date.day))
-            if rev.get(ITEM_STATE) == CONTENT_STATE.PUBLISHED:
-                revisions_tag.append('<li>{} {}</li>'.format('First published', date_string))
-            else:
-                revision_markup = '{} {}'.format('Revision published', date_string)
-                ednote = get_text(rev.get('ednote') or '', content='html').strip()
-                if rev.get(ITEM_STATE) == CONTENT_STATE.CORRECTED and ednote:
-                    revision_markup += '<br><i>{}</i>'.format(ednote)
-                revisions_tag.append('<li>{}</li>'.format(revision_markup))
 
-        article['_revision_history'] = '<ul>{}</ul>' .format(''.join(revisions_tag)) if revisions_tag else ''
+        return body_content
+
+    def _set_story_component(self, article):
+
+        article_body = self.generate_article_content(article)
+
+        story_component = [
+            {
+                "layout": "titleLayout",
+                "role": "title",
+                "text": article.get('headline'),
+                "textStyle": "titleStyle",
+                "format": "html"
+            },
+            {
+                'role': 'divider',
+                'layout': {
+                    'columnStart': 2,
+                    'columnSpan': 3,
+                    'margin': {
+                        'top': 5,
+                        'bottom': 5
+                    }
+                },
+                'stroke': {
+                    'color': '#063c7f',
+                    'style': 'solid',
+                    'width': 1
+                }
+            },
+            {
+                'role': 'byline',
+                'text': 'By {}'.format(article.get('byline')),
+                'layout': 'bylineLayout',
+                'textStyle': 'bylineStyle'
+            },
+            {
+                'role': 'byline',
+                'text': self.format_dateline(article.get('dateline', {}).get('located'),
+                                             get_date(article.get('versioncreated'))),
+                'layout': 'dateLineLayout',
+                'textStyle': 'dateLineStyle'
+            }
+        ]
+        story_component.extend(article_body)
+        return story_component
+
+
+class AppleExporter(DraftJSHTMLExporter):
+    """
+    Exporter class that manipulates the html to inject the required src for the images and
+     also to inject the figcaption
+    """
+
+    def render_media(self, props):
+        embed_key = next(
+            k for k, v in self.content_state["entityMap"].items() if v["data"].get("media") == props["media"]
+        )
+        media_props = props["media"]
+        media_type = media_props.get("type", "picture")
+
+        alt_text = media_props.get("alt_text") or ""
+        desc = "{} - {}".format(media_props.get("description_text"), media_props.get('byline'))
+        if media_type == "picture":
+            src = 'bundle:\\editor_{}'.format(embed_key)
+
+            embed_type = "Image"
+            elt = DOM.create_element(
+                "img",
+                {"src": src, "alt": alt_text, "id": "editor_{}".format(embed_key)},
+                props["children"],
+            )
+        content = DOM.render(elt)
+
+        if desc:
+            content += "<figcaption>{}</figcaption>".format(desc)
+
+        # <dummy_tag> is needed for the comments, because a root node is necessary
+        # it will be removed during rendering.
+        embed = DOM.parse_html(
+            dedent(
+                """\
+            <dummy_tag><!-- EMBED START {embed_type} {{id: "editor_{key}"}} -->
+            <figure>{content}</figure>
+            <!-- EMBED END {embed_type} {{id: "editor_{key}"}} --></dummy_tag>"""
+            ).format(embed_type=embed_type, key=embed_key, content=content)
+        )
+
+        return embed
