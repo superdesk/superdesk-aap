@@ -13,14 +13,11 @@ from unittest import mock
 from unittests import AAPTestCase
 from .fulfill_image_assignments import FullfillImageAssignments
 from superdesk.utc import utcnow
-from httmock import urlmatch, HTTMock
 from eve_elastic.elastic import ElasticCursor
-import os
 
 
 class FullfillImageAssignmentsTest(AAPTestCase):
     def setUp(self):
-        self.setupMock(self)
         self.app.data.insert('assignments', [
             {
                 "_id": ObjectId("5e1692406bb0d58d639f6996"),
@@ -70,21 +67,8 @@ class FullfillImageAssignmentsTest(AAPTestCase):
             'email': 'user1@a.com.au',
             'byline': 'User 1'
         }])
-        self.app.config['DC_URL'] = 'http://a.b.c/rest/aap'
 
         self.script = FullfillImageAssignments()
-
-    def setupMock(self, context):
-        context.mock = HTTMock(*[self.mock_dc])
-        context.mock.__enter__()
-
-    @urlmatch(scheme='http', netloc='a.b.c', path='/rest/aap/archives/imagearc')
-    def mock_dc(self, url, request):
-        dirname = os.path.dirname(os.path.realpath(__file__))
-        fixture = os.path.normpath(os.path.join(dirname, '../tests/io/fixtures', 'dc_response.xml'))
-        with open(fixture, 'r') as f:
-            xml_raw = f.read()
-        return {'status_code': 200, 'content': xml_raw}
 
     def mock_find(resource, req, lookup, p):
         doc = {'fetch_endpoint': 'search_providers_proxy', 'pubstatus': 'usable', 'slugline': 'Fish on a bike',
