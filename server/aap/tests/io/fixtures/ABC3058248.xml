@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<NewsML>
+    <NewsItem>
+        <Identification>
+            <NewsIdentifier>
+                <ProviderId>abc.com</ProviderId>
+                <NewsItemId>ABC3058248</NewsItemId>
+                <DateId>2024-04-17 13:00:00</DateId>
+            </NewsIdentifier>
+        </Identification>
+        <NewsComponent>
+            <NewsLines>
+                <HeadLine>Headline text here
+                </HeadLine>
+                <NewsLine>
+                    <NewsLineType FormalName="Summary"/>
+                    <NewsLineText>
+                        <![CDATA[Summary text here]]>
+                    </NewsLineText>
+                </NewsLine>
+            </NewsLines>
+            <ContentItem>
+                <MediaType FormalName="Text"/>
+                <MimeType FormalName="text/vnd.IPTC.NITF"/>
+                <DataContent>
+                    <body>
+                        <body.content><![CDATA[Body here<BR>more here]]></body.content>
+                    </body>
+                </DataContent>
+            </ContentItem>
+            <ContentItem
+                    Href="/http://somepic.jp">
+                <MediaType FormalName="Picture"/>
+                <MimeType FormalName="image/jpg"/>
+                <Property FormalName="caption"
+                          value="Caption"/>
+            </ContentItem>
+        </NewsComponent>
+    </NewsItem>
+</NewsML>
