@@ -194,7 +194,7 @@ class AAPMMDatalayer(DataLayer):
             new_doc['original_source'] = doc['Credit'] + '/' + str(doc.get('Source', ''))
         else:
             new_doc['original_source'] = doc['Credit']
-        new_doc['versioncreated'] = self._datetime(doc['ModifiedDate'])
+        new_doc['versioncreated'] = self._datetime(doc['CreationDate'])
         new_doc['firstcreated'] = self._datetime(doc['CreationDate'])
         new_doc['pubstatus'] = 'usable'
         # This must match the action

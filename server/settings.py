@@ -149,7 +149,7 @@ CONTENT_EXPIRY_MINUTES = int(env('CONTENT_EXPIRY_MINUTES', 3 * 24 * 60))
 AAP_MM_SEARCH_MEDIA_TYPES = ['image']
 
 # The URL endpoint for the images API
-AAP_MM_SEARCH_URL = env('AAP_MM_SEARCH_URL', 'https://photos-api.aap.com.au/api/v3')
+AAP_MM_SEARCH_URL = env('AAP_MM_SEARCH_URL', 'https://photos-api-prod.aap.com.au/api/v3')
 # Partial URL for the video preview
 AAP_MM_CDN_URL = env('AAP_MM_CDN_URL', 'https://photos-cdn.aap.com.au/Preview.mp4')
 
@@ -339,7 +339,7 @@ ENABLE_FULFILL_ASSIGNMENTS = strtobool(env('ENABLE_FULFILL_ASSIGNMENTS', 'true')
 DC_URL = env('DC_URL', '')
 DC_USERNAME = env('DC_USERNAME', '')
 DC_PASSWORD = env('DC_PASSWORD', '')
-DC_SEARCH_FIELD = env('DC_SEARCH_FIELD', 'ORIGINALTRANSMISSIONREFERENCE')
+DC_SEARCH_FIELD = env('DC_SEARCH_FIELD', 'OriginalTransmissionReference')
 PLANNING_ACCEPT_ASSIGNMENT_EMAIL = env('PLANNING_ACCEPT_ASSIGNMENT_EMAIL', _MAIL_FROM)
 
 EMBED_PRODUCT_FILTERING = strtobool(env('EMBED_PRODUCT_FILTERING', 'true'))
