@@ -18,3 +18,4 @@ import aap.io.feed_parsers.ReutersNewsMLTwoFeedParser  # NOQA
 import aap.io.feed_parsers.abs_calendar_csv  # NOQA
 import aap.io.feed_parsers.three_sixty_ninjs  # NOQA
 import aap.io.feed_parsers.globenewswire  # NOQA
+import aap.io.feed_parsers.bang_parser  # NOQA
