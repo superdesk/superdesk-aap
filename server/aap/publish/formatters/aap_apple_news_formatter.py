@@ -20,7 +20,7 @@ from draftjs_exporter.dom import DOM
 from textwrap import dedent
 from urllib.parse import urlparse, unquote
 from superdesk.publish.formatters import Formatter
-from superdesk.metadata.item import FORMAT, FORMATS
+from superdesk.metadata.item import FORMAT, FORMATS, CONTENT_TYPE, ITEM_TYPE
 from superdesk import get_resource_service
 from superdesk.utils import json_serialize_datetime_objectId
 from superdesk.utc import utc_to_local
@@ -112,37 +112,19 @@ class AAPAppleNewsFormatter(Formatter):
         self._remove_embeds(article, remove_keys)
 
     def format_dateline(self, located, current_timestamp):
-        """
-        Formats dateline to "Location, Month Date Source -"
-
-        :return: formatted dateline string
-        """
-
-        dateline_location = "{city_code}"
-        dateline_location_format_fields = located.get("dateline", "city")
-        dateline_location_format_fields = dateline_location_format_fields.split(",")
-        if "country" in dateline_location_format_fields and "state" in dateline_location_format_fields:
-            dateline_location = "{city_code}, {state_code}, {country_code}"
-        elif "state" in dateline_location_format_fields:
-            dateline_location = "{city_code}, {state_code}"
-        elif "country" in dateline_location_format_fields:
-            dateline_location = "{city_code}, {country_code}"
-        dateline_location = dateline_location.format(**located)
 
         if located.get("tz") and located["tz"] != "UTC":
             current_timestamp = datetime.fromtimestamp(current_timestamp.timestamp(), tz=timezone(located["tz"]))
         else:
             current_timestamp = utc_to_local(config.DEFAULT_TIMEZONE, current_timestamp)
         if current_timestamp.month == 9:
-            formatted_date = "Sept {}".format(current_timestamp.strftime("%-d"))
+            formatted_date = "Sept {}".format(current_timestamp.strftime("%-d, %Y"))
         elif 3 <= current_timestamp.month <= 7:
-            formatted_date = current_timestamp.strftime("%B %-d")
+            formatted_date = current_timestamp.strftime("%B %-d, %Y")
         else:
-            formatted_date = current_timestamp.strftime("%b %-d")
+            formatted_date = current_timestamp.strftime("%b %-d, %Y")
 
-        return "{location}, {mmmdd} at {hhmmpa}".format(
-            location=dateline_location.upper(), mmmdd=formatted_date, hhmmpa=current_timestamp.strftime('%I:%M%p')
-        )
+        return "{mmmdd}".format(mmmdd=formatted_date)
 
     def _format(self, article):
         # Remove any video or audio  embeds since for apple news they must be externally hosted
@@ -157,7 +139,8 @@ class AAPAppleNewsFormatter(Formatter):
 
     def can_format(self, format_type, article):
         """Can format text article that are not preformatted"""
-        return format_type == self.format_type and article.get(FORMAT) == FORMATS.HTML
+        return format_type == self.format_type and article.get(FORMAT) == FORMATS.HTML and article[ITEM_TYPE] in [
+            CONTENT_TYPE.TEXT]
 
     def _set_advertising_settings(self, apple_news):
         """Function to set the advertising settings"""
@@ -237,6 +220,14 @@ class AAPAppleNewsFormatter(Formatter):
                     "top": 15
                 }
             },
+            "bodyImageLayout": {
+                "columnSpan": 7,
+                "columnStart": 0,
+                "margin": {
+                    "bottom": 5,
+                    "top": 2
+                }
+            },
             "fixed_image_header_container": {
                 "columnSpan": 7,
                 "columnStart": 0,
@@ -244,9 +235,9 @@ class AAPAppleNewsFormatter(Formatter):
                 "minimumHeight": "45vh"
             },
             "titleLayout": {
-                "horizontalContentAlignment": "center",
-                "columnSpan": 5,
-                "columnStart": 1,
+                "horizontalContentAlignment": "left",
+                "columnSpan": 6,
+                "columnStart": 0,
                 "margin": {
                     "bottom": 5,
                     "top": 5
@@ -266,21 +257,21 @@ class AAPAppleNewsFormatter(Formatter):
                 "columnSpan": 5,
                 "columnStart": 1,
                 "margin": {
-                    "bottom": 5,
-                    "top": 5
+                    "bottom": 2,
+                    "top": 2
                 }
             },
             "bylineLayout": {
-                "columnSpan": 5,
-                "columnStart": 1,
+                "columnSpan": 6,
+                "columnStart": 0,
                 "margin": {
                     "bottom": 2,
                     "top": 5
                 }
             },
             "dateLineLayout": {
-                "columnSpan": 5,
-                "columnStart": 1,
+                "columnSpan": 6,
+                "columnStart": 0,
                 "margin": {
                     "bottom": 5,
                     "top": 2
@@ -298,9 +289,9 @@ class AAPAppleNewsFormatter(Formatter):
             "bodyStyle": {
                 "fontName": "HelveticaNeue",
                 "fontSize": 16,
-                "lineHeight": 26,
+                "lineHeight": 24,
                 "linkStyle": {
-                    "textColor": "#000",
+                    "textColor": "#CCCCCC",
                     "underline": {
                         "color": "#000"
                     }
@@ -312,28 +303,28 @@ class AAPAppleNewsFormatter(Formatter):
                 "fontName": "HelveticaNeue-Bold",
                 "fontSize": 18,
                 "lineHeight": 18,
-                "textAlignment": "center",
+                "textAlignment": "left",
                 "textColor": "#000"
             },
             "dateLineStyle": {
                 "fontName": "HelveticaNeue-Bold",
-                "fontSize": 18,
-                "lineHeight": 18,
-                "textAlignment": "center",
+                "fontSize": 12,
+                "lineHeight": 16,
+                "textAlignment": "left",
                 "textColor": "#000"
             },
             "titleStyle": {
                 "fontName": "HelveticaNeue-CondensedBlack",
                 "fontSize": 40,
-                "lineHeight": 50,
-                "textAlignment": "center",
+                "lineHeight": 44,
+                "textAlignment": "left",
                 "textColor": "#000"
             },
             "captionStyle": {
                 "fontName": "HelveticaNeue-Italic",
                 "fontSize": 12,
                 "hyphenation": False,
-                "lineHeight": 15,
+                "lineHeight": 16,
                 "textAlignment": "left",
                 "textColor": "#000"
             }
@@ -418,7 +409,7 @@ class AAPAppleNewsFormatter(Formatter):
                         'identifier': key,
                         'accessibilityCaption': elem.find('./img').attrib['alt'],
                         'caption': elem.find('./figcaption').text,
-                        'layout': 'bodyLayout'
+                        'layout': 'bodyImageLayout'
                     },
                     {
                         "layout": "BodyCaptionLayout",
@@ -488,24 +479,8 @@ class AAPAppleNewsFormatter(Formatter):
                 "format": "html"
             },
             {
-                'role': 'divider',
-                'layout': {
-                    'columnStart': 2,
-                    'columnSpan': 3,
-                    'margin': {
-                        'top': 5,
-                        'bottom': 5
-                    }
-                },
-                'stroke': {
-                    'color': '#063c7f',
-                    'style': 'solid',
-                    'width': 1
-                }
-            },
-            {
                 'role': 'byline',
-                'text': 'By {}'.format(article.get('byline')),
+                'text': 'By {}'.format(article.get('byline')) if article.get('byline') else '',
                 'layout': 'bylineLayout',
                 'textStyle': 'bylineStyle'
             },

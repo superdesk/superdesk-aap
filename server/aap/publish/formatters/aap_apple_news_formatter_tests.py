@@ -85,14 +85,10 @@ class AAPAppleNewsFormatterTest(TestCase):
                                                          "role": "title", "text": "Headline of the story",
                                                          "textStyle": "titleStyle",
                                                          "format": "html"},
-                                                        {"role": "divider",
-                                                         "layout": {"columnStart": 2, "columnSpan": 3,
-                                                                    "margin": {"top": 5, "bottom": 5}},
-                                                         "stroke": {"color": "#063c7f", "style": "solid", "width": 1}},
                                                         {"role": "byline", "text": "By John Doe",
                                                          "layout": "bylineLayout",
                                                          "textStyle": "bylineStyle"},
-                                                        {"role": "byline", "text": "SYDNEY, Feb 16 at 12:45AM",
+                                                        {"role": "byline", "text": "Feb 16, 2018",
                                                          "layout": "dateLineLayout", "textStyle": "dateLineStyle"},
                                                         {"format": "html", "layout": "bodyLayout", "role": "body",
                                                          "text": "<p>The Statement</p>"
@@ -275,9 +271,9 @@ class AAPAppleNewsFormatterTest(TestCase):
                 ]
             }}
         apple_news = self.formatter._format(article)
-        self.assertEqual(apple_news['components'][7]['URL'], 'bundle://editor_1')
+        self.assertEqual(apple_news['components'][6]['URL'], 'bundle://editor_1')
         self.assertEqual(apple_news['components'][0]['style']['fill']['URL'], 'bundle://featuremedia')
-        self.assertEqual(apple_news['components'][10]['URL'], 'https://twitter.com/AAPNewswire/status/1')
+        self.assertEqual(apple_news['components'][9]['URL'], 'https://twitter.com/AAPNewswire/status/1')
 
     def test_format_article_with_instagram(self):
         article = self._get_article()
@@ -345,7 +341,7 @@ class AAPAppleNewsFormatterTest(TestCase):
             }
         }
         apple_news = self.formatter._format(article)
-        self.assertEqual(apple_news['components'][5]['URL'], "https://www.instagram.com/reel/C")
+        self.assertEqual(apple_news['components'][4]['URL'], "https://www.instagram.com/reel/C")
 
     def test_format_article_with_facebook(self):
         article = self._get_article()
@@ -412,7 +408,7 @@ class AAPAppleNewsFormatterTest(TestCase):
             }
         }
         apple_news = self.formatter._format(article)
-        self.assertEqual(apple_news['components'][5]['URL'], 'https://www.facebook.com/aapnewswire/posts/pfbid')
+        self.assertEqual(apple_news['components'][4]['URL'], 'https://www.facebook.com/aapnewswire/posts/pfbid')
 
     def test_format_article_with_tik_tok(self):
         article = self._get_article()
@@ -485,4 +481,4 @@ class AAPAppleNewsFormatterTest(TestCase):
             }
         }
         apple_news = self.formatter._format(article)
-        self.assertEqual(apple_news['components'][5]['URL'], 'https://www.tiktok.com/@dic/video/7')
+        self.assertEqual(apple_news['components'][4]['URL'], 'https://www.tiktok.com/@dic/video/7')
