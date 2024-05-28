@@ -1,5 +1,5 @@
 from datetime import datetime
-from superdesk.utc import utc
+import pytz
 from superdesk.io.feed_parsers.newsml_1_2 import NewsMLOneFeedParser
 from superdesk.io.registry import register_feed_parser
 from superdesk.errors import ParserError
@@ -24,7 +24,11 @@ class BangShowbizParser(NewsMLOneFeedParser):
     subject_map = {MUSIC_ID: "01011000", MOVIES_ID: "01005001", SHOWBIZ_ID: "01021000"}
 
     def datetime(self, string):
-        return datetime.strptime(string, "%Y-%m-%d %H:%M:%S").replace(tzinfo=utc)
+        # Assume that timezone of the input datetime is London
+        local_dt = datetime.strptime(string, "%Y-%m-%d %H:%M:%S")
+        local_tz = pytz.timezone("Europe/London")
+        utc_dt = local_tz.localize(local_dt, is_dst=None).astimezone(pytz.utc)
+        return utc_dt
 
     def parse(self, xml, provider=None):
         self.provider = provider
@@ -89,6 +93,7 @@ class BangShowbizParser(NewsMLOneFeedParser):
     def parse_news_management(self, item, tree):
         # It's always entertainment
         item["anpa_category"] = [{"qcode": "e"}]
+        item["original_source"] = "BANG"
 
 
 register_feed_parser(BangShowbizParser.NAME, BangShowbizParser())
