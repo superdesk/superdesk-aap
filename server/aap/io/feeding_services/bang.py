@@ -7,6 +7,7 @@
 # For the full copyright and license information, please see the
 # AUTHORS and LICENSE files distributed with this source code, or
 # at https://www.sourcefabric.org/superdesk/license
+import logging
 
 import lxml.etree
 import requests
@@ -18,6 +19,8 @@ from superdesk.io.registry import register_feeding_service
 MUSIC_ID = "music_url"
 MOVIES_ID = "movies_url"
 SHOWBIZ_ID = "showbiz_url"
+
+logger = logging.getLogger(__name__)
 
 
 class BangFeedingService(HTTPFeedingServiceBase):
@@ -62,13 +65,24 @@ class BangFeedingService(HTTPFeedingServiceBase):
         for src in self.fields:
             current_url = provider.get("config").get(src.get("id"))
             if current_url:
+                feed_items = None
                 provider["current_id"] = src.get("id")
-                r = self.session.get(current_url)
-                r.raise_for_status()
-                xml = lxml.etree.fromstring(r.content)
-                item = parser.parse(xml, provider=provider)
+                try:
+                    r = self.session.get(current_url)
+                    r.raise_for_status()
 
-                items.append(item)
+                    # Set the parser to be more tolerant due to stray quotes we get in attributes at times
+                    xml_parser = lxml.etree.XMLParser(recover=True)
+                    xml = lxml.etree.fromstring(r.content, xml_parser)
+                    feed_items = parser.parse(xml, provider=provider)
+                except lxml.etree.XMLSyntaxError:
+                    logger.exception(f"Syntax error parsing {current_url}")
+                # Anything goes wrong we log it and swallow it, so one bad feed doesn't kill them all!
+                except Exception:
+                    logger.exception(f"Processing url {current_url}")
+
+                if feed_items:
+                    items.append(feed_items)
 
         if self.session:
             self.session.close()
