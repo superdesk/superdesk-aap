@@ -106,7 +106,7 @@ class AAPAppleNewsFormatter(Formatter):
 
         # can only handle pictures at the moment
         for key, item in (article.get("associations") or {}).items():
-            if key.startswith("editor_") and item.get("type") != 'picture':
+            if item and key.startswith("editor_") and item.get("type", "") != 'picture':
                 remove_keys.append(key)
 
         self._remove_embeds(article, remove_keys)
