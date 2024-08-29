@@ -3,7 +3,7 @@
 set -ue
 
 function dcs() {
-	docker-compose -p sddemo -f ./docker-compose-prebuilt.yml $@
+	docker compose -p sddemo -f ./docker-compose-prebuilt.yml $@
 }
 
 WORK_DIR="$(echo $(cd -P -- "$(dirname -- "$0")" && pwd -P))"
