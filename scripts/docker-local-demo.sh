@@ -30,6 +30,7 @@ echo '
 '
 
 cd $WORK_DIR/../docker
+
 dcs kill
 #dcs rm -fv
 dcs pull
