@@ -213,6 +213,7 @@ class ReutersNitfFormatterTest(TestCase):
         self.article['versioncreated'] = now
         item = self.article.copy()
         item.update({
+            'headline': 'headline is here',
             'body_html':
                 '<p>pre amble</p>'
                 '<!-- EMBED START Image {id: \"editor_0\"} -->'
@@ -226,6 +227,8 @@ class ReutersNitfFormatterTest(TestCase):
             'format': 'HTML',
             "fields_meta": {
                 "body_html": {
+                },
+                "headline": {
                 }
             }
         })
@@ -237,3 +240,5 @@ class ReutersNitfFormatterTest(TestCase):
                          etree.tostring(newsml.find('./NewsItem/NewsComponent/NewsComponent/ContentItem/DataContent/'
                                                     '{http://www.w3.org/1999/xhtml}html/'
                                                     '{http://www.w3.org/1999/xhtml}body')).decode('utf-8'))
+        self.assertEqual('headline is here',
+                         newsml.find('./NewsItem/NewsComponent/NewsComponent/NewsLines/HeadLine').text)
