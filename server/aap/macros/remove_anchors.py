@@ -24,26 +24,27 @@ def remove_anchors(item, **kwargs):
     """
 
     def clean_html(html):
-        cleaner = lxml.html.clean.Cleaner(remove_tags=['a'])
+        cleaner = lxml.html.clean.Cleaner(remove_tags=["a"])
+        cleaner.comments = False
         root = lxml.html.fromstring(html)
 
         for elem in root.iter():
             elem.attrib.pop("id", None)
             elem.attrib.pop("class", None)
-            if elem.tag in ('hl2', 'pre', 'note'):
-                elem.tag = 'p'
+            if elem.tag in ("hl2", "pre", "note"):
+                elem.tag = "p"
 
         root = cleaner.clean_html(root)
         return sd_etree.to_string(root, method="html")
 
-    if item.get('body_html'):
-        item['body_html'] = clean_html(item.get('body_html', ''))
+    if item.get("body_html"):
+        item["body_html"] = clean_html(item.get("body_html", ""))
 
     return item
 
 
-name = 'Remove Anchors'
-label = 'Remove Links from text'
+name = "Remove Anchors"
+label = "Remove Links from text"
 callback = remove_anchors
-access_type = 'frontend'
-action_type = 'direct'
+access_type = "frontend"
+action_type = "direct"
