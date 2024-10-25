@@ -114,7 +114,8 @@ class AAPAppleNewsFormatterTest(TestCase):
                                                                         'Extinction Rebellion rally in Sydney, '
                                                                         'Thursday, October 31, 2019.'},
                                    'editor_0': {'type': 'video'},
-                                   'editor_1': {'type': 'picture'}}
+                                   'editor_1': {'type': 'picture'},
+                                   'editor_2': None}
         article['fields_meta'] = {
             "body_html": {
                 "draftjsState": [
