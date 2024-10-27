@@ -385,8 +385,27 @@ class ANPAFormatterTest(TestCase):
         out = resp['encoded_item']
 
         lines = io.StringIO(out.decode())
-        self.assertTrue(lines.getvalue().split('\r')[3].lstrip(), 'Test line 1')
-        self.assertTrue(lines.getvalue().split('\r')[4], 'Test line 2')
+        self.assertEqual(lines.getvalue().split('\r')[3].lstrip(), 'Test line 1')
+        self.assertEqual(lines.getvalue().split('\r')[4], 'Test line 2')
+
+    def test_fancy_quotes(self):
+        f = AAPAnpaFormatter()
+        subscriber = self.app.data.find('subscribers', None, None)[0][0]
+        item = self.article.copy()
+        item.update({
+            'body_html': "<p>\"quoted”</p>"
+                         "<p>“In“ IBAC’s</p>"
+                         "<p>Short hyphen­not handled fix one day!</p>"
+                         "<p>“Then ‘You can’t have it’,\" </p>",
+            'format': 'html',
+            'dateline': {'text': 'SYDNEY, June 27 AAP -'}})
+        resp = f.format(item, subscriber)[0]
+        out = resp['encoded_item']
+
+        lines = io.StringIO(out.decode())
+        self.assertIn('"quoted"', lines.getvalue().split('\r')[3].lstrip())
+        self.assertEqual(lines.getvalue().split('\r')[4].lstrip(), '"In" IBAC\'s')
+        self.assertEqual(lines.getvalue().split('\r')[6].lstrip(), '"Then \'You can\'t have it\'," ')
 
     def test_embed_in_body_body(self):
         f = AAPAnpaFormatter()

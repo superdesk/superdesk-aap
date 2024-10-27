@@ -17,7 +17,7 @@ from superdesk.metadata.item import ITEM_TYPE, CONTENT_TYPE, BYLINE, FORMAT, FOR
 from .field_mappers.locator_mapper import LocatorMapper
 from .field_mappers.slugline_mapper import SluglineMapper
 from eve.utils import config
-from .unicodetoascii import to_ascii
+from .unicodetoascii import to_ascii, clean_string
 from .category_list_map import get_aap_category_list
 import re
 from superdesk.etree import parse_html, to_string, etree
@@ -104,7 +104,7 @@ class AAPAnpaFormatter(Formatter):
                 anpa.append(b'\x0D\x0A')
 
                 if formatted_article.get('ednote', '') != '':
-                    ednote = '{}\r\n'.format(to_ascii(formatted_article.get('ednote')))
+                    ednote = '{}\r\n'.format(to_ascii(clean_string(formatted_article.get('ednote'))))
                     anpa.append(ednote.encode('ascii', 'replace'))
 
                 if formatted_article.get(BYLINE):
@@ -115,17 +115,18 @@ class AAPAnpaFormatter(Formatter):
                     anpa.append(get_text(self.append_body_footer(formatted_article),
                                          content='html').encode('ascii', 'replace'))
                 else:
-                    body = to_ascii(formatted_article.get('body_html', ''))
+                    body = to_ascii(clean_string(formatted_article.get('body_html', '')))
                     # we need to inject the dateline
                     if formatted_article.get('dateline', {}).get('text') and not article.get('auto_publish', False):
                         body_html_elem = parse_html(formatted_article.get('body_html'))
                         ptag = body_html_elem.find('.//p')
                         if ptag is not None:
                             ptag.text = formatted_article['dateline']['text'] + ' ' + (ptag.text or '')
-                            body = to_string(body_html_elem)
+                            body = to_ascii(clean_string(to_string(body_html_elem)))
                     anpa.append(self.get_text_content(body))
                     if formatted_article.get('body_footer'):
-                        anpa.append(self.get_text_content(to_ascii(formatted_article.get('body_footer', ''))))
+                        anpa.append(
+                            self.get_text_content(to_ascii(clean_string(formatted_article.get('body_footer', '')))))
 
                 anpa.append(b'\x0D\x0A')
                 anpa.append(mapped_source.encode('ascii'))
@@ -171,7 +172,8 @@ class AAPAnpaFormatter(Formatter):
     def _process_headline(self, anpa, article, category):
         # prepend the locator to the headline if required
         article['headline'] = get_text(article.get('headline', ''))
-        headline = to_ascii(LocatorMapper().get_formatted_headline(article, category.decode('UTF-8').upper()))
+        headline = to_ascii(
+            clean_string(LocatorMapper().get_formatted_headline(article, category.decode('UTF-8').upper())))
 
         # Set the maximum size to 64 including the sequence number if any
         if len(headline) > 64:
