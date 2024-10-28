@@ -20,6 +20,7 @@ from apps.archive.common import get_utc_schedule
 from flask import current_app as app
 from apps.prepopulate.app_initialize import get_filepath
 from superdesk import etree as sd_etree
+from superdesk.text_utils import get_text
 from copy import deepcopy
 from superdesk.utc import utcnow
 from superdesk.editor_utils import remove_all_embeds
@@ -277,7 +278,8 @@ class ReutersNewsML12Formatter(NewsML12Formatter):
         """
         news_lines = SubElement(main_news_component, "NewsLines")
         if formatted_article.get('headline'):
-            SubElement(news_lines, 'HeadLine').text = formatted_article.get('headline')
+            SubElement(news_lines, 'HeadLine').text = (
+                get_text(formatted_article.get('headline'), 'html'))
         if formatted_article.get('byline'):
             SubElement(news_lines, 'ByLine').text = formatted_article.get('byline') or ''
         if formatted_article.get('dateline', {}).get('text', ''):
