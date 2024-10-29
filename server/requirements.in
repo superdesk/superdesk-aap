@@ -5,7 +5,7 @@ unidecode==0.04.21
 newrelic==8.7.0
 titlecase==0.8.2
 pyasn1==0.4.8
-geopy==1.11.0
+geopy==2.4.0
 slackclient==1.0.9
 
 # Restrict protobuf version
