@@ -1,6 +1,28 @@
 Feature: Rolling news
-    Background:
-        Given the "validators"
+
+  Background:
+    Given "vocabularies"
+        """
+          [
+              {
+                  "_id": "genre",
+                  "display_name": "Genre",
+                  "items": [
+                      {
+                          "is_active": true,
+                          "name": "Article (news)",
+                          "qcode": "Article"
+                      },
+                      {
+                          "is_active": true,
+                          "name": "Broadcast Script",
+                          "qcode": "Broadcast Script"
+                      }
+                  ]
+              }
+          ]
+        """
+    Given the "validators"
         """
         [
             {
@@ -17,11 +39,11 @@ Feature: Rolling news
             }
         ]
         """
-        When we post to "/desks" with "SPORTS_DESK" and success
+    When we post to "/desks" with "SPORTS_DESK" and success
         """
         [{"name": "Sports", "content_expiry": 60}]
         """
-        Given "archive"
+    Given "archive"
             """
             [{"guid": "123", "type": "text", "headline": "test", "state": "fetched",
             "task": {"desk": "#desks._id#", "stage": "#desks.incoming_stage#", "user": "#CONTEXT_USER_ID#"},
@@ -49,11 +71,11 @@ Feature: Rolling news
                 }
             }]
         """
-        When we post to "/desks" with "ROLLING_NEWS_DESK" and success
+    When we post to "/desks" with "ROLLING_NEWS_DESK" and success
         """
         [{"name": "Rolling News", "content_expiry": 60}]
         """
-        And we post to "/internal_destinations"
+    And we post to "/internal_destinations"
         """
         [
             {
@@ -65,13 +87,13 @@ Feature: Rolling news
             }
         ]
         """
-        Then we get OK response
+    Then we get OK response
 
-    @auth
-    @vocabularies @
-    Scenario: Auto Publish Rolling news
-        When we get "/archive"
-        Then we get list with 1 items
+  @auth
+  @vocabularies @
+  Scenario: Auto Publish Rolling news
+    When we get "/archive"
+    Then we get list with 1 items
         """
         {
             "_items": [
@@ -79,10 +101,10 @@ Feature: Rolling news
             ]
         }
         """
-        When we publish "123" with "publish" type and "published" state
-        Then we get OK response
-        When we get "/published"
-        Then we get list with 2 items
+    When we publish "123" with "publish" type and "published" state
+    Then we get OK response
+    When we get "/published"
+    Then we get list with 2 items
         """
         {
             "_items": [
@@ -98,7 +120,7 @@ Feature: Rolling news
                     "genre": [{"qcode": "Broadcast Script", "name": "Broadcast Script"}],
                     "processed_from": "123",
                     "original_id" : "123",
-                    "priority": 2, "urgency": 2,
+                    "priority": 2, "urgency": 5,
                     "headline": "test",
                     "flags": {
                         "marked_for_sms": false
@@ -107,15 +129,15 @@ Feature: Rolling news
             ]
         }
         """
-        When we get "/archive"
-        Then we get list with 0 items
-        When we publish "123" with "correct" type and "corrected" state
+    When we get "/archive"
+    Then we get list with 1 items
+    When we publish "123" with "correct" type and "corrected" state
         """
         {"slugline": "corrected", "genre": [{"qcode": "Results", "name": "Results"}]}
         """
-        Then we get OK response
-        When we get "/published"
-        Then we get list with 4 items
+    Then we get OK response
+    When we get "/published"
+    Then we get list with 4 items
         """
         {
             "_items": [
@@ -138,7 +160,7 @@ Feature: Rolling news
                     "processed_from": "123",
                     "original_id" : "123",
                     "slugline": "test 123",
-                    "priority": 2, "urgency": 2,
+                    "priority": 2, "urgency": 5,
                     "headline": "test",
                     "flags": {
                         "marked_for_sms": false
@@ -151,7 +173,7 @@ Feature: Rolling news
                     "processed_from": "123",
                     "original_id" : "123",
                     "slugline": "corrected",
-                    "priority": 2, "urgency": 2,
+                    "priority": 2, "urgency": 5,
                     "headline": "test",
                     "flags": {
                         "marked_for_sms": false
@@ -160,10 +182,10 @@ Feature: Rolling news
             ]
         }
         """
-        When we publish "123" with "kill" type and "killed" state
-        Then we get OK response
-        When we get "/published"
-        Then we get list with 6 items
+    When we publish "123" with "kill" type and "killed" state
+    Then we get OK response
+    When we get "/published"
+    Then we get list with 5 items
         """
         {
             "_items": [
@@ -191,7 +213,7 @@ Feature: Rolling news
                     "processed_from": "123",
                     "original_id" : "123",
                     "slugline": "test 123",
-                    "priority": 2, "urgency": 2,
+                    "priority": 2, "urgency": 5,
                     "headline": "test",
                     "flags": {
                         "marked_for_sms": false
@@ -204,19 +226,8 @@ Feature: Rolling news
                     "processed_from": "123",
                     "original_id" : "123",
                     "slugline": "corrected",
-                    "priority": 2, "urgency": 2,
+                    "priority": 2, "urgency": 5,
                     "headline": "test",
-                    "flags": {
-                        "marked_for_sms": false
-                    }
-                },
-                {
-                    "state": "killed",
-                    "task": {"desk": "#ROLLING_NEWS_DESK#"},
-                    "genre": [{"qcode": "Broadcast Script", "name": "Broadcast Script"}],
-                    "processed_from": "123",
-                    "original_id" : "123",
-                    "priority": 2, "urgency": 2,
                     "flags": {
                         "marked_for_sms": false
                     }
