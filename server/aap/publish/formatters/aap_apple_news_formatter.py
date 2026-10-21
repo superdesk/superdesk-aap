@@ -18,7 +18,7 @@ from eve.utils import config
 import lxml.html as lxml_html
 from draftjs_exporter.dom import DOM
 from textwrap import dedent
-from urllib.parse import urlparse, unquote, urlunparse
+from urllib.parse import urlparse, unquote
 from superdesk.publish.formatters import Formatter
 from superdesk.metadata.item import FORMAT, FORMATS, CONTENT_TYPE, ITEM_TYPE
 from superdesk import get_resource_service
@@ -30,7 +30,7 @@ from superdesk.editor_utils import (
     Editor3Content,
     DraftJSHTMLExporter,
     render_fragment,
-    Block
+    Block,
 )
 from aap.errors import AppleNewsError
 
@@ -133,7 +133,7 @@ class AAPAppleNewsFormatter(Formatter):
         # can only handle pictures at the moment
         for key, item in (article.get("associations") or {}).items():
             if item and key.startswith("editor_") and item.get("type", "") != "picture":
-                    remove_keys.append(key)
+                remove_keys.append(key)
 
         self._remove_embeds(article, remove_keys)
 
@@ -397,8 +397,8 @@ class AAPAppleNewsFormatter(Formatter):
         body_content = []
 
         for elem in fragments:
-#            if elem.tag == "table":
-#                continue
+            #            if elem.tag == "table":
+            #                continue
             if elem.tag == "figure":
                 key = elem.find("./img").attrib["id"]
                 body_content.extend(
@@ -452,7 +452,7 @@ class AAPAppleNewsFormatter(Formatter):
                     if not src:
                         continue
                     url = urlparse(src)
-                    if 'facebook' not in url.netloc.lower():
+                    if "facebook" not in url.netloc.lower():
                         continue
                     query = unquote(url.query)
                     query_prefix = "href="
@@ -460,7 +460,7 @@ class AAPAppleNewsFormatter(Formatter):
                         facebook_url = query[len(query_prefix):]
                         # According to http://developer.apple.com/documentation/applenewsformat/facebookpost
                         # none of the supported URL's take more than 1 parameter so splitting on & should be safe
-                        facebook_url = facebook_url.split('&')[0]
+                        facebook_url = facebook_url.split("&")[0]
                         self._add_pieces(
                             body_content, par_pieces, "facebook_post", facebook_url
                         )
