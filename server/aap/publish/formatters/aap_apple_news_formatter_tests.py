@@ -402,11 +402,11 @@ class AAPAppleNewsFormatterTest(TestCase):
                                 "data": {
                                     "data": {
                                         "html": '<iframe src="https://www.facebook.com/plugins/post.php?'
-                                                'href=https%3A%2F%2Fwww.facebook.com%2Faapnewswire%2Fposts%2Fpfbid'
-                                                '&show_text=true&width=500" width="500" height="716" '
-                                                'style="border:none;overflow:hidden" scrolling="no" frameborder="0" '
-                                                'allowfullscreen="true" allow="autoplay; clipboard-write; '
-                                                'encrypted-media; picture-in-picture; web-share"/>'
+                                        "href=https%3A%2F%2Fwww.facebook.com%2Faapnewswire%2Fposts%2Fpfbid"
+                                        '&show_text=true&width=500" width="500" height="716" '
+                                        'style="border:none;overflow:hidden" scrolling="no" frameborder="0" '
+                                        'allowfullscreen="true" allow="autoplay; clipboard-write; '
+                                        'encrypted-media; picture-in-picture; web-share"/>'
                                     },
                                     "description": "Embed description",
                                 },
@@ -490,289 +490,294 @@ class AAPAppleNewsFormatterTest(TestCase):
         )
 
     def test_format_article_invalid_state(self):
-        article = dict({
-            "_id": "urn:newsml:aap.com.au:2024-08-19T13:54:44.202653:7dadef10-6d92-4ae0-a5d6-a37b542fbf7d",
-            "type": "text",
-            "version": 1,
-            "headline": "Rashid Khan to skip BBL in blow to CA and Strikers",
-            "slugline": "BBL",
-            "abstract": "<p>",
-            "byline": "Scott Bailey",
-            "priority": 5,
-            "pubstatus": "usable",
-            "description_text": None,
-            "body_html": "<p></p>",
-            "format": "HTML",
-            "associations": {
-                "editor_0": {
-                    "_id": "tag:aap.com.au:2024:83ac9832-27a3-401a-8e43-053df110f7b0",
-                    "guid": "tag:aap.com.au:2024:83ac9832-27a3-401a-8e43-053df110f7b0",
-                    "headline": "CRICKET AUSTRALIA WEST INDIES",
-                    "description_text": "Windies pace ace Shamar Joseph will bring star power as a new BBL addition.",
-                    "source": "AAP Image",
-                    "original_source": "AAP Image/AAP",
-                    "versioncreated": "2024-08-19T04:43:23+0000",
-                    "firstcreated": "2024-01-28T06:30:57+0000",
-                    "pubstatus": "usable",
-                    "type": "picture",
-                    "state": "published",
-                    "slugline": "BBL",
-                    "byline": "Darren England/AAP PHOTOS",
-                    "mimetype": "image/jpeg",
-                    "uri": "20240128001894692527",
-                    "unique_id": 25927104,
-                    "unique_name": "#25927104",
-                    "_current_version": 1,
+        article = dict(
+            {
+                "_id": "urn:newsml:aap.com.au:2024-08-19T13:54:44.202653:7dadef10-6d92-4ae0-a5d6-a37b542fbf7d",
+                "type": "text",
+                "version": 1,
+                "headline": "Rashid Khan to skip BBL in blow to CA and Strikers",
+                "slugline": "BBL",
+                "abstract": "<p>",
+                "byline": "Scott Bailey",
+                "priority": 5,
+                "pubstatus": "usable",
+                "description_text": None,
+                "body_html": "<p></p>",
+                "format": "HTML",
+                "associations": {
+                    "editor_0": {
+                        "_id": "tag:aap.com.au:2024:83ac9832-27a3-401a-8e43-053df110f7b0",
+                        "guid": "tag:aap.com.au:2024:83ac9832-27a3-401a-8e43-053df110f7b0",
+                        "headline": "CRICKET AUSTRALIA WEST INDIES",
+                        "description_text": "Windies pace ace Shamar Joseph will bring star power as a new "
+                                            "BBL addition.",
+                        "source": "AAP Image",
+                        "original_source": "AAP Image/AAP",
+                        "versioncreated": "2024-08-19T04:43:23+0000",
+                        "firstcreated": "2024-01-28T06:30:57+0000",
+                        "pubstatus": "usable",
+                        "type": "picture",
+                        "state": "published",
+                        "slugline": "BBL",
+                        "byline": "Darren England/AAP PHOTOS",
+                        "mimetype": "image/jpeg",
+                        "uri": "20240128001894692527",
+                        "unique_id": 25927104,
+                        "unique_name": "#25927104",
+                        "_current_version": 1,
+                    },
+                    "featuremedia": {
+                        "_id": "tag:aap.com.au:2024:831ead76-ee07-440e-8ffd-1e1713ae1d11",
+                        "guid": "tag:aap.com.au:2024:831ead76-ee07-440e-8ffd-1e1713ae1d11",
+                        "headline": "BBL HEAT STRIKERS",
+                        "description_text": "Popular spin star Rashid Khan will miss the BBL again this summer. ",
+                        "source": "AAP Image",
+                        "original_source": "AAP Image/AAP",
+                        "versioncreated": "2024-08-19T04:40:29+0000",
+                        "firstcreated": "2022-01-12T09:34:55+0000",
+                        "pubstatus": "usable",
+                        "type": "picture",
+                        "state": "published",
+                        "slugline": "BBL",
+                        "byline": "Darren England/AAP PHOTOS",
+                        "ednote": "NO ARCHIVING",
+                        "mimetype": "image/jpeg",
+                        "uri": "20220112001612767199",
+                        "unique_id": 25927100,
+                        "unique_name": "#25927100",
+                        "_current_version": 1,
+                    },
+                    "editor_3": {
+                        "_id": "tag:aap.com.au:2024:b691c82c-cdc4-4242-9aac-a66c05dfeb12",
+                        "guid": "tag:aap.com.au:2024:b691c82c-cdc4-4242-9aac-a66c05dfeb12",
+                        "headline": "CRICKET WBBL RENEGADES HEAT",
+                        "description_text": "India's Harmanpreet Kaur will be back in the WBBL.",
+                        "source": "AAP Image",
+                        "original_source": "AAP Image/AAP",
+                        "versioncreated": "2024-08-19T05:02:36+0000",
+                        "firstcreated": "2023-10-20T05:19:49+0000",
+                        "pubstatus": "usable",
+                        "type": "picture",
+                    },
                 },
-                "featuremedia": {
-                    "_id": "tag:aap.com.au:2024:831ead76-ee07-440e-8ffd-1e1713ae1d11",
-                    "guid": "tag:aap.com.au:2024:831ead76-ee07-440e-8ffd-1e1713ae1d11",
-                    "headline": "BBL HEAT STRIKERS",
-                    "description_text": "Popular spin star Rashid Khan will miss the BBL again this summer. ",
-                    "source": "AAP Image",
-                    "original_source": "AAP Image/AAP",
-                    "versioncreated": "2024-08-19T04:40:29+0000",
-                    "firstcreated": "2022-01-12T09:34:55+0000",
-                    "pubstatus": "usable",
-                    "type": "picture",
-                    "state": "published",
-                    "slugline": "BBL",
-                    "byline": "Darren England/AAP PHOTOS",
-                    "ednote": "NO ARCHIVING",
-                    "mimetype": "image/jpeg",
-                    "uri": "20220112001612767199",
-                    "unique_id": 25927100,
-                    "unique_name": "#25927100",
-                    "_current_version": 1,
-                },
-                "editor_3": {
-                    "_id": "tag:aap.com.au:2024:b691c82c-cdc4-4242-9aac-a66c05dfeb12",
-                    "guid": "tag:aap.com.au:2024:b691c82c-cdc4-4242-9aac-a66c05dfeb12",
-                    "headline": "CRICKET WBBL RENEGADES HEAT",
-                    "description_text": "India's Harmanpreet Kaur will be back in the WBBL.",
-                    "source": "AAP Image",
-                    "original_source": "AAP Image/AAP",
-                    "versioncreated": "2024-08-19T05:02:36+0000",
-                    "firstcreated": "2023-10-20T05:19:49+0000",
-                    "pubstatus": "usable",
-                    "type": "picture",
-                },
-            },
-            "_updated": "2024-08-19T05:06:51.000+0000",
-            "_created": "2024-08-19T03:54:44.000+0000",
-            "_current_version": 12,
-            "firstcreated": "2024-08-19T03:54:44.000+0000",
-            "versioncreated": "2024-08-19T05:06:05.000+0000",
-            "original_creator": "576b7955a5398f65d12ad0dc",
-            "guid": "urn:newsml:aap.com.au:2024-08-19T13:54:44.202653:7dadef10-6d92-4ae0-a5d6-a37b542fbf7d",
-            "state": "published",
-            "source": "AAP",
-            "urgency": 1,
-            "dateline": {
+                "_updated": "2024-08-19T05:06:51.000+0000",
+                "_created": "2024-08-19T03:54:44.000+0000",
+                "_current_version": 12,
+                "firstcreated": "2024-08-19T03:54:44.000+0000",
+                "versioncreated": "2024-08-19T05:06:05.000+0000",
+                "original_creator": "576b7955a5398f65d12ad0dc",
+                "guid": "urn:newsml:aap.com.au:2024-08-19T13:54:44.202653:7dadef10-6d92-4ae0-a5d6-a37b542fbf7d",
+                "state": "published",
                 "source": "AAP",
-                "date": "2024-08-19T03:54:44.000+0000",
-                "located": {
-                    "city": "Sydney",
-                    "state": "New South Wales",
-                    "country": "Australia",
-                    "dateline": "city",
-                    "tz": "Australia/Sydney",
-                    "alt_name": "",
-                    "state_code": "NSW",
-                    "city_code": "Sydney",
-                    "country_code": "AU",
+                "urgency": 1,
+                "dateline": {
+                    "source": "AAP",
+                    "date": "2024-08-19T03:54:44.000+0000",
+                    "located": {
+                        "city": "Sydney",
+                        "state": "New South Wales",
+                        "country": "Australia",
+                        "dateline": "city",
+                        "tz": "Australia/Sydney",
+                        "alt_name": "",
+                        "state_code": "NSW",
+                        "city_code": "Sydney",
+                        "country_code": "AU",
+                    },
+                    "text": "SYDNEY, Aug 19 AAP -",
                 },
-                "text": "SYDNEY, Aug 19 AAP -",
-            },
-            "language": "en",
-            "operation": "publish",
-            "expiry": "2024-08-22T05:06:30.000+0000",
-            "fields_meta": {
-                "body_html": {
-                    "draftjsState": [
-                        {
-                            "blocks": [
-                                {
-                                    "key": "8smap",
-                                    "text": " ",
-                                    "type": "atomic",
-                                    "depth": 0,
-                                    "inlineStyleRanges": [],
-                                    "entityRanges": [
-                                        {"offset": 0, "length": 1, "key": 1}
-                                    ],
-                                    "data": {},
-                                },
-                                {
-                                    "key": "fq1t0",
-                                    "text": "Suspect text block with a table at the end!",
-                                    "type": "unstyled",
-                                    "depth": 0,
-                                    "inlineStyleRanges": [],
-                                    "entityRanges": [
-                                        {"offset": 127, "length": 1, "key": 2}
-                                    ],
-                                    "data": {},
-                                },
-                                {
-                                    "key": "ffusc",
-                                    "text": " ",
-                                    "type": "atomic",
-                                    "depth": 0,
-                                    "inlineStyleRanges": [],
-                                    "entityRanges": [
-                                        {"offset": 0, "length": 1, "key": 3}
-                                    ],
-                                    "data": {},
-                                },
-                            ],
-                            "entityMap": {
-                                "0": {
-                                    "type": "MEDIA",
-                                    "mutability": "MUTABLE",
-                                    "data": {
-                                        "media": {
-                                            "_id": "tag:aap.com.au:2024:83ac9832-27a3-401a-8e43-053df110f7b0",
-                                            "guid": "tag:aap.com.au:2024:83ac9832-27a3-401a-8e43-053df110f7b0",
-                                            "headline": "CRICKET AUSTRALIA WEST INDIES",
-                                            "description_text": "Windies pace ace Shamar Joseph will bring star power",
-                                            "source": "AAP Image",
-                                            "original_source": "AAP Image/AAP",
-                                            "versioncreated": "2024-08-19T04:43:23+0000",
-                                            "firstcreated": "2024-01-28T06:30:57+0000",
-                                            "pubstatus": "usable",
-                                            "type": "picture",
-                                            "state": "fetched",
-                                            "slugline": "CRICKET AUSTRALIA WEST INDIES",
-                                            "byline": "Darren England/AAP PHOTOS",
-                                            "mimetype": "image/jpeg",
-                                        }
+                "language": "en",
+                "operation": "publish",
+                "expiry": "2024-08-22T05:06:30.000+0000",
+                "fields_meta": {
+                    "body_html": {
+                        "draftjsState": [
+                            {
+                                "blocks": [
+                                    {
+                                        "key": "8smap",
+                                        "text": " ",
+                                        "type": "atomic",
+                                        "depth": 0,
+                                        "inlineStyleRanges": [],
+                                        "entityRanges": [
+                                            {"offset": 0, "length": 1, "key": 1}
+                                        ],
+                                        "data": {},
                                     },
-                                },
-                                "1": {
-                                    "type": "MEDIA",
-                                    "mutability": "MUTABLE",
-                                    "data": {
-                                        "media": {
-                                            "_id": "tag:aap.com.au:2024:49b4d3cc-1055-402f-82b4-fb42378d4d7f",
-                                            "guid": "tag:aap.com.au:2024:49b4d3cc-1055-402f-82b4-fb42378d4d7f",
-                                            "headline": "CRICKET BBL STRIKERS SIXERS",
-                                            "description_text": "Rashid Khan won plenty of fans.",
-                                            "source": "AAP Image",
-                                            "original_source": "AAP Image/AAP",
-                                            "versioncreated": "2024-08-19T04:40:21+0000",
-                                            "firstcreated": "2022-12-14T10:17:21+0000",
-                                            "pubstatus": "usable",
-                                            "type": "picture",
-                                            "state": "fetched",
-                                            "slugline": "CRICKET BBL STRIKERS SIXERS",
-                                            "byline": "Matt Turner/AAP PHOTOS",
-                                            "mimetype": "image/jpeg",
-                                            "uri": "20221214001742440638",
-                                            "unique_id": 25927099,
-                                            "unique_name": "#25927099",
-                                            "_current_version": 1,
-                                        }
+                                    {
+                                        "key": "fq1t0",
+                                        "text": "Suspect text block with a table at the end!",
+                                        "type": "unstyled",
+                                        "depth": 0,
+                                        "inlineStyleRanges": [],
+                                        "entityRanges": [
+                                            {"offset": 127, "length": 1, "key": 2}
+                                        ],
+                                        "data": {},
                                     },
-                                },
-                                "2": {
-                                    "type": "TABLE",
-                                    "mutability": "MUTABLE",
-                                    "data": {
+                                    {
+                                        "key": "ffusc",
+                                        "text": " ",
+                                        "type": "atomic",
+                                        "depth": 0,
+                                        "inlineStyleRanges": [],
+                                        "entityRanges": [
+                                            {"offset": 0, "length": 1, "key": 3}
+                                        ],
+                                        "data": {},
+                                    },
+                                ],
+                                "entityMap": {
+                                    "0": {
+                                        "type": "MEDIA",
+                                        "mutability": "MUTABLE",
                                         "data": {
-                                            "numRows": 1,
-                                            "numCols": 2,
-                                            "cells": [
-                                                [
-                                                    {
-                                                        "blocks": [
-                                                            {
-                                                                "key": "53ilp",
-                                                                "text": "Sophie Ecclestone ",
-                                                                "type": "unstyled",
-                                                                "depth": 0,
-                                                                "inlineStyleRanges": [],
-                                                                "entityRanges": [],
-                                                                "data": {},
-                                                            }
-                                                        ],
-                                                        "entityMap": {},
-                                                    },
-                                                    {"blocks": [], "entityMap": {}},
-                                                ]
-                                            ],
-                                        }
+                                            "media": {
+                                                "_id": "tag:aap.com.au:2024:83ac9832-27a3-401a-8e43-053df110f7b0",
+                                                "guid": "tag:aap.com.au:2024:83ac9832-27a3-401a-8e43-053df110f7b0",
+                                                "headline": "CRICKET AUSTRALIA WEST INDIES",
+                                                "description_text": "Windies pace ace Shamar Joseph will "
+                                                                    "bring star power",
+                                                "source": "AAP Image",
+                                                "original_source": "AAP Image/AAP",
+                                                "versioncreated": "2024-08-19T04:43:23+0000",
+                                                "firstcreated": "2024-01-28T06:30:57+0000",
+                                                "pubstatus": "usable",
+                                                "type": "picture",
+                                                "state": "fetched",
+                                                "slugline": "CRICKET AUSTRALIA WEST INDIES",
+                                                "byline": "Darren England/AAP PHOTOS",
+                                                "mimetype": "image/jpeg",
+                                            }
+                                        },
+                                    },
+                                    "1": {
+                                        "type": "MEDIA",
+                                        "mutability": "MUTABLE",
+                                        "data": {
+                                            "media": {
+                                                "_id": "tag:aap.com.au:2024:49b4d3cc-1055-402f-82b4-fb42378d4d7f",
+                                                "guid": "tag:aap.com.au:2024:49b4d3cc-1055-402f-82b4-fb42378d4d7f",
+                                                "headline": "CRICKET BBL STRIKERS SIXERS",
+                                                "description_text": "Rashid Khan won plenty of fans.",
+                                                "source": "AAP Image",
+                                                "original_source": "AAP Image/AAP",
+                                                "versioncreated": "2024-08-19T04:40:21+0000",
+                                                "firstcreated": "2022-12-14T10:17:21+0000",
+                                                "pubstatus": "usable",
+                                                "type": "picture",
+                                                "state": "fetched",
+                                                "slugline": "CRICKET BBL STRIKERS SIXERS",
+                                                "byline": "Matt Turner/AAP PHOTOS",
+                                                "mimetype": "image/jpeg",
+                                                "uri": "20221214001742440638",
+                                                "unique_id": 25927099,
+                                                "unique_name": "#25927099",
+                                                "_current_version": 1,
+                                            }
+                                        },
+                                    },
+                                    "2": {
+                                        "type": "TABLE",
+                                        "mutability": "MUTABLE",
+                                        "data": {
+                                            "data": {
+                                                "numRows": 1,
+                                                "numCols": 2,
+                                                "cells": [
+                                                    [
+                                                        {
+                                                            "blocks": [
+                                                                {
+                                                                    "key": "53ilp",
+                                                                    "text": "Sophie Ecclestone ",
+                                                                    "type": "unstyled",
+                                                                    "depth": 0,
+                                                                    "inlineStyleRanges": [],
+                                                                    "entityRanges": [],
+                                                                    "data": {},
+                                                                }
+                                                            ],
+                                                            "entityMap": {},
+                                                        },
+                                                        {"blocks": [], "entityMap": {}},
+                                                    ]
+                                                ],
+                                            }
+                                        },
+                                    },
+                                    "3": {
+                                        "type": "MEDIA",
+                                        "mutability": "MUTABLE",
+                                        "data": {
+                                            "media": {
+                                                "_id": "tag:aap.com.au:2024:b691c82c-cdc4-4242-9aac-a66c05dfeb12",
+                                                "guid": "tag:aap.com.au:2024:b691c82c-cdc4-4242-9aac-a66c05dfeb12",
+                                                "headline": "CRICKET WBBL RENEGADES HEAT",
+                                                "description_text": "India's Harmanpreet Kaur will "
+                                                                    "be back in the WBBL.",
+                                                "source": "AAP Image",
+                                                "original_source": "AAP Image/AAP",
+                                                "versioncreated": "2024-08-19T05:02:36+0000",
+                                                "firstcreated": "2023-10-20T05:19:49+0000",
+                                                "pubstatus": "usable",
+                                                "type": "picture",
+                                                "state": "fetched",
+                                                "slugline": "CRICKET WBBL RENEGADES HEAT",
+                                                "byline": "James Ross/AAP PHOTOS",
+                                                "mimetype": "image/jpeg",
+                                                "uri": "20231020001854383455",
+                                                "unique_id": 25927147,
+                                                "unique_name": "#25927147",
+                                                "_current_version": 1,
+                                            }
+                                        },
                                     },
                                 },
-                                "3": {
-                                    "type": "MEDIA",
-                                    "mutability": "MUTABLE",
-                                    "data": {
-                                        "media": {
-                                            "_id": "tag:aap.com.au:2024:b691c82c-cdc4-4242-9aac-a66c05dfeb12",
-                                            "guid": "tag:aap.com.au:2024:b691c82c-cdc4-4242-9aac-a66c05dfeb12",
-                                            "headline": "CRICKET WBBL RENEGADES HEAT",
-                                            "description_text": "India's Harmanpreet Kaur will be back in the WBBL.",
-                                            "source": "AAP Image",
-                                            "original_source": "AAP Image/AAP",
-                                            "versioncreated": "2024-08-19T05:02:36+0000",
-                                            "firstcreated": "2023-10-20T05:19:49+0000",
-                                            "pubstatus": "usable",
-                                            "type": "picture",
-                                            "state": "fetched",
-                                            "slugline": "CRICKET WBBL RENEGADES HEAT",
-                                            "byline": "James Ross/AAP PHOTOS",
-                                            "mimetype": "image/jpeg",
-                                            "uri": "20231020001854383455",
-                                            "unique_id": 25927147,
-                                            "unique_name": "#25927147",
-                                            "_current_version": 1,
-                                        }
-                                    },
-                                },
-                            },
-                        }
-                    ]
+                            }
+                        ]
+                    },
+                    "headline": {
+                        "draftjsState": [
+                            {
+                                "blocks": [
+                                    {
+                                        "key": "e6730",
+                                        "text": "Rashid Khan to skip BBL in blow to CA and Strikers",
+                                        "type": "unstyled",
+                                        "depth": 0,
+                                        "inlineStyleRanges": [],
+                                        "entityRanges": [],
+                                        "data": {"MULTIPLE_HIGHLIGHTS": {}},
+                                    }
+                                ],
+                                "entityMap": {},
+                            }
+                        ]
+                    },
+                    "abstract": {
+                        "draftjsState": [
+                            {
+                                "blocks": [
+                                    {
+                                        "key": "7dbu4",
+                                        "text": "Highly-marketable and successful Afghanistan spinner Rashid Khan",
+                                        "type": "unstyled",
+                                        "depth": 0,
+                                        "inlineStyleRanges": [],
+                                        "entityRanges": [],
+                                        "data": {"MULTIPLE_HIGHLIGHTS": {}},
+                                    }
+                                ],
+                                "entityMap": {},
+                            }
+                        ]
+                    },
                 },
-                "headline": {
-                    "draftjsState": [
-                        {
-                            "blocks": [
-                                {
-                                    "key": "e6730",
-                                    "text": "Rashid Khan to skip BBL in blow to CA and Strikers",
-                                    "type": "unstyled",
-                                    "depth": 0,
-                                    "inlineStyleRanges": [],
-                                    "entityRanges": [],
-                                    "data": {"MULTIPLE_HIGHLIGHTS": {}},
-                                }
-                            ],
-                            "entityMap": {},
-                        }
-                    ]
-                },
-                "abstract": {
-                    "draftjsState": [
-                        {
-                            "blocks": [
-                                {
-                                    "key": "7dbu4",
-                                    "text": "Highly-marketable and successful Afghanistan spinner Rashid Khan",
-                                    "type": "unstyled",
-                                    "depth": 0,
-                                    "inlineStyleRanges": [],
-                                    "entityRanges": [],
-                                    "data": {"MULTIPLE_HIGHLIGHTS": {}},
-                                }
-                            ],
-                            "entityMap": {},
-                        }
-                    ]
-                },
-            },
-            "firstpublished": "2024-08-19T05:06:30.000+0000",
-        })
+                "firstpublished": "2024-08-19T05:06:30.000+0000",
+            }
+        )
         article["firstcreated"] = datetime(
             year=2018, month=2, day=15, hour=11, minute=30, second=0, tzinfo=pytz.UTC
         )
@@ -788,173 +793,180 @@ class AAPAppleNewsFormatterTest(TestCase):
         self.assertNotIn("<table>", apple_news["components"][8]["text"])
 
     def test_format_article_invalid_state_pic(self):
-        article = dict({
-            "_id": "urn:newsml:aap.com.au:2024-08-19T13:54:44.202653:7dadef10-6d92-4ae0-a5d6-a37b542fbf7d",
-            "type": "text",
-            "version": 1,
-            "headline": "Rashid Khan to skip BBL in blow to CA and Strikers",
-            "slugline": "BBL",
-            "abstract": "<p>",
-            "byline": "Scott Bailey",
-            "priority": 5,
-            "pubstatus": "usable",
-            "description_text": None,
-            "body_html": "<p></p>",
-            "format": "HTML",
-            "associations": {
-                "editor_0": {
-                    "_id": "tag:aap.com.au:2024:83ac9832-27a3-401a-8e43-053df110f7b0",
-                    "guid": "tag:aap.com.au:2024:83ac9832-27a3-401a-8e43-053df110f7b0",
-                    "headline": "CRICKET AUSTRALIA WEST INDIES",
-                    "description_text": "Windies pace ace Shamar Joseph will bring star power as a new BBL addition.",
-                    "source": "AAP Image",
-                    "original_source": "AAP Image/AAP",
-                    "versioncreated": "2024-08-19T04:43:23+0000",
-                    "firstcreated": "2024-01-28T06:30:57+0000",
-                    "pubstatus": "usable",
-                    "type": "picture",
-                    "state": "published",
-                    "slugline": "BBL",
-                    "byline": "Darren England/AAP PHOTOS",
-                    "mimetype": "image/jpeg",
-                    "uri": "20240128001894692527",
-                    "unique_id": 25927104,
-                    "unique_name": "#25927104",
-                    "_current_version": 1,
+        article = dict(
+            {
+                "_id": "urn:newsml:aap.com.au:2024-08-19T13:54:44.202653:7dadef10-6d92-4ae0-a5d6-a37b542fbf7d",
+                "type": "text",
+                "version": 1,
+                "headline": "Rashid Khan to skip BBL in blow to CA and Strikers",
+                "slugline": "BBL",
+                "abstract": "<p>",
+                "byline": "Scott Bailey",
+                "priority": 5,
+                "pubstatus": "usable",
+                "description_text": None,
+                "body_html": "<p></p>",
+                "format": "HTML",
+                "associations": {
+                    "editor_0": {
+                        "_id": "tag:aap.com.au:2024:83ac9832-27a3-401a-8e43-053df110f7b0",
+                        "guid": "tag:aap.com.au:2024:83ac9832-27a3-401a-8e43-053df110f7b0",
+                        "headline": "CRICKET AUSTRALIA WEST INDIES",
+                        "description_text": "Windies pace ace Shamar Joseph will bring star power "
+                                            "as a new BBL addition.",
+                        "source": "AAP Image",
+                        "original_source": "AAP Image/AAP",
+                        "versioncreated": "2024-08-19T04:43:23+0000",
+                        "firstcreated": "2024-01-28T06:30:57+0000",
+                        "pubstatus": "usable",
+                        "type": "picture",
+                        "state": "published",
+                        "slugline": "BBL",
+                        "byline": "Darren England/AAP PHOTOS",
+                        "mimetype": "image/jpeg",
+                        "uri": "20240128001894692527",
+                        "unique_id": 25927104,
+                        "unique_name": "#25927104",
+                        "_current_version": 1,
+                    },
+                    "featuremedia": {
+                        "_id": "tag:aap.com.au:2024:831ead76-ee07-440e-8ffd-1e1713ae1d11",
+                        "guid": "tag:aap.com.au:2024:831ead76-ee07-440e-8ffd-1e1713ae1d11",
+                        "headline": "BBL HEAT STRIKERS",
+                        "description_text": "Popular spin star Rashid Khan will miss the BBL again this summer. ",
+                        "source": "AAP Image",
+                        "original_source": "AAP Image/AAP",
+                        "versioncreated": "2024-08-19T04:40:29+0000",
+                        "firstcreated": "2022-01-12T09:34:55+0000",
+                        "pubstatus": "usable",
+                        "type": "picture",
+                        "state": "published",
+                        "slugline": "BBL",
+                        "byline": "Darren England/AAP PHOTOS",
+                        "ednote": "NO ARCHIVING",
+                        "mimetype": "image/jpeg",
+                        "uri": "20220112001612767199",
+                        "unique_id": 25927100,
+                        "unique_name": "#25927100",
+                        "_current_version": 1,
+                    },
                 },
-                "featuremedia": {
-                    "_id": "tag:aap.com.au:2024:831ead76-ee07-440e-8ffd-1e1713ae1d11",
-                    "guid": "tag:aap.com.au:2024:831ead76-ee07-440e-8ffd-1e1713ae1d11",
-                    "headline": "BBL HEAT STRIKERS",
-                    "description_text": "Popular spin star Rashid Khan will miss the BBL again this summer. ",
-                    "source": "AAP Image",
-                    "original_source": "AAP Image/AAP",
-                    "versioncreated": "2024-08-19T04:40:29+0000",
-                    "firstcreated": "2022-01-12T09:34:55+0000",
-                    "pubstatus": "usable",
-                    "type": "picture",
-                    "state": "published",
-                    "slugline": "BBL",
-                    "byline": "Darren England/AAP PHOTOS",
-                    "ednote": "NO ARCHIVING",
-                    "mimetype": "image/jpeg",
-                    "uri": "20220112001612767199",
-                    "unique_id": 25927100,
-                    "unique_name": "#25927100",
-                    "_current_version": 1,
-                }
-            },
-            "_updated": "2024-08-19T05:06:51.000+0000",
-            "_created": "2024-08-19T03:54:44.000+0000",
-            "_current_version": 12,
-            "firstcreated": "2024-08-19T03:54:44.000+0000",
-            "versioncreated": "2024-08-19T05:06:05.000+0000",
-            "original_creator": "576b7955a5398f65d12ad0dc",
-            "guid": "urn:newsml:aap.com.au:2024-08-19T13:54:44.202653:7dadef10-6d92-4ae0-a5d6-a37b542fbf7d",
-            "state": "published",
-            "source": "AAP",
-            "urgency": 1,
-            "dateline": {
+                "_updated": "2024-08-19T05:06:51.000+0000",
+                "_created": "2024-08-19T03:54:44.000+0000",
+                "_current_version": 12,
+                "firstcreated": "2024-08-19T03:54:44.000+0000",
+                "versioncreated": "2024-08-19T05:06:05.000+0000",
+                "original_creator": "576b7955a5398f65d12ad0dc",
+                "guid": "urn:newsml:aap.com.au:2024-08-19T13:54:44.202653:7dadef10-6d92-4ae0-a5d6-a37b542fbf7d",
+                "state": "published",
                 "source": "AAP",
-                "date": "2024-08-19T03:54:44.000+0000",
-                "located": {
-                    "city": "Sydney",
-                    "state": "New South Wales",
-                    "country": "Australia",
-                    "dateline": "city",
-                    "tz": "Australia/Sydney",
-                    "alt_name": "",
-                    "state_code": "NSW",
-                    "city_code": "Sydney",
-                    "country_code": "AU",
+                "urgency": 1,
+                "dateline": {
+                    "source": "AAP",
+                    "date": "2024-08-19T03:54:44.000+0000",
+                    "located": {
+                        "city": "Sydney",
+                        "state": "New South Wales",
+                        "country": "Australia",
+                        "dateline": "city",
+                        "tz": "Australia/Sydney",
+                        "alt_name": "",
+                        "state_code": "NSW",
+                        "city_code": "Sydney",
+                        "country_code": "AU",
+                    },
+                    "text": "SYDNEY, Aug 19 AAP -",
                 },
-                "text": "SYDNEY, Aug 19 AAP -",
-            },
-            "language": "en",
-            "operation": "publish",
-            "expiry": "2024-08-22T05:06:30.000+0000",
-            "fields_meta": {
-                "body_html": {
-                    "draftjsState": [
-                        {
-                            "blocks": [
-                                {
-                                    "key": "7onrg",
-                                    "text": 'An excessive reliance on renewables "is going to cause a lot of grief to the country", Mr Dutton said. ',
-                                    "type": "unstyled",
-                                    "depth": 0,
-                                    "inlineStyleRanges": [],
-                                    "entityRanges": [
-                                        {"offset": 0, "length": 1, "key": 1}
-                                    ],
-                                    "data": {},
-                                },
-                                {
-                                    "key": "1n0hk",
-                                    "text": " ",
-                                    "type": "atomic",
-                                    "depth": 0,
-                                    "inlineStyleRanges": [],
-                                    "entityRanges": [
-                                        {"offset": 0, "length": 1, "key": 1}
-                                    ],
-                                    "data": {},
-                                },
-                            ],
-                            "entityMap": {
-                                "1": {
-                                    "type": "MEDIA",
-                                    "mutability": "MUTABLE",
-                                    "data": {
-                                        "media": {
-                                            "_id": "tag:aap.com.au:2024:9b4d52f0-9fb1-4f81-933c-1f12527e39a9",
-                                            "guid": "tag:aap.com.au:2024:9b4d52f0-9fb1-4f81-933c-1f12527e39a9",
-                                            "headline": "QUESTION TIME",
-                                            "description_text": "Energy Minister Chris Bowen",
-                                            "archive_description": "Australian Energy Minister Chris Bowen",
-                                            "source": "AAP Image",
-                                            "original_source": "AAP Image/AAP",
-                                            "versioncreated": "2024-12-12T21:14:08+0000",
-                                            "firstcreated": "2024-11-28T02:52:30+0000",
-                                            "pubstatus": "usable",
-                                            "type": "picture",
-                                            "state": "fetched",
-                                            "slugline": "QUESTION TIME",
-                                            "byline": "Lukas Coch/AAP PHOTOS",
-                                            "ednote": "NO ARCHIVING",
-                                            "mimetype": "image/jpeg",
-                                            "uri": "20241128153046915660",
-                                            "unique_id": 26446441,
-                                            "unique_name": "#26446441",
-                                            "_current_version": 1,
-                                            "expiry": "2024-12-15T21:14:08+0000",
-                                            "family_id": "20241128153046915660",
-                                            "ingest_id": "20241128153046915660",
-                                            "operation": "fetch",
-                                            "original_creator": "670465255fa0f76eb5372a22",
-                                            "ingest_provider": "59265fbcca6a93a44445ce61",
-                                            "format": "HTML",
-                                            "event_id": "tag:aap.com.au:2024:87db7ad8-fa93-493c-8c41-d9001db5f1e4",
-                                            "priority": 6,
-                                            "urgency": 0,
-                                            "genre": [
-                                                {"qcode": "Article", "name": "Article"}
-                                            ],
-                                            "sign_off": "DS",
-                                            "language": "en",
-                                            "version_creator": "670465255fa0f76eb5372a22",
-                                            "_updated": "2024-12-13T00:05:58+0000",
-                                            "_etag": "9482955c3a97406430d4893a516cba04f57bdd21",
-                                        }
+                "language": "en",
+                "operation": "publish",
+                "expiry": "2024-08-22T05:06:30.000+0000",
+                "fields_meta": {
+                    "body_html": {
+                        "draftjsState": [
+                            {
+                                "blocks": [
+                                    {
+                                        "key": "7onrg",
+                                        "text": 'An excessive reliance on renewables "is going to cause a lot '
+                                                'of grief to the country", Mr Dutton said. ',
+                                        "type": "unstyled",
+                                        "depth": 0,
+                                        "inlineStyleRanges": [],
+                                        "entityRanges": [
+                                            {"offset": 0, "length": 1, "key": 1}
+                                        ],
+                                        "data": {},
+                                    },
+                                    {
+                                        "key": "1n0hk",
+                                        "text": " ",
+                                        "type": "atomic",
+                                        "depth": 0,
+                                        "inlineStyleRanges": [],
+                                        "entityRanges": [
+                                            {"offset": 0, "length": 1, "key": 1}
+                                        ],
+                                        "data": {},
+                                    },
+                                ],
+                                "entityMap": {
+                                    "1": {
+                                        "type": "MEDIA",
+                                        "mutability": "MUTABLE",
+                                        "data": {
+                                            "media": {
+                                                "_id": "tag:aap.com.au:2024:9b4d52f0-9fb1-4f81-933c-1f12527e39a9",
+                                                "guid": "tag:aap.com.au:2024:9b4d52f0-9fb1-4f81-933c-1f12527e39a9",
+                                                "headline": "QUESTION TIME",
+                                                "description_text": "Energy Minister Chris Bowen",
+                                                "archive_description": "Australian Energy Minister Chris Bowen",
+                                                "source": "AAP Image",
+                                                "original_source": "AAP Image/AAP",
+                                                "versioncreated": "2024-12-12T21:14:08+0000",
+                                                "firstcreated": "2024-11-28T02:52:30+0000",
+                                                "pubstatus": "usable",
+                                                "type": "picture",
+                                                "state": "fetched",
+                                                "slugline": "QUESTION TIME",
+                                                "byline": "Lukas Coch/AAP PHOTOS",
+                                                "ednote": "NO ARCHIVING",
+                                                "mimetype": "image/jpeg",
+                                                "uri": "20241128153046915660",
+                                                "unique_id": 26446441,
+                                                "unique_name": "#26446441",
+                                                "_current_version": 1,
+                                                "expiry": "2024-12-15T21:14:08+0000",
+                                                "family_id": "20241128153046915660",
+                                                "ingest_id": "20241128153046915660",
+                                                "operation": "fetch",
+                                                "original_creator": "670465255fa0f76eb5372a22",
+                                                "ingest_provider": "59265fbcca6a93a44445ce61",
+                                                "format": "HTML",
+                                                "event_id": "tag:aap.com.au:2024:87db7ad8-fa93-493c-8c41-d9001db5f1e4",
+                                                "priority": 6,
+                                                "urgency": 0,
+                                                "genre": [
+                                                    {
+                                                        "qcode": "Article",
+                                                        "name": "Article",
+                                                    }
+                                                ],
+                                                "sign_off": "DS",
+                                                "language": "en",
+                                                "version_creator": "670465255fa0f76eb5372a22",
+                                                "_updated": "2024-12-13T00:05:58+0000",
+                                                "_etag": "9482955c3a97406430d4893a516cba04f57bdd21",
+                                            }
+                                        },
                                     },
                                 },
-                            },
-                        }
-                    ]
-                }
-            },
-            "firstpublished": "2024-08-19T05:06:30.000+0000",
-        })
+                            }
+                        ]
+                    }
+                },
+                "firstpublished": "2024-08-19T05:06:30.000+0000",
+            }
+        )
         article["firstcreated"] = datetime(
             year=2018, month=2, day=15, hour=11, minute=30, second=0, tzinfo=pytz.UTC
         )
