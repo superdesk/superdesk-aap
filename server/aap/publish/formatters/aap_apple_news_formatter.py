@@ -25,30 +25,43 @@ from superdesk import get_resource_service
 from superdesk.utils import json_serialize_datetime_objectId
 from superdesk.utc import utc_to_local
 from superdesk.text_utils import get_text
-from superdesk.editor_utils import get_content_state_fields, Editor3Content, DraftJSHTMLExporter, render_fragment
+from superdesk.editor_utils import (
+    get_content_state_fields,
+    Editor3Content,
+    DraftJSHTMLExporter,
+    render_fragment,
+    Block,
+)
 from aap.errors import AppleNewsError
 
 logger = logging.getLogger(__name__)
 
 
 class AAPAppleNewsFormatter(Formatter):
-    name = 'AAP Apple News'
+    name = "AAP Apple News"
 
-    type = 'AAP Apple News'
+    type = "AAP Apple News"
 
-    APPLE_NEWS_VERSION = '1.8'
+    APPLE_NEWS_VERSION = "1.8"
 
     def __init__(self):
-        self.format_type = 'AAP Apple News'
+        self.format_type = "AAP Apple News"
         self.can_preview = False
         self.can_export = False
 
     def format(self, article, subscriber, codes=None):
         try:
             formatted_article = deepcopy(article)
-            pub_seq_num = get_resource_service('subscribers').generate_sequence_number(subscriber)
+            pub_seq_num = get_resource_service("subscribers").generate_sequence_number(
+                subscriber
+            )
             output = self._format(formatted_article)
-            return [(pub_seq_num, json.dumps(output, default=json_serialize_datetime_objectId))]
+            return [
+                (
+                    pub_seq_num,
+                    json.dumps(output, default=json_serialize_datetime_objectId),
+                )
+            ]
         except Exception as ex:
             raise AppleNewsError.AppleNewsFormatter(exception=ex)
 
@@ -65,6 +78,17 @@ class AAPAppleNewsFormatter(Formatter):
         editor = Editor3Content(item, field, True)
         exporter = AppleExporter(editor)
         editor.html_exporter = exporter
+
+        # Sometimes the editor will return a text block that has entities in error!
+        blocks = []
+        for block in editor.blocks:
+            if block.type.lower() == "unstyled":
+                if len(block.entities):
+                    blocks.append(Block(editor, data=None, text=block.text))
+                    continue
+            blocks.append(block)
+        editor.set_blocks(blocks)
+
         blocks = []
         for block in editor.blocks:
             if bfilter(block, remove):
@@ -94,7 +118,9 @@ class AAPAppleNewsFormatter(Formatter):
         for key in remove_keys:
             article.get("associations", {}).pop(key, None)
             if article.get("refs") is not None:
-                article["refs"] = [r for r in article.get("refs", []) if r["key"] != key]
+                article["refs"] = [
+                    r for r in article.get("refs", []) if r["key"] != key
+                ]
 
     def _remove_unwanted_embeds(self, article):
         """
@@ -106,15 +132,16 @@ class AAPAppleNewsFormatter(Formatter):
 
         # can only handle pictures at the moment
         for key, item in (article.get("associations") or {}).items():
-            if item and key.startswith("editor_") and item.get("type", "") != 'picture':
+            if item and key.startswith("editor_") and item.get("type", "") != "picture":
                 remove_keys.append(key)
 
         self._remove_embeds(article, remove_keys)
 
     def format_dateline(self, located, current_timestamp):
-
         if located.get("tz") and located["tz"] != "UTC":
-            current_timestamp = datetime.fromtimestamp(current_timestamp.timestamp(), tz=timezone(located["tz"]))
+            current_timestamp = datetime.fromtimestamp(
+                current_timestamp.timestamp(), tz=timezone(located["tz"])
+            )
         else:
             current_timestamp = utc_to_local(config.DEFAULT_TIMEZONE, current_timestamp)
         if current_timestamp.month == 9:
@@ -134,47 +161,54 @@ class AAPAppleNewsFormatter(Formatter):
         self._set_article_document(apple_news, article)
 
         # Set the associations for the transmitter to be able to get the binaries
-        apple_news['associations'] = article.get('associations', {})
+        apple_news["associations"] = article.get("associations", {})
         return apple_news
 
     def can_format(self, format_type, article):
         """Can format text article that are not preformatted"""
-        return format_type == self.format_type and article.get(FORMAT) == FORMATS.HTML and article[ITEM_TYPE] in [
-            CONTENT_TYPE.TEXT]
+        return (
+            format_type == self.format_type
+            and article.get(FORMAT) == FORMATS.HTML
+            and article[ITEM_TYPE] in [CONTENT_TYPE.TEXT]
+        )
 
     def _set_advertising_settings(self, apple_news):
         """Function to set the advertising settings"""
-        apple_news['autoplacement'] = {
+        apple_news["autoplacement"] = {
             "advertisement": {
                 "enabled": True,
                 "bannerType": "any",
                 "distanceFromMedia": "10vh",
                 "frequency": 10,
-                "layout": {
-                    "margin": 10
-                }
+                "layout": {"margin": 10},
             }
         }
 
     def _is_featuremedia_exists(self, article):
         """Checks if the feature media exists"""
-        return True if (article.get('associations') or {}).get('featuremedia') else False
+        return (
+            True if (article.get("associations") or {}).get("featuremedia") else False
+        )
 
     def _set_language(self, apple_news, article):
         """Set language"""
-        apple_news['language'] = 'en-AU' if article.get('language') == 'en' else article.get('language', 'en-AU')
+        apple_news["language"] = (
+            "en-AU"
+            if article.get("language") == "en"
+            else article.get("language", "en-AU")
+        )
 
     def _set_document_style(self, apple_news):
         """Set document style"""
-        apple_news['documentStyle'] = {'backgroundColor': '#FFF'}
+        apple_news["documentStyle"] = {"backgroundColor": "#FFF"}
 
     def _set_article_document(self, apple_news, article):
         """Set article document"""
         self._set_language(apple_news, article)
         self._set_metadata(apple_news, article)
-        apple_news['identifier'] = article['item_id']
-        apple_news['title'] = article.get('headline')
-        apple_news['version'] = self.APPLE_NEWS_VERSION
+        apple_news["identifier"] = article["item_id"]
+        apple_news["title"] = article.get("headline")
+        apple_news["version"] = self.APPLE_NEWS_VERSION
         self._set_layout(apple_news)
         self._set_advertising_settings(apple_news)
         self._set_component_layouts(apple_news)
@@ -183,142 +217,111 @@ class AAPAppleNewsFormatter(Formatter):
 
     def _set_metadata(self, apple_news, article):
         """Set metadata"""
-        apple_news['metadata'] = {
-            'dateCreated': self._format_datetime(article.get('firstcreated')),
-            'datePublished': self._format_datetime(article.get('firstpublished')),
-            'dateModified': self._format_datetime(article.get('versioncreated')),
-            'excerpt': get_text(article.get('abstract', ''), content='html').strip()
+        apple_news["metadata"] = {
+            "dateCreated": self._format_datetime(article.get("firstcreated")),
+            "datePublished": self._format_datetime(article.get("firstpublished")),
+            "dateModified": self._format_datetime(article.get("versioncreated")),
+            "excerpt": get_text(article.get("abstract", ""), content="html").strip(),
         }
-        if article.get('byline'):
-            apple_news['metadata']['authors'] = [article.get('byline')]
+        if article.get("byline"):
+            apple_news["metadata"]["authors"] = [article.get("byline")]
         if self._is_featuremedia_exists(article):
-            apple_news['metadata']['thumbnailURL'] = 'bundle://featuremedia'
+            apple_news["metadata"]["thumbnailURL"] = "bundle://featuremedia"
 
     def _format_datetime(self, article_date, date_format=None):
         if date_format is None:
             aware_dt = article_date.astimezone()
-            return aware_dt.isoformat(timespec='seconds')
+            return aware_dt.isoformat(timespec="seconds")
         else:
-            return datetime.strftime(utc_to_local(config.DEFAULT_TIMEZONE, article_date), date_format)
+            return datetime.strftime(
+                utc_to_local(config.DEFAULT_TIMEZONE, article_date), date_format
+            )
 
     def _set_layout(self, apple_news):
         """Set Layout"""
-        apple_news['layout'] = {
-            'columns': 7,
-            'gutter': 20,
-            'margin': 50,
-            'width': 1024
-        }
+        apple_news["layout"] = {"columns": 7, "gutter": 20, "margin": 50, "width": 1024}
 
     def _set_component_layouts(self, apple_news):
-        apple_news['componentLayouts'] = {
+        apple_news["componentLayouts"] = {
             "bodyLayout": {
                 "columnSpan": 7,
                 "columnStart": 0,
-                "margin": {
-                    "bottom": 15,
-                    "top": 15
-                }
+                "margin": {"bottom": 15, "top": 15},
             },
             "bodyImageLayout": {
                 "columnSpan": 7,
                 "columnStart": 0,
-                "margin": {
-                    "bottom": 5,
-                    "top": 2
-                }
+                "margin": {"bottom": 5, "top": 2},
             },
             "fixed_image_header_container": {
                 "columnSpan": 7,
                 "columnStart": 0,
                 "ignoreDocumentMargin": True,
-                "minimumHeight": "45vh"
+                "minimumHeight": "45vh",
             },
             "titleLayout": {
                 "horizontalContentAlignment": "left",
                 "columnSpan": 6,
                 "columnStart": 0,
-                "margin": {
-                    "bottom": 5,
-                    "top": 5
-                }
+                "margin": {"bottom": 5, "top": 5},
             },
             "captionLayout": {
                 "horizontalContentAlignment": "left",
                 "columnSpan": 7,
                 "columnStart": 0,
-                "margin": {
-                    "bottom": 5,
-                    "top": 5
-                }
+                "margin": {"bottom": 5, "top": 5},
             },
             "BodyCaptionLayout": {
                 "horizontalContentAlignment": "left",
                 "columnSpan": 5,
                 "columnStart": 1,
-                "margin": {
-                    "bottom": 2,
-                    "top": 2
-                }
+                "margin": {"bottom": 2, "top": 2},
             },
             "bylineLayout": {
                 "columnSpan": 6,
                 "columnStart": 0,
-                "margin": {
-                    "bottom": 2,
-                    "top": 5
-                }
+                "margin": {"bottom": 2, "top": 5},
             },
             "dateLineLayout": {
                 "columnSpan": 6,
                 "columnStart": 0,
-                "margin": {
-                    "bottom": 5,
-                    "top": 2
-                }
-            }
+                "margin": {"bottom": 5, "top": 2},
+            },
         }
 
     def _set_component_styles(self, apple_news):
-        apple_news['componentStyles'] = {
-            "headerContainerStyle": {
-                "backgroundColor": "#000"
-            }
+        apple_news["componentStyles"] = {
+            "headerContainerStyle": {"backgroundColor": "#000"}
         }
-        apple_news['componentTextStyles'] = {
+        apple_news["componentTextStyles"] = {
             "bodyStyle": {
                 "fontName": "HelveticaNeue",
                 "fontSize": 16,
                 "lineHeight": 24,
-                "linkStyle": {
-                    "textColor": "#CCCCCC",
-                    "underline": {
-                        "color": "#000"
-                    }
-                },
+                "linkStyle": {"textColor": "#000", "underline": {"color": "#000"}},
                 "textAlignment": "left",
-                "textColor": "#000"
+                "textColor": "#000",
             },
             "bylineStyle": {
                 "fontName": "HelveticaNeue-Bold",
                 "fontSize": 18,
                 "lineHeight": 18,
                 "textAlignment": "left",
-                "textColor": "#000"
+                "textColor": "#000",
             },
             "dateLineStyle": {
                 "fontName": "HelveticaNeue-Bold",
                 "fontSize": 12,
                 "lineHeight": 16,
                 "textAlignment": "left",
-                "textColor": "#000"
+                "textColor": "#000",
             },
             "titleStyle": {
                 "fontName": "HelveticaNeue-CondensedBlack",
                 "fontSize": 40,
                 "lineHeight": 44,
                 "textAlignment": "left",
-                "textColor": "#000"
+                "textColor": "#000",
             },
             "captionStyle": {
                 "fontName": "HelveticaNeue-Italic",
@@ -326,36 +329,37 @@ class AAPAppleNewsFormatter(Formatter):
                 "hyphenation": False,
                 "lineHeight": 16,
                 "textAlignment": "left",
-                "textColor": "#000"
-            }
+                "textColor": "#000",
+            },
         }
 
     def _set_component(self, apple_news, article):
         components = []
         components.extend(self._set_header_component(article))
         components.extend(self._set_story_component(article))
-        apple_news['components'] = components
+        apple_news["components"] = components
 
     def _set_header_component(self, article):
-        header = [{
-            'behaviour': {'type': 'background_parallax'},
-            'layout': 'fixed_image_header_container',
-            'role': 'container',
-            'style': {
-                'fill': {
-                    'URL': 'bundle://featuremedia',
-                    'type': 'image'
-                }
-            }
-        },
+        header = [
+            {
+                "behaviour": {"type": "background_parallax"},
+                "layout": "fixed_image_header_container",
+                "role": "container",
+                "style": {"fill": {"URL": "bundle://featuremedia", "type": "image"}},
+            },
             {
                 "layout": "captionLayout",
                 "role": "caption",
                 "text": "{} - {}".format(
-                    article.get('associations', {}).get('featuremedia', {}).get('description_text', ''),
-                    article.get('associations', {}).get('featuremedia', {}).get('byline', '')),
-                "textStyle": 'captionStyle'
-        }
+                    article.get("associations", {})
+                    .get("featuremedia", {})
+                    .get("description_text", ""),
+                    article.get("associations", {})
+                    .get("featuremedia", {})
+                    .get("byline", ""),
+                ),
+                "textStyle": "captionStyle",
+            },
         ]
 
         if not self._is_featuremedia_exists(article):
@@ -372,125 +376,148 @@ class AAPAppleNewsFormatter(Formatter):
         :param embed_url:
         :return:
         """
-        body.extend([{
-            'format': 'html',
-            'layout': 'bodyLayout',
-            'role': 'body',
-            'text': ''.join(pieces),
-            'textStyle': 'bodyStyle'
-        }, {
-            "role": role,
-            "layout": "bodyLayout",
-            "URL": embed_url
-        }])
+        body.extend(
+            [
+                {
+                    "format": "html",
+                    "layout": "bodyLayout",
+                    "role": "body",
+                    "text": "".join(pieces),
+                    "textStyle": "bodyStyle",
+                },
+                {"role": role, "layout": "bodyLayout", "URL": embed_url},
+            ]
+        )
         pieces.clear()
         return
 
     def generate_article_content(self, article):
-
-        fragments = lxml_html.fragments_fromstring(article.get('body_html', '<p></p>'))
+        fragments = lxml_html.fragments_fromstring(article.get("body_html", "<p></p>"))
         par_pieces = []
         body_content = []
 
         for elem in fragments:
-            if elem.tag == 'figure':
-                key = elem.find('./img').attrib['id']
-                body_content.extend([
-                    {
-                        'format': 'html',
-                        'layout': 'bodyLayout',
-                        'role': 'body',
-                        'text': ''.join(par_pieces),
-                        'textStyle': 'bodyStyle'
-                    },
-                    {
-                        'role': 'figure',
-                        'URL': 'bundle://{}'.format(key),
-                        'identifier': key,
-                        'accessibilityCaption': elem.find('./img').attrib['alt'],
-                        'caption': elem.find('./figcaption').text,
-                        'layout': 'bodyImageLayout'
-                    },
-                    {
-                        "layout": "BodyCaptionLayout",
-                        "role": "caption",
-                        "text": elem.find('./figcaption').text,
-                        "textStyle": 'captionStyle'
-                    }
-                ])
+            #            if elem.tag == "table":
+            #                continue
+            if elem.tag == "figure":
+                key = elem.find("./img").attrib["id"]
+                body_content.extend(
+                    [
+                        {
+                            "format": "html",
+                            "layout": "bodyLayout",
+                            "role": "body",
+                            "text": "".join(par_pieces),
+                            "textStyle": "bodyStyle",
+                        },
+                        {
+                            "role": "figure",
+                            "URL": "bundle://{}".format(key),
+                            "identifier": key,
+                            "accessibilityCaption": elem.find("./img").attrib["alt"],
+                            "caption": elem.find("./figcaption").text,
+                            "layout": "bodyImageLayout",
+                        },
+                        {
+                            "layout": "BodyCaptionLayout",
+                            "role": "caption",
+                            "text": elem.find("./figcaption").text,
+                            "textStyle": "captionStyle",
+                        },
+                    ]
+                )
                 par_pieces.clear()
-            elif elem.tag == 'div' and 'embed-block' in elem.attrib.get('class', ''):
-                bq = elem.find('./blockquote')
+            elif elem.tag == "div" and "embed-block" in elem.attrib.get("class", ""):
+                bq = elem.find("./blockquote")
                 if bq is not None:
-                    if bq.attrib.get('class') == 'twitter-tweet':
-                        tweet = bq.find('./a').attrib.get('href', '')
-                        if 'twitter' in tweet:
+                    if bq.attrib.get("class") == "twitter-tweet":
+                        tweet = bq.find("./a").attrib.get("href", "")
+                        if "twitter" in tweet:
                             self._add_pieces(body_content, par_pieces, "tweet", tweet)
-                    elif bq.attrib.get('class') == 'instagram-media':
-                        insta_link = bq.attrib.get('data-instgrm-permalink')
+                    elif bq.attrib.get("class") == "instagram-media":
+                        insta_link = bq.attrib.get("data-instgrm-permalink")
                         if insta_link:
-                            self._add_pieces(body_content, par_pieces, "instagram", insta_link)
-                    elif bq.attrib.get('class') == 'tiktok-embed':
-                        tiktok = bq.attrib.get('cite')
+                            self._add_pieces(
+                                body_content, par_pieces, "instagram", insta_link
+                            )
+                    elif bq.attrib.get("class") == "tiktok-embed":
+                        tiktok = bq.attrib.get("cite")
                         if tiktok:
                             self._add_pieces(body_content, par_pieces, "tiktok", tiktok)
                 else:
                     iframe = elem.find("./iframe")
-                    if iframe is not None:
-                        src = iframe.attrib.get('src')
-                        if src:
-                            url = urlparse(src)
-                            query = unquote(url.query)
-                            if query.startswith('href='):
-                                fburl = query[len('href='):]
-                                self._add_pieces(body_content, par_pieces, 'facebook_post', fburl)
+                    if iframe is None:
+                        continue
+                    src = iframe.attrib.get("src")
+                    if not src:
+                        continue
+                    url = urlparse(src)
+                    if "facebook" not in url.netloc.lower():
+                        continue
+                    query = unquote(url.query)
+                    query_prefix = "href="
+                    if query.startswith(query_prefix):
+                        facebook_url = query[len(query_prefix):]
+                        # According to http://developer.apple.com/documentation/applenewsformat/facebookpost
+                        # none of the supported URL's take more than 1 parameter so splitting on & should be safe
+                        facebook_url = facebook_url.split("&")[0]
+                        self._add_pieces(
+                            body_content, par_pieces, "facebook_post", facebook_url
+                        )
             else:
                 par_pieces.append(render_fragment(elem))
         # Add what is left over
-        body_content.append({
-            'format': 'html',
-            'layout': 'bodyLayout',
-            'role': 'body',
-            'text': ''.join(par_pieces),
-            'textStyle': 'bodyStyle'
-        })
+        body_content.append(
+            {
+                "format": "html",
+                "layout": "bodyLayout",
+                "role": "body",
+                "text": "".join(par_pieces),
+                "textStyle": "bodyStyle",
+            }
+        )
 
-        if article.get('body_footer', '') != '':
-            body_content.append({
-                'format': 'html',
-                'layout': 'bodyLayout',
-                'role': 'body',
-                'text': article.get('body_footer', ''),
-                'textStyle': 'bodyStyle'}
+        if article.get("body_footer", "") != "":
+            body_content.append(
+                {
+                    "format": "html",
+                    "layout": "bodyLayout",
+                    "role": "body",
+                    "text": article.get("body_footer", ""),
+                    "textStyle": "bodyStyle",
+                }
             )
 
         return body_content
 
     def _set_story_component(self, article):
-
         article_body = self.generate_article_content(article)
 
         story_component = [
             {
                 "layout": "titleLayout",
                 "role": "title",
-                "text": article.get('headline'),
+                "text": article.get("headline"),
                 "textStyle": "titleStyle",
-                "format": "html"
+                "format": "html",
             },
             {
-                'role': 'byline',
-                'text': 'By {}'.format(article.get('byline')) if article.get('byline') else '',
-                'layout': 'bylineLayout',
-                'textStyle': 'bylineStyle'
+                "role": "byline",
+                "text": "By {}".format(article.get("byline"))
+                if article.get("byline")
+                else "",
+                "layout": "bylineLayout",
+                "textStyle": "bylineStyle",
             },
             {
-                'role': 'byline',
-                'text': self.format_dateline(article.get('dateline', {}).get('located'),
-                                             get_date(article.get('versioncreated'))),
-                'layout': 'dateLineLayout',
-                'textStyle': 'dateLineStyle'
-            }
+                "role": "byline",
+                "text": self.format_dateline(
+                    article.get("dateline", {}).get("located"),
+                    get_date(article.get("versioncreated")),
+                ),
+                "layout": "dateLineLayout",
+                "textStyle": "dateLineStyle",
+            },
         ]
         story_component.extend(article_body)
         return story_component
@@ -504,15 +531,19 @@ class AppleExporter(DraftJSHTMLExporter):
 
     def render_media(self, props):
         embed_key = next(
-            k for k, v in self.content_state["entityMap"].items() if v["data"].get("media") == props["media"]
+            k
+            for k, v in self.content_state["entityMap"].items()
+            if v["data"].get("media") == props["media"]
         )
         media_props = props["media"]
         media_type = media_props.get("type", "picture")
 
         alt_text = media_props.get("alt_text") or ""
-        desc = "{} - {}".format(media_props.get("description_text"), media_props.get('byline'))
+        desc = "{} - {}".format(
+            media_props.get("description_text"), media_props.get("byline")
+        )
         if media_type == "picture":
-            src = 'bundle:\\editor_{}'.format(embed_key)
+            src = "bundle:\\editor_{}".format(embed_key)
 
             embed_type = "Image"
             elt = DOM.create_element(
