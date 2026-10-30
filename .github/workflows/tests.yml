@@ -11,8 +11,8 @@ jobs:
         working-directory: server
 
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with:
           python-version: 3.8
       - run: |
@@ -20,7 +20,7 @@ jobs:
           sudo apt-get -y install libxml2-dev libxmlsec1-dev libxmlsec1-openssl libexempi-dev unixodbc unixodbc-dev
       - run: docker compose -f ../.github/docker-compose.yml up -d
       - name: Cache pip
-        uses: actions/cache@v2
+        uses: actions/cache@v6
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ hashFiles('server/dev-requirements.txt') }}
@@ -42,11 +42,11 @@ jobs:
         working-directory: client
 
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version: 14.x
-      - uses: actions/cache@v2
+      - uses: actions/cache@v6
         with:
           path: ~/.npm
           key: ${{ runner.os }}-npm-${{ hashFiles('client/package-lock.json') }}
