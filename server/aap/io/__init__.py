@@ -14,3 +14,4 @@ from .feeding_services.cision import CisionFeedingService  # noqa
 from .feeding_services.bang import BangFeedingService  # noqa
 from .feeding_services.pa_rss import PARSSFeedingService  # noqa
 from .feeding_services.abc_rss import ABCRSSFeedingService  # noqa
+from .feeding_services.aapr import AAPRFeedingService  # noqa
