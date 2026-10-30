@@ -29,3 +29,4 @@ import aap.publish.formatters.aap_newsroom_ninjs_formatter  # NOQA
 import aap.publish.formatters.kvh_newsml_1_2_formatter  # NOQA
 import aap.publish.formatters.notes_anpa_formatter_test  # NOQA
 import aap.publish.formatters.aap_phoenix_ninjs_formatter  # NOQA
+import aap.publish.formatters.gender_agent  # NOQA
