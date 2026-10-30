@@ -1,0 +1,31 @@
+{
+    "data": {
+        "release_id": "b02c6ea1-2d4c-481a-b33a-5d9b5790ced7",
+        "date": "20261016T043100+0000",
+        "title": "AAPR launches revolutionary breath lozenges - TOAST",
+        "body": "<p>AAPR has done it again - delivering breath that smells like <strong>burnt toast</strong>.<br />Who wouldn&#039;t want this amazing development in their back pocket - any time of day, turn that nasty breath into sweet-smelling burnt toast.<br />The benefits include:</p><ul><li>smelling like toast</li><li>making your presence known wherever you are</li></ul><p>The product is the <i>brainchild</i> of the AAP IT department, who love a bit of burnt toast.<br />Key ingredients include:</p><ol><li>burnt toast</li><li>more burnt toast</li></ol><p>The advancement has been hailed as revolutionary by the Breath Council of Australia (BCA).</p><p>“What a time to be alive,” BCA president Josh Joshinson said.</p><p>“This is truly remarkable, I&#039;m lost for words”.<br /></p><p>Toast will be available from dodgy corner stores and illegal lolly shops, or online at <a href='https://aapnews.aap.com.au/' rel='noopener noreferrer' target='_blank'>shophere</a>.</p>",
+        "source_company": "AAPR Solutions",
+        "geography": [],
+        "subject": ["Press Release (Default)", "AAP Test"],
+        "multimedia": [{
+                "href": "https://beta.aapr.aap.com.au/compiled/b02c6ea1-2d4c-481a-b33a-5d9b5790ced7/attachments/logo%20%281%29.png",
+                "mimetype": "image/png",
+                "name": "logo (1).png",
+                "description": "",
+                "size": 11106
+            }, {
+                "href": "https://beta.aapr.aap.com.au/compiled/b02c6ea1-2d4c-481a-b33a-5d9b5790ced7/attachments/First.jpeg",
+                "mimetype": "image/jpeg",
+                "name": "First.jpeg",
+                "description": "Thumbnail",
+                "size": 4970630
+            }, {
+                "href": "https://beta.aapr.aap.com.au/compiled/b02c6ea1-2d4c-481a-b33a-5d9b5790ced7/attachments/Happy%20I%20Like%20It%20GIF.gif",
+                "mimetype": "image/gif",
+                "name": "Happy I Like It GIF.gif",
+                "description": "",
+                "size": 864880
+            }
+        ]
+    }
+}
