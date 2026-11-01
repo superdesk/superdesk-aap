@@ -397,8 +397,6 @@ class AAPAppleNewsFormatter(Formatter):
         body_content = []
 
         for elem in fragments:
-            #            if elem.tag == "table":
-            #                continue
             if elem.tag == "figure":
                 key = elem.find("./img").attrib["id"]
                 body_content.extend(
