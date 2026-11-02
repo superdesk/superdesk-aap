@@ -52,7 +52,7 @@ Feature: AAP Multimedia Feature
         """
         [{"name": "Sports"}]
         """
-        Given "vocabularies"
+    Given "vocabularies"
         """
         [{"_id" : "crop_sizes",
             "display_name" : "Image Crop Sizes",
@@ -112,7 +112,7 @@ Feature: AAP Multimedia Feature
 	    """
         [{"search_provider": "aapmm", "source": "aapmm", "config": {"password":"", "username":""}}]
 	    """
-        Given "vocabularies"
+    Given "vocabularies"
         """
         [{"_id" : "crop_sizes",
             "display_name" : "Image Crop Sizes",
@@ -154,7 +154,7 @@ Feature: AAP Multimedia Feature
 	    """
         [{"search_provider": "aapmm", "source": "aapmm", "config": {"password":"", "username":""}}]
 	    """
-        Given "vocabularies"
+    Given "vocabularies"
         """
         [{"_id" : "crop_sizes",
             "display_name" : "Image Crop Sizes",
@@ -198,6 +198,23 @@ Feature: AAP Multimedia Feature
 	    """
     When we get "/aapmm?source={"post_filter":{"and":[{"range":{"firstcreated":{"gte":"now-1w"}}}]},"query":{"filtered":{}},"size":48}"
     Then we get list with +1 items
+
+  @auth
+  Scenario: Can search video
+    Given "search_providers"
+	    """
+        [{"search_provider": "aapmm", "source": "aapmm", "config": {"password":"", "username":""}}]
+	    """
+    When we get "/aapmm?source={"post_filter":{"and":[{"terms":{"type":["video"]}}]},"size":50,"from":0}"
+    Then we get list with +1 items
+    """
+        {"_items": [
+      	  {
+      		  "_id": "__any_value__",
+      		  "guid": "__any_value__"
+      	  }
+        ]}
+    """
 
   @auth
   Scenario: Can search date range
