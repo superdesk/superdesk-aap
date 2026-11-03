@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/"
+      xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:dc="http://purl.org/dc/elements/1.1/"
+      xmlns:dcterms="http://purl.org/dc/terms/"
+      xmlns:snf="http://www.smartnews.be/snf/">
+    <id>https://some.api.io/v1/item?product=paproduct%3Acreate&amp;type=text&amp;accept=atom</id>
+    <title>Content API</title>
+    <updated>2026-01-05T04:31:11.288Z</updated>
+    <link href="https://some.api.io/v1/item?product=paproduct%3Acreate&amp;type=text&amp;accept=atom"
+          rel="self"/>
+    <opensearch:itemsPerPage>1</opensearch:itemsPerPage>
+    <opensearch:totalResults>10000</opensearch:totalResults>
+    <opensearch:startIndex>0</opensearch:startIndex>
+    <entry>
+        <id>https://some.api.io/v1/item/123</id>
+        <author>
+            <name>By A Cricket Correspondent, Sydney</name>
+        </author>
+        <title><![CDATA[England reach series high in Sydney]]></title>
+        <link rel="self" href="https://some.api.io/v1/item/123"/>
+        <link rel="alternate" href="https://some.api.io/v1/item/123"/>
+        <link rel="related" href="https://some.api.io/v1/item/123/more-like-this"/>
+        <published>2026-01-05T04:13:15.000Z</published>
+        <updated>2026-01-05T04:13:15.000Z</updated>
+        <summary type="text"><![CDATA[.]]></summary>
+        <content type="html"><![CDATA[<p>England loses the Ashes again.</p>]]></content>
+        <category term="paservice:sport" scheme="urn:pa:subject:paservice" label="Sport"/>
+        <category term="paservice:sport:uk" scheme="urn:pa:subject:paservice" label="UK"/>
+        <category term="patopic:cricket" scheme="urn:pa:subject:patopic" label="Cricket"/>
+        <category term="pakeyword:england" scheme="urn:pa:subject:pakeyword" label="England"/>
+        <category term="paterritory:uk" scheme="urn:pa:subject:paterritory" label="UK"/>
+        <category term="sport:cricket" scheme="urn:pa:subject:sport" label="Cricket"/>
+        <category term="contributor:pa" scheme="urn:pa:subject:contributor" label="PA"/>
+        <category term="medtop:15000000" scheme="urn:pa:subject:medtop" label="sport"/>
+        <category term="medtop:20000822" scheme="urn:pa:subject:medtop" label="competition discipline"/>
+        <category term="medtop:20000888" scheme="urn:pa:subject:medtop" label="cricket"/>
+        <category term="iso:code:3166:GB" scheme="urn:pa:place:isocountry" label="United Kingdom"/>
+        <category term="profile:story" scheme="urn:pa:content:profile" label="story"/>
+        <category term="type:text" scheme="urn:pa:content:type" label="text"/>
+    </entry>
+</feed>
