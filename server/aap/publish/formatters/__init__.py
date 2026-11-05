@@ -10,7 +10,6 @@
 
 import aap.publish.formatters.aap_ipnews_formatter  # NOQA
 import aap.publish.formatters.anpa_formatter  # NOQA
-import aap.publish.formatters.aap_bulletinbuilder_formatter  # NOQA
 import aap.publish.formatters.aap_sms_formatter  # NOQA
 import aap.publish.formatters.aap_newscentre_formatter  # NOQA
 import aap.publish.formatters.aap_nitf_formatter  # NOQA
@@ -22,7 +21,6 @@ import aap.publish.formatters.aap_ninjs_formatter  # NOQA
 import aap.publish.formatters.reuters_newsml_1_2_formatter  # NOQA
 import aap.publish.formatters.iress_nitf_formatter  # NOQA
 import aap.publish.formatters.ticker_formatter  # NOQA
-import aap.publish.formatters.agenda_planning_formatter  # NOQA
 import aap.publish.formatters.marketplace_ninjs_formatter  # NOQA
 import aap.publish.formatters.aap_apple_news_formatter  # NOQA
 import aap.publish.formatters.aap_newsroom_ninjs_formatter  # NOQA
