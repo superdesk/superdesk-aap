@@ -4,7 +4,7 @@ pyodbc==4.0.14
 unidecode==0.04.21
 newrelic>=2.66,<2.67
 titlecase==0.8.2
-pyasn1==0.4.5
+pyasn1==0.6.5
 geopy==1.11.0
 slackclient==1.0.9
 gtfs-realtime-bindings==0.0.5
