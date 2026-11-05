@@ -8,6 +8,4 @@
 # AUTHORS and LICENSE files distributed with this source code, or
 # at https://www.sourcefabric.org/superdesk/license
 
-import aap.publish.transmitters.http_push_agenda  # NOQA
 import aap.publish.transmitters.http_push_apple_news  # NOQA
-import aap.publish.transmitters.notes_transmitter  # NOQA

@@ -8,23 +8,15 @@
 # AUTHORS and LICENSE files distributed with this source code, or
 # at https://www.sourcefabric.org/superdesk/license
 
-import aap.publish.formatters.aap_ipnews_formatter  # NOQA
 import aap.publish.formatters.anpa_formatter  # NOQA
 import aap.publish.formatters.aap_sms_formatter  # NOQA
-import aap.publish.formatters.aap_newscentre_formatter  # NOQA
 import aap.publish.formatters.aap_nitf_formatter  # NOQA
-import aap.publish.formatters.nzn_newscentre_formatter  # NOQA
-import aap.publish.formatters.nzn_ipnews_formatter  # NOQA
-import aap.publish.formatters.aap_text_formatter  # NOQA
-import aap.publish.formatters.nzn_anpa_formatter  # NOQA
 import aap.publish.formatters.aap_ninjs_formatter  # NOQA
 import aap.publish.formatters.reuters_newsml_1_2_formatter  # NOQA
 import aap.publish.formatters.iress_nitf_formatter  # NOQA
-import aap.publish.formatters.ticker_formatter  # NOQA
 import aap.publish.formatters.marketplace_ninjs_formatter  # NOQA
 import aap.publish.formatters.aap_apple_news_formatter  # NOQA
 import aap.publish.formatters.aap_newsroom_ninjs_formatter  # NOQA
 import aap.publish.formatters.kvh_newsml_1_2_formatter  # NOQA
-import aap.publish.formatters.notes_anpa_formatter_test  # NOQA
 import aap.publish.formatters.aap_phoenix_ninjs_formatter  # NOQA
 import aap.publish.formatters.gender_agent  # NOQA
