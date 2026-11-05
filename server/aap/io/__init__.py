@@ -9,7 +9,6 @@
 # at https://www.sourcefabric.org/superdesk/license
 
 import aap.io.iptc_extension  # noqa
-from .feeding_services.ap_media_relay import APMediaRelayFeedingService  # noqa
 from .feeding_services.cision import CisionFeedingService  # noqa
 from .feeding_services.bang import BangFeedingService  # noqa
 from .feeding_services.pa_rss import PARSSFeedingService  # noqa
