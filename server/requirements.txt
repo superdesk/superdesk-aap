@@ -194,14 +194,13 @@ protobuf==3.20.1
     #   protobuf3-to-dict
 protobuf3-to-dict==0.1.5
     # via -r requirements.in
-pyasn1==0.4.8
+pyasn1==0.6.5
     # via
-    #   -r requirements.in
     #   ldap3
     #   oauth2client
     #   pyasn1-modules
     #   rsa
-pyasn1-modules==0.4.1
+pyasn1-modules==0.4.2
     # via oauth2client
 pycparser==3.11
     # via cffi
@@ -214,7 +213,7 @@ pymongo==3.11.4
     #   eve
     #   mongolock
     #   superdesk-core
-pyodbc==4.0.32
+pyodbc==5.3.0
     # via -r requirements.in
 pyparsing==3.3.3
     # via httplib2
@@ -297,10 +296,8 @@ tzdata==2026.6
     #   kombu
 tzlocal==2.1
     # via superdesk-core
-unidecode==0.4.21
-    # via
-    #   -r requirements.in
-    #   superdesk-core
+unidecode==1.4.0
+    # via superdesk-core
 urllib3==2.8.0
     # via
     #   botocore
