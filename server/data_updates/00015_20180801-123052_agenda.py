@@ -16,10 +16,11 @@ class DataUpdate(DataUpdate):
     resource = 'agenda'
 
     def forwards(self, mongodb_collection, mongodb_database):
-        init = AppInitializeWithDataCommand()
-        init.run(entity_name='agenda_city_map')
-        init.run(entity_name='agenda_country_map')
-        init.run(entity_name='agenda_iptc_map')
+        pass
+        # init = AppInitializeWithDataCommand()
+        # init.run(entity_name='agenda_city_map')
+        # init.run(entity_name='agenda_country_map')
+        # init.run(entity_name='agenda_iptc_map')
 
     def backwards(self, mongodb_collection, mongodb_database):
         for resource in ['agenda_city_map', 'agenda_country_map', 'agenda_iptc_map']:
