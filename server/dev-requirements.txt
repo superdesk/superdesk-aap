@@ -1,7 +1,7 @@
 -r requirements.txt
 
 flake8
-nose
+pytest
 pep8
 pyflakes
 httmock
