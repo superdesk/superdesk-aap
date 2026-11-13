@@ -3,14 +3,20 @@
     "name": "superdesk",
     "license": "GPL-3.0",
     "dependencies": {
-        "superdesk-analytics": "github:superdesk/superdesk-analytics#v2.5.2",
-        "superdesk-core": "github:superdesk/superdesk-client-core#hotfix/2.5.3",
-        "superdesk-planning": "github:superdesk/superdesk-planning#v2.5.2"
+        "superdesk-analytics": "github:superdesk/superdesk-analytics#release/2.10",
+        "superdesk-core": "github:superdesk/superdesk-client-core#release/2.11",
+        "superdesk-planning": "github:superdesk/superdesk-planning#release/2.11"
     },
     "devDependencies": {
-        "@superdesk/build-tools": "^1.0.18"
+        "@superdesk/build-tools": "~1.0.19"
+    },
+    "overrides": {
+        "@types/node": "^20.17.0",
+        "typescript": "^4.9.5",
+        "webpack": "^4.47.0"
     },
     "scripts": {
-        "build": "npx @superdesk/build-tools build-root-repo ./"
+        "build": "npx @superdesk/build-tools build-root-repo ./",
+        "start": "npx grunt server"
     }
 }

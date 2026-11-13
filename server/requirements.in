@@ -1,5 +1,5 @@
-gunicorn==20.0.4
-honcho==1.0.1
+gunicorn
+honcho
 pyodbc==4.0.32
 unidecode==0.04.21
 newrelic==8.7.0
@@ -12,6 +12,6 @@ slackclient==1.0.9
 protobuf3-to-dict==0.1.5
 protobuf>=2.3.0,<=3.20.1
 
-git+https://github.com/superdesk/superdesk-core.git@hotfix/2.5.4#egg=superdesk-core
-git+https://github.com/superdesk/superdesk-planning.git@v2.5.2#egg=superdesk-planning
-git+https://github.com/superdesk/superdesk-analytics.git@v2.5.2#egg=superdesk-analytics
+git+https://github.com/superdesk/superdesk-core.git@release/2.11#egg=superdesk-core
+git+https://github.com/superdesk/superdesk-planning.git@release/2.11#egg=superdesk-planning
+git+https://github.com/superdesk/superdesk-analytics.git@release/2.10#egg=superdesk-analytics
