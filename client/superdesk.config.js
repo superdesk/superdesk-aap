@@ -26,7 +26,7 @@ module.exports = function(grunt) {
             confirmMediaOnUpdate: 1,
             hideLiveSuggestions: 1,
             preview: 1,
-            previewFormats: 1,
+            previewFormats: 0,
             noTakes: 1,
             searchShortcut: 1,
             slackNotifications: 1,
