@@ -5,7 +5,7 @@ module.exports = function(grunt) {
         defaultRoute: '/workspace',
         workspace: {
             ingest: 1,
-            content: 1,
+            content: 0,
             tasks: 0,
             planning: 1,
             assignments: 1
